@@ -1,0 +1,288 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  title="Management Dashboard"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card crm-widget">
+      <div class="card-body p-0">
+        <div class="row row-cols-xxl-5 row-cols-md-3 row-cols-1 g-0">
+          @for(stat of statData; track $index){
+          <div>
+            <div class="col">
+              <div class="py-4 px-3">
+                <h5 class="text-muted text-uppercase fs-13">
+                  {{ stat.title }}
+                  <i
+                    class="fs-18 float-end align-middle"
+                    [ngClass]="{
+                      'ri-arrow-up-circle-line text-success':
+                        stat.profit === 'up',
+                      'ri-arrow-down-circle-line text-danger':
+                        stat.profit === 'down'
+                    }"
+                  ></i>
+                </h5>
+                <div class="d-flex align-items-center">
+                  <div class="flex-shrink-0">
+                    <i class="{{ stat.icon }} display-6 text-muted"></i>
+                  </div>
+                  <div class="flex-grow-1 ms-3">
+                    <h2 class="mb-0">
+                      <span
+                        [countUp]="stat.value"
+                        class="counter-value"
+                        [options]="option"
+                      ></span>
+                    </h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+        <!-- end row -->
+      </div>
+      <!-- end card body -->
+    </div>
+    <!-- end card -->
+  </div>
+  <!-- end col -->
+</div>
+<!-- end row -->
+<div class="row">
+  <div class="col-xxl-3 col-md-6">
+    <div class="card">
+      <div class="card-header align-items-center d-flex">
+        <h4 class="card-title mb-0 flex-grow-1">Sales Forecast</h4>
+        <div class="flex-shrink-0">
+          <div class="dropdown card-header-dropdown" ngbDropdown>
+            <a
+              class="text-reset dropdown-btn arrow-none"
+              href="javascript:void(0);"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              ngbDropdownToggle
+            >
+              <span class="fw-semibold text-uppercase fs-13">Sort by: </span
+              ><span class="text-muted"
+                >Nov 2021<i class="mdi mdi-chevron-down ms-1"></i
+              ></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+              <a
+                class="dropdown-item"
+                href="javascript:void(0);"
+                (click)="setforecastvalue('oct')"
+                >Oct 2021</a
+              >
+              <a
+                class="dropdown-item"
+                href="javascript:void(0);"
+                (click)="setforecastvalue('nov')"
+                >Nov 2021</a
+              >
+              <a
+                class="dropdown-item"
+                href="javascript:void(0);"
+                (click)="setforecastvalue('dec')"
+                >Dec 2021</a
+              >
+              <a
+                class="dropdown-item"
+                href="javascript:void(0);"
+                (click)="setforecastvalue('jan')"
+                >Jan 2022</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end card header -->
+      <div class="card-body pb-0">
+        <div class="mb-n3">
+          <apx-chart
+            [series]="salesForecastChart.series"
+            [chart]="salesForecastChart.chart"
+            [colors]="salesForecastChart.colors"
+            [dataLabels]="salesForecastChart.dataLabels"
+            [plotOptions]="salesForecastChart.plotOptions"
+            [yaxis]="salesForecastChart.yaxis"
+            [legend]="salesForecastChart.legend"
+            [fill]="salesForecastChart.fill"
+            [stroke]="salesForecastChart.stroke"
+            [tooltip]="salesForecastChart.tooltip"
+            [xaxis]="salesForecastChart.xaxis"
+            dir="ltr"
+          ></apx-chart>
+        </div>
+      </div>
+    </div>
+    <!-- end card -->
+  </div>
+  <!-- end col -->
+
+  <div class="col-xxl-3 col-md-6">
+    <div class="card card-height-100">
+      <div class="card-header align-items-center d-flex">
+        <h4 class="card-title mb-0 flex-grow-1">Deal Type</h4>
+        <div class="flex-shrink-0">
+          <div class="dropdown card-header-dropdown" ngbDropdown>
+            <a
+              class="text-reset dropdown-btn arrow-none"
+              href="javascript:void(0);"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              ngbDropdownToggle
+            >
+              <span class="fw-semibold text-uppercase fs-13">Sort by: </span
+              ><span class="text-muted"
+                >Monthly<i class="mdi mdi-chevron-down ms-1"></i
+              ></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+              <a
+                class="dropdown-item"
+                href="javascript:void(0);"
+                (click)="setdealvalue('today')"
+                >Today</a
+              >
+              <a
+                class="dropdown-item"
+                href="javascript:void(0);"
+                (click)="setdealvalue('weekly')"
+                >Weekly</a
+              >
+              <a
+                class="dropdown-item"
+                href="javascript:void(0);"
+                (click)="setdealvalue('monthly')"
+                >Monthly</a
+              >
+              <a
+                class="dropdown-item"
+                href="javascript:void(0);"
+                (click)="setdealvalue('yearly')"
+                >Yearly</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end card header -->
+      <div class="card-body pb-0">
+        <div class="mb-n3">
+          <apx-chart
+            [series]="DealTypeChart.series"
+            [chart]="DealTypeChart.chart"
+            [stroke]="DealTypeChart.stroke"
+            [fill]="DealTypeChart.fill"
+            [markers]="DealTypeChart.markers"
+            [colors]="DealTypeChart.colors"
+            [xaxis]="DealTypeChart.xaxis"
+            dir="ltr"
+          ></apx-chart>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+    <!-- end card -->
+  </div>
+
+  <div class="col-xxl-3 col-md-6">
+    <div class="card card-height-100">
+      <div class="card-header">
+        <h4 class="card-title mb-0">Patterned Donut Chart</h4>
+    </div><!-- end card header -->
+
+    <div class="card-body">
+      <apx-chart [series]="patternedDonutChart.series" [chart]="patternedDonutChart.chart"
+      [stroke]="patternedDonutChart.stroke" [plotOptions]="patternedDonutChart.plotOptions"
+      [labels]="patternedDonutChart.labels" [dataLabels]="patternedDonutChart.dataLabels"
+      [fill]="patternedDonutChart.fill" [states]="patternedDonutChart.states"
+      [theme]="patternedDonutChart.theme" [title]="patternedDonutChart.title"
+      [legend]="patternedDonutChart.legend" [colors]="patternedDonutChart.colors" dir="ltr"></apx-chart>
+    </div><!-- end card-body -->
+    </div><!-- end card -->
+</div>
+  
+
+  <div class="col-xxl-3 col-md-6">
+    <div class="card card-height-100">
+        <div class="card-header">
+            <h4 class="card-title mb-0">Pie Charts</h4>
+        </div>
+        <div class="card-body">
+          <div echarts [options]="PieChart" class="demo-chart"></div>
+        </div>
+    </div>
+    <!-- end card -->
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-xl-6">
+      <div class="card card-height-100">
+          <div class="card-header">
+              <h4 class="card-title mb-0">Line Chart</h4>
+          </div>
+          <div class="card-body">
+            <canvas baseChart height="500" [datasets]="lineAreaChart.datasets" [labels]="lineAreaChart.labels"
+            [options]="lineAreaChart.options" [type]="'line'">
+          </canvas>
+          </div>
+      </div>
+  </div> 
+  <div class="col-xxl-6">
+    <!-- card -->
+    <div class="card card-height-100">
+        <div class="card-header align-items-center d-flex">
+            <h4 class="card-title mb-0 flex-grow-1">Jobs Views Location</h4>
+            <div class="flex-shrink-0">
+                <button type="button" class="btn btn-soft-primary btn-sm">
+                    Export Report
+                </button>
+            </div>
+        </div><!-- end card header -->
+
+        <!-- card body -->
+        <div class="card-body">
+
+            <div id="sales-by-locations" leaflet style="height: 269px;width: 100%;" [leafletOptions]="options"
+                [leafletLayers]="layers"></div>
+            <!-- <div id="sales-by-locations" data-colors='["--vz-light", "--vz-success", "--vz-primary"]'
+                style="height: 269px" dir="ltr"></div> -->
+
+            <div class="px-2 py-2 mt-4">
+                <p class="mb-1">Canada <span class="float-end">75%</span></p>
+                <div class="progress mt-2" style="height: 6px;">
+                    <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 75%"
+                        aria-valuenow="75" aria-valuemin="0" aria-valuemax="75"></div>
+                </div>
+
+                <p class="mt-3 mb-1">Greenland <span class="float-end">47%</span>
+                </p>
+                <div class="progress mt-2" style="height: 6px;">
+                    <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 47%"
+                        aria-valuenow="47" aria-valuemin="0" aria-valuemax="47"></div>
+                </div>
+
+                <p class="mt-3 mb-1">Russia <span class="float-end">82%</span></p>
+                <div class="progress mt-2" style="height: 6px;">
+                    <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 82%"
+                        aria-valuenow="82" aria-valuemin="0" aria-valuemax="82"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end card body -->
+    </div>
+    <!-- end card -->
+</div>
+  </div>

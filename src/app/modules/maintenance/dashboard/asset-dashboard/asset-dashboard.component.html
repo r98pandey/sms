@@ -1,0 +1,336 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="d-flex justify-content-between">
+  <div></div>
+  <div class="search-box">
+    <div class="input-group me-1">
+      <ng-select
+        [items]="companyList"
+        class="ng-select-width"
+        bindLabel="companyName"
+        [clearable]="true"
+        bindValue="companyId"
+        placeholder="Select Company"
+        [(ngModel)]="selectedCompanyId"
+        (change)="onChangeCompanyDropdown()"
+      ></ng-select>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-xl-12">
+    <div class="card crm-widget">
+      <div class="card-body p-0">
+        <div class="row row-cols-xxl-5 row-cols-md-5 g-0">
+          <div *ngFor="let stat of totalAssetCounts">
+            <app-crm-stat
+              [title]="stat.title"
+              [value]="stat.value"
+              [icon]="stat.icon"
+              [profit]="stat.profit"
+            >
+            </app-crm-stat>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row asset-dashboard">
+  <div
+    class="col-sm-6 col-md-6 col-lg-6 col-xl-3"
+    *ngIf="expiredAssetsCounts && expiredAssetsCounts.series"
+  >
+    <div class="card card-height-100">
+      <div class="card-header align-items-center d-flex">
+        <h4 class="card-title mb-0">Expired Asset Counts</h4>
+      </div>
+
+      <div class="card-body pt-5">
+        <apx-chart
+          class="apex-charts"
+          dir="ltr"
+          [series]="expiredAssetsCounts.series"
+          [labels]="expiredAssetsCounts.labels"
+          [chart]="expiredAssetsCounts.chart"
+          [plotOptions]="expiredAssetsCounts.plotOptions"
+          [dataLabels]="expiredAssetsCounts.dataLabels"
+          [legend]="expiredAssetsCounts.legend"
+          [stroke]="expiredAssetsCounts.stroke"
+          [colors]="expiredAssetsCounts.colors"
+          dir="ltr"
+        ></apx-chart>
+
+        <div class="mt-3">
+          <div class="d-flex justify-content-center align-items-center mb-4">
+            <h2 class="me-3 ff-secondary mb-0">
+              {{ totalExpiredAssetCounts }}
+            </h2>
+            <div>
+              <p class="text-muted mb-0">Total Expired Assets</p>
+            </div>
+          </div>
+
+          <div
+            class="d-flex justify-content-between border-bottom border-bottom-dashed py-2 mt-3"
+          >
+            <p class="fw-medium mb-0">
+              <i
+                class="ri-checkbox-blank-circle-fill text-success align-middle me-2"
+              ></i>
+              {{ expiredCounts[0].label }}
+            </p>
+            <div>
+              <span class="text-muted pe-5"
+                >{{ expiredCounts[0].value }} Assets</span
+              >
+            </div>
+          </div>
+          <!-- end -->
+
+          <div
+            class="d-flex justify-content-between border-bottom border-bottom-dashed py-2"
+          >
+            <p class="fw-medium mb-0">
+              <i
+                class="ri-checkbox-blank-circle-fill text-primary align-middle me-2"
+              ></i>
+              {{ expiredCounts[1].label }}
+            </p>
+            <div>
+              <span class="text-muted pe-5"
+                >{{ expiredCounts[1].value }} Assets</span
+              >
+            </div>
+          </div>
+          <!-- end -->
+          <div
+            class="d-flex justify-content-between border-bottom border-bottom-dashed py-2"
+          >
+            <p class="fw-medium mb-0">
+              <i
+                class="ri-checkbox-blank-circle-fill text-warning align-middle me-2"
+              ></i>
+              {{ expiredCounts[2].label }}
+            </p>
+            <div>
+              <span class="text-muted pe-5"
+                >{{ expiredCounts[2].value }} Assets</span
+              >
+            </div>
+          </div>
+          <!-- end -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
+    <div class="card card-height-100">
+      <div class="card-header">
+        <h4 class="card-title mb-0">Asset Critical Counts</h4>
+      </div>
+
+      <div class="card-body">
+        <apx-chart
+          [series]="criticalAssetsRadialGraph?.series"
+          [chart]="criticalAssetsRadialGraph?.chart"
+          [colors]="criticalAssetsRadialGraph?.colors"
+          [dataLabels]="criticalAssetsRadialGraph?.dataLabels"
+          [plotOptions]="criticalAssetsRadialGraph?.plotOptions"
+          [yaxis]="criticalAssetsRadialGraph?.yaxis"
+          [legend]="criticalAssetsRadialGraph?.legend"
+          [fill]="criticalAssetsRadialGraph?.fill"
+          [stroke]="criticalAssetsRadialGraph?.stroke"
+          [tooltip]="criticalAssetsRadialGraph?.tooltip"
+          [xaxis]="criticalAssetsRadialGraph?.xaxis"
+          dir="ltr"
+        ></apx-chart>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+    <div class="card card-height-100">
+      <div class="card-header">
+        <h4 class="card-title mb-0">Assets Warranty</h4>
+      </div>
+      <div class="card-body table-card2">
+        <div class="table-responsive">
+          <table
+            class="table table-borderless table-hover table-nowrap align-middle mb-0"
+          >
+            <thead class="table-light">
+              <tr class="text-muted">
+                <th scope="col" style="width: 20%">Asset Tag</th>
+                <th scope="col">Asset Name</th>
+                <th scope="col" style="width: 16%">Status</th>
+                <th scope="col" style="width: 12%">Expiry</th>
+                <th scope="col" style="width: 12%">RMA</th>
+                <th scope="col" style="width: 12%">Extended</th>
+              </tr>
+            </thead>
+
+            <tbody *ngIf="assetWarranty.length !== 0">
+              <tr
+                *ngFor="let data of assetWarranty.slice(0, 8)"
+                class="text-muted"
+              >
+                <td class="text-primary">{{ data.assetTagId }}</td>
+                <td>
+                  <img
+                    src="{{
+                      data.assetImagePath
+                        ? apiUrl + data.assetImagePath
+                        : '../../../../../assets/images/placeholderimage.png'
+                    }}"
+                    alt=""
+                    class="avatar-xs rounded-circle me-2"
+                  />
+                  <a href="javascript:void(0);" class="text-body fw-medium">{{
+                    data.assetName
+                  }}</a>
+                </td>
+                <td>
+                  <span
+                    [ngClass]="
+                      returnStatusBadgeClassesStatus(data.assetStatusId)
+                    "
+                    >{{ data.assetStatus }}</span
+                  >
+                </td>
+                <td>
+                  <div class="text-nowrap">
+                    {{ data.daysUntilWarrantyExpired }}days
+                  </div>
+                </td>
+                <td>
+                  <div class="text-nowrap">
+                    {{ data.daysUntilRMAEndWarrantyExpired }}days
+                  </div>
+                </td>
+                <td>
+                  <div class="text-nowrap">
+                    {{ data.daysUntilExtendedEndWarrantyExpired }}days
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+
+            <tbody *ngIf="assetWarranty.length === 0">
+              <tr>
+                <td colspan="6">
+                  <div class="text-center mt-3">
+                    <p class="text-muted">No Assets are expiring currently.</p>
+                  </div>
+                </td>
+              </tr>
+              <!-- end tbody -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-xl-0">
+    <div class="card card-height-100">
+      <div class="card-header">
+        <h4 class="card-title">Loan Assets</h4>
+      </div>
+      <div class="card-body table-card2">
+        <div class="table-responsive">
+          <table
+            class="table table-borderless table-hover table-nowrap align-middle mb-0"
+          >
+            <thead class="table-light">
+              <tr class="text-muted">
+                <th scope="col">Asset Tag</th>
+                <th scope="col">Asset Name</th>
+                <th scope="col">Department</th>
+                <th scope="col">Loan To</th>
+                <th scope="col">Loan Out Date</th>
+                <th scope="col">Return Date</th>
+                <th scope="col">Condition Status</th>
+                <th scope="col">Workflow Status</th>
+                <th scope="col" style="width: 12%">Collection Status</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+
+            <tbody *ngIf="listAssetLoanRetun.length != 0">
+              <tr *ngFor="let data of listAssetLoanRetun" class="text-muted">
+                <td class="text-primary">{{ data.assetTagId }}</td>
+                <td>
+                  <img
+                    src="{{
+                      data.assetImagePath
+                        ? apiUrl + data.assetImagePath
+                        : '../../../../../assets/images/placeholderimage.png'
+                    }}"
+                    alt=""
+                    class="avatar-xs rounded-circle me-2"
+                  />
+                  <a href="javascript:void(0);" class="text-body fw-medium">{{
+                    data.assetName
+                  }}</a>
+                </td>
+                <td>{{ data.departmentName }}</td>
+                <td>{{ data.empNameLoanTo }}</td>
+                <td>{{ data.loanOutDate }}</td>
+                <td>{{ data.returnDate }}</td>
+                <td>
+                  <span
+                    [ngClass]="
+                      returnStatusBadgeClassesStatus(
+                        data.assetConditionStatusId
+                      )
+                    "
+                    >{{ data.assetConditionStatus }}</span
+                  >
+                </td>
+                <td>
+                  <span
+                    [ngClass]="
+                      returnworkFlowAssetStatus(data.assetWorkFlowStatusId)
+                    "
+                    >{{ data.assetWorkFlowStatus }}</span
+                  >
+                </td>
+                <td>
+                  <span
+                    [ngClass]="
+                      returnStatusBadgeClassesStatus(
+                        data.assetCollectionStatusId
+                      )
+                    "
+                    >{{ data.assetCollectionStatus }}</span
+                  >
+                </td>
+                <td>
+                  <span [ngClass]="returnStatusBadgeClassesStatus(17)">{{
+                    data.assetStatus
+                  }}</span>
+                </td>
+              </tr>
+            </tbody>
+            <tbody *ngIf="listAssetLoanRetun.length === 0">
+              <tr>
+                <td colspan="10">
+                  <div class="text-center mt-3">
+                    <p class="text-muted">No Loan Assets found.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <!-- end tbody -->
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

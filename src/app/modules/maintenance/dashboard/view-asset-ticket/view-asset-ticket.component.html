@@ -1,0 +1,553 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h6 class="card-title mb-0">Asset List</h6>
+  </div>
+</div>
+<div class="row">
+  <ng-container *ngIf="filteredList.length == 0">
+    <h6 class="card-title fs-17">No Asset Found</h6>
+  </ng-container>
+  <ng-container *ngIf="filteredList.length != 0">
+    <!-- stretch-card -->
+    <div
+      class="col-xxl-3 col-sm-6 stretch-card"
+      *ngFor="let data of filteredList"
+    >
+      <div
+        class="card profile-project-card shadow-none profile-project-{{
+          getBorderBagde(data.ticketItemStatusId)
+        }}"
+      >
+        <div
+          class="card-header text-end p-1"
+          *ngIf="
+            returnHeaderShownByTicket(ticketData[0]) &&
+            returnHeaderShownByTicketStatusId(data.ticketItemStatusId)
+          "
+        >
+          <ng-container
+            *ngIf="returnHeaderShownByTicketStatusId(data.ticketItemStatusId)"
+          >
+            <button *ngIf="ticketData[0].ticketStatusId==30"
+              class="btn btn-danger btn-sm me-2"
+              (click)="confirm(deleteModel, data.ticketItemId)"
+            >
+              <i class="ri-delete-bin-6-line align-bottom me-1"></i> Delete
+            </button>
+              <ng-container *ngIf="ticketData[0].ticketStatusId != 48">
+                <button
+                  *ngIf="
+                    mX_WorkOder
+                      ? mX_WorkOder?.woStatusId != 2
+                      : true
+                      ? false
+                      : true
+                  "
+                  class="btn btn-primary btn-sm"
+                  (click)="updateAsset(updatePopup, data)"
+                >
+                  <i class="ri-edit-2-line align-bottom me-1"></i> Update
+                </button>
+              </ng-container>
+    
+          </ng-container>
+          <ng-container
+            *ngIf="!returnHeaderShownByTicketStatusId(data.ticketItemStatusId)"
+          >
+            <p class="mb-2"></p>
+            <br />
+          </ng-container>
+        </div>
+
+        <div class="card-body p-3">
+          <div class="d-flex mb-2">
+            <div class="flex-shrink-0">
+              <img
+                (click)="open(imageUrl + data.reqIMGURL)"
+                src="{{ imageUrl }}{{ data.reqIMGURL }}"
+                alt=""
+                height="50"
+                class="rounded"
+              />
+            </div>
+            <div class="flex-grow-1 ms-3 overflow-hidden">
+              <a href="javascript:void(0);">
+                <h6 class="fs-14 mb-0">
+                  {{ data.assetName }}
+                </h6>
+              </a>
+              <p class="text-primary fw-bold mb-0 fs-12">
+                #{{ data.assetTagId }}
+              </p>
+
+              <div
+                [class]="
+                  commonFunctionService.returnStatusBadgeClasses(
+                    data.ticketItemStatusId
+                  )
+                "
+              >
+                {{ data.ticketItemStatusName }}
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="row border-top border-top-dashed p-2 mt-1"
+            *ngIf="data.techIMGURL1 || data.techIMGURL2 || data.techIMGURL3"
+          >
+            <div class="col-md-4" *ngIf=" data.techIMGURL1">
+              <div class="mb-1">
+                <div class="position-relative d-inline-block">
+                  <div class="avatar-xs-galy">
+                    <div class="avatar-title rounded">
+                      <img
+                        *ngIf="data.techIMGURL1"
+                        (click)="open_new(data.imageAll, imageUrl + data.techIMGURL1)"
+                        [src]="
+                          data.techIMGURL1
+                            ? imageUrl + data.techIMGURL1
+                            : '../../../../../assets/images/placeholderimage.png'
+                        "
+                        id="product-img"
+                        class="avatar-xs-galy"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4" *ngIf=" data.techIMGURL2">
+              <div class="mb-1">
+                <div class="position-relative d-inline-block">
+                  <div class="avatar-xs-galy">
+                    <div class="avatar-title rounded">
+                      <img
+                        *ngIf="data.techIMGURL2"
+                        (click)="open_new(data.imageAll, imageUrl + data.techIMGURL2)"
+                        [src]="
+                          data.techIMGURL2
+                            ? imageUrl + data.techIMGURL2
+                            : '../../../../../assets/images/placeholderimage.png'
+                        "
+                        id="product-img"
+                        class="avatar-xs-galy"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4" *ngIf=" data.techIMGURL3">
+              <div class="mb-1">
+                <div class="position-relative d-inline-block">
+                  <div class="avatar-xs-galy">
+                    <div class="avatar-title rounded">
+                      <img
+                        *ngIf="data.techIMGURL3"
+                        (click)="open_new(data.imageAll, imageUrl + data.techIMGURL3)"
+                        [src]="
+                          data.techIMGURL3
+                            ? imageUrl + data.techIMGURL3
+                            : '../../../../../assets/images/placeholderimage.png'
+                        "
+                        id="product-img"
+                        class="avatar-xs-galy"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="col-md-12 d-flex align-items-center"
+              *ngIf="data.technitionRemark"
+            >
+              <div>
+                <h5 class="fs-12 text-muted mb-0">Remark:</h5>
+                <p class="text-muted mb-0">{{ data.technitionRemark }}</p>
+              </div>
+            </div>
+          </div>
+          <!-- end card body -->
+        </div>
+        <!-- end card -->
+      </div>
+    </div>
+    <!--end col-->
+    <div class="col-lg-12">
+      <hr />
+      <div
+        class="row justify-content-md-between align-items-md-center pb-3 mt-4"
+      >
+        <div class="col col-sm-12 col col-md-6">
+          <div
+            class="dataTables_info mb-2 mt-2"
+            id="tickets-table_info"
+            role="status"
+            aria-live="polite"
+          >
+            Showing {{ from }} to {{ to }} of {{ totalRecords }} entries
+          </div>
+        </div>
+        <!-- Pagination -->
+        <div class="col col-sm-12 col col-md-6">
+          <div class="text-sm-right float-end listjs-pagination">
+            <ngb-pagination
+              [collectionSize]="collectionSize"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              (pageChange)="getLocalPagination()"
+              *ngIf="totalRecords > pageSize"
+            >
+              <ng-template ngbPaginationPrevious let-page let-pages="pages">
+                <i class="ci-arrow-left me-2"></i>
+                Prev
+              </ng-template>
+              <ng-template ngbPaginationNext>
+                Next
+                <i class="ci-arrow-right ms-2"></i>
+              </ng-template>
+            </ngb-pagination>
+          </div>
+        </div>
+        <!-- End Pagination -->
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #updatePopup let-modal>
+  <div class="modal-header bg-info-subtle d-flex align-items-baseline">
+    <h6 class="card-title mb-2">
+      Update Asset<br /><span class="fs-10 text-muted"
+        >({{ listData.assetName }})</span
+      >
+    </h6>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formGroup">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="control-label"
+              >Asset Status <span style="color: red">*</span></label
+            >
+            <ng-select
+              [items]="assetStatusList"
+              bindLabel="assetStatus"
+              bindValue="assetStatusId"
+              placeholder="Select Status"
+              [clearable]="false"
+              class="custom"
+              formControlName="status"
+            >
+            </ng-select>
+            <div *ngIf="status?.invalid && status?.touched">
+              <small class="text-danger" *ngIf="status?.errors?.['required']">
+                Asset Status is Required
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 mt-2">
+          <div class="form-group">
+            <label class="control-label"
+              >Remark <span style="color: red">*</span></label
+            >
+            <textarea
+              type="text"
+              class="form-control"
+              placeholder="Enter Remark Here..."
+              maxlength="300"
+              formControlName="remark"
+              rows="7"
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ remark?.value?.length }}/{{ maxCharsDecision }}</label
+            >
+            <div *ngIf="remark?.invalid && remark?.touched">
+              <small class="text-danger" *ngIf="remark?.errors?.['required']">
+                Remark is Required
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 mt-2">
+          <label class="control-label">Image</label>
+          <div class="row justify-content-center">
+            <div class="col-md-4">
+              <div class="mb-3">
+                <div class="position-relative d-inline-block">
+                  <div
+                    class="position-absolute top-100 start-100 translate-middle"
+                  >
+                    <label
+                      class="mb-0"
+                      placement="left"
+                      ngbTooltip="Remove Image"
+                      *ngIf="isSecondImageVisible"
+                    >
+                      <div class="avatar-xs">
+                        <div
+                          class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                        >
+                          <i
+                            (click)="crossSecondImage(imageOneUrl)"
+                            class="ri-close-circle-fill"
+                          ></i>
+                        </div>
+                      </div>
+                    </label>
+                    <label
+                      for="picOne"
+                      class="mb-0"
+                      placement="left"
+                      ngbTooltip="Select Image"
+                      *ngIf="!isSecondImageVisible"
+                    >
+                      <div class="avatar-xs">
+                        <div
+                          class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                        >
+                          <i class="ri-image-fill"></i>
+                        </div>
+                      </div>
+                    </label>
+                    <input
+                      (change)="onSelectFirstFile($event)"
+                      accept="image/*"
+                      formControlName="picOne"
+                      class="form-control d-none"
+                      value=""
+                      id="picOne"
+                      type="file"
+                      accept="image/png, image/gif, image/jpeg"
+                    />
+                  </div>
+                  <div class="avatar-lg">
+                    <div class="avatar-title bg-light rounded">
+                      <img
+                        (click)="open(imageOneUrl)"
+                        src="{{ imageOneUrl }}"
+                        id="product-img"
+                        class="avatar-xs img-size-fixed"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <div class="position-relative d-inline-block">
+                  <div
+                    class="position-absolute top-100 start-100 translate-middle"
+                  >
+                    <label
+                      for="picTwo"
+                      class="mb-0"
+                      placement="left"
+                      ngbTooltip="Select Image"
+                      *ngIf="!isSecondImageVisible"
+                    >
+                      <div class="avatar-xs">
+                        <div
+                          class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                        >
+                          <i class="ri-image-fill"></i>
+                        </div>
+                      </div>
+                    </label>
+                    <label
+                      class="mb-0"
+                      placement="left"
+                      ngbTooltip="Remove Image"
+                      *ngIf="isSecondImageVisible"
+                    >
+                      <div class="avatar-xs">
+                        <div
+                          class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                        >
+                          <i
+                            (click)="crossSecondImage(imageTwoUrl)"
+                            class="ri-close-circle-fill"
+                          ></i>
+                        </div>
+                      </div>
+                    </label>
+                    <input
+                      (change)="onSelectSecondFile($event)"
+                      accept="image/*"
+                      formControlName="picTwo"
+                      class="form-control d-none"
+                      value=""
+                      id="picTwo"
+                      type="file"
+                      accept="image/png, image/gif, image/jpeg"
+                    />
+                  </div>
+                  <div class="avatar-lg">
+                    <div class="avatar-title bg-light rounded">
+                      <img
+                        (click)="open(imageTwoUrl)"
+                        src="{{ imageTwoUrl }}"
+                        id="product-img"
+                        class="avatar-xs img-size-fixed"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <div class="position-relative d-inline-block">
+                  <div
+                    class="position-absolute top-100 start-100 translate-middle"
+                  >
+                    <label
+                      class="mb-0"
+                      placement="left"
+                      ngbTooltip="Remove Image"
+                      *ngIf="isThirdImageVisible"
+                    >
+                      <div class="avatar-xs">
+                        <div
+                          class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                        >
+                          <i
+                            (click)="crossThirdImage(imageThreeUrl)"
+                            class="ri-close-circle-fill"
+                          ></i>
+                        </div>
+                      </div>
+                    </label>
+                    <label
+                      for="picThree"
+                      class="mb-0"
+                      placement="left"
+                      ngbTooltip="Select Image"
+                      *ngIf="!isThirdImageVisible"
+                    >
+                      <div class="avatar-xs">
+                        <div
+                          class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                        >
+                          <i class="ri-image-fill"></i>
+                        </div>
+                      </div>
+                    </label>
+                    <input
+                      (change)="onSelectThirdFile($event)"
+                      accept="image/*"
+                      formControlName="picThree"
+                      class="form-control d-none"
+                      value=""
+                      id="picThree"
+                      type="file"
+                      accept="image/png, image/gif, image/jpeg"
+                    />
+                  </div>
+                  <div class="avatar-lg">
+                    <div class="avatar-title bg-light rounded">
+                      <img
+                        (click)="open(imageThreeUrl)"
+                        src="{{ imageThreeUrl }}"
+                        id="product-img"
+                        class="avatar-xs img-size-fixed"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div>
+      <button
+        class="btn btn-primary me-2 mb-2 mb-md-0"
+        [disabled]="formGroup.invalid"
+        (click)="Submit()"
+      >
+        Update
+      </button>
+      <button
+        class="btn btn btn-outline-danger me-2 mb-2 mb-md-0"
+        (click)="modal.dismiss('Cross click')"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #deleteModel let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="mt-2 text-center">
+        <img
+        src
+        ="../../../../assets/images/ticketChatpartImage.png"
+        class
+        ="img-fluid rounded chat-image-success">
+        <!-- <lord-icon
+          src="https://cdn.lordicon.com/gsqxdxog.json"
+          trigger="loop"
+          colors="primary:#405189,secondary:#f06548"
+          style="width: 90px; height: 90px"
+        ></lord-icon> -->
+        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+          <h4>You are about to delete a Asset ?</h4>
+          <p class="text-muted mx-4 mb-0">
+            Deleting the Asset from Ticket list.
+          </p>
+        </div>
+      </div>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+          (click)="modal.close('Close click')"
+        >
+          <i class="ri-close-line me-1 align-middle"></i> Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="deleteData(deleteId)"
+          (click)="modal.close('Close click')"
+        >
+          Yes, Delete It!
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>

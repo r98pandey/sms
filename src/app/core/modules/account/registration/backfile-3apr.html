@@ -1,0 +1,563 @@
+<ng-container *ngIf="isRegister">
+  <div class="row w-100 mx-0 auth-page">
+    <div class="col-md-10 col-xl-10 mx-auto">
+      <div class="card">
+        <div class="row">
+          <div class="col-md-12 pl-md-0 ">
+            <div class="auth-form-wrapper px-4 py-3">
+              <div class="col-md-12 grid-margin">
+                <a routerLink="." class="noble-ui-logo d-block mb-2">Vajra <span>Asset Management</span></a>
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class=" text-muted font-weight-normal mb-1 card-title">Update Organisation Details</h4>
+
+                    <aw-wizard #wizardForm>
+
+                      <aw-wizard-step stepTitle="Details">
+                        <form (ngSubmit)="form1Submit()" [formGroup]="validationForm1">
+                          <div class="row">
+
+                            <div class="input-group input-group-sm col-md-6">
+                              <label for="organisationName" class="form-label pt-2">Organisation Name<span
+                                  class="starRequried">*</span></label>
+                              <input type="text" readonly class="form-control form-control-sm" id="organisationName"
+                                formControlName="organisationName" placeholder="Organisation Name">
+                              <!-- <div *ngIf="isForm1Submitted && form1.organisationName.errors?.required"
+                                  class="invalid-feedback">
+                                  Organisation Name is Required
+                                </div> -->
+                            </div>
+                            <div class="input-group input-group-sm  col-md-6">
+                              <label for="organisationShortName" class="form-label pt-2">Organisation Short Name<span
+                                  class="starRequried">*</span> </label>
+                              <input type="text" class="form-control form-control-sm" id="organisationShortName"
+                                formControlName="organisationShortName" placeholder="Organisation Short Name ">
+                              <!-- <div *ngIf="isForm1Submitted && form1.organisationShortName.errors?.required"
+                                  class="invalid-feedback">
+                                  Organisation Short Name is Required
+                                </div> -->
+                            </div>
+
+                            <div class="input-group input-group-sm col-md-6">
+                              <label for="address1" class="form-label pt-2">Address 1<span
+                                  class="starRequried">*</span></label>
+                              <input type="text" class="form-control form-control-sm" id="address1"
+                                formControlName="address1" placeholder="Address 1">
+                              <!-- <div *ngIf="isForm1Submitted && form1.address1.errors?.required" class="invalid-feedback">
+                                  Address 1 is Required
+                                </div> -->
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label for="address2" class="form-label pt-2">Address 2</label>
+                              <input type="text" class="form-control form-control-sm" id="address2"
+                                formControlName="address2" placeholder="Address 2">
+                              <!-- <div *ngIf="isForm1Submitted && form1.address2.errors?.required" class="invalid-feedback">
+                                  Address 2 is Required
+                                </div> -->
+                            </div>
+                            <div class="form-group  col-md-6">
+                              <label for="address3" class="form-label pt-2">Address 3</label>
+                              <input type="text" class="form-control form-control-sm" id="address3"
+                                formControlName="address3" placeholder="Address 3">
+                              <!-- <div *ngIf="isForm1Submitted && form1.address3.errors?.required" class="invalid-feedback">
+                                  Address 3 is Required
+                                </div> -->
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="postalCode" class="form-label pt-2">Postal Code<span
+                                  class="starRequried">*</span></label>
+                              <input type="text" class="form-control form-control-sm" id="postalCode"
+                                formControlName="postalCode" placeholder="Postal Code">
+                              <!-- <div *ngIf="isForm1Submitted && form1.postalCode.errors?.required"
+                                  class="invalid-feedback">
+                                  Postal Code is Required
+                                </div> -->
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="country" class="form-label pt-2">Country<span
+                                  class="starRequried">*</span></label>
+
+
+                              <select type="text" class="form-control form-control-sm" id="country"
+                                formControlName="country" placeholder="Country">
+                                <option value="" disabled> select Country</option>
+                                <option *ngFor="let country of countryList" value="{{country.countryName}}">
+                                  {{country.countryName}}</option>
+
+                              </select>
+                              <!-- <div *ngIf="isForm1Submitted && form1.country.errors?.required" class="invalid-feedback">
+                                  Country is Required
+                                </div> -->
+                            </div>
+                          </div>
+                          <div class="d-flex justify-content-between mt-2">
+                            <button class="btn btn-primary  mr-2" type="submit">Continue</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0"
+                              (click)="onBack()">
+                              <i class="feather icon-twitter btn-icon-prepend"></i>
+                              Back to Home
+                            </button>
+                          </div>
+                        </form>
+                      </aw-wizard-step>
+
+                      <aw-wizard-step stepTitle="Contacts">
+                        <form (ngSubmit)="form2Submit()" [formGroup]="validationForm2">
+                          <div class="row">
+                            <div class="form-group col-md-6 ">
+                              <label for="email" class="form-label pt-2">Email<span class="starRequried">*</span></label>
+                              <input type="email" class="form-control form-control-sm" id="email"
+                                formControlName="email" placeholder="Email">
+                              <!-- <div *ngIf="isForm2Submitted && form2.email.errors?.required" class="invalid-feedback">
+                                  Email is Required
+                                </div> -->
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="mobileNumber" class="form-label pt-2">Mobile<span
+                                  class="starRequried">*</span></label>
+                              <input type="number" class="form-control form-control-sm" id="mobileNumber"
+                                formControlName="mobileNumber" placeholder="Mobile number">
+                              <!-- <div *ngIf="isForm2Submitted && form2.mobileNumber.errors?.required"
+                                  class="invalid-feedback">
+                                  Mobile number is Required
+                                </div> -->
+
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label for="faxNumber" class="form-label pt-2">Fax Number</label>
+                              <input type="faxNumber" class="form-control form-control-sm" id="faxNumber"
+                                formControlName="faxNumber" placeholder="Fax Number">
+                              <!-- <div *ngIf="isForm2Submitted && form2.faxNumber.errors?.required"
+                                  class="invalid-feedback">
+                                  Fax Number is Required
+                                </div>
+   -->
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label for="websiteURL" class="form-label pt-2">Web site URL</label>
+                              <input type="text" class="form-control form-control-sm" id="websiteURL"
+                                formControlName="websiteURL" placeholder="Web site URL">
+                              <!-- <div *ngIf="isForm2Submitted && form2.websiteURL.errors?.required"
+                                  class="invalid-feedback">
+                                  Web site URL is Required
+                                </div> -->
+                            </div>
+                          </div>
+
+                          <div class="d-flex justify-content-between mt-2">
+                            <button class="btn btn-light mr-2" type="button" awPreviousStep>Back</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button class="btn btn-primary  mr-2" type="submit">Continue</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0"
+                              (click)="onBack()">
+                              <i class="feather icon-twitter btn-icon-prepend"></i>
+                              Back to Home
+                            </button>
+                          </div>
+                        </form>
+                      </aw-wizard-step>
+
+                      <aw-wizard-step stepTitle="Prefix">
+                        <form [formGroup]="validationForm3">
+                          <div class="row mb-2 new">
+                            <div class="form-check  col-md-3">
+                              <label class="form-check-label">
+                                <input type="checkbox" checked class="form-check-input" formControlName="prefixCompany">
+                                <i class="input-frame"></i>
+                                Prefix Company
+                              </label>
+                            </div>
+                            <div class="form-check  col-md-3">
+                              <label class="form-check-label">
+                                <input type="checkbox" checked class="form-check-input"
+                                  formControlName="prefixDepartment">
+                                <i class="input-frame "></i>
+                                Prefix Department
+                              </label>
+                            </div>
+                            <div class="form-check  col-md-3">
+                              <label class="form-check-label">
+                                <input type="checkbox" checked class="form-check-input"
+                                  formControlName="prefixCategory">
+                                <i class="input-frame"></i>
+                                Prefix Category
+                              </label>
+                            </div>
+                            <div class="form-check  col-md-3">
+                              <label class="form-check-label">
+                                <input type="checkbox" checked class="form-check-input"
+                                  formControlName="prefixSubcategory">
+                                <i class="input-frame"></i>
+                                Prefix Subcategory
+                              </label>
+                            </div>
+                            <div class="form-check  col-md-10">
+
+                              <div class="form-group row pt-5">
+                                <label for="prefixSeparator" class="col-sm-5 pt-5 col-form-label pt-2">Prefix
+                                  Separator</label>
+                                <div class="col-sm-7 pt-5">
+                                  <select type="text" class="form-control form-control-sm" id="prefixSeparator"
+                                    formControlName="prefixSeparator">
+                                    <option value="-"><b>-</b></option>
+                                    <option value="/"><b>/</b></option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+
+                        <div class="d-flex justify-content-between mt-2">
+                          <button class="btn btn-light mr-2" type="button" awPreviousStep>Back</button>
+                          &nbsp;&nbsp;&nbsp;
+                          <button class="btn btn-success  mr-2" type="button" [disabled]="registerDisable"
+                            (click)="onRegister($event)"> <span class="spinner-border spinner-border-sm" role="status"
+                              aria-hidden="true" *ngIf="registerDisable"></span>Update</button>
+                          &nbsp;&nbsp;&nbsp;
+                          <button type="button" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0"
+                            (click)="onBack()">
+                            <i class="feather icon-twitter btn-icon-prepend"></i>
+                            Back to Home
+                          </button>
+                        </div>
+                      </aw-wizard-step>
+
+                    </aw-wizard>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="!isRegister">
+  <div class="row w-100 mx-0 auth-page">
+    <div class="col-md-10 col-xl-10 mx-auto">
+      <div class="card">
+        <div class="row">
+          <div class="col-md-12 pl-md-0 ">
+            <div class="auth-form-wrapper px-4 py-3">
+              <div class="col-md-12 grid-margin">
+                <a routerLink="." class="noble-ui-logo d-block mb-2">FMS- <span>VWatch</span></a>
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class=" text-muted font-weight-normal mb-1 card-title">Update Organisation Details</h4>
+                    <aw-wizard #wizardForm>
+                      <aw-wizard-step stepTitle="Details">
+                        <form (ngSubmit)="form1Submit()" [formGroup]="firstFormGroup">
+                          <div class="row">
+
+                            <div class="form-group col-md-12">
+                              <label for="organisationName" class="form-label pt-2">Organisation Name<span
+                                  class="starRequried">*</span></label>
+                              <input type="text" class="form-control form-control-sm" id="organisationName"
+                                formControlName="organisationName" placeholder="Organisation Name">
+                              <!-- <div *ngIf="isForm1Submitted && form1.organisationName.errors?.required"
+                                  class="invalid-feedback">
+                                  Organisation Name is Required
+                                </div> -->
+                            </div>
+                            <!-- <div class="form-group  col-md-6">
+                                <label for="organisationShortName" class="form-label pt-2">Organisation Short Name<span
+                                    class="starRequried">*</span> </label>
+                                <input type="text" class="form-control form-control-sm" id="organisationShortName"
+                                  formControlName="organisationShortName"
+                                  [ngClass]="{'is-invalid':isForm1Submitted && form1.organisationShortName.errors}"
+                                  placeholder="Organisation Short Name ">
+                                <div *ngIf="isForm1Submitted && form1.organisationShortName.errors?.required"
+                                  class="invalid-feedback">
+                                  Organisation Short Name is Required
+                                </div>
+                              </div> -->
+
+                            <div class="form-group col-md-6">
+                              <label for="address1" class="form-label pt-2">Address 1</label>
+                              <input type="text" class="form-control form-control-sm" id="address1"
+                                formControlName="address1" placeholder="Address 1">
+                              <!-- <div *ngIf="isForm1Submitted && form1.address1.errors?.required" class="invalid-feedback">
+                                  Address 1 is Required
+                                </div> -->
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label for="address2" class="form-label pt-2">Address 2</label>
+                              <input type="text" class="form-control form-control-sm" id="address2"
+                                formControlName="address2" placeholder="Address 2">
+                              <!-- <div *ngIf="isForm1Submitted && form1.address2.errors?.required" class="invalid-feedback">
+                                  Address 2 is Required
+                                </div> -->
+                            </div>
+                            <div class="form-group  col-md-6">
+                              <label for="address3" class="form-label pt-2">Address 3</label>
+                              <input type="text" class="form-control form-control-sm" id="address3"
+                                formControlName="address3" placeholder="Address 3">
+                              <!-- <div *ngIf="isForm1Submitted && form1.address3.errors?.required" class="invalid-feedback">
+                                  Address 3 is Required
+                                </div> -->
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="postalCode" class="form-label pt-2">Postal Code</label>
+                              <input type="text" class="form-control form-control-sm" id="postalCode"
+                                formControlName="postalCode" placeholder="Postal Code">
+                              <!-- <div *ngIf="isForm1Submitted && form1.postalCode.errors?.required"
+                                  class="invalid-feedback">
+                                  Postal Code is Required
+                                </div> -->
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="country" class="form-label pt-2">Country</label>
+                              <select type="text" class="form-control form-control-sm" id="country"
+                                formControlName="country" placeholder="Country">
+                                <option value="" disabled> select Country</option>
+                                <option *ngFor="let country of countryList" value="{{country.countryName}}">
+                                  {{country.countryName}}</option>
+                              </select>
+                              <!-- <div *ngIf="isForm1Submitted && form1.country.errors?.required" class="invalid-feedback">
+                                  Country is Required
+                                </div> -->
+                            </div>
+                          </div>
+                          <div class="d-flex justify-content-between mt-2">
+                            <button class="btn btn-primary  mr-2" type="submit">Continue</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0"
+                              (click)="onBack()">
+                              <!-- <i class="feather icon-twitter btn-icon-prepend"></i> -->
+                              Back to Login
+                            </button>
+                          </div>
+                        </form>
+                      </aw-wizard-step>
+
+                      <aw-wizard-step stepTitle="Contacts">
+                        <form (ngSubmit)="form2Submit()" [formGroup]="secondFormGroup">
+                          <div class="row">
+                            <div class="form-group col-md-6 ">
+                              <label for="email" class="form-label pt-2">Email<span class="starRequried">*</span></label>
+                              <input type="email" class="form-control form-control-sm" id="email"
+                                formControlName="email" placeholder="Email">
+                              <!-- <div *ngIf="isForm2Submitted && form2.email.errors?.required" class="invalid-feedback">
+                                  Email is Required
+                                </div> -->
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="mobileNumber" class="form-label pt-2">Mobile<span
+                                  class="starRequried">*</span></label>
+                              <input type="number" class="form-control form-control-sm" id="mobileNumber"
+                                formControlName="mobileNumber" placeholder="Mobile number">
+                              <!-- <div *ngIf="isForm2Submitted && form2.mobileNumber.errors?.required"
+                                  class="invalid-feedback">
+                                  Mobile number is Required
+                                </div> -->
+
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label for="faxNumber" class="form-label pt-2">Fax Number</label>
+                              <input type="faxNumber" class="form-control form-control-sm" id="faxNumber"
+                                formControlName="faxNumber" placeholder="Fax Number">
+                              <!-- <div *ngIf="isForm2Submitted && form2.faxNumber.errors?.required"
+                                  class="invalid-feedback">
+                                  Fax Number is Required
+                                </div> -->
+
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label for="websiteURL" class="form-label pt-2">Web site URL</label>
+                              <input type="text" class="form-control form-control-sm" id="websiteURL"
+                                formControlName="websiteURL" placeholder="Web site URL">
+                              <!-- <div *ngIf="isForm2Submitted && form2.websiteURL.errors?.required"
+                                  class="invalid-feedback">
+                                  Web site URL is Required
+                                </div> -->
+                            </div>
+                          </div>
+
+                          <div class="d-flex justify-content-between mt-2">
+                            <button class="btn btn-light mr-2" type="button" awPreviousStep>Back</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button class="btn btn-primary  mr-2" type="submit">Continue</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0"
+                              (click)="onBack()">
+                              <!-- <i class="feather icon-twitter btn-icon-prepend"></i> -->
+                              Back to Login
+                            </button>
+                          </div>
+                        </form>
+                      </aw-wizard-step>
+
+                      <aw-wizard-step stepTitle="Prefix/License">
+                        <form [formGroup]="thirdFormGroup">
+                          <div class="card">
+                            <div class="card-body">
+                              <h6 class="card-title">
+                                Prefix
+                              </h6>
+                              <hr />
+                              <div class="row mb-2 new p-4">
+                                <div class="form-check  col-md-3">
+                                  <label class="form-check-label">
+                                    <input type="checkbox" checked class="form-check-input"
+                                      formControlName="prefixCompany">
+                                    <i class="input-frame"></i>
+                                    Prefix Company<span class="starRequried">*</span>
+                                  </label>
+                                  <!-- <div *ngIf="isForm2Submitted && form3.prefixCompany.errors?.required"
+                                      class="invalid-feedback">
+                                      Prefix Company is Required
+                                    </div> -->
+                                </div>
+                                <div class="form-check  col-md-3">
+                                  <label class="form-check-label">
+                                    <input type="checkbox" checked class="form-check-input"
+                                      formControlName="prefixDepartment">
+                                    <i class="input-frame "></i>
+                                    Prefix Department
+                                  </label>
+                                </div>
+                                <div class="form-check  col-md-3">
+                                  <label class="form-check-label">
+                                    <input type="checkbox" checked class="form-check-input"
+                                      formControlName="prefixCategory">
+                                    <i class="input-frame"></i>
+                                    Prefix Category
+                                  </label>
+                                </div>
+                                <div class="form-check  col-md-3">
+                                  <label class="form-check-label">
+                                    <input type="checkbox" checked class="form-check-input"
+                                      formControlName="prefixSubcategory">
+                                    <i class="input-frame"></i>
+                                    Prefix Subcategory
+                                  </label>
+                                </div>
+                                <div class="form-check col-md-6 pt-5">
+                                  <div class="form-group row">
+                                    <label for="prefixSeparator" class="col-sm-5 col-form-label pt-2">Prefix
+                                      Separator<span class="starRequried">*</span></label>
+                                    <div class="col-sm-7">
+                                      <select type="text" class="form-control form-control-sm" id="prefixSeparator"
+                                        formControlName="prefixSeparator">
+                                        <option value="-"><b>-</b></option>
+                                        <option value="/"><b>/</b></option>
+                                      </select>
+                                      <!-- <div *ngIf="isForm2Submitted && form3.prefixSeparator.errors?.required"
+                                          class="invalid-feedback">
+                                          Prefix Separator is Required
+                                        </div> -->
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="card mt-2">
+                            <div class="card-body">
+                              <h6 class="card-title">
+                                License
+                              </h6>
+                              <hr />
+                              <div class="row">
+                                <div class="form-group col-md-6 ">
+                                  <label for="Company" class="form-label pt-2">No Of Company<span
+                                      class="starRequried">*</span></label>
+                                  <input type="text" class="form-control form-control-sm" id="Company"
+                                    formControlName="NoOfCompany" placeholder="No Of Company" pattern="^[1-9][0-9]*$">
+                                  <!-- <div *ngIf="isForm2Submitted && form3.NoOfCompany.errors?.required"
+                                      class="invalid-feedback">
+                                      No Of Company is Required
+                                    </div>
+                                    <div *ngIf="isForm2Submitted && form3.NoOfCompany.errors?.pattern"
+                                      class="invalid-feedback">
+                                      Put greater then 0.
+                                    </div> -->
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                  <label for="user" class="form-label pt-2">No Of Users<span
+                                      class="starRequried">*</span></label>
+                                  <input type="text" class="form-control form-control-sm" id="user"
+                                    formControlName="NoOfUsers" placeholder="No Of Users" pattern="^[1-9][0-9]*$">
+                                  <!-- <div *ngIf="isForm2Submitted && form3.NoOfUsers.errors?.required"
+                                      class="invalid-feedback">
+                                      No Of Users is Required
+                                    </div>
+                                    <div *ngIf="isForm2Submitted && form3.NoOfUsers.errors?.pattern"
+                                      class="invalid-feedback">
+                                      Put greater then 0.
+                                    </div> -->
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                  <label for="project" class="form-label pt-2">No Of Project<span
+                                      class="starRequried">*</span></label>
+                                  <input type="text" class="form-control form-control-sm" id="project"
+                                    formControlName="NoOfProject" placeholder="No Of Project" pattern="^[1-9][0-9]*$">
+                                  <!-- <div *ngIf="isForm2Submitted && form3.NoOfProject.errors?.required"
+                                      class="invalid-feedback">
+                                      No Of Project is Required
+                                    </div> -->
+                                  <!-- <div *ngIf="isForm2Submitted && form3.NoOfProject.errors?.pattern"
+                                      class="invalid-feedback">
+                                      Put greater then 0.
+                                    </div> -->
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                  <label for="asset" class="form-label pt-2">No Of Assets<span
+                                      class="starRequried">*</span></label>
+                                  <input type="text" class="form-control form-control-sm" id="asset"
+                                    formControlName="NoOfAssets" placeholder="No Of Assets" pattern="^[1-9][0-9]*$">
+                                  <!-- <div *ngIf="isForm2Submitted && form3.NoOfAssets.errors?.required"
+                                      class="invalid-feedback">
+                                      No Of Assets is Required
+                                    </div> -->
+                                  <!-- <div *ngIf="isForm2Submitted && form3.NoOfAssets.errors?.pattern"
+                                      class="invalid-feedback">
+                                      Put greater then 0.
+                                    </div> -->
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+
+                        <div class="d-flex justify-content-between mt-2">
+                          <button class="btn btn-light mr-2" type="button" awPreviousStep>Back</button>
+                          <button class="btn btn-success  mr-2" type="button" [disabled]="registerDisable"
+                            (click)="onSubmit()"> <span class="spinner-border spinner-border-sm" role="status"
+                              aria-hidden="true" *ngIf="registerDisable"></span>Submit</button>
+                          <button type="button" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0"
+                            (click)="onBack()">
+                            <!-- <i class="feather icon-twitter btn-icon-prepend"></i> -->
+                            Back to Login
+                          </button>
+                        </div>
+                      </aw-wizard-step>
+
+                    </aw-wizard>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

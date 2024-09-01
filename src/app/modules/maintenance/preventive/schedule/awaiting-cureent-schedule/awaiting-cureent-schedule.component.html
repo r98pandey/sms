@@ -1,0 +1,259 @@
+<div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title">Start Checklist</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close()"
+  ></button>
+</div>
+<div class="offcanvas-body">
+  <div class="card p-0">
+    <div class="card-body">
+
+  
+  <form [formGroup]="updateScheduleFrom">
+    <div class="row border-bottom">
+      <div class="col-md-auto">
+        <div class="form-check form-radio-primary mb-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            
+            id="statusTypeVerifiedPassed3"
+            formControlName="statusType"
+            [value]="24"
+            
+          />
+          <label class="form-check-label" for="statusTypeVerifiedPassed3">
+            Verified-Passed
+          </label>
+        </div>
+      </div>
+      <div class="col-md-auto">
+        <div class="form-check form-radio-primary mb-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            
+            id="statusTypeVerifiedFailed2"
+            formControlName="statusType"
+            [value]="58"  
+            
+          />
+          <label class="form-check-label" for="statusTypeVerifiedFailed2">
+            Verified-Failed
+          </label>
+        </div>
+      </div>
+      <div class="col-md-auto">
+        <div class="form-check form-radio-primary mb-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            
+            id="statusTypeVerifiedFailed1"
+            formControlName="statusType"
+            [value]="1"  
+          />
+          <label class="form-check-label" for="statusTypeVerifiedFailed1">
+            Not Applicable
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-md-12 mt-2">
+      <label
+        for="exampleFormControlTextarea1"
+        class="form-label text-muted text-uppercase fw-semibold"
+        >Remark <span class="starRequried">*</span></label
+      >
+      <textarea
+        class="form-control bg-light border-0"
+        id="Remark"
+        rows="4"
+        placeholder="Remark"
+        formControlName="remark"
+        [maxlength]="maxCharsDecision"
+        [class.is-invalid]="remark.invalid && remark.touched"
+      ></textarea>
+      <label class="nopadding clrlbl mb-0">
+        Characters Remaining:
+        {{ remark?.value?.length ? remark?.value?.length : 0 }}/{{
+          maxCharsDecision
+        }}</label
+      >
+      <div class="invalid-feedback mt-0">Please enter a Remark</div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 mt-3">
+        <div class="text-center mb-3">
+          <h6 class="mb-0">Image 1</h6>
+          <div class="position-relative d-inline-block">
+            <div class="position-absolute top-100 start-100 translate-middle">
+              <input
+                #fileInput
+                (change)="onSelectFile($event)"
+                class="form-control d-none"
+                value=""
+                id="asset_id0"
+                type="file"
+                accept="image/png, image/gif, image/jpeg"
+              />
+            </div>
+            <div class="avatar-lg-new-edit">
+              <div class="avatar-title bg-light rounded">
+                <img
+                  src="{{ pic_url0 }}"
+                  class="avatar-md img-size-fixed-edit"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-1">
+          <!-- <button class="btn btn-primary me-3" *ngIf="isFirstImageVisible" >
+            Rotate
+          </button> -->
+          <button
+            class="btn btn-danger"
+            *ngIf="isFirstImageVisible"
+            (click)="crossFirstImage(pic_url0)"
+          >
+            Clear Image 1
+          </button>
+
+          <button
+            class="btn btn-primary"
+            ngbTooltip="Select Image"
+            *ngIf="!isFirstImageVisible"
+            (click)="fileInput.click()"
+          >
+            Upload Image 1
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4 mt-3">
+        <div class="text-center mb-3">
+          <h6 class="mb-0">Image 2</h6>
+          <div class="position-relative d-inline-block">
+            <div class="position-absolute top-100 start-100 translate-middle">
+              <input
+                #fileInput1
+                (change)="onSelectFile1($event)"
+                accept="image/*"
+                class="form-control d-none"
+                value=""
+                id="asset_id1"
+                type="file"
+                accept="image/png, image/gif, image/jpeg"
+              />
+            </div>
+            <div class="avatar-lg-new-edit">
+              <div class="avatar-title bg-light rounded">
+                <img
+                  src="{{ pic_url1 }}"
+                  id="product-img"
+                  class="avatar-md img-size-fixed-edit"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-1">
+          <!-- <button class="btn btn-primary me-3" *ngIf="isSecondImageVisible">
+            Rotate
+          </button> -->
+          <button
+            class="btn btn-danger"
+            *ngIf="isSecondImageVisible"
+            (click)="crossSecondImage(pic_url1)"
+          >
+            Clear Image 2
+          </button>
+
+          <button
+            class="btn btn-primary"
+            ngbTooltip="Select Image"
+            *ngIf="!isSecondImageVisible"
+            for="pic_url2"
+            (click)="fileInput1.click()"
+          >
+            Upload Image 2
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4 mt-3">
+        <div class="text-center mb-3">
+          <h6 class="mb-0">Image 3</h6>
+          <div class="position-relative d-inline-block">
+            <div class="position-absolute top-100 start-100 translate-middle">
+              <input
+                #fileInput2
+                (change)="onSelectFile2($event)"
+                accept="image/*"
+                class="form-control d-none"
+                value=""
+                id="asset_id2"
+                type="file"
+                accept="image/png, image/gif, image/jpeg"
+              />
+            </div>
+            <div class="avatar-lg-new-edit">
+              <div class="avatar-title bg-light rounded">
+                <img
+                  src="{{ pic_url2 }}"
+                  id="product-img"
+                  class="avatar-md img-size-fixed-edit"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-1">
+          <!-- <button class="btn btn-primary me-3" *ngIf="isThirdImageVisible">
+            Rotate 
+          </button> -->
+          <button
+            class="btn btn-danger"
+            *ngIf="isThirdImageVisible"
+            (click)="crossThirdImage(pic_url2)"
+          >
+            Clear Image 3
+          </button>
+
+          <button
+            class="btn btn-primary"
+            ngbTooltip="Select Image"
+            *ngIf="!isThirdImageVisible"
+            for="pic_url3"
+            (click)="fileInput2.click()"
+          >
+            Upload Image 3
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+</div>
+</div>
+
+<div class="offcanvas-footer mx-3 mb-4 pb-3 text-end">
+  <button
+    
+    class="btn btn-primary me-2"
+    (click)="submit()"
+    [disabled]="updateScheduleFrom.invalid"
+  >
+    Submit
+  </button>
+  <button class="btn btn btn-outline-danger me-2" (click)="close()">
+    Cancel
+  </button>
+</div>
+
+ 

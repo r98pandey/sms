@@ -1,0 +1,351 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm-12 col-md-8 col-lg-8">
+            <h5 class="card-title mb-0">{{ userType }} List</h5>
+          </div>
+
+          <div class="col-sm-12 col-md-8 col-lg-4 text-end">
+            <div class="search-box">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                [(ngModel)]="searchName"
+                placeholder="Search for user name"
+                #inputer
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row g-3">
+          <div class="col-lg">
+            <ng-select
+              [items]="rolesList"
+              bindLabel="name"
+              bindValue="name"
+              [loading]="loading.role"
+              (change)="onTypeRole($event)"
+              [clearable]="true"
+              id="roleName"
+              [(ngModel)]="selectedRoleIdValue"
+              placeholder="Select Role"
+              class="w-100 mr-2 my-1"
+            ></ng-select>
+          </div>
+
+          <div class="col-lg">
+            <ng-select
+              [items]="accessGroupList"
+              bindLabel="name"
+              bindValue="name"
+              [loading]="loading.accessGroup"
+              [clearable]="true"
+              [disabled]="!selectedRoleIdValue"
+              id="accessName"
+              (change)="onTypeAccessGroup($event)"
+              [(ngModel)]="selectedAccessGroupValue"
+              placeholder="Select Access Group/Designation"
+              class="w-100 mr-2 my-1"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="portalYesNoArray"
+              bindLabel="name"
+              bindValue="id"
+              [clearable]="true"
+              (change)="onSelectedPortalEnable($event)"
+              id="portal"
+              [(ngModel)]="selectedPortalEnable"
+              placeholder="Select Portal Accessibility"
+              class="w-100 mr-2 my-1"
+            ></ng-select>
+          </div>
+
+          <div class="col-lg">
+            <ng-select
+              [items]="mobileYesNoArray"
+              bindLabel="name"
+              bindValue="id"
+              (change)="onSelectedMobileEnable($event)"
+              [clearable]="true"
+              id="portal"
+              [(ngModel)]="selectedMobileEnable"
+              placeholder="Select Mobile Accessibility "
+              class="w-100 mr-2 my-1"
+            ></ng-select>
+          </div>
+          <div class="col-lg-auto">
+            <div class="d-flex justify-content-end">
+              <button
+                type="button"
+                class="btn btn-danger ms-1"
+                (click)="resetSerachVariable()"
+                ngbTooltip="Remove All Search"
+              >
+                <i class="ri-refresh-fill me-1 align-bottom"></i>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th scope="col" style="width: 50px">
+                          <div class="form-check" *ngIf="userList.length != 0">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              id="checkAll"
+                              value="option"
+                              [checked]="checkUncheckAll()"
+                              (change)="onCheckboxChange($event)"
+                            />
+                          </div>
+                        </th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Mobile No</th>
+                        <th>Email</th>
+                        <th>App</th>
+                        <th>Portal</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let user of userList; let i = index">
+                        <th scope="row">
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              name="checkAll"
+                              value="{{ user.id }}"
+                              [(ngModel)]="userList[i].checked"
+                              (change)="
+                                getAssetlistChecked(userList[i].checked, user)
+                              "
+                            />
+                          </div>
+                        </th>
+                        <td class="customer_name text-primary cursor">
+                          <div
+                            class="d-flex align-items-center"
+                            *ngIf="user.profileImageUrl"
+                          >
+                            <!-- <img
+                              src="{{ apiUrl }}{{ user.profileImageUrl }}"
+                              class="avatar-xs rounded-circle me-2 a2"
+                              alt=""
+                            /> -->
+                            <div class="d-flex align-items-center">
+                              <div
+                            class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0 online"
+                          >
+                            <img
+                            src="{{ apiUrl }}{{ user.profileImageUrl }}"
+                              class="rounded-circle avatar-xs"
+                              alt=""
+                            />
+                            <!-- <span class="user-status"></span> -->
+                            <div class="dropdown" ngbDropdown>
+                              <span
+                                class="user-status shadow-none arrow-none cursor-pointer"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                ngbDropdownToggle
+                                [class]="
+                                  returnCurrentStatusClassesStatusCircle(
+                                    user.currentStatus
+                                  )
+                                "
+                                title="{{
+                                  user.currentStatus
+                                }}"
+                              ></span>
+                              <div
+                                *ngIf="user.currentStatus"
+                                class="dropdown-menu dropdown-menu-start drop-con p-0"
+                                ngbDropdownMenu
+                              >
+                                <div
+                                  [class]="
+                                    returnCurrentStatusClassesStatus(
+                                      user.currentStatus
+                                    )
+                                  "
+                                  class="text-uppercase p-2"
+                                >
+                                  <b class="fs-14">
+                                    {{
+                                      user.currentStatus
+                                    }}</b
+                                  >
+                                </div>
+                                <div
+                                  class="white-space-normal text-muted fs-13 p-2"
+                                  *ngIf="
+                                  user.currentStatusRemark
+                                  "
+                                >
+                                  {{
+                                    user.currentStatusRemark
+                                  }}
+                                </div>
+                              </div>
+                            </div>
+                              </div>
+                            </div>
+
+
+                            {{ user.fullName }}
+                          </div>
+                          <div
+                            class="d-flex align-items-center"
+                            *ngIf="!user.profileImageUrl"
+                          >
+                            <div class="flex-shrink-0 avatar-xs me-2">
+                              <div
+                                class="avatar-title bg-success-subtle text-success rounded-circle fs-13"
+                              >
+                                {{ user.fullName.charAt(0) }}
+                              </div>
+                            </div>
+                            {{ user.fullName }}
+                          </div>
+                        </td>
+
+                        <td class="align-middle">
+                          {{ user.roleName }}
+                        </td>
+
+                        <td class="align-middle">{{ user.phoneNumber }}</td>
+
+                        <td class="align-middle">
+                          {{ user.email }}
+                        </td>
+                        <td class="align-middle">
+                          <h5 class="mb-1">
+                            <span
+                              class="badge text-uppercase"
+                              [ngClass]="
+                                user.mobileEnable ? 'bg-primary' : 'bg-danger'
+                              "
+                              >{{ user.mobileEnable ? "Yes" : "No" }}</span
+                            >
+                          </h5>
+                        </td>
+                        <td class="align-middle">
+                          <h5 class="mb-1">
+                            <span
+                              class="badge text-uppercase"
+                              [ngClass]="
+                                user.portalEnable ? 'bg-primary' : 'bg-danger'
+                              "
+                              >{{ user.portalEnable ? "Yes" : "No" }}</span
+                            >
+                          </h5>
+                        </td>
+
+                        <td class="align-middle">
+                          <span
+                            class="badge text-uppercase bg-success-subtle text-success"
+                            *ngIf="user.profileStatus == 'Active'"
+                            >{{ user.profileStatus }}</span
+                          >
+                          <span
+                            class="badge text-uppercase bg-danger-subtle text-danger"
+                            *ngIf="user.profileStatus == 'InActive'"
+                            >{{ user.profileStatus }}</span
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="text-center" *ngIf="userList.length === 0">
+                    {{ userType }} have already been assigned for this project.
+                  </div>
+                </div>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col-sm-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecords }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col-sm-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="totalRecords"
+                        [(page)]="page"
+                        [pageSize]="pageSize"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="pageChange($event)"
+                        *ngIf="totalRecords > pageSize"
+                      >
+                        <ng-template
+                          ngbPaginationPrevious
+                          let-page
+                          let-pages="pages"
+                        >
+                          <i class="ci-arrow-left me-2"></i> Prev
+                        </ng-template>
+                        <ng-template ngbPaginationNext>
+                          Next
+                          <i class="ci-arrow-right ms-2"></i>
+                        </ng-template>
+                      </ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card-footer text-end">
+          <button type="submit" class="btn btn-primary" (click)="createUserAssignByProject()" [disabled]="checkedUserList?.length==0">
+        Submit
+      </button>
+
+      </div>
+    </div>
+  </div>
+</div>

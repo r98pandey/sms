@@ -1,0 +1,231 @@
+<div class="row me-0 ms-0">
+  <div class="col-lg-12">
+    <div class="card mb-1">
+      <div class="card-body pb-0">
+        <div class="row mb-3">
+          <div class="col-md">
+            <div class="row align-items-center">
+              <div class="col-md">
+                <div>
+                  <div class="d-flex justify-content-between">
+                    <h5 class="fw-bold">
+                      {{ warrentyDetails?.title }}
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      aria-label="Close"
+                      (click)="close('Cross click')"
+                    ></button>
+                  </div>
+                  <div class="hstack gap-3 flex-wrap">
+                    <div>
+                      <b>Number</b><br />
+                      #{{ warrentyDetails?.projectWarrentyNo }}
+                    </div>
+
+                    <div class="vr"></div>
+                    <div>
+                      <b>Start Date</b><br />
+                      {{ warrentyDetails?.startDate }}
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <b>End Date</b><br />
+                      {{ warrentyDetails?.endDate }}
+                    </div>
+
+                    <div class="vr"></div>
+                    <!-- <div>
+                          <i class="ri-honour-line align-bottom me-1"></i
+                          ><b>Task No.</b><br /><span class="text-primary">
+                            #{{ warrentyDetails?.taskNo }}</span
+                          >
+                        </div>
+                        <div class="vr"></div> -->
+
+                    <div *ngIf="warrentyDetails?.projectWarrentyStatusId">
+                      <i class="ri-stack-overflow-line align-bottom me-1"></i
+                      ><b>Status</b><br /><span
+                        class="fs-14"
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            warrentyDetails?.projectWarrentyStatusId
+                          )
+                        "
+                        >{{ warrentyDetails?.projectWarrentyStatusName }}</span
+                      >
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <b>Created Date</b><br />
+                      {{ warrentyDetails?.createdDate }}
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <b>Created Name</b><br />
+                      {{ warrentyDetails?.createdBy }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-12 mb-2">
+            <div class="text-muted">
+              <h6 class="mb-1 fw-semibold text-uppercase">Description</h6>
+              <ngx-simplebar style="height: 200px" class="">
+                <div [innerHTML]="warrentyDetails?.description"></div>
+              </ngx-simplebar>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" *ngIf="warrentyDetails?.verifiedById">
+      <div
+        class="card-header align-items-center d-flex border-bottom-dashed p-2"
+      >
+        <h5 class="card-title mb-0 flex-grow-1 fs-14">Verified by</h5>
+      </div>
+
+      <div class="card-body text-muted p-2">
+        <p class="fs-13 text-dark mb-0">
+          <b>
+            <i class="ri-user-3-line align-bottom"></i>
+            {{ warrentyDetails?.verifiedBy }}
+          </b>
+        </p>
+        <p class="fs-13 text-dark mb-0">
+          <i class="ri-outlet-2-line align-bottom"></i>
+          {{ warrentyDetails?.verifiedDesig }}
+        </p>
+        <p class="fs-13 text-muted mb-0">
+          <i class="ri-calendar-2-line align-bottom"></i>
+          {{ warrentyDetails?.verifiedDateTime }}
+        </p>
+
+        <p class="fs-12 text-muted">
+          <i class="ri-edit-2-linealign-bottom"></i>
+          {{ warrentyDetails?.verifiedRemark }}
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="warrentyDetails?.acknowledgeById">
+      <div
+        class="card-header align-items-center d-flex border-bottom-dashed p-2"
+      >
+        <h5 class="card-title mb-0 flex-grow-1 fs-14">
+          Acknowledge By 
+        </h5>
+      </div>
+
+      <div class="card-body text-muted p-2">
+        <p class="fs-13 text-dark mb-0">
+          <b>
+            <i class="ri-user-3-line align-bottom"></i>
+            {{ warrentyDetails?.acknowledgeBy || "-" }}
+          </b>
+        </p>
+        <p class="fs-13 text-dark mb-0">
+          <i class="ri-outlet-2-line align-bottom"></i>
+          {{ warrentyDetails?.acknowledgeDesig || "- " }}
+        </p>
+
+        <p class="fs-13 text-muted mb-0">
+          <i class="ri-calendar-2-line align-bottom"></i>
+          {{ warrentyDetails?.acknowledgeDateTime || "-" }}
+        </p>
+
+        <p class="fs-12 text-muted">
+          <i class="ri-edit-2-linealign-bottom"></i>
+          {{ warrentyDetails?.acknowledgeRemark || "-" }}
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="warrentyDetails?.approvedById">
+      <div
+        class="card-header align-items-center d-flex border-bottom-dashed p-2"
+      >
+        <h5 class="card-title mb-0 flex-grow-1 fs-14">Approved By</h5>
+      </div>
+
+      <div class="card-body text-muted p-2">
+        <p class="fs-13 text-dark mb-0">
+          <b>
+            <i class="ri-user-3-line align-bottom"></i>
+            {{ warrentyDetails?.approvedBy }}
+          </b>
+        </p>
+        <p class="fs-13 text-dark mb-0">
+          <i class="ri-outlet-2-line align-bottom"></i>
+          {{ warrentyDetails?.approvedDesig }}
+        </p>
+        <p class="fs-13 text-muted mb-0">
+          <i class="ri-calendar-2-line align-bottom"></i>
+          {{ warrentyDetails?.approvedDateTime }}
+        </p>
+
+        <p class="fs-12 text-muted">
+          <i class="ri-edit-2-linealign-bottom"></i>
+          {{ warrentyDetails?.approvedRemark }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8 stretch-card">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <ul
+            ngbNav
+            #customNav="ngbNav"
+            [(activeId)]="activeTaskTab"
+            class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0"
+            role="tablist"
+          >
+            <li [ngbNavItem]="1" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Document
+              </a>
+              <ng-template ngbNavContent>
+                <app-list-attchament-warranty
+                  (completeProcess)="getUpdateResults()"
+                  [projectId]="ProjectId"
+                  [dDetail]="dDetail"
+                  [projectWarrentyId]="ProjectWarrentyId"
+                  [ProjectWarrentyStatusId]="
+                    warrentyDetails?.projectWarrentyStatusId
+                  "
+                  [ProjectWarrentyStatusName]="
+                    warrentyDetails?.projectWarrentyStatusName
+                  "
+                  [projectAttachment]="agreementDocList"
+                ></app-list-attchament-warranty>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-body p-2">
+        <div class="row me-0 ms-0">
+          <div class="col-lg-12 pe-0 ps-0">
+            <div class="tab-content">
+              <div [ngbNavOutlet]="customNav"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

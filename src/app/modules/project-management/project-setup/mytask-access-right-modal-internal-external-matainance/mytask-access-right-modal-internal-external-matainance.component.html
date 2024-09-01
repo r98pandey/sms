@@ -1,0 +1,118 @@
+<div class="modal-content">
+  <div
+    class="modal-header d-flex justify-content-end align-items-center border-bottom"
+  >
+    <h4 class="card-title mb-1"> Ticket Process</h4>
+    <button
+      type="button"
+      class="btn-close mb-1"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="btn-close"
+      (click)="close('Close click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="d-flex mb-2 align-items-starr">
+                  <div class="flex-shrink-0">
+                    <img
+                      src="{{
+                        teamMember.profileImageUrl
+                          ? imageUrl + teamMember.profileImageUrl
+                          : '../../../../../assets/images/placeholderimage.png'
+                      }}"
+                      alt=""
+                      class="avatar-sm rounded"
+                    />
+                  </div>
+                  <div class="flex-grow-1 ms-2">
+                    <h5
+                      class="card-title mb-1 text-truncate d-block"
+                      ngbTooltip="{{ teamMember.fullName }}"
+                    >
+                      {{ teamMember.fullName }}
+                    </h5>
+                    <p class="text-muted mb-0 text-truncate d-block">
+                      {{ teamMember.accessGroupName }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <p class="card-text text-muted text-truncate d-block mb-0">
+                  <i class="ri-mail-fill me-1 align-middle text-success"></i>
+                  {{ teamMember.email }}
+                </p>
+    
+                <p class="text-muted mb-0 text-truncate d-block mb-0">
+                  <i class="ri-phone-fill me-1 align-middle text-danger"></i>
+                  {{ teamMember.phoneNumber }}
+                </p>
+              </div>
+            </div>
+          
+          
+          </div>
+        </div>
+      </div>
+    
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-4 stretch-card" *ngFor="let group of groupOrder">
+            <div class="card mb-2">
+              <div class="card-header" style="    padding-bottom: 5px;">
+                <h6 class="mb-0 card-title fs-14">{{ group }}</h6>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div
+                    class="col-sm-12 mb-2"
+                    *ngFor="let task of groupedTasks[group]; index as i"
+                  >
+                    <div
+                      class="form-check topDisplay"
+                      [ngbTooltip]="task.remark ? task.remark : null"
+                    >
+                      <input
+                        class="form-check-input me-2 p-2"
+                        type="checkbox"
+                        (change)="changesMyTaskRulesActive($event, group, i)"
+                        [(ngModel)]="task.checked"
+                        value="{{ task.type }}"
+                        id="{{ task.type }}"
+                      />
+                      <label
+                        class="form-check-label labelforCheckbox fs-12"
+                        for="{{ task.type }}"
+                      >
+                        {{ task.name }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+      <button
+        class="btn w-sm btn-danger fw-medium text-decoration-none"
+        (click)="close('close')"
+        id="deleteRecord-close"
+      >
+        <i class="ri-close-line me-1 align-middle"></i> Close
+      </button>
+    </div>
+  </div>
+</div>

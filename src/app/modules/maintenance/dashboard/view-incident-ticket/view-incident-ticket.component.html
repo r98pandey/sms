@@ -1,0 +1,382 @@
+<div class="row">
+  <div class="col-lg-12 col-sm-12 mb-3">
+    <h6 class="fw-semibold text-uppercase mb-3">Impact of Incident</h6>
+    <p class="text-muted mb-0" [innerHTML]="incidentList.impactOfIncident"></p>
+  </div>
+
+  <div class="col-lg-12 col-sm-12 pt-3 border-top border-top-dashed mb-2">
+    <div class="row">
+      <div class="col-lg-3 col-sm-6 mb-3">
+        <h5 class="fs-15 mb-1">Incident Type</h5>
+        <p class="text-muted fs-13">
+          {{ incidentList.incidentTypeName || "Na" }}
+        </p>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-3">
+        <h5 class="fs-15 mb-1">Location</h5>
+        <p class="text-muted fs-13">{{ incidentList.locationName || "Na" }}</p>
+      </div>
+
+      <div class="col-lg-3 col-sm-6 mb-3">
+        <h5 class="fs-15 mb-1">Approx Date of Incident</h5>
+        <p class="text-muted fs-13">
+          {{ incidentList.dateOfincident || "Na" }}
+        </p>
+      </div>
+
+      <div class="col-lg-3 col-sm-6 mb-3">
+        <h5 class="fs-15 mb-1">Approx Time of Incident</h5>
+        <p class="text-muted fs-13">
+          {{ incidentList.approxTimeOfIncident || "Na" }}
+        </p>
+      </div>
+      <!-- <div class="col-lg-3 col-sm-6 mb-3">
+        <h5 class="fs-15 mb-1">Status</h5>
+        <div
+          [class]="
+            commonFunctionService.returnStatusBadgeClasses(
+              incidentList.incidentStatusId
+            )
+          "
+        >
+          {{ incidentList.incidentStatusName }}
+        </div>
+      </div> -->
+    </div>
+  </div>
+
+  <div
+    class="col-sm-12 pt-3 border-top border-top-dashed mb-2"
+    *ngIf="incidentList.incidentRemark"
+  >
+    <h6 class="fw-semibold text-uppercase mb-3">Cause of Incident</h6>
+    <p class="text-muted mb-0" [innerHTML]="incidentList.incidentRemark"></p>
+  </div>
+
+  <div
+    class="col-sm-12 pt-3 border-top border-top-dashed mb-2 row"
+    *ngIf="
+      incidentList.incidentImage1URL ||
+      incidentList.incidentImage2URL ||
+      incidentList.incidentImage3URL ||
+      incidentList.incidentImage4URL ||
+      incidentList.tecgUpdatemage1URL ||
+      incidentList.tecgUpdatemage2URL ||
+      incidentList.tecgUpdatemage3URL ||
+      incidentList.tecgUpdatemage4URL
+    "
+  >
+    <div
+      class="col-sm-6"
+      *ngIf="
+        incidentList.incidentImage1URL ||
+        incidentList.incidentImage2URL ||
+        incidentList.incidentImage3URL ||
+        incidentList.incidentImage4URL
+      "
+    >
+      <h6 class="mb-3 fw-semibold text-uppercase">Incident Images</h6>
+      <div class="row g-1 w-100">
+        <div class="col-xxl-12 col-lg-12">
+          <div class="border rounded border-dashed p-2">
+            <div class="row g-2 mb-3">
+              <div class="col-lg-3" *ngIf="incidentList.incidentImage1URL">
+                <img
+                  (click)="
+                     open_new(
+                      incidentList.imageAllIncident , imgurl + incidentList.incidentImage1URL
+                       
+                    )
+                  "
+                  [src]="
+                    incidentList.incidentImage1URL
+                      ? imgurl + incidentList.incidentImage1URL
+                      : '../../../../../assets/images/placeholderimage.png'
+                  "
+                  alt=""
+                  class="img-fluid rounded img-size-fixed"
+                />
+              </div>
+              <div class="col-lg-3" *ngIf="incidentList.incidentImage2URL">
+                <img
+                 (click)="
+                     open_new(
+                      incidentList.imageAllIncident ,imgurl + incidentList.incidentImage2URL
+                       
+                    )
+                  "
+                  [src]="
+                    incidentList.incidentImage2URL
+                      ? imgurl + incidentList.incidentImage2URL
+                      : '../../../../../assets/images/placeholderimage.png'
+                  "
+                  alt=""
+                  class="img-fluid rounded img-size-fixed"
+                />
+              </div>
+              <div class="col-lg-3" *ngIf="incidentList.incidentImage3URL">
+                <img
+                  (click)="
+                     open_new(
+                      incidentList.imageAllIncident ,imgurl + incidentList.incidentImage3URL
+                       
+                    )
+                  "
+                  [src]="
+                    incidentList.incidentImage3URL
+                      ? imgurl + incidentList.incidentImage3URL
+                      : '../../../../../assets/images/placeholderimage.png'
+                  "
+                  alt=""
+                  class="img-fluid rounded img-size-fixed"
+                />
+              </div>
+              <div class="col-lg-3" *ngIf="incidentList.incidentImage4URL">
+                <img
+                  (click)="
+                     open_new(
+                      incidentList.imageAllIncident ,imgurl + incidentList.incidentImage4URL
+                       
+                    )
+                  "
+                  [src]="
+                    incidentList.incidentImage4URL
+                      ? imgurl + incidentList.incidentImage4URL
+                      : '../../../../../assets/images/placeholderimage.png'
+                  "
+                  alt=""
+                  class="img-fluid rounded img-size-fixed"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- end row -->
+      </div>
+    </div>
+    <div
+      class="col-sm-6"
+      *ngIf="
+        incidentList.tecgUpdatemage1URL ||
+        incidentList.tecgUpdatemage2URL ||
+        incidentList.tecgUpdatemage3URL ||
+        incidentList.tecgUpdatemage4URL
+      "
+    >
+      <h6 class="mb-3 fw-semibold text-uppercase">Updated Images</h6>
+      <div class="row g-1 w-100">
+        <div class="col-xxl-12 col-lg-12">
+          <div class="border rounded border-dashed p-2">
+            <div class="row g-2 mb-3">
+              <div class="col-lg-3" *ngIf="incidentList.tecgUpdatemage1URL">
+                <img
+                  (click)="
+                    open_new(
+                      incidentList.imageAllTech ,imgurl + incidentList.tecgUpdatemage1URL
+                       
+                    )
+                  "
+                  [src]="
+                    incidentList.tecgUpdatemage1URL
+                      ? imgurl + incidentList.tecgUpdatemage1URL
+                      : '../../../../../assets/images/placeholderimage.png'
+                  "
+                  alt=""
+                  class="img-fluid rounded img-size-fixed"
+                />
+              </div>
+              <div class="col-lg-3" *ngIf="incidentList.tecgUpdatemage2URL">
+                <img
+                  (click)="
+                    open_new(
+                      incidentList.imageAllTech ,imgurl + incidentList.tecgUpdatemage2URL
+                       
+                    )
+                  "
+                  [src]="
+                    incidentList.tecgUpdatemage2URL
+                      ? imgurl + incidentList.tecgUpdatemage2URL
+                      : '../../../../../assets/images/placeholderimage.png'
+                  "
+                  alt=""
+                  class="img-fluid rounded img-size-fixed"
+                />
+              </div>
+              <div class="col-lg-3" *ngIf="incidentList.tecgUpdatemage3URL">
+                <img
+                  (click)="
+                    open_new(
+                      incidentList.imageAllTech ,imgurl + incidentList.tecgUpdatemage3URL
+                       
+                    )
+                  "
+                  [src]="
+                    incidentList.tecgUpdatemage3URL
+                      ? imgurl + incidentList.tecgUpdatemage3URL
+                      : '../../../../../assets/images/placeholderimage.png'
+                  "
+                  alt=""
+                  class="img-fluid rounded img-size-fixed"
+                />
+              </div>
+              <div class="col-lg-3" *ngIf="incidentList.tecgUpdatemage4URL">
+                <img
+                  (click)="
+                     open_new(
+                      incidentList.imageAllTech ,imgurl + incidentList.tecgUpdatemage4URL
+                       
+                    )
+                  "
+                  [src]="
+                    incidentList.tecgUpdatemage4URL
+                      ? imgurl + incidentList.tecgUpdatemage4URL
+                      : '../../../../../assets/images/placeholderimage.png'
+                  "
+                  alt=""
+                  class="img-fluid rounded img-size-fixed"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- end row -->
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="col-sm-12 pt-3 border-top border-top-dashed mb-3"
+    *ngIf="incidentList.isSolvedRemark"
+  >
+    <div class="card ribbon-box border shadow-none mb-lg-0 right">
+      <div class="card-body text-muted">
+        <div
+          class="ribbon-two"
+          [ngClass]="{
+            'ribbon-two-info': incidentList.isSolved,
+            'ribbon-two-danger': !incidentList.isSolved
+          }"
+        >
+          <span>{{ incidentList.isSolved ? "Solved" : "Not Solve" }}</span>
+        </div>
+        <h5 class="fs-14 mb-3">Solved Remark</h5>
+        <p
+          class="text-muted mb-0"
+          [innerHTML]="incidentList.isSolvedRemark"
+        ></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-12 mt-2 pt-4 border-top border-top-dashed"></div>
+
+  <div class="col-sm-6 stretch-card pt-2 mb-3" *ngIf="isTechSignCard">
+    <div class="card border shadow-none mb-lg-0 right">
+      <div class="card-body text-muted">
+        <h5 class="fs-14 mb-2">{{ ticketData[0].companyName }}</h5>
+        <div class="text-center mb-1">
+          <div class="position-relative d-inline-block">
+            <button
+              class="btn btn-success mt-2"
+              (click)="openSignatureTech()"
+              *ngIf="isTechSignButton"
+            >
+              Signature of Tech
+            </button>
+
+            <div class="avatar-lg" *ngIf="!isTechSignButton">
+              <div class="avatar-title bg-light rounded">
+                <img
+                  (click)="open(imgurl + incidentList.incindetTechSignImageURL)"
+                  src="{{ imgurl }}{{ incidentList.incindetTechSignImageURL }}"
+                  class="avatar-md img-size-fixed"
+                  *ngIf="incidentList.incindetTechSignImageURL"
+                />
+                <img
+                  (click)="
+                    open('../../../../../assets/images/placeholderimage.png')
+                  "
+                  src="../../../../../assets/images/placeholderimage.png"
+                  class="avatar-md img-size-fixed"
+                  *ngIf="!incidentList.incindetTechSignImageURL"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="text-center text-muted mb-0">
+          {{ incidentList.incindetTechSignDateTime }}
+        </p>
+        <p class="text-center text-dark mb-0">
+          <b>
+            {{ incidentList.incindetTechSignByName }}
+          </b>
+        </p>
+
+        <p class="fs-10 text-muted">
+          {{ incidentList.techFinalRemark }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 stretch-card pt-2 mb-3" *ngIf="isClientSignCard">
+    <div class="card border shadow-none mb-lg-0 right">
+      <div class="card-body text-muted">
+        <h5 class="fs-14 mb-2">{{ ticketData[0].clientName }}</h5>
+
+        <div class="text-center mb-1">
+          <div class="position-relative d-inline-block">
+            <button
+              class="btn btn-success mt-2"
+              (click)="openSignatureClient()"
+              *ngIf="isClientSignButton"
+            >
+              Signature of Client
+            </button>
+
+            <div class="avatar-lg" *ngIf="!isClientSignButton">
+              <div class="avatar-title bg-light rounded">
+                <img
+                  (click)="
+                    open(imgurl + incidentList.incindetClientSignImageURL)
+                  "
+                  src="{{ imgurl }}{{
+                    incidentList.incindetClientSignImageURL
+                  }}"
+                  class="avatar-md img-size-fixed"
+                  *ngIf="incidentList.incindetClientSignImageURL"
+                />
+                <img
+                  (click)="
+                    open('../../../../../assets/images/placeholderimage.png')
+                  "
+                  src="../../../../../assets/images/placeholderimage.png"
+                  class="avatar-md img-size-fixed"
+                  *ngIf="!incidentList.incindetClientSignImageURL"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="text-center text-muted mb-0">
+          {{ incidentList.incindetClientSignDateTime }}
+        </p>
+        <p class="text-center text-dark mb-0">
+          <b>
+            {{ incidentList.incindetClientSignByName }}
+          </b>
+        </p>
+
+        <p class="fs-10 text-muted">
+          {{ incidentList.clientFinalRemark }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="col-sm-6 pt-4 mb-3">
+     <button class="btn btn-success">Signature of Client</button>
+  </div> -->
+</div>

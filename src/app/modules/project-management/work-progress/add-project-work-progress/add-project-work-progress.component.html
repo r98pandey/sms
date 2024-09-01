@@ -1,0 +1,210 @@
+<div class="modal-content">
+    <div class="modal-header bg-info-subtle p-3">
+      <h5 class="card-title mb-0">Create Work Programme</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="close('Close click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="workforceForm" autocomplete="off">
+        <div class="row">
+         
+            <div class="col-md-12 mb-3">
+              <label for="companyId" class="form-label"
+                >Company<span class="starRequried">*</span></label
+              >
+              <ng-container *ngIf="byDefaultDetailsCompanyName!=null" >
+                <input   placeholder="Select Company"   [(ngModel)]="byDefaultDetailsCompanyName"  class="form-control"  formControlName="company">
+              </ng-container>
+              <ng-container *ngIf="byDefaultDetailsCompanyName==null" >
+              <ng-select
+                [items]="arrayListDropDownCompany"
+                bindLabel="companyName"
+                bindValue="companyId"
+                (change)="onDropdownCompanyValueChange($event)"
+                [clearable]="false"
+                id="companyName"
+                [(ngModel)]="selectedDropDownCompanyIdValue"
+                placeholder="Select Company"
+                class="w-100 mr-2"
+                for="companyName"
+                [readonly]="disabledWithAceessGroup"
+                formControlName="company"
+              ></ng-select>
+              </ng-container>
+              <div *ngIf="company.invalid && company.touched" class="mt-2">
+                <small class="text-danger" *ngIf="company['errors']['required']">
+                  Company is Required
+                </small>
+              </div>
+            </div>
+  
+            <div class="col-md-12  mb-3">
+              <div class="form-group">
+                <label for="ClientId" class="form-label"
+                  >Client<span class="starRequried">*</span></label
+                >
+                <ng-container *ngIf="byDefaultDetailsClientName !=null" >
+                  <input   placeholder="Select Client"   class="form-control"   [(ngModel)]="byDefaultDetailsClientName" formControlName="client">
+                </ng-container>
+                <ng-container *ngIf="byDefaultDetailsClientName==null" >
+                <ng-select
+                  [items]="arrayListDropDownClientList"
+                  bindLabel="clientName"
+                  bindValue="clientId"
+                  [disabled]="!selectedDropDownCompanyIdValue"
+                  (change)="onDropdownClientValueChange($event)"
+                  [clearable]="false"
+                  id="clientName"
+                  [(ngModel)]="selectedDropDownClientIdValue"
+                  placeholder="Select Client"
+                  class="w-100 mr-2"
+                  for="clientName"
+                  [readonly]="disabledWithAceessGroup"
+                  formControlName="client"
+                ></ng-select>
+                </ng-container>
+                <div *ngIf="client.invalid && client.touched" class="mt-2">
+                  <small class="text-danger" *ngIf="client['errors']['required']">
+                    Client is Required
+                  </small>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-md-12  mb-3">
+              <div class="form-group">
+                <label class="form-label"
+                  >{{ isProject ? "Project" : "Department"
+                  }}<span class="starRequried">*</span></label
+                >
+                <ng-container *ngIf="byDefaultDetailsProjectName !=null" >
+                  <input   placeholder="Select Project"   class="form-control"  formControlName="project"   [(ngModel)]="byDefaultDetailsProjectName"
+                  
+                  >
+                </ng-container>
+                <ng-container *ngIf="byDefaultDetailsProjectName ==null" >
+  
+                <ng-select
+                  [readonly]="projectDepartmentFieldDisiabled"
+                  [items]="arrayListDropDownProjectOrDeparmentList"
+                  bindLabel="departmentName"
+                  bindValue="departmentId"
+                  [disabled]="
+                    !selectedDropDownCompanyIdValue ||
+                    !selectedDropDownClientIdValue
+                  "
+                  (change)="onDropdownDepartmentValueChange($event)"
+                  [clearable]="false"
+                  id="departmentName"
+                  [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+                  [placeholder]="
+                    isProject ? 'Select Project' : 'Select Department'
+                  "
+                  class="w-100 mr-2"
+                  for="departmentName"
+                  formControlName="project"
+                ></ng-select>
+                </ng-container>
+                <div *ngIf="project?.invalid && project?.touched" class="mt-2">
+                  <small
+                    class="text-danger"
+                    *ngIf="project['errors']['required']"
+                  >
+                    {{ isProject ? "Project" : "Department" }} is Required</small
+                  >
+                </div>
+              </div>
+            </div>
+         
+            <div class="col-md-12  mb-3">
+              <div class="form-group">
+                <label for="projectScheduleName" class="form-label"
+                  >Work Programme Name
+                  <span class="starRequried">*</span>
+                </label>
+                <input
+                  type="text"
+                  formControlName="projectScheduleName"
+                  class="form-control"
+                  [(ngModel)]="typeWorkforceValue"
+                  placeholder="Work Programme Name"
+                />
+              </div>
+              <div
+                *ngIf="projectScheduleName?.invalid && projectScheduleName?.touched"
+                class="mt-2"
+              >
+                <small
+                  class="text-danger"
+                  *ngIf="projectScheduleName['errors']['required']"
+                >
+                Work Programme Name is Required</small
+                >
+              </div>
+            </div>
+  
+  
+            <div class="col-lg-12 mb-3">
+              <div class="form-group">
+                <label for="plannedCompletionDate" class="form-label"
+                  >Planned Completion Date
+                  <span class="starRequried">*</span>
+                  <i
+                    class="ri-close-circle-line text-danger"
+                    ngbTooltip="Clear"
+                    *ngIf="plannedCompletionDate?.value"
+                    (click)="clearChangeStartDate()"
+                  ></i>
+                </label>
+               
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="plannedCompletionDate"
+                    formControlName="plannedCompletionDate"
+                    placeholder="Enter Planned Completion Date"
+                    mwlFlatpickr
+                    [altInput]="false"
+                    [enableTime]="false"
+                    [convertModelValue]="true"
+                    [dateFormat]="'d-m-Y'"
+                  
+                  />
+                 
+                 
+                </div>
+    
+                <div *ngIf="plannedCompletionDate.invalid && plannedCompletionDate.touched">
+                  <small
+                    class="text-danger"
+                    *ngIf="plannedCompletionDate.errors?.['required']"
+                  >
+                  Planned Completion Date is Required
+                  </small>
+                </div>
+             
+              </div>
+            
+  
+            <div class="col-md-12  text-end mb-3">
+              <button
+                class="btn btn-success w-sm"
+                type="button"
+                [disabled]="workforceForm.invalid"
+                (click)="addWorkFroce()"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        
+      </form>
+    </div>
+  </div>
+  

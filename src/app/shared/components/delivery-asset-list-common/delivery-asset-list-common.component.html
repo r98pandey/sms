@@ -1,0 +1,253 @@
+<div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title">Ready Stock Asset List</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close()"
+  ></button>
+</div>
+<div class="offcanvas-body">
+  <div class="row mb-3">
+    <div class="col-lg mb-2">
+      <ng-select
+        [items]="arrayListDropDownLocationList"
+        bindLabel="locationName"
+        [disabled]="!selectedDropDownProjectOrDeparmentIdValue"
+        bindValue="locationId"
+        (change)="onDropdownLocationValueChange($event)"
+        [clearable]="true"
+        id="locationName"
+        [(ngModel)]="selectedDropDownLocationIdValue"
+        placeholder="Select Location"
+        class="w-100 mr-2"
+        for="locationName"
+      ></ng-select>
+    </div>
+    <div class="col-lg mb-2" *ngIf="!SearchAssetStatusIdShown">
+      <ng-select
+        [items]="arrayListDropDownAssetStatus"
+        bindLabel="assetStatus"
+        bindValue="assetStatusId"
+        (change)="onDropdownAssetStatusValueChange($event)"
+        [clearable]="true"
+        id="assetStatus"
+        [(ngModel)]="selectedDropDownAssetStatusIdValue"
+        placeholder="Select Asset Status"
+        class="mr-2"
+        for="assetStatus"
+      ></ng-select>
+    </div>
+    <div class="col-lg mb-2">
+      <div class="search-box">
+        <input
+          type="search"
+          name="searchTerm"
+          class="form-control"
+          [(ngModel)]="typeAssetNameValue"
+          placeholder="Search for asset name"
+          #inputer
+        />
+        <i class="ri-search-line search-icon"></i>
+      </div>
+    </div>
+
+    <div class="col-lg mb-2">
+      <div class="search-box">
+        <input
+          type="search"
+          name="searchTerm"
+          class="form-control"
+          [(ngModel)]="typePoNumber"
+          placeholder="Search by Po Number"
+          #poNumber
+        />
+        <i class="ri-search-line search-icon"></i>
+      </div>
+    </div>
+
+    <div class="col-lg text-end mb-2">
+      <!-- <button type="button" class="btn btn-primary" id="create-btn">
+        <i class="ri-equalizer-fill align-bottom me-1"></i>
+        Filters
+      </button> -->
+      <button
+        type="button"
+        class="btn btn-danger ms-1"
+        (click)="resetSerachVariable()"
+        ngbTooltip="Remove All Search"
+      >
+        <i class="ri-refresh-fill me-1 align-bottom"></i>
+        Clear
+      </button>
+    </div>
+  </div>
+  <div class="row mt-2 border border-dashed border-top">
+    <div class="col-md-12 col-lg-12 mt-2 mb-2">
+      <div class="table-responsive table-card mb-0">
+        <table class="table">
+          <thead>
+            <tr class="bg-light text-muted text-uppercase">
+              <th scope="col" style="width: 50px">
+                <div class="form-check" *ngIf="assetList.length != 0">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="checkAll"
+                    value="option"
+                    [checked]="checkUncheckAll()"
+                    (change)="onCheckboxChange($event)"
+                  />
+                </div>
+              </th>
+
+              <th>Asset</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="assetList.length != 0">
+              <tr *ngFor="let asset of assetList; let i = index">
+                <th scope="row">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      name="checkAll"
+                      value="{{ asset.id }}"
+                      [(ngModel)]="assetList[i].checked"
+                      (change)="
+                        getAssetlistChecked(assetList[i].checked, asset)
+                      "
+                    />
+                  </div>
+                </th>
+                <td>
+                  <span>
+                    <div class="d-flex align-items-center">
+                      <div class="flex-shrink-0 me-3">
+                        <div class="avatar-sm bg-light rounded p-1">
+                          <img
+                            [src]="
+                              asset.assetImagePath
+                                ? imageUrl + asset.assetImagePath
+                                : '../../../../../assets/images/placeholderimage.png'
+                            "
+                            alt=""
+                            class="img-fluid-with-HW d-block"
+                          />
+                        </div>
+                      </div>
+                      <div class="flex-grow-1">
+                        <h5 class="fs-14 mb-0">
+                          <a href="javascript:void(0)" class="text-body">{{
+                            asset.assetName
+                          }}</a>
+                        </h5>
+                        <p class="text-muted mb-0">
+                          <a
+                            href="javascript:void(0)"
+                            class="fw-sm link-primary"
+                            >{{ asset.assetTagId }}
+                          </a>
+                        </p>
+                        <p class="text-muted mb-0 fs-12" *ngIf="asset.poNumber">
+                          Po No:{{ asset.poNumber ? asset.poNumber : "NA" }}
+                        </p>
+
+                        <p class="text-muted mb-0 status">
+                          <span
+                            class="badge text-uppercase bg-secondary-subtle text-secondary"
+                            >{{ asset.assetStatus }}</span
+                          >
+                        </p>
+                      </div>
+                    </div>
+                  </span>
+                </td>
+              </tr>
+            </ng-container>
+            <ng-container *ngIf="assetList.length == 0">
+              <tr>
+                <td colspan="2"><p class="text-center">No Records Found</p></td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <div class="row justify-content-md-between align-items-md-center gy-2">
+        <div class="col col-sm-12 col col-md-6">
+          <div
+            class="dataTables_info mb-2"
+            id="tickets-table_info"
+            role="status"
+            aria-live="polite"
+          >
+            Showing {{ from }} to {{ to }} of {{ totalRecordsFromApi }} entries
+          </div>
+        </div>
+        <!-- Pagination -->
+        <div class="col col-sm-12 col col-md-6">
+          <div class="text-sm-right float-end listjs-pagination">
+            <ngb-pagination
+              [collectionSize]="totalRecordsFromApi"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [maxSize]="1"
+              [rotate]="true"
+              (pageChange)="OnChangesPage($event)"
+              *ngIf="totalRecordsFromApi > pageSize"
+            >
+              <ng-template ngbPaginationPrevious let-page let-pages="pages">
+                <i class="ci-arrow-left me-2"></i> Prev
+              </ng-template>
+              <ng-template ngbPaginationNext>
+                Next
+                <i class="ci-arrow-right ms-2"></i>
+              </ng-template>
+            </ngb-pagination>
+          </div>
+        </div>
+        <!-- End Pagination -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="offcanvas-footer text-end mb-4 pb-2">
+  <button
+    type="button"
+    class="btn btn btn-outline-danger me-2"
+    (click)="close()"
+  >
+    Close
+  </button>
+  <button
+    type="button"
+    ngbAutofocus
+    class="btn btn-success me-2"
+    (click)="submit()"
+  >
+    Submit
+  </button>
+</div>
+
+<ng-template #qrView let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Qr-Code</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <img
+      [src]="imageUrl + assetQrData?.qrCodeImgPath"
+      alt="qr"
+      class="qrCode-img"
+    />
+  </div>
+</ng-template>

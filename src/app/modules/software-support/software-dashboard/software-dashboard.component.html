@@ -1,0 +1,277 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<div class="row">
+  <div
+    class="col-xxl-2 col-sm-4 stretch-card"
+    (click)="onCardClickActive('Total', null)"
+  >
+    <div class="card">
+      <div
+        class="card-body"
+        [class]="activeCard == 'Total' ? 'activeCardClasss' : ''"
+      >
+        <div class="d-flex align-items-center">
+          <div class="avatar-sm flex-shrink-0">
+            <span
+              class="avatar-title bg-light text-primary rounded-circle fs-3"
+            >
+              <i class="ri-ticket-2-line align-middle"></i>
+            </span>
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <p class="text-uppercase fw-semibold fs-12 mb-1">Total</p>
+            <ng-container *ngIf="totalCountTicketOnly.countTotalTicket != 0">
+              <h4 class="mb-0">
+                <span
+                  [countUp]="totalCountTicketOnly.countTotalTicket"
+                  class="counter-value cursor-pointer"
+                  [options]="option"
+                ></span>
+              </h4>
+            </ng-container>
+            <ng-container *ngIf="totalCountTicketOnly.countTotalTicket == 0">
+              <h4 class="mb-0">0</h4>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+    <!-- end card-->
+  </div>
+  <!--end col-->
+  <div
+    class="col-xxl-2 col-sm-4 stretch-card"
+    (click)="onCardClickActive('Open', 29)"
+  >
+    <div class="card">
+      <div
+        class="card-body"
+        [class]="activeCard == 'Open' ? 'activeCardClasss' : ''"
+      >
+        <div class="d-flex align-items-center">
+          <div class="avatar-sm flex-shrink-0">
+            <span
+              class="avatar-title bg-light text-primary rounded-circle fs-3"
+            >
+              <i class="ri-coupon-5-line align-middle"></i>
+            </span>
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <p class="text-uppercase fw-semibold fs-12 mb-1">Open</p>
+            <ng-container *ngIf="totalCountTicketOnly.countOpenTicket != 0">
+              <h4 class="mb-0">
+                <span
+                  [countUp]="totalCountTicketOnly.countOpenTicket"
+                  class="counter-value cursor-pointer"
+                  [options]="option"
+                ></span>
+              </h4>
+            </ng-container>
+            <ng-container *ngIf="totalCountTicketOnly.countOpenTicket == 0">
+              <h4 class="mb-0">0</h4>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+  </div>
+  <!--end col-->
+  <div
+    class="col-xxl-2 col-sm-4 stretch-card"
+    (click)="onCardClickActive('In-Progress', 30)"
+  >
+    <div class="card">
+      <div
+        class="card-body"
+        [class]="activeCard == 'In-Progress' ? 'activeCardClasss' : ''"
+      >
+        <div class="d-flex align-items-center">
+          <div class="avatar-sm flex-shrink-0">
+            <span
+              class="avatar-title bg-light text-primary rounded-circle fs-3"
+            >
+              <i class="mdi mdi-timer-sand align-middle"></i>
+            </span>
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <p class="text-uppercase fw-semibold fs-12 mb-1">In-Progress</p>
+            <ng-container
+              *ngIf="totalCountTicketOnly.countInProgressTicket != 0"
+            >
+              <h4 class="mb-0">
+                <span
+                  [countUp]="totalCountTicketOnly.countInProgressTicket"
+                  class="counter-value cursor-pointer"
+                  [options]="option"
+                ></span>
+              </h4>
+            </ng-container>
+            <ng-container
+              *ngIf="totalCountTicketOnly.countInProgressTicket == 0"
+            >
+              <h4 class="mb-0">0</h4>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+  </div>
+  <!--end col-->
+  <div
+    class="col-xxl-2 col-sm-4 stretch-card"
+    (click)="onCardClickActive('Partially', 34)"
+  >
+    <div class="card">
+      <div
+        class="card-body"
+        [class]="activeCard == 'Partially' ? 'activeCardClasss' : ''"
+      >
+        <div class="d-flex align-items-center">
+          <div class="avatar-sm flex-shrink-0">
+            <span
+              class="avatar-title bg-light text-primary rounded-circle fs-3"
+            >
+              <i class="mdi mdi-clock align-middle"></i>
+            </span>
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <p class="text-uppercase fw-semibold fs-12 mb-1">Partially</p>
+            <ng-container *ngIf="totalCountTicketOnly.countOnHoldTicket != 0">
+              <h4 class="mb-0">
+                <span
+                  [countUp]="totalCountTicketOnly.countOnHoldTicket"
+                  class="counter-value cursor-pointer"
+                  [options]="option"
+                ></span>
+              </h4>
+            </ng-container>
+            <ng-container *ngIf="totalCountTicketOnly.countOnHoldTicket == 0">
+              <h4 class="mb-0">0</h4>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+  </div>
+  <!--end col-->
+  <div
+    class="col-xxl-2 col-sm-4 stretch-card"
+    (click)="onCardClickActive('Closed', 32)"
+  >
+    <div class="card">
+      <div
+        class="card-body"
+        [class]="activeCard == 'Closed' ? 'activeCardClasss' : ''"
+      >
+        <div class="d-flex align-items-center">
+          <div class="avatar-sm flex-shrink-0">
+            <span
+              class="avatar-title bg-light text-primary rounded-circle fs-3"
+            >
+              <i class="mdi mdi-close-box align-middle"></i>
+            </span>
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <p class="text-uppercase fw-semibold fs-12 mb-1">Closed</p>
+            <ng-container *ngIf="totalCountTicketOnly.countClosedTicket != 0">
+              <h4 class="mb-0">
+                <span
+                  [countUp]="totalCountTicketOnly.countClosedTicket"
+                  class="counter-value cursor-pointer"
+                  [options]="option"
+                ></span>
+              </h4>
+            </ng-container>
+            <ng-container *ngIf="totalCountTicketOnly.countClosedTicket == 0">
+              <h4 class="mb-0">0</h4>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+  </div>
+  <!--end col-->
+  <div
+    class="col-xxl-2 col-sm-4 stretch-card"
+    (click)="onCardClickActive('Resolved', 31)"
+  >
+    <div class="card">
+      <div
+        class="card-body"
+        [class]="activeCard == 'Resolved' ? 'activeCardClasss' : ''"
+      >
+        <div class="d-flex align-items-center">
+          <div class="avatar-sm flex-shrink-0">
+            <span
+              class="avatar-title bg-light text-primary rounded-circle fs-3"
+            >
+              <i class="mdi mdi-ticket-confirmation-outline align-middle"></i>
+            </span>
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <p class="text-uppercase fw-semibold fs-12 mb-1">Resolved</p>
+            <ng-container *ngIf="totalCountTicketOnly.countResolvedTicket != 0">
+              <h4 class="mb-0">
+                <span
+                  [countUp]="totalCountTicketOnly.countResolvedTicket"
+                  class="counter-value cursor-pointer"
+                  [options]="option"
+                ></span>
+              </h4>
+            </ng-container>
+            <ng-container *ngIf="totalCountTicketOnly.countResolvedTicket == 0">
+              <h4 class="mb-0">0</h4>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <!-- Nav tabs -->
+        <ul
+          ngbNav
+          #Border="ngbNav"
+          [(activeId)]="activeIdTabs"
+          (activeIdChange)="onTabChange($event)"
+          class="nav nav-tabs nav-border-top nav-border-top-primary mb-3"
+        >
+          <li [ngbNavItem]="1">
+            <a ngbNavLink> Assigned Ticket </a>
+            <ng-template ngbNavContent>
+              <app-assigned-ticket-list
+                [sendingCard]="sendingCard"
+                (AfterLoadApi)="sendLoadApi($event)"
+                (sendAfterClear)="sendAfterClear($event)"
+              ></app-assigned-ticket-list>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="2">
+            <a ngbNavLink> Expected Completion Date Required</a>
+            <ng-template ngbNavContent>
+              <app-expected-complition-date></app-expected-complition-date>
+            </ng-template>
+          </li>
+        </ul>
+        <div class="tab-content text-muted">
+          <div [ngbNavOutlet]="Border"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

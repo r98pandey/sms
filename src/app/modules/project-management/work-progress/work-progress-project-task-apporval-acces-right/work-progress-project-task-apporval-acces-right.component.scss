@@ -1,0 +1,21 @@
+.custom-offcanvas-body {
+    height: calc(100vh - 100px); /* Adjust the height based on your header and footer height */
+    overflow-y: auto;
+  }
+  
+  .offcanvas-header,
+  .offcanvas-footer {
+    position: sticky;
+    z-index: 10;
+  }
+  
+  .offcanvas-header {
+    top: 0;
+    background-color: white; /* Ensure background color matches the offcanvas */
+  }
+  
+  .offcanvas-footer {
+    bottom: 0;
+    background-color: white; /* Ensure background color matches the offcanvas */
+  }
+  

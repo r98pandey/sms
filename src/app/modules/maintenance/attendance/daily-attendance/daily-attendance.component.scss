@@ -1,0 +1,97 @@
+.clear-box{
+    position: relative;
+}
+
+.clear-box .search-icon {
+    font-size: 14px;
+    position: absolute;
+    left:94%;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: #767474;
+}
+::ng-deep.clear-box .search-icon :hover{
+    font-size: 16px!important
+}
+
+
+.activeClas{
+    border:3px solid;
+    border-radius: 4px;
+
+}
+.activeClasCheckIn{
+    border: 3px solid rgb(218 134 52 / 92%);
+    border-radius: 4px;
+}
+.activeClasCheckOut{
+    border: 3px solid rgb(15 126 157);
+    border-radius: 4px;
+}
+.activeClasoffice{
+    border: 3px solid rgb(17 154 16);
+    border-radius: 4px;
+}
+.activeClashome{
+    border: 3px solid rgb(23 43 184);
+    border-radius: 4px;
+}
+.activeClasOnsite{
+    border: 3px solid rgb(12 102 154);
+    border-radius: 4px;
+    
+}
+.activeClasabsent{
+    border: 3px solid rgb(189 60 26);
+    border-radius: 4px;
+}
+
+
+.icon-set{
+    margin-top: -13px;
+    margin-left: 15px;
+}
+
+/************ image **********/
+
+.chat-user-img .user-status {
+    width: 12px !important;
+    height: 12px !important;
+    border-radius: 50%;
+    border: 2px solid var(--vz-secondary-bg);
+    position: absolute;
+    right: 0;
+    left: auto;
+    bottom: 0;
+}
+
+.word-break{
+    word-wrap: break-word;
+    white-space: unset !important;
+    display: block;
+    width: 100%;
+    padding: var(--vz-dropdown-item-padding-y) var(--vz-dropdown-item-padding-x);
+    clear: both;
+    font-weight: 400;
+    color: var(--vz-dropdown-link-color);
+    text-align: inherit;
+    background-color: transparent;
+    border: 0;
+    border-radius: var(--vz-dropdown-item-border-radius, 0);
+}
+.br-col{
+    color: #fff;
+    margin-top: -8px;
+    border-radius: 2px 2px;
+}
+
+.drop-con{
+    top:-10px !important; 
+    margin-left: 20px !important;
+}
+
+.fade {
+    transition: opacity .15s linear;
+}

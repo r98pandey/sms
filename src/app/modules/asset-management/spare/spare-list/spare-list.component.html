@@ -1,0 +1,319 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<div class="row">
+
+  <!--end col-->
+  <div class="col-xxl-4 col-sm-6 " (click)="onCardClickActive('Ready Stock',1)">
+    <div class="card card-animate">
+      <div class="card-body" [class]="activeCard=='Ready Stock'?'activeCardClasss':''">
+        <div class="d-flex justify-content-between">
+          <div>
+            <p class="fw-semibold  mb-0">Ready Stock</p>
+            <h2 class="mt-1 ff-secondary cursor fw-semibold">
+              <span
+                *ngIf="
+                  spareStatusCountObject.totalReadyStockAssetAssetSparePart != 0
+                "
+                [countUp]="
+                  spareStatusCountObject.totalReadyStockAssetAssetSparePart
+                "
+                class="counter-value"
+              
+                [options]="option"
+              ></span>
+              <span
+                *ngIf="
+                  spareStatusCountObject.totalReadyStockAssetAssetSparePart == 0
+                "
+                class="counter-value"
+                >0</span
+              >
+            </h2>
+          </div>
+          <div>
+            <div class="avatar-sm flex-shrink-0">
+              <span
+                class="avatar-title bg-info-subtle text-info rounded-circle fs-4"
+              >
+                <i class="mdi mdi-cart"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+  </div>
+    <div class="col-xxl-4 col-sm-6 " (click)="onCardClickActive('In-Service',2)">
+    <div class="card card-animate">
+      <div class="card-body" [class]="activeCard=='In-Service'?'activeCardClasss':''">
+        <div class="d-flex justify-content-between">
+          <div>
+            <p class="fw-semibold mb-0">In-Service</p>
+            <h2 class="mt-1 ff-secondary cursor fw-semibold">
+              <span
+                *ngIf="spareStatusCountObject.totalInserviceAssetSparePart != 0"
+                [countUp]="spareStatusCountObject.totalInserviceAssetSparePart"
+                class="counter-value"
+              
+                [options]="option"
+              ></span>
+
+              <span
+                *ngIf="spareStatusCountObject.totalInserviceAssetSparePart == 0"
+                class="counter-value"
+                >0</span
+              >
+            </h2>
+          </div>
+          <div>
+            <div class="avatar-sm flex-shrink-0">
+              <span
+                class="avatar-title bg-info-subtle text-info rounded-circle fs-4"
+              >
+                <i class="mdi mdi-wrench"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+    <!-- end card-->
+  </div>
+  <!--end col-->
+  <div class="col-xxl-4 col-sm-6 "(click)="onCardClickActive('EOL',3)">
+    <div class="card card-animate">
+      <div class="card-body"[class]="activeCard=='EOL'?'activeCardClasss':''">
+        <div class="d-flex justify-content-between">
+          <div>
+            <p class="fw-semibold  mb-0">EOL</p>
+            <h2 class="mt-1 ff-secondary cursor fw-semibold">
+              <span
+                *ngIf="spareStatusCountObject.totalEndOffLifeAsset != 0"
+                [countUp]="spareStatusCountObject.totalEndOffLifeAsset"
+                class="counter-value"
+              
+                [options]="option"
+              ></span>
+              <span
+                *ngIf="spareStatusCountObject.totalEndOffLifeAsset == 0"
+                class="counter-value"
+                >0</span
+              >
+            </h2>
+          </div>
+          <div>
+            <div class="avatar-sm flex-shrink-0">
+              <span
+                class="avatar-title bg-info-subtle text-info rounded-circle fs-4"
+              >
+                <i class="mdi mdi-timer-sand"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm-3 col-xxl-3">
+            <h5 class="card-title mb-0">Spare Part List</h5>
+          </div>
+          <div
+            class="col-sm-9 col-xxl-9 d-flex gap-2 flex-wrap justify-content-end"
+          >
+            <div *ngIf="returnValueMenu.add">
+              <button *ngIf="addButtonShownHide"
+                class="btn btn-success add-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#showModal"
+                (click)="openModalAddSpare(addSpareModel)"
+              >
+                <i class="ri-add-line align-bottom me-1"></i> Add Spares
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <!-- Nav tabs -->
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [(activeId)]="activeId"
+            (navChange)="onNavChange($event)"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1" (click)="onCardClickActive('Ready Stock',1)">
+              <a ngbNavLink>
+                <i class="ri-store-2-fill me-1 align-bottom"></i> Ready Stock
+              </a>
+              <ng-template ngbNavContent>
+                <app-ready-stock-spare-list></app-ready-stock-spare-list>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="2" (click)="onCardClickActive('In-Service',2)">
+              <a ngbNavLink>
+                <i class="ri-checkbox-circle-line me-1 align-bottom"></i> In-Service
+              </a>
+              <ng-template ngbNavContent>
+                <app-in-service-spare></app-in-service-spare>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="3" (click)="onCardClickActive('EOL',3)">
+              <a ngbNavLink>
+                <i class="ri-recycle-fill me-1 align-bottom"></i> EOL
+              </a>
+              <ng-template ngbNavContent>
+                <app-eol-spare-list></app-eol-spare-list>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #qrView let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="exampleModalLabel">Qr-Code</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="modal-body text-center">
+    <img
+      [src]="imageUrl + spareQrData?.sparePartQrCodeURL"
+      alt="qr"
+      class="qrCode-img"
+    />
+  </div>
+</ng-template>
+
+<ng-template #addSpareModel role="document" let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title a1" id="exampleModalLabel">Add Spare Part</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-form-spare (loadList)="afterSubmitSpareData($event)"></app-form-spare>
+  </div>
+</ng-template>
+
+<ng-template #editSpareModel role="document" let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="exampleModalLabel">Edit Spare Part</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-form-spare
+      (loadList)="afterSubmitSpareData($event)"
+      [editSparepartObject]="editSparepartObject"
+    ></app-form-spare>
+  </div>
+</ng-template>
+
+<ng-template #viewSpareModel role="document" let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="exampleModalLabel">View Spare Part</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-view-spare
+      [viewSparepartObject]="viewSparepartObject"
+    ></app-view-spare>
+  </div>
+</ng-template>
+
+<ng-template #deleteModel let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="mt-2 text-center">
+        <img
+        src
+        ="../../../../assets/images/ticketChatpartImage.png"
+        class
+        ="img-fluid rounded chat-image-success">
+        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+          <h4>You are about to delete a Spare Part ?</h4>
+          <p class="text-muted mx-4 mb-0">
+            Deleting your spare part will remove all of your information from
+            our database.
+          </p>
+        </div>
+      </div>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+          (click)="modal.close('Close click')"
+        >
+          <i class="ri-close-line me-1 align-middle"></i> Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="deleteData(deleteId)"
+          (click)="modal.close('Close click')"
+        >
+          Yes, Delete It!
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>

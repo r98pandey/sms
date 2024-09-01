@@ -1,0 +1,272 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  title="PROJECT MANAGEMENT"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card mt-n4 mx-n4">
+        <div class="bg-warning-subtle">
+          <div class="card-body pb-0 px-4">
+            <div class="row mb-3">
+              <div class="col-md">
+                <div class="row align-items-center g-3">
+                  <div class="col-md-auto">
+                    <div class="avatar-md">
+                       
+                      <div
+                        class="avatar-md"
+                      >
+                        <span class="rounded">
+                          <ng-container>
+                            <app-avatar-photo
+                              [name]="toUpperCaseword(departmentName)"
+                            ></app-avatar-photo>
+                          </ng-container>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md">
+                    <div>
+                      <h4 class="fw-bold">
+                        Server, FIDS and VMS Acceptance Test
+                      </h4>
+                      <div class="hstack gap-3 flex-wrap">
+                        <div>
+                          <i class="ri-building-line align-bottom me-1"></i>
+                          SS Tech Pte Ltd (Testing)
+
+                        </div>
+                        <div class="vr"></div>
+                        <div>
+                          <i class="ri-building-2-line align-bottom me-1"></i
+                          > McConnell Dowell South East Asia Pte Ltd
+                        </div>
+                        <div class="vr"></div>
+  
+                       
+                       
+  
+                       
+                        <div
+                          class="vr"
+                          *ngIf="dDetail.currentProcessId != null"
+                        ></div>
+                        <div *ngIf="dDetail.currentProcessId != null">
+                          Current Proccess:
+                          <span
+                            class="fs-12"
+                            [class]="
+                              returnStatusBadgeClassesStatus(
+                                dDetail.currentProcessId
+                              )
+                            "
+                            >{{ dDetail.currentProcessName }}</span
+                          >
+                        </div>
+  
+                        <div class="vr" *ngIf="dDetail.departmentStatusId"></div>
+                        <div *ngIf="dDetail.departmentStatusId">
+                          Status:
+                          <span
+                            class="fs-12"
+                            [class]="
+                              returnStatusBadgeClassesStatus(
+                                dDetail.departmentStatusId
+                              )
+                            "
+                            >{{ dDetail.departmentStatusName }}</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+          </div>
+          <!-- end card body -->
+        </div>
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
+  </div>
+
+
+  <div class="row">
+    <div class="col-xxl-8">
+     
+        <div class="card">
+                    <div class="card-body">
+                      <ul
+                        ngbNav
+                        #defaultNav="ngbNav"
+                        [(activeId)]="defaultNavActiveId"
+                        class="nav-tabs nav-tabs-custom"
+                      >
+                        <li [ngbNavItem]="1">
+                          <a ngbNavLink>
+                            <div
+                              class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                            >
+                              <p class="d-none1 d-sm-block mb-0">Description</p>
+                            </div>
+                          </a>
+                          <ng-template ngbNavContent>
+                            <div class="row">
+                              <div class="col-lg-12">
+                                <div class="card mb-1">
+                                  <div class="card-body maxHeightCard">
+                                    <div class="text-muted">
+                                      <h6 class="mb-3 fw-semibold text-uppercase">Description</h6>
+                                      <p>It will be as simple as occidental in fact, it will be Occidental. To an English person, it will
+                                          seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental
+                                          is. The European languages are members of the same family. Their separate existence is a myth.
+                                          For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in
+                                          their grammar, their pronunciation and their most common words.</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-template>
+                          </li>
+            
+                          <li [ngbNavItem]="2">
+                            <a ngbNavLink>
+                              <div
+                                class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                              >
+                                <p class="d-none1 d-sm-block mb-0">Member</p>
+                              </div>
+                            </a>
+                            <ng-template ngbNavContent>
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <div class="card mb-1">
+                                    <div class="card-body maxHeightCard">
+                                       
+                                        <div *ngFor="let tech of filteredTechnicianList; let i = index">
+                                            <div
+                                              class="d-flex align-items-center mb-2 border-bottom p-2"
+                                              
+                                            >
+                                            
+                                  
+                                              <div class="avatar-xs flex-shrink-0 me-3">
+                                              <img
+                                                  src="../../../../../assets/images/users/avatar-5.jpg"
+                                                  
+                                                  alt=""
+                                                  class="img-fluid rounded-circle"
+                                                /> 
+                                              </div>
+                                              <div class="flex-grow-1">
+                                                <h5 class="fs-14 mb-0">
+                                                  <a href="javascript:void(0);" class="text-body d-block">
+                                                    {{ tech.fullName }}
+                                                  </a>
+                                                  <!-- <p class="mt-0 mb-0 text-muted">{{ tech.designation }}</p> -->
+                                                </h5>
+                                              </div>
+                                              <div class="flex-shrink-0 me-3 mb-0">
+                                                <p class="mb-0">
+                                                  <span
+                                                    ><i class="ri-phone-fill me-1"></i
+                                                    >{{ tech.phoneNumber }}</span
+                                                  >
+                                                </p>
+                                                <!-- <p class="mb-0"><span><i class=" ri-mail-check-fill me-1"></i>{{ tech.email }}</span></p> -->
+                                              </div>
+                                            </div>
+                                          </div>
+            
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-template>
+                          </li>
+            
+                      </ul>
+                      <div class="tab-content text-muted">
+                        <div [ngbNavOutlet]="defaultNav"></div>
+                      </div>
+            
+                    </div>
+        </div>
+
+    </div>
+    <div class="col-xxl-4">
+            <div class="card ribbon-box right">
+              <div
+                class="card-header d-flex justify-content-between align-items-baseline"
+              >
+                <h5 class="card-title mb-0">Sub Task Details</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table mb-0 table-borderless">
+                    <tbody>
+                        <tr>
+                            <td class="fw-medium w-20">Team</td>
+                            <td>Site Project Team</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-medium w-20">Status</td>
+                            <td  class="badge bg-warning-subtle text-uppercase text-warning">
+                                In-Progress
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="fw-medium w-20">Priority</td>
+                            <td>
+                                <span class="badge bg-danger text-uppercase"> High </span>
+                            </td>
+                          </tr>
+                         <caption>PLANED DATE</caption>
+                        <tr>
+                            <td class="fw-medium w-20">Start Date</td>
+                            <td>
+                            04-04-2024
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fw-medium w-20">End Date</td>
+                            <td id="t-client">
+                                28-04-2024
+                            </td>
+                        </tr>
+                    
+                         <caption>ACTUAL DATE</caption>
+                        <tr>
+                        
+                        <td class="fw-medium w-20">Start Date</td>
+                        <td>
+                            04-04-2024
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="fw-medium w-20">End Date</td>
+                        <td id="t-client">
+                            28-04-2024
+                        </td>
+                      </tr>
+                     
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!--end card-body-->
+            </div>
+    </div>
+ </div>
+
+ 

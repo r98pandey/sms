@@ -1,0 +1,549 @@
+<div class="row justify-content-center">
+  <div class="col-xxl-12">
+    <div class="card" id="demo">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="p-4">
+            <div class="text-center mb-2">
+              <img
+                [src]="
+                  quotationObject.companyLogoURL
+                    ? imgUrl + quotationObject.companyLogoURL
+                    : '../../../../../../assets/images/placeholderimage.png'
+                "
+                class="card-logo"
+                alt="logo light"
+                height="47"
+              />
+            </div>
+            <div class="mt-sm-0 mt-0">
+              <h6 class="text-muted text-uppercase fw-semibold mb-0">
+                {{ quotationObject.companyName }}
+              </h6>
+              <p class="text-muted mb-1">
+                {{ quotationObject.companyAddress1 }}
+              </p>
+              <p class="text-muted mb-1">
+                {{
+                  quotationObject.companyAddress2
+                    ? quotationObject.companyAddress2
+                    : ""
+                }}
+                {{
+                  quotationObject.companyAddress3
+                    ? quotationObject.companyAddress3
+                    : ""
+                }}
+                {{
+                  quotationObject.companyCountry
+                    ? quotationObject.companyCountry
+                    : ""
+                }}
+              </p>
+              <p class="text-muted mb-0" id="zip-code">
+                <span>Zip-code:</span> {{ quotationObject.companyPostalCode }}
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="hstack gap-2 justify-content-end d-print-none mt-1 mb-2 ps-2 pe-2"
+            *ngIf="viewQuationApproveReviewButtons"
+          >
+            <button
+              type="button"
+              (click)="openModalApproveReviewQuotation()"
+              class="btn btn-success btn-label waves-effect waves-light"
+            >
+              <i
+                class="ri-check-double-line label-icon align-middle fs-16 me-2"
+              ></i>
+              {{
+                quotationObjectFromTheDashbaordWorkFlowTable.approverType ==
+                "Approver"
+                  ? "Approve"
+                  : "Review"
+              }}
+            </button>
+
+            <button
+              type="button"
+              (click)="openModalForRejectedQuotation()"
+              class="btn btn-danger btn-label waves-effect waves-light"
+            >
+              <i
+                class="ri-error-warning-line label-icon align-middle fs-16 me-2"
+              ></i>
+              Reject
+            </button>
+          </div>
+          <div
+            class="hstack gap-2 justify-content-end d-print-none mt-1 mb-2 ps-2 pe-2"
+            *ngIf="viewQuationProcessInvoiceButtons"
+          >
+            <button
+              type="button"
+              (click)="openModalAProcessInvoiceQuotation()"
+              class="btn btn-success btn-label waves-effect waves-light"
+            >
+              <i
+                class="ri-check-double-line label-icon align-middle fs-16 me-2"
+              ></i>
+              Process Invoice
+            </button>
+          </div>
+        </div>
+        <!--end col-->
+
+        <div class="col-lg-12">
+          <div class="card-header border-bottom-dashed border-top-dashed p-4">
+            <div class="d-flex flex-wrap">
+              <div class="flex-grow-1">
+                <h6 class="text-muted text-uppercase fw-semibold">
+                  {{ quotationObject.clientName }}
+                </h6>
+                <p class="text-muted mb-1" id="address-details">
+                  {{ quotationObject.clientAddress1 }}
+                </p>
+                <p class="text-muted mb-1">
+                  {{
+                    quotationObject.clientAddress2
+                      ? quotationObject.clientAddress2
+                      : ""
+                  }}
+                  {{
+                    quotationObject.clientAddress3
+                      ? quotationObject.clientAddress3
+                      : ""
+                  }}
+                  {{
+                    quotationObject.clientCountry
+                      ? quotationObject.clientCountry
+                      : ""
+                  }}
+                </p>
+                <p class="text-muted mb-0" id="zip-code">
+                  <span>Zip-code:</span> {{ quotationObject.clientPostalCode }}
+                </p>
+              </div>
+              <div class="flex-shrink-0 mt-sm-0 mt-3">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td class="department-text">
+                        <h6>
+                          <span class="text-muted fw-normal">{{
+                            isProject ? "Project" : "Department"
+                          }}</span>
+                        </h6>
+                      </td>
+                      <td>
+                        <h6>
+                          <span id="legal-register-no">
+                            &nbsp;: &nbsp;{{
+                              quotationObject.projectName
+                            }}</span
+                          >
+                        </h6>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width: 30px">
+                        <h6>
+                          <span class="text-muted fw-normal">Ticket No</span>
+                        </h6>
+                      </td>
+                      <td>
+                        <h6>
+                          <span id="legal-register-no"
+                            >&nbsp;: &nbsp;#
+                            {{ quotationObject.ticketNo }}</span
+                          >
+                        </h6>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width: 30px">
+                        <h6>
+                          <span class="text-muted fw-normal">Quotation No</span>
+                        </h6>
+                      </td>
+                      <td>
+                        <h6>
+                          <span id="legal-register-no"
+                            >&nbsp;: &nbsp; #<span id="invoice-no">{{
+                              quotationObject.quotNo
+                            }}</span></span
+                          >
+                        </h6>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="mt-1 p-2">
+            <label class="form-label text-muted text-uppercase fw-semibold">
+              Thank you for your inquiry. We are pleased to submit our quote as
+              follows:
+            </label>
+          </div>
+          <!--end card-header-->
+        </div>
+        <!--end col-->
+        <div class="col-lg-12">
+          <div class="card-body p-4">
+            <div class="row g-3">
+              <div class="col-lg-12 col-12 mb-1">
+                <p class="text-muted mb-2 text-uppercase fw-semibold">
+                  Atten To
+                </p>
+                <h5 class="fs-14 mb-0">
+                  {{ quotationObject.attentionTo }}
+                </h5>
+              </div>
+              <div class="col-lg-12 col-12 mb-1">
+                <p class="text-muted mb-2 text-uppercase fw-semibold">Title</p>
+                <h5 class="fs-14 mb-0">
+                  {{ quotationObject.quotTitle }}
+                </h5>
+              </div>
+              <!--e <div class="col-lg-12 col-12 mb-1">
+                <p class="text-muted mb-2 text-uppercase fw-semibold">Remark</p>
+                <h5 class="fs-14 mb-0">{{ }}</h5>
+              </div>
+             nd col-->
+              <div class="col-lg-3 col-6">
+                <p class="text-muted mb-2 text-uppercase fw-semibold">Date</p>
+                <h5 class="fs-14 mb-0">
+                  {{ quotationObject.createdDate | date : "dd-MM-YYY" }}
+                </h5>
+              </div>
+              <!--end col-->
+              <div class="col-lg-3 col-6">
+                <p class="text-muted mb-2 text-uppercase fw-semibold">Status</p>
+                <span
+                  class="fs-11"
+                  [class]="
+                    returnStatusBadgeClassesStatus(quotationObject.quotStatusId)
+                  "
+                  >{{ quotationObject.quotStatusName }}</span
+                >
+              </div>
+              <!--end col-->
+
+              <div class="col-lg-3 col-6">
+                <p class="text-muted mb-2 text-uppercase fw-semibold">
+                  Created By
+                </p>
+                <h5 class="fs-14 mb-0">{{ quotationObject.createdBy }}</h5>
+              </div>
+              <div class="col-lg-3 col-6">
+                <p class="text-muted mb-2 text-uppercase fw-semibold">
+                  Total Amount <span class="fs-10">({{departmentDetail?.currencyCode}})</span>
+                </p>
+                <h5 class="fs-14 mb-0">
+                  <span id="total-amount">{{
+                    quotationObject.totalPrice | number:'1.2-2'
+                  }}</span>
+                </h5>
+              </div>
+
+              <!--end col-->
+            </div>
+            <!--end row-->
+          </div>
+          <!--end card-body-->
+        </div>
+        <!--end col-->
+        <div class="col-lg-12">
+          <div class="card-body p-4">
+            <div class="table-responsive" *ngIf="mX_quotationItem.length != 0">
+              <table
+                class="table table-borderless text-center table-nowrap align-middle mb-0"
+              >
+                <thead>
+                  <tr class="table-active">
+                    <th scope="col" style="width: 10%">#</th>
+                    <th scope="col" class="text-start" style="width: 50%">Item Details</th>
+                    <th scope="col" style="width: 10%">UOM</th>
+                    <th scope="col" style="width: 10%">Unit Price</th>
+                    <th scope="col" style="width: 10%">Quantity</th>
+                    <th scope="col" class="text-end" style="width: 10%">Amount<span class="fs-10">({{departmentDetail?.currencyCode}})</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let item of mX_quotationItem; let i = index"
+                    [attr.data-index]="i"
+                  >
+                  <th scope="row" class="align-top">{{ i + 1 }}</th>
+                  <td class="text-start title">
+                    <span class="fw-medium">{{ item.itemName }}</span>
+                    <p class="text-muted mb-0 text-desc">{{ item.itemDetail }}</p>
+                  </td>
+                  <td class="align-top text-center">{{ item.uom }}</td>
+                  <td class="align-top text-center">{{ item.unitPrice | number:'1.2-2' }}</td>
+                  <td class="align-top text-center">{{ item.qty | number:'1.2-2' }}</td>
+                  <td class="text-end align-top">{{ item.unitTotalPrice | number:'1.2-2' }}</td>
+                        </tr>
+                </tbody>
+              </table>
+              <!--end table-->
+            </div>
+            <div class="border-top border-top-dashed mt-2">
+              <table
+                class="table table-borderless table-nowrap align-middle mb-0 ms-auto"
+                style="width: 250px"
+              >
+                <tbody>
+                  <tr>
+                    <td>Sub Total</td>
+                    <td class="text-end">{{quotationObject.subTotal | number:'1.2-2'}}</td>
+                  </tr>
+                   <tr>
+                    <td>Discount ({{quotationObject.discountRate | number:'1.2-2'}})</td>
+                    <td class="text-end">{{quotationObject.discountPrice | number:'1.2-2'}}</td>
+                  </tr>
+                  <!-- <tr>
+                    <td>Estimated Tax (12.5%)</td>
+                    <td class="text-end">{{ quotationObject.taxPrice }}</td>
+                  </tr> -->
+               
+                  <tr>
+                    <td>{{quotationObject.serviceTaxType }}</td>
+                    <td class="text-end">{{ quotationObject.gstPrice | number:'1.2-2'}}</td>
+                  </tr>
+                  <tr class="border-top border-top-dashed fs-15">
+                    <th scope="row">Total Amount <span class="fs-10">({{departmentDetail?.currencyCode}})</span></th>
+                    <th class="text-end">{{ quotationObject.totalPrice | number:'1.2-2'}}</th>
+                  </tr>
+                </tbody>
+              </table>
+              <!--end table-->
+            </div>
+            <div class="mt-4">
+              <div class="alert alert-primary">
+                <p class="mb-0">
+                  <span class="fw-semibold">NOTES:</span>
+                  <span id="note"> {{ quotationObject.remark }} </span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <!--end card-body-->
+        </div>
+        <!--end col-->
+      </div>
+      <!--end row-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="d-flex justify-content-end mb-3">
+    <button
+      class="btn btn-soft-primary waves-effect back-button"
+      (click)="goBack()"
+    >
+      Back
+    </button>
+  </div>
+</div>
+
+<!-- isRejectedQuotationModalPopup -->
+<ng-template #isRejectedQuotationModalPopup let-modal>
+  <div class="modal-content">
+    <div class="modal-body p-5 text-center">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="mt-2">
+        <div class="">
+          <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        </div>
+
+        <h4 class="mb-3 mt-4 text-justify">Quotation {{textTitle}} Verification</h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          Are you sure you want to make this Quotation Proceed to next process?
+        </p>
+        <br />
+        <div class="row">
+          <div class="col-lg">
+            <label class="form-label" for="remark"
+            >Remark
+            <span class="starRequried">*</span>
+          </label>
+            <textarea
+              class="form-control bg-light border-light"
+              id="exampleFormControlTextarea1"
+              rows="4"
+              placeholder="Enter your remark..."
+              [(ngModel)]="billingEligibilityDecisionRemarkValue"
+              [maxlength]="maxCharsBillingEligibilityDecision"
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ billingEligibilityDecisionRemarkValue?.length }}/{{
+                maxCharsBillingEligibilityDecision
+              }}</label
+            >
+          </div>
+        </div>
+        <br /><br />
+        <div class="hstack gap-2 justify-content-center">
+          <button
+            class="btn btn-success"
+            [disabled]="!billingEligibilityDecisionRemarkValue"
+            (click)="modal.close('Ok', $event)"
+          >
+            Yes, Proceed!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.dismiss('Cross click')"
+            id="deleteRecord-close"
+            class="btn btn-soft-danger"
+          >
+            Later
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+<!-- end isRejectedQuotationModalPopup -->
+
+<!-- isApproveReviewQuotationModalPopup -->
+<ng-template #isApproveReviewQuotationModalPopup let-modal>
+  <div class="modal-content">
+    <div class="modal-body text-center p-5">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="mt-2">
+        <div class="text-center">
+          <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        </div>
+        <h4 class="mb-3 mt-4 text-justify">Quotation {{textTitle}} Verification</h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          Are you sure you want to make this Quotation Proceed to next process?
+        </p>
+        <br />
+        <div class="row">
+          <div class="col-lg">
+            <label class="form-label" for="remark"
+            >Remark
+            <span class="starRequried">*</span>
+          </label>
+            <textarea
+              class="form-control bg-light border-light"
+              id="exampleFormControlTextarea1"
+              rows="4"
+              placeholder="Enter your remark..."
+              [(ngModel)]="billingEligibilityDecisionRemarkValue"
+            [maxlength]="maxCharsBillingEligibilityDecision"
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ billingEligibilityDecisionRemarkValue?.length }}/{{
+                maxCharsBillingEligibilityDecision
+              }}</label
+            >
+          </div>
+        </div>
+        <br /><br />
+        <div class="hstack gap-2 justify-content-center">
+          <button
+            class="btn btn-success"
+            [disabled]="!billingEligibilityDecisionRemarkValue"
+            (click)="modal.close('Ok', $event)"
+          >
+            Yes, Proceed!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.dismiss('Cross click')"
+            id="deleteRecord-close"
+            class="btn btn-soft-danger"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+<!-- end isApproveReviewQuotationModalPopup -->
+
+<ng-template #successDataModalQuotation let-modal>
+  <div class="modal-content">
+    <div class="modal-body text-center p-5">
+      <div class="mt-2">
+        <!-- <lord-icon
+          src="https://cdn.lordicon.com/tqywkdcz.json"
+          trigger="hover"
+          style="width: 150px; height: 150px"
+        >
+        </lord-icon> -->
+        <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        <h4 class="mb-3 mt-4">
+          {{ successDataModalQuotationMessageObject.name }}
+        </h4>
+        <p class="text-muted fs-15 mb-4">
+          {{ successDataModalQuotationMessageObject.remark1 }}
+        </p>
+        <p
+          class="text-muted fs-15 mb-4"
+          *ngIf="successDataModalQuotationMessageObject.remark2"
+        >
+          <br />
+          {{ successDataModalQuotationMessageObject.remark2 }}
+        </p>
+        <p
+          class="text-muted fs-15 mb-4"
+          *ngIf="successDataModalQuotationMessageObject.remark3"
+        >
+          <br />
+          {{ successDataModalQuotationMessageObject.remark3 }}
+        </p>
+        <br />
+
+        <div class="hstack gap-2 justify-content-center">
+          <button class="btn btn-primary" (click)="modal.close('Ok', $event)">
+            Ok,Done It!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

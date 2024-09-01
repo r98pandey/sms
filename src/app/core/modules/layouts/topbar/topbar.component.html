@@ -1,0 +1,967 @@
+<header id="page-topbar" data-scroll-header (window:scroll)="windowScroll()">
+  <div class="layout-width">
+    <div class="navbar-header">
+      <div class="d-flex">
+        <!-- LOGO -->
+        <div class="navbar-brand-box horizontal-logo">
+          <a href="javascript:void(0);" class="logo logo-dark">
+            <span class="logo-sm">
+              <img src="assets/images/logo-sm.png" alt="" height="22" />
+            </span>
+            <span class="logo-lg">
+              <img src="assets/images/logo-dark.png" alt="" height="17" />
+            </span>
+          </a>
+
+          <a href="javascript:void(0);" class="logo logo-light">
+            <span class="logo-sm">
+              <img src="assets/images/logo-sm.png" alt="" height="22" />
+            </span>
+            <span class="logo-lg">
+              <img src="assets/images/logo-light.png" alt="" height="17" />
+            </span>
+          </a>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger"
+          id="topnav-hamburger-icon"
+          (click)="toggleMobileMenu($event)"
+        >
+          <span class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+
+        <!-- App Search  (click)="moveToActive()"-->
+        <div class="app-search">
+          <div
+            class="position-relative d-flex align-items-center text-muted cursor"
+          >
+            <i
+              class="ri-notification-3-line fs-24 text-success"
+              *ngIf="pushActive"
+            ></i>
+            <i
+              class="ri-notification-off-line fs-24 text-danger"
+              *ngIf="!pushActive"
+            ></i>
+            Push Notification {{ pushActive ? "Active" : "Inactive" }}
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center">
+        <div class="ms-1 header-item d-none d-sm-flex">
+          <button
+            type="button"
+            class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
+            data-toggle="fullscreen"
+            (click)="fullscreen()"
+          >
+            <i class="bx bx-fullscreen fs-22"></i>
+          </button>
+        </div>
+
+        <div class="ms-1 header-item d-none d-sm-flex">
+          <button
+            type="button"
+            class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode"
+          >
+            <i class="bx bx-moon fs-22" (click)="changeMode('dark')"></i>
+            <i class="bx bx-sun fs-22" (click)="changeMode('light')"></i>
+          </button>
+        </div>
+
+        <div class="dropdown topbar-head-dropdown ms-1 header-item" ngbDropdown>
+          <button
+            (click)="countRealTimeNotification = 0"
+            type="button"
+            class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
+            id="page-header-notifications-dropdown"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            ngbDropdownToggle
+          >
+            <i class="bx bx-bell fs-22"></i>
+            <span
+              *ngIf="countRealTimeNotification != 0"
+              class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger"
+              >{{ countRealTimeNotification
+              }}<span class="visually-hidden">unread messages</span></span
+            >
+          </button>
+          <div
+            class="dropdown-menu dropdown-menu-lg dropdown-menu-start p-0"
+            aria-labelledby="page-header-notifications-dropdown"
+            ngbDropdownMenu
+          >
+            <div class="dropdown-head bg-primary bg-pattern rounded-top">
+              <div class="p-3">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <h6 class="m-0 fs-16 fw-semibold text-white">
+                      Notifications
+                    </h6>
+                  </div>
+                  <div class="col-auto dropdown-tabs">
+                    <span
+                      class="badge bg-light-subtle text-body fs-13"
+                      *ngIf="countRealTimeNotification"
+                    >
+                      {{ countRealTimeNotification }} New</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="px-2 pt-2">
+                <ul
+                  ngbNav
+                  #nav="ngbNav"
+                  [activeId]="1"
+                  class="nav nav-tabs dropdown-tabs nav-tabs-custom"
+                  id="notificationItemsTab"
+                >
+                  <li [ngbNavItem]="1">
+                    <a ngbNavLink>
+                      All ({{ storeNotificationArray?.length }})
+                    </a>
+                    <ng-template ngbNavContent>
+                      <div
+                        class="tab-pane fade show active py-2 ps-2"
+                        id="all-noti-tab"
+                        role="tabpanel"
+                      >
+                        <ngx-simplebar style="max-height: 300px">
+                          <ng-container
+                            *ngIf="storeNotificationArray?.length == 0"
+                          >
+                            <div
+                              class="tab-pane p-4"
+                              id="alerts-tab"
+                              role="tabpanel"
+                              aria-labelledby="alerts-tab"
+                            >
+                              <div class="w-25 w-sm-50 pt-3 mx-auto">
+                                <img
+                                  src="assets/images/svg/bell.svg"
+                                  class="img-fluid"
+                                  alt="user-pic"
+                                />
+                              </div>
+                              <div class="text-center pb-5 mt-2">
+                                <h6 class="fs-18 fw-semibold lh-base">
+                                  Hey! You have no any notifications
+                                </h6>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="storeNotificationArray?.length != 0"
+                          >
+                            <div
+                              class="pe-2"
+                              *ngFor="let note of storeNotificationArray"
+                            >
+                              <div
+                                class="text-reset notification-item d-block dropdown-item position-relative"
+                              >
+                                <div class="d-flex">
+                                  <div class="avatar-xs me-3 flex-shrink-0">
+                                    <span
+                                      class="avatar-title bg-info-subtle text-info rounded-circle fs-16"
+                                    >
+                                      <i class="bx bx-bell"></i>
+                                    </span>
+                                  </div>
+                                  <div class="flex-grow-1">
+                                    <a
+                                      href="javascript:void(0);"
+                                      class="stretched-link"
+                                    >
+                                      <h6
+                                        class="mt-0 mb-1 fs-13 fw-semibold"
+                                        *ngIf="note.ticketNo"
+                                      >
+                                        Ticket: #{{ note.ticketNo }}
+                                      </h6>
+                                      <h6
+                                        class="mt-0 mb-1 fs-13 fw-semibold"
+                                        *ngIf="note.quotNo"
+                                      >
+                                        Quotation : # {{ note.quotNo }}
+                                      </h6>
+                                    </a>
+                                    <div
+                                      class="fs-13 text-muted"
+                                      *ngIf="note.message"
+                                    >
+                                      <p class="mb-1">
+                                        {{ removeToHtml(note.message) }}
+                                      </p>
+                                    </div>
+                                    <div
+                                      class="fs-13 text-muted"
+                                      *ngIf="note.workflowTab"
+                                    >
+                                      <p class="mb-1">
+                                        <b>Workflow Tab :</b>
+                                        {{ note.workflowTab }}
+                                      </p>
+                                    </div>
+                                    <div
+                                      class="fs-13 text-muted"
+                                      *ngIf="note.myTaskTab"
+                                    >
+                                      <p class="mb-1">
+                                        <b>My-Task Tab :</b>
+                                        {{ note.myTaskTab }}
+                                      </p>
+                                    </div>
+                                    <p
+                                      class="mb-0 fs-11 fw-medium text-uppercase text-muted"
+                                    >
+                                      <span
+                                        ><i class="mdi mdi-clock-outline"></i>
+                                        {{ note.date | date }}
+                                      </span>
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!-- <div class="my-3 text-center">
+                                                            <button type="button" class="btn btn-soft-success waves-effect waves-light">View
+                                                                All Notifications <i class="ri-arrow-right-line align-middle"></i></button>
+                                                        </div> -->
+                            </div>
+                          </ng-container>
+                        </ngx-simplebar>
+                      </div>
+                    </ng-template>
+                  </li>
+                  <!-- <li [ngbNavItem]="2">
+                                        <a ngbNavLink>
+                                            Messages
+                                        </a>
+                                        <ng-template ngbNavContent>
+                                            <div class="tab-pane fade show active py-2 ps-2" id="all-noti-tab" role="tabpanel">
+                                                <ngx-simplebar style="max-height: 300px;">
+                                                    <div class="pe-2">
+                                                        <div class="text-reset notification-item d-block dropdown-item">
+                                                            <div class="d-flex">
+                                                                <img src="assets/images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                                                <div class="flex-grow-1">
+                                                                    <a href="javascript:void(0);" class="stretched-link">
+                                                                        <h6 class="mt-0 mb-1 fs-13 fw-semibold">James
+                                                                            Lemire</h6>
+                                                                    </a>
+                                                                    <div class="fs-13 text-muted">
+                                                                        <p class="mb-1">We talked about a project on
+                                                                            linkedin.</p>
+                                                                    </div>
+                                                                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                                        <span><i class="mdi mdi-clock-outline"></i> 30
+                                                                            min ago</span>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="px-2 fs-15">
+                                                                    <div class="form-check notification-check">
+                                                                        <input class="form-check-input" type="checkbox" value="" id="all-notification-check01">
+                                                                        <label class="form-check-label" for="all-notification-check01"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="text-reset notification-item d-block dropdown-item">
+                                                            <div class="d-flex">
+                                                                <img src="assets/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                                                <div class="flex-grow-1">
+                                                                    <a href="javascript:void(0);" class="stretched-link">
+                                                                        <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela
+                                                                            Bernier</h6>
+                                                                    </a>
+                                                                    <div class="fs-13 text-muted">
+                                                                        <p class="mb-1">Answered to your comment on the
+                                                                            cash flow forecast's
+                                                                            graph 🔔.</p>
+                                                                    </div>
+                                                                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                                        <span><i class="mdi mdi-clock-outline"></i> 2
+                                                                            hrs ago</span>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="px-2 fs-15">
+                                                                    <div class="form-check notification-check">
+                                                                        <input class="form-check-input" type="checkbox" value="" id="all-notification-check02">
+                                                                        <label class="form-check-label" for="all-notification-check02"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="text-reset notification-item d-block dropdown-item">
+                                                            <div class="d-flex">
+                                                                <img src="assets/images/users/avatar-6.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                                                <div class="flex-grow-1">
+                                                                    <a href="javascript:void(0);" class="stretched-link">
+                                                                        <h6 class="mt-0 mb-1 fs-13 fw-semibold">Kenneth
+                                                                            Brown</h6>
+                                                                    </a>
+                                                                    <div class="fs-13 text-muted">
+                                                                        <p class="mb-1">Mentionned you in his comment on
+                                                                            📃 invoice #12501. </p>
+                                                                    </div>
+                                                                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                                        <span><i class="mdi mdi-clock-outline"></i> 10
+                                                                            hrs ago</span>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="px-2 fs-15">
+                                                                    <div class="form-check notification-check">
+                                                                        <input class="form-check-input" type="checkbox" value="" id="all-notification-check03">
+                                                                        <label class="form-check-label" for="all-notification-check03"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="text-reset notification-item d-block dropdown-item">
+                                                            <div class="d-flex">
+                                                                <img src="assets/images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                                                <div class="flex-grow-1">
+                                                                    <a href="javascript:void(0);" class="stretched-link">
+                                                                        <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen
+                                                                            Gibson</h6>
+                                                                    </a>
+                                                                    <div class="fs-13 text-muted">
+                                                                        <p class="mb-1">We talked about a project on
+                                                                            linkedin.</p>
+                                                                    </div>
+                                                                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                                        <span><i class="mdi mdi-clock-outline"></i> 3
+                                                                            days ago</span>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="px-2 fs-15">
+                                                                    <div class="form-check notification-check">
+                                                                        <input class="form-check-input" type="checkbox" value="" id="all-notification-check04">
+                                                                        <label class="form-check-label" for="all-notification-check04"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="my-3 text-center">
+                                                            <button type="button" class="btn btn-soft-success waves-effect waves-light">View
+                                                                All Messages <i class="ri-arrow-right-line align-middle"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </ngx-simplebar>
+                                            </div>
+                                        </ng-template>
+                                    </li> 
+                                    <li [ngbNavItem]="3">
+                                        <a ngbNavLink>
+                                            Alerts
+                                        </a>
+                                        <ng-template ngbNavContent>
+                                          
+                                        </ng-template>
+                                    </li> -->
+                </ul>
+              </div>
+            </div>
+
+            <div class="tab-content" id="notificationItemsTabContent">
+              <div class="tab-content text-muted">
+                <div [ngbNavOutlet]="nav"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dropdown ms-sm-3 header-item topbar-user">
+          <span class="d-flex align-items-center ms-2">
+            <!-- <img
+              class="rounded-circle header-profile-user"
+              [src]="imageUrl + _userImgae"
+              alt="Header Avatar"
+            /></span> -->
+            <div class="d-flex align-items-center">
+              <div class="flex-grow-0">
+                <div class="d-flex align-items-center">
+                  <div
+                    class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0 online"
+                  >
+                    <img
+                      [src]="imageUrl + _userImgae"
+                      class="rounded-circle avatar-xs"
+                      alt=""
+                    />
+                    <!-- <span class="user-status"></span> -->
+                    <div class="dropdown" ngbDropdown>
+                      <span
+                        class="user-status shadow-none arrow-none cursor-pointer"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        ngbDropdownToggle
+                        [class]="
+                          returnCurrentStatusClassesStatusCircle(currentStatus)
+                        "
+                        title="{{ currentStatus }}"
+                      ></span>
+                      <div
+                        class="dropdown-menu dropdown-menu-start drop-con p-0"
+                        ngbDropdownMenu
+                      >
+                        <h6 class="dropdown-header">Status</h6>
+                        <ng-container
+                          *ngFor="let stat of currentStatusListArray"
+                        >
+                          <a
+                            class="dropdown-item"
+                            (click)="UpdateUserCurrentStatus_Portal(stat)"
+                            [class]="
+                              stat === currentStatus
+                                ? returnCurrentStatusClassesStatus(
+                                    currentStatus
+                                  )
+                                : ''
+                            "
+                          >
+                            <i
+                              *ngIf="stat === currentStatus"
+                              class="ri-checkbox-circle-line fs-16 align-middle me-1"
+                              [class]="
+                                returnCurrentStatusClassesStatusCircleNav(stat)
+                              "
+                            ></i
+                            ><i
+                              *ngIf="stat !== currentStatus"
+                              class="ri-checkbox-blank-circle-fill fs-16 align-middle me-1"
+                              [class]="
+                                returnCurrentStatusClassesStatusCircleNav(stat)
+                              "
+                            ></i>
+                            <span class="align-middle">{{ stat }}</span></a
+                          >
+                        </ng-container>
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header ms-0 p-1"><i class=" ri-chat-1-line align-bottom me-1"></i>Status Message</h6>
+
+                        <a
+                          *ngIf="!currentStatusRemark"
+                          class="dropdown-item"
+                          href="javascript: void(0);"
+                          (click)="
+                            changeStatusRemarkModalUpcontent(modalStatusRemark,'')
+                          "
+                          ><i
+                            class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1 text-info"
+                          ></i>
+                          <span class="align-middle text-info"
+                            >Update Status Message</span
+                          ></a
+                        >
+                        <a
+                          *ngIf="currentStatusRemark"
+                          class="dropdown-item white-space-normal text-muted fs-13 p-2"
+                          href="javascript: void(0);"
+                          (click)="
+                            changeStatusRemarkModalUpcontent(modalStatusRemark,currentStatusRemark)
+                          "
+                        >
+                          <span class="align-middle">{{
+                            currentStatusRemark
+                          }}</span></a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </span>
+          <span ngbDropdown>
+            <button
+              type="button"
+              class="btn"
+              id="page-header-user-dropdown"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              ngbDropdownToggle
+            >
+              <span class="text-start">
+                <span
+                  class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"
+                  >{{ _userFullName }}
+                </span>
+                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">{{
+                  _userAccessGroupName
+                }}</span>
+              </span>
+            </button>
+
+            <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+              <h6 class="dropdown-header">Welcome {{ _userFullName }} !</h6>
+              <a class="dropdown-item" (click)="gotoUserProfile()"
+                ><i
+                  class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"
+                ></i>
+                <span class="align-middle">Profile</span></a
+              >
+              <a
+                class="dropdown-item"
+                href="javascript: void(0);"
+                (click)="changePasswordOpenModalUp(modalChangePassword)"
+                ><i
+                  class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"
+                ></i>
+                <span class="align-middle">Change password</span></a
+              >
+
+              <a
+                class="dropdown-item"
+                href="javascript: void(0);"
+                (click)="onLogout()"
+                ><i
+                  class="mdi mdi-logout text-muted fs-16 align-middle me-1"
+                ></i>
+                <span class="align-middle" data-key="t-logout">Logout</span></a
+              >
+            </div>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Add Form -->
+<ng-template #modalChangePassword let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h4 class="modal-title" id="modal-title">Change password</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="forgotForm">
+      <div class="form-group mb-3">
+        <label class="form-label mb-0" for="userName">Username</label>
+        <input
+          type="text"
+          readonly
+          class="form-control"
+          id="userName"
+          formControlName="userName"
+          placeholder="Username"
+          [class.is-invalid]="userName.invalid && userName.touched"
+          [class.is-valid]="userName.valid && userName.touched"
+        />
+
+        <div *ngIf="userName.invalid && userName.touched">
+          <small class="text-danger" *ngIf="userName.errors?.['required']">
+            User Name is Required</small
+          >
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label mb-0" for="password-input">
+          Current Password</label
+        >
+        <div class="position-relative auth-pass-inputgroup mb-3">
+          <input
+            [type]="toggle3 ? 'text' : 'password'"
+            class="form-control pe-5 password-input"
+            formControlName="currentPassword"
+            id="currentPassword"
+            placeholder="Current Password"
+            #password3
+          />
+          <button
+            class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+            type="button"
+            id="password-addon"
+          >
+            <i
+              class="mdi align-middle"
+              [ngClass]="{
+                'mdi-eye-off-outline': !toggle3,
+                'mdi-eye-outline': toggle3
+              }"
+              (click)="changeType(password3, 3)"
+            ></i>
+          </button>
+          <div *ngIf="currentPassword.invalid && currentPassword.touched">
+            <small
+              class="text-danger"
+              *ngIf="currentPassword.errors?.['required']"
+            >
+              User Name is Required</small
+            >
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label mb-0" for="password-input">New Password</label>
+        <div class="position-relative auth-pass-inputgroup mb-3">
+          <input
+            [type]="toggle1 ? 'text' : 'password'"
+            class="form-control pe-5 password-input"
+            formControlName="newpassword"
+            id="newpassword"
+            placeholder="New Password"
+            #password1
+          />
+          <button
+            class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+            type="button"
+            id="password-addon"
+          >
+            <i
+              class="mdi align-middle"
+              [ngClass]="{
+                'mdi-eye-off-outline': !toggle1,
+                'mdi-eye-outline': toggle1
+              }"
+              (click)="changeType(password1, 1)"
+            ></i>
+          </button>
+        </div>
+
+        <label
+          class="col mb-0"
+          [ngClass]="
+            forgotForm.controls['newpassword'].hasError('required') ||
+            forgotForm.controls['newpassword'].hasError('startsWithLetter')
+              ? 'text-danger'
+              : 'text-success'
+          "
+        >
+          <i
+            class="feather"
+            [ngClass]="
+              forgotForm.controls['newpassword'].hasError('required') ||
+              forgotForm.controls['newpassword'].hasError('startsWithLetter')
+                ? ' ri-error-warning-line'
+                : 'ri-checkbox-circle-line'
+            "
+          ></i>
+          Must be at first character's letter capital! </label
+        ><br />
+
+        <label
+          class="col mb-0"
+          [ngClass]="
+            forgotForm.controls['newpassword'].hasError('required') ||
+            forgotForm.controls['newpassword'].hasError('minlength')
+              ? 'text-danger'
+              : 'text-success'
+          "
+        >
+          <i
+            class="feather"
+            [ngClass]="
+              forgotForm.controls['newpassword'].hasError('required') ||
+              forgotForm.controls['newpassword'].hasError('minlength')
+                ? ' ri-error-warning-line'
+                : 'ri-checkbox-circle-line'
+            "
+          ></i>
+          Must be at least 12 characters! </label
+        ><br />
+        <label
+          class="col mb-0"
+          [ngClass]="
+            forgotForm.controls['newpassword'].hasError('required') ||
+            forgotForm.controls['newpassword'].hasError('maxlength')
+              ? 'text-danger'
+              : 'text-success'
+          "
+        >
+          <i
+            class="feather"
+            [ngClass]="
+              forgotForm.controls['newpassword'].hasError('required') ||
+              forgotForm.controls['newpassword'].hasError('maxlength')
+                ? ' ri-error-warning-line'
+                : 'ri-checkbox-circle-line'
+            "
+          ></i>
+          Max 32 characters Value! </label
+        ><br />
+        <label
+          class="col mb-0"
+          [ngClass]="
+            forgotForm.controls['newpassword'].hasError('required') ||
+            forgotForm.controls['newpassword'].hasError('hasNumber')
+              ? 'text-danger'
+              : 'text-success'
+          "
+        >
+          <i
+            class="feather"
+            [ngClass]="
+              forgotForm.controls['newpassword'].hasError('required') ||
+              forgotForm.controls['newpassword'].hasError('hasNumber')
+                ? ' ri-error-warning-line'
+                : 'ri-checkbox-circle-line '
+            "
+          ></i>
+          Must contain at least 1 number!
+        </label>
+        <br />
+        <label
+          class="col mb-0"
+          [ngClass]="
+            forgotForm.controls['newpassword'].hasError('required') ||
+            forgotForm.controls['newpassword'].hasError('hasCapitalCase')
+              ? 'text-danger'
+              : 'text-success'
+          "
+        >
+          <i
+            class="feather"
+            [ngClass]="
+              forgotForm.controls['newpassword'].hasError('required') ||
+              forgotForm.controls['newpassword'].hasError('hasCapitalCase')
+                ? ' ri-error-warning-line'
+                : 'ri-checkbox-circle-line'
+            "
+          ></i>
+          Must contain at least 1 in Capital Case!
+        </label>
+        <br />
+        <label
+          class="col mb-0"
+          [ngClass]="
+            forgotForm.controls['newpassword'].hasError('required') ||
+            forgotForm.controls['newpassword'].hasError('hasSmallCase')
+              ? 'text-danger'
+              : 'text-success'
+          "
+        >
+          <i
+            class="feather"
+            [ngClass]="
+              forgotForm.controls['newpassword'].hasError('required') ||
+              forgotForm.controls['newpassword'].hasError('hasSmallCase')
+                ? ' ri-error-warning-line'
+                : 'ri-checkbox-circle-line'
+            "
+          ></i>
+          Must contain at least 1 Letter in Small Case!
+        </label>
+        <br />
+        <label
+          class="col mb-0"
+          [ngClass]="
+            forgotForm.controls['newpassword'].hasError('required') ||
+            forgotForm.controls['newpassword'].hasError('hasSpecialCharacters')
+              ? 'text-danger'
+              : 'text-success'
+          "
+        >
+          <i
+            class="feather"
+            [ngClass]="
+              forgotForm.controls['newpassword'].hasError('required') ||
+              forgotForm.controls['newpassword'].hasError(
+                'hasSpecialCharacters'
+              )
+                ? ' ri-error-warning-line'
+                : 'ri-checkbox-circle-line'
+            "
+          ></i>
+          Must contain at least 1 Special Character!
+        </label>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label mb-0" for="password-input">
+          Confirm Password</label
+        >
+        <div class="position-relative auth-pass-inputgroup mb-3">
+          <input
+            [type]="toggle2 ? 'text' : 'password'"
+            class="form-control pe-5 password-input"
+            formControlName="ConfirmPassword"
+            placeholder="Confirm Password"
+            #password2
+          />
+          <button
+            class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+            type="button"
+            id="password-addon"
+          >
+            <i
+              class="mdi align-middle"
+              [ngClass]="{
+                'mdi-eye-off-outline': !toggle2,
+                'mdi-eye-outline': toggle2
+              }"
+              (click)="changeType(password2, 2)"
+            ></i>
+          </button>
+          <div *ngIf="ConfirmPassword.invalid && ConfirmPassword.touched">
+            <small
+              class="text-danger"
+              *ngIf="ConfirmPassword.errors?.['required']"
+            >
+              Confirm Password is Required</small
+            >
+          </div>
+
+          <div
+            *ngIf="
+              forgotForm.hasError('passwordsNotMatch') &&
+              (forgotForm.get('ConfirmPassword').dirty ||
+                forgotForm.get('ConfirmPassword').touched)
+            "
+          >
+            <small class="text-danger">Passwords do not match</small>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn btn-danger mr-2 mb-2 mb-md-0"
+      (click)="modal.dismiss('cancel')"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      ngbAutofocus
+      class="btn btn-success mr-2 mb-2 mb-md-0"
+      [disabled]="forgotForm.invalid"
+      (click)="modal.close('Ok', $event)"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>
+<!--/ Add Form -->
+
+<ng-template #clearCookiesDataModal let-modal>
+  <div class="modal-content border-0 overflow-hidden">
+    <div class="row g-0">
+      <div class="col-lg-7">
+        <div class="modal-body p-5">
+          <h2 class="lh-base">New Build Update Available</h2>
+          <p class="text-muted mb-4">
+            We have identified that a new build update is available on the
+            server. Your current version is outdated and it is recommended to
+            update to the latest version to ensure optimal performance and
+            access to new features.
+          </p>
+          <p>
+            <strong>Action Required:</strong> To update to the latest version,
+            please click 'Yes'. This action will clear your cookies and you will
+            be required to re-login to the system.
+          </p>
+          <button
+            class="btn btn-primary"
+            type="button"
+            (click)="clearCookies()"
+          >
+            Yes
+          </button>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="subscribe-modals-cover h-100">
+          <img
+            src="assets/images/auth-one-bg.jpg"
+            alt=""
+            class="h-100 w-100 object-fit-cover"
+            style="
+              clip-path: polygon(
+                100% 0%,
+                100% 100%,
+                100% 100%,
+                0% 100%,
+                25% 50%,
+                0% 0%
+              );
+            "
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+
+<ng-template #modalStatusRemark let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h4 class="modal-title" id="modal-title">Status Messages</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <label class="form-label" for="gen-info-description-input"
+        >Remark<span class="starRequried">*</span></label
+      >
+      <textarea
+        class="form-control bg-light border-0"
+        id="Remark"
+        rows="4"
+        placeholder="Remark"
+        [(ngModel)]="currentStatusRemark"
+        [maxlength]="maxCurrentStatusRemark"
+      ></textarea>
+      <label class="nopadding clrlbl">
+        Characters Remaining:
+        {{ currentStatusRemark?.length }}/{{ maxCurrentStatusRemark }}</label
+      >
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn btn-danger mr-2 mb-2 mb-md-0"
+      (click)="modal.dismiss('cancel')"
+
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      ngbAutofocus
+      class="btn btn-success mr-2 mb-2 mb-md-0"
+      [disabled]="currentStatusRemark.length==0"
+      (click)="modal.close('Ok', $event)"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,1960 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card mt-n4 mx-n4">
+      <div class="card-body pb-0 px-4">
+        <div class="row mb-3">
+          <div class="col-md">
+            <div class="row align-items-center g-3">
+              <div class="col-md-auto">
+                <div
+                  class="avatar-md"
+                  *ngIf="
+                    dDetail.departmentName && dDetail.departmentName.length
+                  "
+                >
+                  <span class="rounded">
+                    <ng-container>
+                      <app-avatar-photo
+                        [name]="toUpperCaseword(dDetail.departmentName)"
+                      ></app-avatar-photo>
+                    </ng-container>
+                  </span>
+                </div>
+              </div>
+
+              <div class="col-md">
+                <div>
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <h4 class="fw-bold">
+                      {{ dDetail.departmentName }}
+
+                      <span class="">
+                        ( {{ dDetail.departmentCode || "-" }})
+
+                        <i
+                          ngbTooltip="Maintenance"
+                          class="align-bottom ri-award-fill fs-20 text-info"
+                          *ngIf="dDetail.isMaintenance"
+                        ></i>
+                        <i
+                          ngbTooltip="Awarded"
+                          class="align-bottom ri-medal-line fs-20 ms-2 text-success"
+                          *ngIf="dDetail.isAwarded"
+                        ></i>
+                        <i
+                          ngbTooltip="Not Awarded"
+                          class="align-bottom ri-medal-line fs-20 ms-2 text-muted"
+                          *ngIf="!dDetail.isAwarded"
+                        ></i>
+                        <i
+                          ngbTooltip="Project Management"
+                          class="align-bottom ri-git-repository-private-line fs-20 ms-2 text-warning"
+                          *ngIf="dDetail.isProjectManagement"
+                        ></i>
+                      </span>
+                    </h4>
+                    <div class="actions">
+                      <ng-container
+                        *ngIf="
+                          currentUserRole ===
+                            'System Administrator' ||
+                            currentUserRole == 'Super Admin' ||
+                            this.currentUserId ===
+                            this.dDetail.createdBy
+                        "
+                      >
+                        <ng-container
+                          *ngIf="
+                            currentObjectFindWithAccessRight.projectDefaultAwardConfirmation
+                          "
+                        >
+                          <button
+                            *ngIf="dDetail.isAwarded == false"
+                            type="button"
+                            (click)="openSuccessAwarded()"
+                            class="btn btn-secondary mb-2 me-3"
+                          >
+                            Awarded
+                          </button>
+                        </ng-container>
+                        <ng-container
+                          *ngIf="
+                            currentObjectFindWithAccessRight.projectDefaultProjectStartConfirmation
+                          "
+                        >
+                          <button
+                            *ngIf="
+                              dDetail.isAwarded == true &&
+                              dDetail.isProjectManagement == false &&
+                              dDetail.isMaintenance == false &&
+                              dDetail.projectManagementStatusId != 125
+                            "
+                            type="button"
+                            class="btn btn-primary mb-2"
+                            (click)="openSuccessprojectStart()"
+                          >
+                            Project Start
+                          </button></ng-container
+                        >
+                      </ng-container>
+                    </div>
+                  </div>
+
+                  <div class="hstack gap-1 flex-wrap">
+                    <div>
+                      <i class="ri-building-2-line align-bottom me-1"></i
+                      >{{ dDetail?.clientName || "-" }}
+                    </div>
+
+                    <div
+                      class="vr"
+                      *ngIf="dDetail.currentProcessId != null"
+                    ></div>
+                    <div *ngIf="dDetail.currentProcessId != null">
+                      Document submission:
+                      <span
+                        class="fs-12"
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            dDetail.currentProcessId
+                          )
+                        "
+                        >{{ dDetail.currentProcessName }}</span
+                      >
+                    </div>
+                    <div
+                      class="vr"
+                      *ngIf="dDetail.projectManagementStatusId != null"
+                    ></div>
+                    <div *ngIf="dDetail.projectManagementStatusId != null">
+                      Project :
+                      <span
+                        class="fs-12"
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            dDetail.projectManagementStatusId
+                          )
+                        "
+                        >{{ dDetail.projectManagementStatusName }}</span
+                      >
+                    </div>
+
+                    <div
+                      class="vr"
+                      *ngIf="dDetail.warrentyStatusId != null"
+                    ></div>
+                    <div *ngIf="dDetail.warrentyStatusId != null">
+                      Warranty:
+                      <span
+                        class="fs-12"
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            dDetail.warrentyStatusId
+                          )
+                        "
+                        >{{ dDetail.warrentyStatusName }}</span
+                      >
+                    </div>
+                    <div
+                      class="vr"
+                      *ngIf="dDetail.maintenanceStatusId != null"
+                    ></div>
+                    <div *ngIf="dDetail.maintenanceStatusId != null">
+                      Maintenance:
+                      <span
+                        class="fs-12"
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            dDetail.maintenanceStatusId
+                          )
+                        "
+                        >{{ dDetail.maintenanceStatusName }}</span
+                      >
+                    </div>
+
+                    <div class="vr" *ngIf="dDetail.departmentStatusId"></div>
+                    <div *ngIf="dDetail.departmentStatusId">
+                      Status:
+                      <span
+                        class="fs-12"
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            dDetail.departmentStatusId
+                          )
+                        "
+                        >{{ dDetail.departmentStatusName }}</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ul
+          ngbNav
+          #customNav="ngbNav"
+          [(activeId)]="pmProjectActiveTabId"
+          class="nav nav-tabs-custom border-bottom-0"
+          role="tablist"
+        >
+          <li [ngbNavItem]="1" class="nav-item" (click)="onNavChange(1)">
+            <a
+              ngbNavLink
+              class="nav-link"
+              data-bs-toggle="tab"
+              role="tab"
+              (click)="callingFollowListApi()"
+            >
+              Todo
+            </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <div
+                        class="row d-flex mb-2 border-bottom border-bottom-dashed"
+                      >
+                        <div
+                          class="col-lg-12 d-flex align-items-center justify-content-between"
+                        >
+                          <h6 class="mb-3 fw-semibold text-uppercase">Todo</h6>
+
+                          <button
+                            ngbTooltip="Users can add Todo that are associated with a specific project."
+                            class="btn btn-success add-btn fl-r mb-3"
+                            (click)="addFollowUp()"
+                          >
+                            <i class="ri-add-fill align-bottom me-1"></i> Add
+                            Todo
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="row" *ngIf="masterFollowList?.length != 0">
+                        <div
+                          class="col-xl-3 col-lg-4 col-sm-6"
+                          *ngFor="let follow of masterFollowList"
+                        >
+                          <div class="card mb-2">
+                            <div class="card-header text-end p-2">
+                              <div
+                                class="d-flex justify-content-between align-items-center text-nowrap"
+                              >
+                                <h5
+                                  class="fs-16 text-truncate d-block mb-0"
+                                  [ngbTooltip]="follow.followUpName"
+                                >
+                                  {{ follow.followUpName }}
+                                </h5>
+
+                                <div>
+                                  <i
+                                    class="bx bx-navigation text-success fs-18 me-2"
+                                    (click)="
+                                      openEventFullDetailsModalPopup(
+                                        follow.followUpId
+                                      )
+                                    "
+                                  ></i>
+
+                                  <i
+                                    *ngIf="
+                                      checkDeleteButtonVisible(
+                                        follow
+                                      )
+                                    "
+                                    class="ri-delete-bin-line fs-18 me-1 text-danger"
+                                    (click)="
+                                      openModalDeleteConf(follow.followUpId)
+                                    "
+                                  ></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-md-12 mb-1 d-flex">
+                                  <div class="col-md-6">
+                                    <i
+                                      class="ri-message-line align-bottom align-bottom me-2 cursor"
+                                      ngbTooltip="Type"
+                                    ></i>
+
+                                    <a
+                                      href="javascript:void(0);"
+                                      class="badge bg-primary-subtle text-primary"
+                                      >{{ follow.followUpType }}</a
+                                    >
+                                  </div>
+                                  <div class="col-md-6">
+                                    <i
+                                      class="ri-china-railway-line align-bottom me-2 cursor"
+                                      ngbTooltip="Status"
+                                    ></i>
+                                    <span
+                                      [class]="
+                                        returnStatusBadgeClassesStatus(
+                                          follow.followUpStatusId
+                                        )
+                                      "
+                                      >{{ follow.followUpStatusName }}</span
+                                    >
+                                  </div>
+                                </div>
+
+                                <div class="col-md-12 mb-1">
+                                  <i
+                                    class="ri-time-line align-bottom align-bottom me-2 cursor"
+                                    ngbTooltip="Start Date"
+                                  ></i>
+                                  {{ follow.startDateTime }}
+                                </div>
+                                <div class="col-md-12 mb-1">
+                                  <i
+                                    class="ri-time-line align-bottom align-bottom me-2 cursor"
+                                    ngbTooltip="End date"
+                                  ></i>
+                                  {{ follow.endDateTime }}
+                                </div>
+                                <div class="col-md-12 mb-1">
+                                  <i
+                                    class="ri-user-settings-line align-bottom me-2 cursor"
+                                    ngbTooltip="Created By"
+                                  ></i
+                                  ><b> {{ follow.createdBy }}</b>
+                                </div>
+
+                                <div class="col-md-12 mb-1">
+                                  <i
+                                    class="ri-calendar-event-line cursor align-bottom me-2"
+                                    ngbTooltip="Created Date"
+                                  ></i>
+                                  <b> {{ follow.createdDate }}</b>
+                                </div>
+
+                                <div class="col-md-12 mb-1 d-flex">
+                                  <div class="flex-cont">
+                                    <i
+                                      class="ri-message-2-line align-bottom"
+                                      ngbTooltip="Messages"
+                                      [class]="
+                                        follow.totalMessages != 0
+                                          ? 'text-secondary'
+                                          : 'text-muted'
+                                      "
+                                    ></i>
+                                    {{ follow.totalMessages }}
+                                  </div>
+                                  <div class="flex-cont">
+                                    <i
+                                      class="ri-todo-line cursor align-bottom"
+                                      ngbTooltip="Done/Total Todo"
+                                      [class]="
+                                        follow.totalTodoDone || follow.totalTodo
+                                          ? 'text-secondary'
+                                          : 'text-muted'
+                                      "
+                                    ></i>
+                                    {{
+                                      follow.totalTodoDone || follow.totalTodo
+                                        ? (follow.totalTodoDone || 0) +
+                                          "/" +
+                                          (follow.totalTodo || 0)
+                                        : "0"
+                                    }}
+                                  </div>
+                                  <div class="flex-cont">
+                                    <i
+                                      class="ri-link align-bottom cursor me-2"
+                                      ngbTooltip="Number Of Documents"
+                                      [class]="
+                                        follow.numberOfDocuments != 0
+                                          ? 'text-secondary'
+                                          : 'text-muted'
+                                      "
+                                    ></i>
+                                    {{ follow.numberOfDocuments }}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div
+                                class="col-lg-12 border-top border-top-dashed"
+                              >
+                                <div class="mt-1">
+                                  <h6 class="mb-0">Members</h6>
+                                  <div class="flex-shrink-0">
+                                    <div
+                                      class="avatar-group"
+                                      *ngIf="follow.members.length != 0"
+                                    >
+                                      @for(user of follow.members; track
+                                      $index){
+                                      <a
+                                        href="javascript:void(0);"
+                                        class="avatar-group-item"
+                                        ngbTooltip="{{ user.fullName }}"
+                                        placement="top"
+                                      >
+                                        <img
+                                          [src]="apiUrl + user.profileImageUrl"
+                                          alt=""
+                                          class="rounded-circle avatar-xxs"
+                                          *ngIf="user.profileImageUrl"
+                                        />
+                                        <div
+                                          class="flex-shrink-0 avatar-xs"
+                                          *ngIf="!user.profileImageUrl"
+                                        >
+                                          <div
+                                            class="avatar-title bg-info-subtle text-info rounded-circle fs-13"
+                                          >
+                                            {{
+                                              user?.fullName
+                                                ? user?.fullName
+                                                    ?.charAt(0)
+                                                    .toUpperCase()
+                                                : "N"
+                                            }}{{
+                                              user?.fullName
+                                                ? user?.fullName
+                                                    ?.charAt(1)
+                                                    .toUpperCase()
+                                                : "A"
+                                            }}
+                                          </div>
+                                        </div>
+                                      </a>
+                                      }
+                                    </div>
+                                    <p
+                                      *ngIf="follow.members.length == 0"
+                                      class="mb-0 fs-13"
+                                    >
+                                      No members were added.
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="masterFollowList?.length == 0">
+                        <div class="col-md-12 mb-4">
+                          <div class="py-4 text-center">
+                            <div>
+                              <lord-icon
+                                src="https://cdn.lordicon.com/msoeawqm.json"
+                                trigger="loop"
+                                colors="primary:#405189,secondary:#0ab39c"
+                                style="width: 72px; height: 72px"
+                              >
+                              </lord-icon>
+                            </div>
+                            <div class="mt-4">
+                              <h5>No Records Found</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr *ngIf="masterFollowList?.length != 0" />
+                      <div
+                        *ngIf="masterFollowList?.length != 0"
+                        class="row justify-content-md-between align-items-md-center gy-2"
+                      >
+                        <div class="col col-sm-12 col col-md-6">
+                          <div
+                            class="dataTables_info mb-2"
+                            id="tickets-table_info"
+                            role="status"
+                            aria-live="polite"
+                          >
+                            Showing {{ from }} to {{ to }} of
+                            {{ totalRecordsFromApi }} entries
+                          </div>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="col col-sm-12 col col-md-6">
+                          <div
+                            class="text-sm-right float-end listjs-pagination"
+                          >
+                            <ngb-pagination
+                              [collectionSize]="totalRecordsFromApi"
+                              [pageSize]="pageSize"
+                              [(page)]="page"
+                              [maxSize]="2"
+                              [rotate]="true"
+                              (pageChange)="OnChangesPage($event)"
+                              *ngIf="totalRecordsFromApi > pageSize"
+                            ></ngb-pagination>
+                          </div>
+                        </div>
+                        <!-- End Pagination -->
+                      </div>
+                    </div>
+                    <!-- end card body -->
+                  </div>
+                </div>
+                <!-- ene col -->
+              </div>
+            </ng-template>
+          </li>
+          <ng-container
+            *ngIf="currentObjectFindWithAccessRight.documentSubmission_Tab_View"
+          >
+            <ng-container *ngIf="projectProcessHeaderByProjectList.length != 0">
+              <li [ngbNavItem]="2" class="nav-item" (click)="onNavChange(2)">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Document Submission
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="card">
+                    <div class="card-header">
+                      <h4 class="card-title mb-0">Document Submission</h4>
+                    </div>
+                    <div class="card-body form-steps">
+                      <ng-container
+                        *ngIf="projectProcessHeaderByProjectList.length != 0"
+                      >
+                        <div class="vertical-navs-step">
+                          <div class="row gy-5">
+                            <div class="col-lg-4">
+                              <div class="stepper">
+                                <div class="stepper-header">
+                                  <ol class="p-0">
+                                    <li
+                                      class="stepcss ng-star-inserted completed"
+                                      (click)="getDataItem(listitem, index)"
+                                      [ngStyle]="{
+                                        cursor:
+                                          listitem.isActive ||
+                                          listitem.isComplete
+                                            ? 'pointer'
+                                            : 'not-allowed'
+                                      }"
+                                      [class]="
+                                        activeIndex == index
+                                          ? 'bg-active'
+                                          : listitem.isComplete == true
+                                          ? 'bg-completed'
+                                          : 'bg-mutud'
+                                      "
+                                      *ngFor="
+                                        let listitem of projectProcessHeaderByProjectList;
+                                        index as index
+                                      "
+                                    >
+                                      <button
+                                        type="button"
+                                        class="nav-link done ng-star-inserted"
+                                      >
+                                        <span class="step-title me-2"
+                                          ><i
+                                            class="align-bottom me-2"
+                                            [class]="
+                                              listitem.isComplete == true
+                                                ? 'ri-checkbox-circle-line'
+                                                : 'ri-close-circle-fill'
+                                            "
+                                          ></i>
+                                          Step {{ listitem.seq }}
+                                        </span>
+                                        {{ listitem.projectProcessName }}
+                                      </button>
+                                    </li>
+                                  </ol>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div
+                              class="col-lg-8"
+                              *ngIf="selectedTab?.projectProcessId == 1"
+                            >
+                              <!--  "projectProcessName": "Tender Document Submission",, -->
+                              <app-add-new-proccess
+                                [selectedTab]="selectedTab"
+                                [accessRight]="currentObjectFindWithAccessRight"
+                                [projectId]="projectDepartmentId"
+                                [dDetail]="dDetail"
+                                [projectProcessId]="1"
+                                (completeProcess)="getAfterComplete($event)"
+                              ></app-add-new-proccess>
+                            </div>
+                            <div
+                              class="col-lg-8"
+                              *ngIf="selectedTab?.projectProcessId == 2"
+                            >
+                              <!-- "projectProcessName": "Site Visit", -->
+                              <app-add-new-proccess
+                                [selectedTab]="selectedTab"
+                                [accessRight]="currentObjectFindWithAccessRight"
+                                [projectId]="projectDepartmentId"
+                                [dDetail]="dDetail"
+                                [projectProcessId]="2"
+                                (completeProcess)="getAfterComplete($event)"
+                              ></app-add-new-proccess>
+                            </div>
+                            <div
+                              class="col-lg-8"
+                              *ngIf="selectedTab?.projectProcessId == 3"
+                            >
+                              <!--  "projectProcessName": "Project Schedule Submission", -->
+                              <app-add-new-proccess
+                                [selectedTab]="selectedTab"
+                                [accessRight]="currentObjectFindWithAccessRight"
+                                [projectId]="projectDepartmentId"
+                                [dDetail]="dDetail"
+                                [projectProcessId]="3"
+                                (completeProcess)="getAfterComplete($event)"
+                              ></app-add-new-proccess>
+                            </div>
+
+                            <div
+                              class="col-lg-8"
+                              *ngIf="selectedTab?.projectProcessId == 4"
+                            >
+                              <!--   "projectProcessName": "Technical Proposal Submission", -->
+                              <app-add-new-proccess
+                                [selectedTab]="selectedTab"
+                                [accessRight]="currentObjectFindWithAccessRight"
+                                [projectId]="projectDepartmentId"
+                                [dDetail]="dDetail"
+                                [projectProcessId]="4"
+                                (completeProcess)="getAfterComplete($event)"
+                              ></app-add-new-proccess>
+                            </div>
+
+                            <div
+                              class="col-lg-8"
+                              *ngIf="selectedTab?.projectProcessId == 5"
+                            >
+                              <!--  "projectProcessName": "Award Evaluation", -->
+                              <app-add-new-proccess
+                                [selectedTab]="selectedTab"
+                                [accessRight]="currentObjectFindWithAccessRight"
+                                [projectId]="projectDepartmentId"
+                                [dDetail]="dDetail"
+                                [projectProcessId]="5"
+                                (completeProcess)="getAfterComplete($event)"
+                              ></app-add-new-proccess>
+                            </div>
+
+                            <div
+                              class="col-lg-8"
+                              *ngIf="selectedTab?.projectProcessId == 6"
+                            >
+                              <!--   "projectProcessName": "Project Kick-Off", -->
+                              <app-add-new-proccess
+                                [selectedTab]="selectedTab"
+                                [accessRight]="currentObjectFindWithAccessRight"
+                                [projectId]="projectDepartmentId"
+                                [dDetail]="dDetail"
+                                [projectProcessId]="6"
+                                (completeProcess)="getAfterComplete($event)"
+                              ></app-add-new-proccess>
+                            </div>
+
+                            <div
+                              class="col-lg-8"
+                              *ngIf="selectedTab?.projectProcessId == 7"
+                            >
+                              <!--   "projectProcessName": "MAR(Material Request Approval) Submission", -->
+                              <app-add-new-proccess
+                                [selectedTab]="selectedTab"
+                                [accessRight]="currentObjectFindWithAccessRight"
+                                [projectId]="projectDepartmentId"
+                                [dDetail]="dDetail"
+                                [projectProcessId]="7"
+                                (completeProcess)="getAfterComplete($event)"
+                              ></app-add-new-proccess>
+                            </div>
+
+                            <div
+                              class="col-lg-8"
+                              *ngIf="selectedTab?.projectProcessId == 8"
+                            >
+                              <!-- "projectProcessName": "RWI(Request Work Inspection) ", -->
+
+                              <app-add-new-proccess
+                                [selectedTab]="selectedTab"
+                                [accessRight]="currentObjectFindWithAccessRight"
+                                [projectId]="projectDepartmentId"
+                                [dDetail]="dDetail"
+                                [projectProcessId]="8"
+                                (completeProcess)="getAfterComplete($event)"
+                              ></app-add-new-proccess>
+
+                              <!-- <app-request-work-inspection
+                                [selectedTab]="selectedTab"
+                                [accessRight]="currentObjectFindWithAccessRight"
+                                [projectId]="projectDepartmentId"
+                                [dDetail]="dDetail"
+                                [projectProcessId]="8"
+                                (completeProcess)="getAfterComplete($event)"
+                              ></app-request-work-inspection> -->
+                            </div>
+
+                            <div
+                              class="col-lg-8"
+                              *ngIf="selectedTab?.projectProcessId == 9"
+                            >
+                              <!--  "projectProcessName": "T&C/UAT", -->
+                              <app-add-new-proccess
+                                [selectedTab]="selectedTab"
+                                [accessRight]="currentObjectFindWithAccessRight"
+                                [projectId]="projectDepartmentId"
+                                [dDetail]="dDetail"
+                                [projectProcessId]="9"
+                                (completeProcess)="getAfterComplete($event)"
+                              ></app-add-new-proccess>
+                            </div>
+
+                            <div
+                              class="col-lg-8"
+                              *ngIf="selectedTab?.projectProcessId == 10"
+                            >
+                              <!-- "projectProcessName": "DLP", -->
+                              <app-add-new-proccess
+                                [selectedTab]="selectedTab"
+                                [accessRight]="currentObjectFindWithAccessRight"
+                                [projectId]="projectDepartmentId"
+                                [dDetail]="dDetail"
+                                [projectProcessId]="10"
+                                (completeProcess)="getAfterComplete($event)"
+                              ></app-add-new-proccess>
+                            </div>
+
+                            <div
+                              class="col-lg-8"
+                              *ngIf="selectedTab?.projectProcessId == 11"
+                            >
+                              <!--    "projectProcessName": "Warrenty Period", -->
+                              <app-add-new-proccess
+                                [selectedTab]="selectedTab"
+                                [accessRight]="currentObjectFindWithAccessRight"
+                                [projectId]="projectDepartmentId"
+                                [dDetail]="dDetail"
+                                [projectProcessId]="11"
+                                (completeProcess)="getAfterComplete($event)"
+                              ></app-add-new-proccess>
+                            </div>
+
+                            <div
+                              class="col-lg-8"
+                              *ngIf="selectedTab?.projectProcessId == 12"
+                            >
+                              <!--  "projectProcessName": "Maintenance", -->
+                              <app-add-new-proccess
+                                [selectedTab]="selectedTab"
+                                [accessRight]="currentObjectFindWithAccessRight"
+                                [projectId]="projectDepartmentId"
+                                [dDetail]="dDetail"
+                                [projectProcessId]="12"
+                                (completeProcess)="getAfterComplete($event)"
+                              ></app-add-new-proccess>
+                            </div>
+                          </div>
+                          <!-- end row -->
+                        </div>
+                      </ng-container>
+
+                      <ng-container
+                        *ngIf="projectProcessHeaderByProjectList.length == 0"
+                      >
+                        <div class="py-4 text-center">
+                          <div>
+                            <lord-icon
+                              src="https://cdn.lordicon.com/msoeawqm.json"
+                              trigger="loop"
+                              colors="primary:#405189,secondary:#0ab39c"
+                              style="width: 72px; height: 72px"
+                            >
+                            </lord-icon>
+                          </div>
+                          <div class="mt-4">
+                            <h5>No Records Found</h5>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+            </ng-container>
+          </ng-container>
+          <li
+            [ngbNavItem]="projectProcessHeaderByProjectList.length != 0 ? 3 : 2"
+            class="nav-item"
+            (click)="
+              onNavChange(projectProcessHeaderByProjectList.length != 0 ? 3 : 2)
+            "
+            (click)="getV2_GetMX_ProjectActivityAuditList_ServerPaging()"
+          >
+            <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+              Activities
+            </a>
+            <ng-template ngbNavContent>
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Activities</h5>
+                  <div class="acitivity-timeline py-3">
+                    <ng-container *ngIf="projectActivityAuditList.length != 0">
+                      <ng-container
+                        *ngFor="
+                          let activites of projectActivityAuditList;
+                          index as index
+                        "
+                      >
+                        <div
+                          class="acitivity-item d-flex"
+                          [class]="index != 0 ? 'py-3' : ''"
+                        >
+                          <div class="flex-shrink-0">
+                            <img
+                              src="{{
+                                activites.profileImageUrl
+                                  ? apiUrl + activites.profileImageUrl
+                                  : '../../../../../assets/images/placeholderimage.png'
+                              }}"
+                              alt=""
+                              class="avatar-xs rounded-circle acitivity-avatar"
+                            />
+                          </div>
+                          <div class="flex-grow-1 ms-3">
+                            <h6 class="mb-1">
+                              {{ activites.createdBy }}
+                              <span
+                                class="badge bg-primary-subtle text-primary align-middle"
+                                >{{ activites.activityType }}</span
+                              >
+                            </h6>
+                            <p class="text-muted mb-0">
+                              {{ activites.descrption }}
+                            </p>
+                            <p
+                              class="text-muted mb-2 d-flex align-items-start pargraph-width"
+                              *ngIf="activites.remark"
+                            >
+                              <i
+                                class="ri-file-text-line align-middle me-1 fs-16"
+                              ></i>
+                              <span [innerHTML]="activites.remark"></span>
+                            </p>
+
+                            <small class="mb-0 text-muted">{{
+                              activites.createdDate
+                            }}</small>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="projectActivityAuditList.length == 0">
+                      <div class="py-4 text-center">
+                        <div>
+                          <lord-icon
+                            src="https://cdn.lordicon.com/msoeawqm.json"
+                            trigger="loop"
+                            colors="primary:#405189,secondary:#0ab39c"
+                            style="width: 72px; height: 72px"
+                          >
+                          </lord-icon>
+                        </div>
+                        <div class="mt-4">
+                          <h5>No Records Found</h5>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+                <!--end card-body-->
+              </div>
+              <!--end card-->
+            </ng-template>
+          </li>
+          <ng-container
+            *ngIf="currentObjectFindWithAccessRight.project_Tab_View"
+          >
+            <!-- <ng-container
+              *ngIf="
+                dDetail.isProjectManagement == true &&
+                dDetail.projectManagementStatusId != 125
+              "
+            > -->
+            <li
+              [ngbNavItem]="
+                projectProcessHeaderByProjectList.length != 0 ? 4 : 3
+              "
+              class="nav-item"
+              (click)="getProjectTeamMemberList()"
+              (click)="getProjectClientList()"
+              (click)="
+                onNavChange(
+                  projectProcessHeaderByProjectList.length != 0 ? 4 : 3
+                )
+              "
+            >
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Project Team
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row g-4 mb-3">
+                  <div class="col-md-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <ul
+                          ngbNav
+                          #innercustomNav="ngbNav"
+                          [activeId]="
+                            currentObjectFindWithAccessRight.pM_InternalUser_Tab_View
+                              ? 1
+                              : currentObjectFindWithAccessRight.pM_ExternalUser_Tab_View
+                              ? 2
+                              : 3
+                          "
+                          class="nav nav-tabs-custom border-bottom-0"
+                          role="tablist"
+                        >
+                          <ng-container
+                            *ngIf="
+                              currentObjectFindWithAccessRight.pM_InternalUser_Tab_View
+                            "
+                          >
+                            <li [ngbNavItem]="1" class="nav-item">
+                              <a
+                                ngbNavLink
+                                class="nav-link"
+                                data-bs-toggle="tab"
+                                role="tab"
+                                (click)="getProjectTeamMemberList()"
+                              >
+                                Internal Users
+                                <span
+                                  class="badge align-middle ms-1"
+                                  [class]="
+                                    teamMemberList.length != 0
+                                      ? 'bg-success'
+                                      : 'bg-danger'
+                                  "
+                                  >{{ teamMemberList.length }}</span
+                                ></a
+                              >
+                              <ng-template ngbNavContent>
+                                <div class="row g-4 mb-3">
+                                  <div class="col-md-12">
+                                    <div class="d-flex justify-content-end">
+                                      <button
+                                        *ngIf="
+                                          currentObjectFindWithAccessRight.pM_InternalUser_SelectMember
+                                        "
+                                        type="button"
+                                        (click)="openModalMember()"
+                                        class="btn btn-sm btn-success mb-2"
+                                      >
+                                        Select Internal Users
+                                      </button>
+                                    </div>
+                                    <ng-container
+                                      *ngIf="teamMemberList.length != 0"
+                                    >
+                                      <app-shown-internal-external-matainance
+                                        [dDetail]="dDetail"
+                                        [accessRight]="
+                                          currentObjectFindWithAccessRight
+                                        "
+                                        (afterDeleteSend)="
+                                          callAfterDelete($event)
+                                        "
+                                        [internalExternalMatainanceList]="
+                                          teamMemberList
+                                        "
+                                        [comingWhichTab]="'Project'"
+                                      ></app-shown-internal-external-matainance>
+                                    </ng-container>
+
+                                    <ng-container
+                                      *ngIf="teamMemberList.length == 0"
+                                    >
+                                      <div class="py-4 text-center">
+                                        <div>
+                                          <lord-icon
+                                            src="https://cdn.lordicon.com/msoeawqm.json"
+                                            trigger="loop"
+                                            colors="primary:#405189,secondary:#0ab39c"
+                                            style="width: 72px; height: 72px"
+                                          >
+                                          </lord-icon>
+                                        </div>
+                                        <div class="mt-4">
+                                          <h5>No Records Found</h5>
+                                        </div>
+                                      </div>
+                                    </ng-container>
+                                  </div>
+                                </div>
+                              </ng-template>
+                            </li>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              currentObjectFindWithAccessRight.pM_ExternalUser_Tab_View
+                            "
+                          >
+                            <li
+                              [ngbNavItem]="2"
+                              class="nav-item"
+                              (click)="getProjectClientList()"
+                            >
+                              <a
+                                ngbNavLink
+                                class="nav-link"
+                                data-bs-toggle="tab"
+                                role="tab"
+                              >
+                                External Users
+                                <span
+                                  class="badge align-middle ms-1"
+                                  [class]="
+                                    clientList.length != 0
+                                      ? 'bg-success'
+                                      : 'bg-danger'
+                                  "
+                                  >{{ clientList.length }}</span
+                                ></a
+                              >
+                              <ng-template ngbNavContent>
+                                <div class="row g-4 mb-3">
+                                  <div class="col-md-12">
+                                    <div class="d-flex justify-content-end">
+                                      <button
+                                        *ngIf="
+                                          currentObjectFindWithAccessRight.pM_ExternalUser_SelectMember
+                                        "
+                                        type="button"
+                                        (click)="openModalClient()"
+                                        class="btn btn-sm btn-success mb-2"
+                                      >
+                                        Select External Users
+                                      </button>
+                                    </div>
+                                    <ng-container
+                                      *ngIf="clientList.length != 0"
+                                    >
+                                      <app-shown-internal-external-matainance
+                                        [dDetail]="dDetail"
+                                        (afterDeleteSend)="
+                                          callAfterDelete($event)
+                                        "
+                                        [accessRight]="
+                                          currentObjectFindWithAccessRight
+                                        "
+                                        [internalExternalMatainanceList]="
+                                          clientList
+                                        "
+                                        [comingWhichTab]="'Project'"
+                                      ></app-shown-internal-external-matainance>
+                                    </ng-container>
+
+                                    <ng-container
+                                      *ngIf="clientList.length == 0"
+                                    >
+                                      <div class="py-4 text-center">
+                                        <div>
+                                          <lord-icon
+                                            src="https://cdn.lordicon.com/msoeawqm.json"
+                                            trigger="loop"
+                                            colors="primary:#405189,secondary:#0ab39c"
+                                            style="width: 72px; height: 72px"
+                                          >
+                                          </lord-icon>
+                                        </div>
+                                        <div class="mt-4">
+                                          <h5>No Records Found</h5>
+                                        </div>
+                                      </div>
+                                    </ng-container>
+                                  </div>
+                                </div>
+                              </ng-template>
+                            </li>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              currentObjectFindWithAccessRight.documentSubmission_Tab_View
+                            "
+                          >
+                            <li [ngbNavItem]="3" class="nav-item">
+                              <a
+                                ngbNavLink
+                                class="nav-link"
+                                data-bs-toggle="tab"
+                                role="tab"
+                                (click)="get_V2_ProjectProcessUserApprval()"
+                              >
+                                Access Right
+                              </a>
+                              <ng-template ngbNavContent>
+                                <app-list-access-right
+                                  [dDetail]="dDetail"
+                                  [accessGroup]="
+                                    currentObjectFindWithAccessRight
+                                  "
+                                  [maintenanceProcessComing]="false"
+                                  [projectDepartmentId]="projectDepartmentId"
+                                  (sendBackAfterSubmitUser)="
+                                    get_V2_ProjectProcessUserApprval()
+                                  "
+                                  [projectProcessUserApprvalList]="
+                                    projectProcessUserApprvalList
+                                  "
+                                  [comingWhichTab]="'Project'"
+                                ></app-list-access-right>
+                              </ng-template>
+                            </li>
+                          </ng-container>
+                        </ul>
+                      </div>
+                      <div class="card-body">
+                        <div class="tab-content text-muted">
+                          <div [ngbNavOutlet]="innercustomNav"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+            <!-- </ng-container> -->
+          </ng-container>
+
+          <ng-container
+            *ngIf="currentObjectFindWithAccessRight.maintenance_Tab_View"
+          >
+            <li
+              [ngbNavItem]="
+                projectProcessHeaderByProjectList.length != 0 ? 5 : 4
+              "
+              class="nav-item"
+              (click)="getV2_MyTaskMaintenanceMemberAndMyTaskListApplication()"
+              (click)="getV2_MyTaskMaintenanceMemberAndMyTaskListClient()"
+              (click)="
+                onNavChange(
+                  projectProcessHeaderByProjectList.length != 0 ? 5 : 4
+                )
+              "
+            >
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Maintenance Team
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row g-4 mb-3">
+                  <div class="col-md-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <ul
+                          ngbNav
+                          #innercustomNav="ngbNav"
+                          [activeId]="
+                            currentObjectFindWithAccessRight.maintenance_InternalUser_Tab_View
+                              ? 1
+                              : currentObjectFindWithAccessRight.maintenance_ExternalUser_Tab_View
+                              ? 2
+                              : 3
+                          "
+                          class="nav nav-tabs-custom border-bottom-0"
+                          role="tablist"
+                        >
+                          <ng-container
+                            *ngIf="
+                              currentObjectFindWithAccessRight.maintenance_InternalUser_Tab_View
+                            "
+                          >
+                            <li [ngbNavItem]="1" class="nav-item">
+                              <a
+                                ngbNavLink
+                                class="nav-link"
+                                data-bs-toggle="tab"
+                                role="tab"
+                                (click)="
+                                  getV2_MyTaskMaintenanceMemberAndMyTaskListApplication()
+                                "
+                              >
+                                Internal Users
+                                <span
+                                  class="badge align-middle ms-1"
+                                  [class]="
+                                    maintenanceUserMemberList.length != 0
+                                      ? 'bg-success'
+                                      : 'bg-danger'
+                                  "
+                                  >{{ maintenanceUserMemberList.length }}</span
+                                ></a
+                              >
+
+                              <ng-template ngbNavContent>
+                                <div class="row g-4 mb-3">
+                                  <div class="col-md-12">
+                                    <div class="d-flex justify-content-end">
+                                      <button
+                                        *ngIf="
+                                          currentObjectFindWithAccessRight.maintenance_InternalUser_SelectMember
+                                        "
+                                        type="button"
+                                        (click)="
+                                          openModalMaintenanceUserMember()
+                                        "
+                                        class="btn btn-sm btn-success mb-2"
+                                      >
+                                        Select Internal Users
+                                      </button>
+                                    </div>
+                                    <ng-container
+                                      *ngIf="
+                                        maintenanceUserMemberList.length != 0
+                                      "
+                                    >
+                                      <app-shown-internal-external-matainance
+                                        [dDetail]="dDetail"
+                                        (afterDeleteSend)="
+                                          callAfterDelete($event)
+                                        "
+                                        [accessRight]="
+                                          currentObjectFindWithAccessRight
+                                        "
+                                        [internalExternalMatainanceList]="
+                                          maintenanceUserMemberList
+                                        "
+                                        [comingWhichTab]="'Maintenance'"
+                                      ></app-shown-internal-external-matainance>
+                                    </ng-container>
+                                    <ng-container
+                                      *ngIf="
+                                        maintenanceUserMemberList.length == 0
+                                      "
+                                    >
+                                      <div class="py-4 text-center">
+                                        <div>
+                                          <lord-icon
+                                            src="https://cdn.lordicon.com/msoeawqm.json"
+                                            trigger="loop"
+                                            colors="primary:#405189,secondary:#0ab39c"
+                                            style="width: 72px; height: 72px"
+                                          >
+                                          </lord-icon>
+                                        </div>
+                                        <div class="mt-4">
+                                          <h5>No Records Found</h5>
+                                        </div>
+                                      </div>
+                                    </ng-container>
+                                  </div>
+                                </div>
+                              </ng-template>
+                            </li>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              currentObjectFindWithAccessRight.maintenance_ExternalUser_Tab_View
+                            "
+                          >
+                            <li
+                              [ngbNavItem]="2"
+                              class="nav-item"
+                              (click)="
+                                getV2_MyTaskMaintenanceMemberAndMyTaskListClient()
+                              "
+                            >
+                              <a
+                                ngbNavLink
+                                class="nav-link"
+                                data-bs-toggle="tab"
+                                role="tab"
+                              >
+                                External Users
+                                <span
+                                  class="badge align-middle ms-1"
+                                  [class]="
+                                    maintenanceUserClientList.length != 0
+                                      ? 'bg-success'
+                                      : 'bg-danger'
+                                  "
+                                  >{{ maintenanceUserClientList.length }}</span
+                                ></a
+                              >
+
+                              <ng-template ngbNavContent>
+                                <div class="row g-4 mb-3">
+                                  <div class="col-md-12">
+                                    <div class="d-flex justify-content-end">
+                                      <button
+                                        *ngIf="
+                                          currentObjectFindWithAccessRight.maintenance_ExternalUser_SelectMember
+                                        "
+                                        type="button"
+                                        (click)="
+                                          openModalMaintenanceUserClient()
+                                        "
+                                        class="btn btn-sm btn-success mb-2"
+                                      >
+                                        Select External Users
+                                      </button>
+                                    </div>
+                                    <ng-container
+                                      *ngIf="
+                                        maintenanceUserClientList.length != 0
+                                      "
+                                    >
+                                      <ng-container
+                                        *ngIf="
+                                          maintenanceUserClientList?.length != 0
+                                        "
+                                      >
+                                        <app-shown-internal-external-matainance
+                                          [dDetail]="dDetail"
+                                          (afterDeleteSend)="
+                                            callAfterDelete($event)
+                                          "
+                                          [accessRight]="
+                                            currentObjectFindWithAccessRight
+                                          "
+                                          [internalExternalMatainanceList]="
+                                            maintenanceUserClientList
+                                          "
+                                          [comingWhichTab]="'Maintenance'"
+                                        ></app-shown-internal-external-matainance>
+                                      </ng-container>
+                                    </ng-container>
+                                    <ng-container
+                                      *ngIf="
+                                        maintenanceUserClientList.length == 0
+                                      "
+                                    >
+                                      <div class="py-4 text-center">
+                                        <div>
+                                          <lord-icon
+                                            src="https://cdn.lordicon.com/msoeawqm.json"
+                                            trigger="loop"
+                                            colors="primary:#405189,secondary:#0ab39c"
+                                            style="width: 72px; height: 72px"
+                                          >
+                                          </lord-icon>
+                                        </div>
+                                        <div class="mt-4">
+                                          <h5>No Records Found</h5>
+                                        </div>
+                                      </div>
+                                    </ng-container>
+                                  </div>
+                                </div>
+                              </ng-template>
+                            </li>
+                          </ng-container>
+
+                          <li [ngbNavItem]="3" class="nav-item">
+                            <a
+                              ngbNavLink
+                              class="nav-link"
+                              data-bs-toggle="tab"
+                              role="tab"
+                              (click)="get_V2_MaintenanceProcessUserApprval()"
+                            >
+                              Access Right
+                            </a>
+                            <ng-template ngbNavContent>
+                              <app-list-access-right
+                                [dDetail]="dDetail"
+                                [accessGroup]="currentObjectFindWithAccessRight"
+                                [projectDepartmentId]="projectDepartmentId"
+                                (sendBackAfterSubmitUser)="
+                                  get_V2_MaintenanceProcessUserApprval()
+                                "
+                                [projectProcessUserApprvalList]="
+                                  maintenanceProcessUserApprval
+                                "
+                                [comingWhichTab]="'Maintenance'"
+                                [maintenanceProcessComing]="true"
+                              ></app-list-access-right>
+                            </ng-template>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="card-body">
+                        <div class="tab-content text-muted">
+                          <div [ngbNavOutlet]="innercustomNav"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+          </ng-container>
+          <ng-container *ngIf="currentObjectFindWithAccessRight.asset_Tab_View">
+            <li
+              [ngbNavItem]="
+                projectProcessHeaderByProjectList.length != 0 ? 6 : 5
+              "
+              class="nav-item"
+              (click)="getAssetUserAccessList()"
+              (click)="getAssetClientAccessList()"
+              (click)="
+                onNavChange(
+                  projectProcessHeaderByProjectList.length != 0 ? 6 : 5
+                )
+              "
+            >
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Asset Team
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row g-4 mb-3">
+                  <div class="col-md-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <ul
+                          ngbNav
+                          #innercustomNav="ngbNav"
+                          [activeId]="1"
+                          class="nav nav-tabs-custom border-bottom-0"
+                          role="tablist"
+                        >
+                          <ng-container
+                            *ngIf="
+                              this.currentObjectFindWithAccessRight
+                                .asset_InternalUser_Tab_View
+                            "
+                          >
+                            <li [ngbNavItem]="1" class="nav-item">
+                              <a
+                                ngbNavLink
+                                class="nav-link"
+                                data-bs-toggle="tab"
+                                role="tab"
+                                (click)="getAssetUserAccessList()"
+                              >
+                                Internal Users
+                                <span
+                                  class="badge align-middle ms-1"
+                                  [class]="
+                                    assetUserAccessList.length != 0
+                                      ? 'bg-success'
+                                      : 'bg-danger'
+                                  "
+                                  >{{ assetUserAccessList.length }}</span
+                                ></a
+                              >
+                              <ng-template ngbNavContent>
+                                <div class="row g-4 mb-3">
+                                  <div class="col-md-12">
+                                    <div class="d-flex justify-content-end">
+                                      <button
+                                        *ngIf="
+                                          this.currentObjectFindWithAccessRight
+                                            .asset_InternalUser_SelectMember
+                                        "
+                                        type="button"
+                                        (click)="openModalAssetUserMember()"
+                                        class="btn btn-sm btn-success mb-2"
+                                      >
+                                        Select Internal Users
+                                      </button>
+                                    </div>
+                                    <ng-container
+                                      *ngIf="assetUserAccessList.length != 0"
+                                    >
+                                      <app-shown-internal-external-matainance
+                                        [dDetail]="dDetail"
+                                        (afterDeleteSend)="
+                                          callAfterDelete($event)
+                                        "
+                                        [accessRight]="
+                                          currentObjectFindWithAccessRight
+                                        "
+                                        [internalExternalMatainanceList]="
+                                          assetUserAccessList
+                                        "
+                                        [comingWhichTab]="'Asset'"
+                                      ></app-shown-internal-external-matainance>
+                                    </ng-container>
+
+                                    <ng-container
+                                      *ngIf="assetUserAccessList.length == 0"
+                                    >
+                                      <div class="py-4 text-center">
+                                        <div>
+                                          <lord-icon
+                                            src="https://cdn.lordicon.com/msoeawqm.json"
+                                            trigger="loop"
+                                            colors="primary:#405189,secondary:#0ab39c"
+                                            style="width: 72px; height: 72px"
+                                          >
+                                          </lord-icon>
+                                        </div>
+                                        <div class="mt-4">
+                                          <h5>No Records Found</h5>
+                                        </div>
+                                      </div>
+                                    </ng-container>
+                                  </div>
+                                </div>
+                              </ng-template>
+                            </li>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              this.currentObjectFindWithAccessRight
+                                .asset_ExternalUser_Tab_View
+                            "
+                          >
+                            <li
+                              [ngbNavItem]="2"
+                              class="nav-item"
+                              (click)="getAssetClientAccessList()"
+                            >
+                              <a
+                                ngbNavLink
+                                class="nav-link"
+                                data-bs-toggle="tab"
+                                role="tab"
+                              >
+                                External Users
+                                <span
+                                  class="badge align-middle ms-1"
+                                  [class]="
+                                    assetUserClientAccessList.length != 0
+                                      ? 'bg-success'
+                                      : 'bg-danger'
+                                  "
+                                  >{{ assetUserClientAccessList.length }}</span
+                                ></a
+                              >
+                              <ng-template ngbNavContent>
+                                <div class="row g-4 mb-3">
+                                  <div class="col-md-12">
+                                    <div class="d-flex justify-content-end">
+                                      <button
+                                        *ngIf="
+                                          this.currentObjectFindWithAccessRight
+                                            .asset_ExternalUser_SelectMember
+                                        "
+                                        type="button"
+                                        (click)="openModalAssetUserClient()"
+                                        class="btn btn-sm btn-success mb-2"
+                                      >
+                                        Select External Users
+                                      </button>
+                                    </div>
+                                    <ng-container
+                                      *ngIf="
+                                        assetUserClientAccessList.length != 0
+                                      "
+                                    >
+                                      <app-shown-internal-external-matainance
+                                        [dDetail]="dDetail"
+                                        (afterDeleteSend)="
+                                          callAfterDelete($event)
+                                        "
+                                        [accessRight]="
+                                          currentObjectFindWithAccessRight
+                                        "
+                                        [internalExternalMatainanceList]="
+                                          assetUserClientAccessList
+                                        "
+                                        [comingWhichTab]="'Asset'"
+                                      ></app-shown-internal-external-matainance>
+                                    </ng-container>
+
+                                    <ng-container
+                                      *ngIf="
+                                        assetUserClientAccessList.length == 0
+                                      "
+                                    >
+                                      <div class="py-4 text-center">
+                                        <div>
+                                          <lord-icon
+                                            src="https://cdn.lordicon.com/msoeawqm.json"
+                                            trigger="loop"
+                                            colors="primary:#405189,secondary:#0ab39c"
+                                            style="width: 72px; height: 72px"
+                                          >
+                                          </lord-icon>
+                                        </div>
+                                        <div class="mt-4">
+                                          <h5>No Records Found</h5>
+                                        </div>
+                                      </div>
+                                    </ng-container>
+                                  </div>
+                                </div>
+                              </ng-template>
+                            </li></ng-container
+                          >
+                        </ul>
+                      </div>
+                      <div class="card-body">
+                        <div class="tab-content text-muted">
+                          <div [ngbNavOutlet]="innercustomNav"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+          </ng-container>
+          <ng-container
+            *ngIf="currentObjectFindWithAccessRight.warrenty_Tab_View"
+          >
+            <li
+              (click)="
+                onNavChange(
+                  projectProcessHeaderByProjectList.length != 0 ? 7 : 6
+                )
+              "
+              (click)="getDepartmentDetail(projectDepartmentId)"
+              [ngbNavItem]="
+                projectProcessHeaderByProjectList.length != 0 ? 7 : 6
+              "
+              class="nav-item"
+              *ngIf="
+                (dDetail.isAwarded == true &&
+                  dDetail.isProjectManagement == true) ||
+                dDetail.isMaintenance == true
+              "
+            >
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Warranty
+              </a>
+              <ng-template ngbNavContent>
+                <app-warranty-list
+                  [accessRight]="currentObjectFindWithAccessRight"
+                  [clientStatus]="clientStatus?.clientStatusId"
+                  [projectId]="projectDepartmentId"
+                  [dDetail]="this.dDetail"
+                  (completeProcess)="getAfterComplete($event)"
+                ></app-warranty-list>
+              </ng-template>
+            </li>
+          </ng-container>
+          <ng-container
+            *ngIf="
+              currentObjectFindWithAccessRight.maintenanceAgreement_Tab_View
+            "
+          >
+            <li
+              (click)="
+                onNavChange(
+                  projectProcessHeaderByProjectList.length != 0 ? 8 : 9
+                )
+              "
+              (click)="getDepartmentDetail(projectDepartmentId)"
+              [ngbNavItem]="
+                projectProcessHeaderByProjectList.length != 0 ? 8 : 7
+              "
+              class="nav-item"
+              *ngIf="
+                (dDetail.isAwarded == true &&
+                  dDetail.isProjectManagement == true) ||
+                dDetail.isMaintenance == true
+              "
+            >
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Maintenance Agreement
+              </a>
+              <ng-template ngbNavContent>
+                <app-maintenance-agreement
+                  [accessRight]="currentObjectFindWithAccessRight"
+                  [clientStatus]="clientStatus?.clientStatusId"
+                  [projectId]="projectDepartmentId"
+                  [dDetail]="this.dDetail"
+                  (completeProcess)="getAfterComplete($event)"
+                ></app-maintenance-agreement>
+              </ng-template>
+            </li>
+          </ng-container>
+          <ng-container
+            *ngIf="currentObjectFindWithAccessRight.workflow_Tab_View"
+          >
+            <li
+            
+              (click)="
+                onNavChange(
+                  projectProcessHeaderByProjectList.length != 0 ? 9 : 8
+                )
+              "
+              [ngbNavItem]="
+                projectProcessHeaderByProjectList.length != 0 ? 9 : 8
+              "
+              class="nav-item"
+            >
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Workflow
+              </a>
+              <ng-template ngbNavContent>
+                <app-pm-configuration
+                  [globalCompanyId]="dDetail.companyId"
+                  [globalDepartmentId]="dDetail.departmentId"
+                  [globalDepartmentName]="dDetail.departmentName"
+                  [dDetail]="dDetail"
+                  [workflow_Modification]="
+                    currentObjectFindWithAccessRight.workflow_Modification
+                  "
+                ></app-pm-configuration>
+              </ng-template>
+            </li>
+          </ng-container>
+          <ng-container
+            *ngIf="currentObjectFindWithAccessRight.projectSchedule_Tab_View"
+          >
+            <li
+              
+              (click)="
+                onNavChange(
+                  projectProcessHeaderByProjectList.length != 0 ? 10 : 9
+                )
+              "
+              [ngbNavItem]="
+                projectProcessHeaderByProjectList.length != 0 ? 10 : 9
+              "
+              class="nav-item"
+            >
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Schedule
+              </a>
+              <ng-template ngbNavContent>
+                <app-pm-project-schedule
+                  [SearchProjectId]="dDetail.departmentId"
+                  [dDetail]="dDetail"
+                  [projectSchedule_Add]="
+                    currentObjectFindWithAccessRight.projectSchedule_Add
+                  "
+                  [projectSchedule_Delete]="
+                    currentObjectFindWithAccessRight.projectSchedule_Delete
+                  "
+                ></app-pm-project-schedule>
+              </ng-template>
+            </li>
+          </ng-container>
+
+          <li
+            (click)="
+              onNavChange(
+                projectProcessHeaderByProjectList.length != 0 ? 11 : 10
+              )
+            "
+            [ngbNavItem]="
+              projectProcessHeaderByProjectList.length != 0 ? 11 : 10
+            "
+            class="nav-item"
+          >
+            <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+              Attendance
+            </a>
+            <ng-template ngbNavContent>
+              <div class="row align-items-center">
+                <div class="col">
+                  <!-- Nav tabs -->
+                  <ul
+                    ngbNav
+                    #nav="ngbNav"
+                    [(activeId)]="activeIdWorkingHoursTop_Attendance"
+                    class="nav nav-tabs-custom card-header-tabs border-bottom-0"
+                  >
+                    <li [ngbNavItem]="1">
+                      <a ngbNavLink (click)="onNavChange_Attendance(1)">
+                        Corrective
+                      </a>
+                      <ng-template ngbNavContent>
+                        <app-corrective-month-year-wise-project-id
+                          [ProjectId]="dDetail.departmentId"
+                        ></app-corrective-month-year-wise-project-id>
+                      </ng-template>
+                    </li>
+                    <li [ngbNavItem]="2">
+                      <a ngbNavLink (click)="onNavChange_Attendance(2)">
+                        Preventive
+                      </a>
+                      <ng-template ngbNavContent>
+                        <app-preventive-month-year-wise-project-id
+                          [ProjectId]="dDetail.departmentId"
+                        ></app-preventive-month-year-wise-project-id>
+                      </ng-template>
+                    </li>
+                    <li [ngbNavItem]="3">
+                      <a ngbNavLink (click)="onNavChange_Attendance(3)"
+                        >Project Task
+                      </a>
+                      <ng-template ngbNavContent>
+                        <app-project-task-month-year-wise-project-id
+                          [ProjectId]="dDetail.departmentId"
+                        ></app-project-task-month-year-wise-project-id>
+                      </ng-template>
+                    </li>
+                  </ul>
+                </div>
+                <div class="tab-content text-muted mt-3">
+                  <div [ngbNavOutlet]="nav"></div>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li class="nav-item ms-auto">
+            <button
+              type="button"
+              class="btn nav-link hy-link me-3"
+              (click)="openViewMore(viewMoreModal)"
+            >
+              View More
+            </button>
+          </li>
+        </ul>
+      </div>
+      <!-- end card body -->
+    </div>
+    <!-- end card -->
+  </div>
+  <!-- end col -->
+</div>
+<!-- end row -->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="tab-content text-muted">
+      <div [ngbNavOutlet]="customNav"></div>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="text-end mb-3">
+      <button
+        class="btn btn-soft-primary waves-effect mx-3"
+        type="button"
+        (click)="goBack()"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+  <!-- end col -->
+</div>
+<!-- end row -->
+
+<ng-template #viewMoreModal let-offcanvas>
+  <div class="offcanvas-header p-3 bg-info-subtle">
+    <h5 class="offcanvas-title" id="exampleModalLabel">Contact and SLA</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+      id="close-offcanvas"
+      (click)="offcanvas.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="offcanvas-body">
+    <div class="row">
+      <div class="col-xl-12 col-lg-12">
+        <div class="card-header align-items-center border-bottom-dashed">
+          <h4 class="card-title mb-0 flex-grow-1 pb-3">Contact</h4>
+        </div>
+        <div class="card-body text-muted">
+          <div class="table-responsive">
+            <table class="table table-borderless mb-0">
+              <tbody>
+                <tr>
+                  <td class="fw-medium w-30">HOD</td>
+                  <td>
+                    {{ dDetail.departHeadName || "-" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-30">Person</td>
+                  <td>
+                    {{ dDetail.contactPerson1 || "-" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-30">Designation</td>
+                  <td>
+                    {{ dDetail.contactDesignation1 || "-" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-30 pb-1">Mobile No</td>
+                  <td>
+                    {{ dDetail.contactMobileNo1 || "-" }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium w-30">Phone No</td>
+                  <td>
+                    {{ dDetail.contactPhoneNo1 || "-" }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium w-30">Email</td>
+                  <td>
+                    {{ dDetail.contactEMail1 || "-" }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium w-30">Fax No</td>
+                  <td>
+                    {{ dDetail.contactFaxNo1 || "-" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card-header align-items-center border-bottom-dashed mt-3">
+          <h4 class="card-title mb-0 flex-grow-1 pb-3">SLA</h4>
+        </div>
+        <div class="card-body text-muted">
+          <div class="table-responsive">
+            <table class="table table-borderless mb-0">
+              <tbody>
+                <tr>
+                  <td class="fw-medium w-30">Respond SLA Duration</td>
+                  <td>
+                    {{ dDetail.respondSLA || "-" }}
+                    {{ dDetail.respondSLADurationDesc }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-30">On Site SLA Duration</td>
+                  <td>
+                    {{ dDetail.onSiteSLA || "-" }}
+                    {{ dDetail.onSiteSLADurationDesc || "-" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-30">Expected SLA Duration</td>
+                  <td>
+                    {{ dDetail.exepectedComplitionSLA || "-" }}
+                    {{ dDetail.exepectedComplitionSLADurationDesc || "-" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="offcanvas-footer text-end mb-3"></div>
+</ng-template>

@@ -1,0 +1,1326 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  title="Asset Edit"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+<ng-container *ngIf="assetDetailsObj !== {}">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card mt-n4 mx-n4">
+        <div class="bg-warning-subtle">
+          <div class="card-body pb-0 px-4">
+            <div class="row mb-3">
+              <div class="col-md">
+                <div class="row align-items-center g-3">
+                  <div class="col-md-auto">
+                    <div class="avatar-md">
+                      <div class="avatar-title bg-white rounded-circle">
+                        <img
+                          [src]="
+                            assetDetailsObj.assetImagePath
+                              ? apiUrl + assetDetailsObj.assetImagePath
+                              : '../../../../../assets/images/placeholderimage.png'
+                          "
+                          alt=""
+                          class="avatar-xs"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md">
+                    <div>
+                      <h4 class="fw-bold">{{ assetDetailsObj.assetName }}</h4>
+                      <div class="hstack gap-3 flex-wrap">
+                        <div *ngIf="assetDetailsObj.assetTagId">
+                          <span class="fw-medium"
+                            >#{{ assetDetailsObj.assetTagId }}</span
+                          >
+                        </div>
+                        <div
+                          *ngIf="assetDetailsObj.assetTagId"
+                          class="vr"
+                        ></div>
+
+                        <div>
+                          Company :
+                          <span class="fw-medium">{{
+                            assetDetailsObj.companyName
+                          }}</span>
+                        </div>
+                        <div class="vr"></div>
+
+                        <div>
+                          Client :
+                          <span class="fw-medium">{{
+                            assetDetailsObj.clientName
+                          }}</span>
+                        </div>
+
+                        <div class="vr"></div>
+
+                        <div>
+                          {{ isProject ? "Project" : "Department" }} :
+                          <span class="fw-medium">{{
+                            assetDetailsObj.departmentName
+                          }}</span>
+                        </div>
+
+                        <div class="vr"></div>
+
+                        <div>
+                          Category :
+                          <span class="fw-medium">{{
+                            assetDetailsObj.categoryName
+                          }}</span>
+                        </div>
+
+                        <div class="vr"></div>
+                        <div>
+                          Subcategory :
+                          <span class="fw-medium">{{
+                            assetDetailsObj.subCategoryName
+                          }}</span>
+                        </div>
+
+                        <div class="vr"></div>
+                        <div
+                          class="d-flex justify-content-center align-items-center"
+                        >
+                          <i
+                            class="ri-printer-line me-1 align-bottom"
+                            [class]="
+                              assetDetailsObj.qrCodePrintCount == 0
+                                ? 'text-danger'
+                                : 'text-success'
+                            "
+                          >
+                          </i
+                          >{{ assetDetailsObj.qrCodePrintCount }}
+                        </div>
+                        <div class="vr"></div>
+                        <div
+                          class="d-flex justify-content-center align-items-center"
+                        >
+                          <i
+                            class="align-bottom"
+                            [class]="
+                              assetDetailsObj.isLock
+                                ? 'ri-lock-line text-success'
+                                : ' ri-lock-unlock-line text-danger'
+                            "
+                          >
+                          </i
+                          >{{ assetDetailsObj.isLock ? "Locked" : "UnLocked" }}
+                        </div>
+                        <div class="vr"></div>
+                        <div
+                          class="badge rounded-pill fs-12"
+                          [class]="
+                            assetDetailsObj.assignType == 'Project'
+                              ? 'bg-primary'
+                              : 'bg-success'
+                          "
+                        >
+                          {{ assetDetailsObj.assignType }}
+                        </div>
+                        <div class="vr"></div>
+                        <div
+                          class="fs-14 text-success"
+                          *ngIf="assetDetailsObj.assigned == true"
+                        >
+                          {{
+                            assetDetailsObj.assignType == "Project"
+                              ? "On-site installation of the asset has been completed"
+                              : "Asset have been collected"
+                          }}
+                        </div>
+                        <div
+                          class="fs-14 text-danger"
+                          *ngIf="assetDetailsObj.assigned == false"
+                        >
+                          {{
+                            assetDetailsObj.assignType == "Project"
+                              ? "Currently, the asset is not installed on site"
+                              : "Asset have not been collected"
+                          }}
+                        </div>
+                        <div class="vr"></div>
+                        <div>
+                          <span
+                            [class]="
+                              returnStatusBadgeClassesStatus(
+                                assetDetailsObj.assetStatusId
+                              )
+                            "
+                            >{{ assetDetailsObj.assetStatus }}</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ul
+              ngbNav
+              #customNav="ngbNav"
+              [activeId]="1"
+              class="nav nav-tabs-custom border-bottom-0"
+              role="tablist"
+            >
+              <li [ngbNavItem]="1" class="nav-item">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Asset Details
+                </a>
+                <ng-template ngbNavContent>
+                  <form [formGroup]="editAsset">
+                    <div class="row">
+                      <div class="col-lg-5 stretch-card">
+                        <div class="card">
+                          <div class="card-header d-flex align-items-center">
+                            <h5 class="card-title mb-0 col-lg-6">Basic Information</h5>
+                            <div class=" col-lg-6" *ngIf="editStatusButton" >
+                              <button
+                              type="button"
+                              class="btn btn-success add-btn"
+                              style="float: right;"
+                            
+                              (click)="getDropdownAssetStatusList_new('AssetStatusUpdate',modalAddConfirm, $event)"
+                              #button
+                            >
+                               Update Asset Status
+                            </button>
+
+                              </div>
+                          </div>
+
+                          <div class="card-body">
+                            <div class="mb-3">
+                              <label
+                                for="choices-location-input"
+                                class="form-label"
+                                >Location</label
+                              >
+
+                              <ng-select
+                                [items]="locationList"
+                                bindLabel="locationName"
+                                bindValue="locationId"
+                                placeholder="Select Location"
+                                [clearable]="false"
+                                [(ngModel)]="_locationId"
+                                class="custom"
+                                formControlName="location"
+                              >
+                              </ng-select>
+
+                              <div
+                                *ngIf="location?.invalid && location?.touched"
+                                class="mt-2"
+                              >
+                                <small
+                                  class="text-danger"
+                                  *ngIf="location['errors']['required']"
+                                >
+                                  Location is Required</small
+                                >
+                              </div>
+                            </div>
+
+                            <div class="mb-3">
+                              <label class="form-label" for="lifespan-input"
+                                >Asset Lifespan</label
+                              >
+                              <div class="input-group">
+                              <input
+                                type="number"
+                                class="form-control"
+                                placeholder="Enter Asset Life Span"
+                                formControlName="assetLifeSpan"
+                              /><span class="input-group-text">Month</span>
+                            </div>
+              
+                            </div>
+
+                            <div class="mb-3">
+                              <label
+                                for="choices-assethandler-input"
+                                class="form-label"
+                                >Asset handler</label
+                              >
+
+                              <div class="input-group">
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  style="position: relative"
+                                  placeholder="Enter Asset Handler"
+                                  formControlName="employee"
+                                  readonly
+                                />
+                                <div
+                                  class="input-group-append"
+                                  *ngIf="assetDetailsObj.isLock == false"
+                                >
+                                  <button
+                                    class="btn btn-outline-secondary btn-xs"
+                                    (click)="confirmUpdate(assetHandlePopUP)"
+                                    style="height: 40px"
+                                  >
+                                    <i class="ri-user-fill"></i>
+                                  </button>
+                                </div>
+                              </div>
+                              <div
+                                *ngIf="employee?.invalid && employee?.touched"
+                              >
+                                <small
+                                  class="text-danger"
+                                  *ngIf="employee['errors']['required']"
+                                >
+                                  Asset Handler is Required</small
+                                >
+                              </div>
+                            </div>
+
+                            <div class="mb-3">
+                              <label
+                                for="choices-vendor-input"
+                                class="form-label"
+                                >Vendor</label
+                              >
+
+                              <ng-select
+                                [items]="vendorList"
+                                bindLabel="vendorName"
+                                bindValue="vendorId"
+                                placeholder="Select Vendor"
+                                [clearable]="false"
+                                [(ngModel)]="_vendorId"
+                                class="custom"
+                                formControlName="vendor"
+                              >
+                              </ng-select>
+
+                              <div
+                                *ngIf="vendor?.invalid && vendor?.touched"
+                                class="mt-2"
+                              >
+                                <small
+                                  class="text-danger"
+                                  *ngIf="vendor['errors']['required']"
+                                >
+                                  Vendor is Required</small
+                                >
+                              </div>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Model </label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Enter Model "
+                                formControlName="model"
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Serial No </label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Enter SerialNo "
+                                formControlName="serialNo"
+                              />
+                            </div>
+
+                            <div class="mb-3">
+                              <label class="form-label">Active/Passive</label>
+                              <ng-select
+                                [items]="activePassiveList"
+                                id="V017"
+                                placeholder="Enter Active/Passive"
+                                formControlName="V017"
+                                bindLabel="value"
+                                bindValue="id"
+                                [clearable]="false"
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">MTBF</label>
+
+                              <div class="input-group">
+                                <input
+                                  type="number"
+                                  class="form-control"
+                                  placeholder="Enter MTBF"
+                                  formControlName="V018"
+                                /><span class="input-group-text">Hours</span>
+                              </div>
+                             
+                            </div>
+                            <!-- <div class="mb-3">
+                              <label class="form-label">Old Asset Id</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Enter Old Asset Id"
+                                formControlName="oldAssetId"
+                              />
+                            </div> -->
+                          </div>
+                          <!-- end card body -->
+                          <div class="p-3">
+                            <ul
+                              ngbNav
+                              #customNav="ngbNav"
+                              [activeId]="1"
+                              class="nav nav-tabs-custom card-header-tabs border-bottom-0"
+                              role="tablist"
+                            >
+                              <li [ngbNavItem]="1" class="nav-item">
+                                <a
+                                  ngbNavLink
+                                  class="nav-link"
+                                  data-bs-toggle="tab"
+                                  role="tab"
+                                >
+                                  Account
+                                </a>
+                                <ng-template ngbNavContent>
+                                  <div
+                                    class="tab-pane"
+                                    id="addproduct-metadata"
+                                    role="tabpanel"
+                                  >
+                                    <div class="row">
+                                      <div class="col-lg-6 mb-3">
+                                        <label
+                                          class="form-label"
+                                          for="meta-pono-input"
+                                          >PO Number</label
+                                        >
+                                        <input
+                                          type="text"
+                                          class="form-control"
+                                          placeholder="Enter PO Number"
+                                          formControlName="pONumber"
+                                          id="meta-pono-input"
+                                        />
+                                      </div>
+                                      <!-- end col -->
+
+                                      <div class="col-lg-6 mb-3">
+                                        <label
+                                          class="form-label"
+                                          for="meta-invoice-input"
+                                          >Invoice Number</label
+                                        >
+                                        <input
+                                          type="text"
+                                          class="form-control"
+                                          formControlName="invoiceNo"
+                                          placeholder="Enter Invoice Number"
+                                          id="meta-invoice-input"
+                                        />
+                                      </div>
+                                      <div class="col-lg-6 mb-3">
+                                        <div class="form-group mb-3">
+                                          <label
+                                            class="form-label"
+                                            for="product-price-input"
+                                            >Purchase Price</label
+                                          >
+                                          <div class="input-group mb-3">
+                                            <span
+                                              class="input-group-text"
+                                              id="product-price-addon"
+                                              >{{
+                                                this.assetDetailsObj?.v003
+                                              }}</span
+                                            >
+                                            <input
+                                              type="number"
+                                              class="form-control"
+                                              formControlName="purchasePrice"
+                                              id="product-price-input"
+                                              placeholder="Purchase Price"
+                                              aria-label="Price"
+                                              aria-describedby="product-price-addon"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="col-lg-6 mb-3">
+                                        <label
+                                          class="form-label"
+                                          for="Purchase Date"
+                                          >Purchase Date</label
+                                        >
+                                        <input
+                                          class="form-control flatpickr-input"
+                                          type="text"
+                                          formControlName="purchasedDate"
+                                          placeholder="Enter Purchase Date"
+                                          mwlFlatpickr
+                                          [altInput]="false"
+                                          [enableTime]="false"
+                                          [convertModelValue]="true"
+                                          [dateFormat]="'d-m-Y'"
+                                        />
+                                      </div>
+                                      <div class="col-lg-6 mb-3">
+                                        <label class="form-label"
+                                          >Invoice Date</label
+                                        >
+                                        <input
+                                          class="form-control flatpickr-input"
+                                          type="text"
+                                          formControlName="invoiceDate"
+                                          placeholder="Enter Invoice Date"
+                                          mwlFlatpickr
+                                          [altInput]="false"
+                                          [enableTime]="false"
+                                          [convertModelValue]="true"
+                                          [dateFormat]="'d-m-Y'"
+                                        />
+                                      </div>
+
+                                      <div class="col-lg-6 mb-3">
+                                        <div class="mb-3">
+                                          <label
+                                            class="form-label"
+                                            for="meta-deliveryondate-input"
+                                            >Delivery Date
+                                            <i
+                                              class="ri-close-circle-line text-danger"
+                                              *ngIf="deliveryDate.value"
+                                              (click)="clearChangDeliveryDate()"
+                                            ></i
+                                          ></label>
+
+                                          <div class="input-group mb-3">
+                                            <input
+                                              class="form-control flatpickr-input"
+                                              type="text"
+                                              placeholder="Enter Delivery Date"
+                                              mwlFlatpickr
+                                              [altInput]="false"
+                                              formControlName="deliveryDate"
+                                              [enableTime]="false"
+                                              [convertModelValue]="true"
+                                              [dateFormat]="'d-m-Y'"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div
+                                        class="col-lg-6 mb-3"
+                                        *ngIf="deliveryDate.value"
+                                      >
+                                        <div class="mb-3">
+                                          <label class="form-label"
+                                            >Installation Date
+                                            <i
+                                              class="ri-close-circle-line text-danger"
+                                              *ngIf="installationDate.value"
+                                              (click)="
+                                                clearChangInstallationDate()
+                                              "
+                                            ></i
+                                          ></label>
+                                          <div class="input-group mb-3">
+                                            <input
+                                              class="form-control flatpickr-input"
+                                              type="text"
+                                              placeholder="Enter Installation Date"
+                                              mwlFlatpickr
+                                              [altInput]="false"
+                                              formControlName="installationDate"
+                                              [enableTime]="false"
+                                              [convertModelValue]="true"
+                                              [dateFormat]="'d-m-Y'"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </ng-template>
+                              </li>
+
+                              <li [ngbNavItem]="2" class="nav-item">
+                                <a
+                                  ngbNavLink
+                                  class="nav-link"
+                                  data-bs-toggle="tab"
+                                  role="tab"
+                                >
+                                  Warranty
+                                </a>
+                                <ng-template ngbNavContent>
+                                  <div
+                                    class="tab-pane active"
+                                    id="addproduct-general-info"
+                                    role="tabpanel"
+                                  >
+                                    <div class="row">
+                                      <div class="col-sm-12">
+                                        <label
+                                          class="form-label"
+                                          for="product-warrantystart-input"
+                                        >
+                                          Warranty Period</label
+                                        >
+                                        <div class="mb-3 d-flex">
+                                          <div class="input-group mb-3 me-2">
+                                            <input
+                                              class="form-control flatpickr-input"
+                                              type="text"
+                                              placeholder="Start"
+                                              formControlName="warrantyStart"
+                                              mwlFlatpickr
+                                              [altInput]="false"
+                                              [enableTime]="false"
+                                              [convertModelValue]="true"
+                                              [dateFormat]="'d-m-Y'"
+                                            />
+                                          </div>
+
+                                          <div class="input-group mb-3">
+                                            <input
+                                              class="form-control flatpickr-input"
+                                              type="text"
+                                              formControlName="warrantyEnd"
+                                              placeholder="End"
+                                              mwlFlatpickr
+                                              [altInput]="false"
+                                              [enableTime]="false"
+                                              [convertModelValue]="true"
+                                              [dateFormat]="'d-m-Y'"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-sm-12">
+                                        <label
+                                          class="form-label"
+                                          for="extendstart-input"
+                                          >Extended Warranty Period</label
+                                        >
+                                        <div class="mb-3 d-flex">
+                                          <div class="input-group mb-3 me-2">
+                                            <input
+                                              class="form-control flatpickr-input"
+                                              type="text"
+                                              formControlName="ExtendedStartWarrenty"
+                                              placeholder="Start"
+                                              mwlFlatpickr
+                                              [altInput]="false"
+                                              [enableTime]="false"
+                                              [convertModelValue]="true"
+                                              [dateFormat]="'d-m-Y'"
+                                            />
+                                          </div>
+
+                                          <div class="input-group mb-3">
+                                            <input
+                                              class="form-control flatpickr-input"
+                                              type="text"
+                                              formControlName="ExtendedEndWarrenty"
+                                              placeholder="End"
+                                              mwlFlatpickr
+                                              [altInput]="false"
+                                              [enableTime]="false"
+                                              [convertModelValue]="true"
+                                              [dateFormat]="'d-m-Y'"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-sm-12">
+                                        <label
+                                          class="form-label"
+                                          for="rmastart-input"
+                                          >RMA Warranty Period</label
+                                        >
+                                        <div class="mb-3 d-flex">
+                                          <div class="input-group mb-3 me-2">
+                                            <input
+                                              class="form-control flatpickr-input"
+                                              type="text"
+                                              formControlName="RMAStartWarrenty"
+                                              placeholder=" Start"
+                                              mwlFlatpickr
+                                              [altInput]="false"
+                                              [enableTime]="false"
+                                              [convertModelValue]="true"
+                                              [dateFormat]="'d-m-Y'"
+                                            />
+                                          </div>
+
+                                          <div class="input-group mb-3">
+                                            <input
+                                              class="form-control flatpickr-input"
+                                              formControlName="RMAEndWarrenty"
+                                              type="text"
+                                              placeholder="End"
+                                              mwlFlatpickr
+                                              [altInput]="false"
+                                              [enableTime]="false"
+                                              [convertModelValue]="true"
+                                              [dateFormat]="'d-m-Y'"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <!-- end row -->
+                                  </div>
+                                </ng-template>
+                              </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content pt-4">
+                              <div [ngbNavOutlet]="customNav"></div>
+                            </div>
+                          </div>
+                          <!-- end card header -->
+
+                          <!-- end card -->
+                        </div>
+                        <!-- end card -->
+                      </div>
+                      <!-- ene col -->
+
+                      <div class="col-lg-7">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="mb-3">
+                              <label class="form-label"
+                                >Asset Name<span class="starRequried"
+                                  >*</span
+                                ></label
+                              >
+                              <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Enter Asset Name"
+                                formControlName="assetName"
+                                [class.is-invalid]="
+                                  assetName?.invalid && assetName?.touched
+                                "
+                                [class.is-valid]="
+                                  assetName?.valid && assetName?.touched
+                                "
+                              />
+
+                              <div
+                                *ngIf="assetName?.invalid && assetName?.touched"
+                              >
+                                <small
+                                  class="text-danger"
+                                  *ngIf="assetName['erro rs']['required']"
+                                >
+                                  Asset Name is Required
+                                </small>
+                              </div>
+                            </div>
+                            <div>
+                              <label>Specification</label>
+                              <ckeditor
+                                [editor]="Editor"
+                                [config]="{
+                                  toolbar: [
+                                    'heading',
+                                    '|',
+                                    'bold',
+                                    'italic',
+                                    '|',
+                                    'NumberedList',
+                                    'BulletedList'
+                                  ]
+                                }"
+                                data=""
+                                formControlName="assetSpec"
+                              >
+                              </ckeditor>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- end card -->
+
+                        <div class="card">
+                          <div class="card-header">
+                            <h5 class="card-title mb-0">Asset Gallery</h5>
+                          </div>
+                          <div class="card-body">
+                            <div class="mb-4">
+                              <h5 class="fs-15 mb-1">Asset Image</h5>
+                              <p class="text-muted">Add Asset Profile Image.</p>
+                              <div class="text-center">
+                                <div class="position-relative d-inline-block">
+                                  <div
+                                    class="position-absolute top-100 start-100 translate-middle"
+                                  >
+                                    <label
+                                      class="mb-0"
+                                      placement="left"
+                                      ngbTooltip="Remove Image"
+                                      *ngIf="isFirstImageVisible"
+                                    >
+                                      <div class="avatar-xs">
+                                        <div
+                                          class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                        >
+                                          <i
+                                            class="ri-close-circle-fill"
+                                            (click)="
+                                              crossFirstImage(asset_img0)
+                                            "
+                                          ></i>
+                                        </div>
+                                      </div>
+                                    </label>
+                                    <label
+                                      for="asset_id0"
+                                      class="mb-0"
+                                      placement="left"
+                                      ngbTooltip="Select Image"
+                                      *ngIf="!isFirstImageVisible"
+                                    >
+                                      <div class="avatar-xs">
+                                        <div
+                                          class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                        >
+                                          <i class="ri-image-fill"></i>
+                                        </div>
+                                      </div>
+                                    </label>
+                                    <input
+                                      (change)="onSelectFile($event)"
+                                      formControlName="assetImageURL"
+                                      class="form-control d-none"
+                                      value=""
+                                      id="asset_id0"
+                                      type="file"
+                                      accept="image/png, image/gif, image/jpeg"
+                                    />
+                                  </div>
+                                  <div class="avatar-lg">
+                                    <div class="avatar-title bg-light rounded">
+                                      <img
+                                        src="{{ asset_img0 }}"
+                                        id="product-img"
+                                        class="avatar-md img-size-fixed"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <h5 class="fs-15 mb-1">Asset Gallery</h5>
+                              <p class="text-muted">
+                                Add Asset Gallery Images.
+                              </p>
+
+                              <div class="row text-center">
+                                <div class="row justify-content-center">
+                                  <div class="col-md-2">
+                                    <div class="mb-3">
+                                      <div
+                                        class="position-relative d-inline-block"
+                                      >
+                                        <div
+                                          class="position-absolute top-100 start-100 translate-middle"
+                                        >
+                                          <label
+                                            class="mb-0"
+                                            placement="left"
+                                            ngbTooltip="Remove Image"
+                                            *ngIf="isSecondImageVisible"
+                                          >
+                                            <div class="avatar-xs">
+                                              <div
+                                                class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                              >
+                                                <i
+                                                  (click)="
+                                                    crossSecondImage(asset_img1)
+                                                  "
+                                                  class="ri-close-circle-fill"
+                                                ></i>
+                                              </div>
+                                            </div>
+                                          </label>
+                                          <label
+                                            for="asset_id1"
+                                            class="mb-0"
+                                            placement="left"
+                                            ngbTooltip="Select Image"
+                                            *ngIf="!isSecondImageVisible"
+                                          >
+                                            <div class="avatar-xs">
+                                              <div
+                                                class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                              >
+                                                <i class="ri-image-fill"></i>
+                                              </div>
+                                            </div>
+                                          </label>
+                                          <input
+                                            (change)="onSelectFile1($event)"
+                                            accept="image/*"
+                                            formControlName="assetImageURL1"
+                                            class="form-control d-none"
+                                            value=""
+                                            id="asset_id1"
+                                            type="file"
+                                            accept="image/png, image/gif, image/jpeg"
+                                          />
+                                        </div>
+                                        <div class="avatar-lg">
+                                          <div
+                                            class="avatar-title bg-light rounded"
+                                          >
+                                            <img
+                                              src="{{ asset_img1 }}"
+                                              id="product-img"
+                                              class="avatar-md img-size-fixed"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <!-- end col -->
+
+                                  <div class="col-md-2">
+                                    <div class="mb-3">
+                                      <div
+                                        class="position-relative d-inline-block"
+                                      >
+                                        <div
+                                          class="position-absolute top-100 start-100 translate-middle"
+                                        >
+                                          <label
+                                            for="asset_id2"
+                                            class="mb-0"
+                                            placement="left"
+                                            ngbTooltip="Select Image"
+                                            *ngIf="!isThirdImageVisible"
+                                          >
+                                            <div class="avatar-xs">
+                                              <div
+                                                class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                              >
+                                                <i class="ri-image-fill"></i>
+                                              </div>
+                                            </div>
+                                          </label>
+                                          <label
+                                            class="mb-0"
+                                            placement="left"
+                                            ngbTooltip="Remove Image"
+                                            *ngIf="isThirdImageVisible"
+                                          >
+                                            <div class="avatar-xs">
+                                              <div
+                                                class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                              >
+                                                <i
+                                                  (click)="
+                                                    crossThirdImage(asset_img2)
+                                                  "
+                                                  class="ri-close-circle-fill"
+                                                ></i>
+                                              </div>
+                                            </div>
+                                          </label>
+                                          <input
+                                            (change)="onSelectFile2($event)"
+                                            accept="image/*"
+                                            formControlName="assetImageURL2"
+                                            class="form-control d-none"
+                                            value=""
+                                            id="asset_id2"
+                                            type="file"
+                                            accept="image/png, image/gif, image/jpeg"
+                                          />
+                                        </div>
+                                        <div class="avatar-lg">
+                                          <div
+                                            class="avatar-title bg-light rounded"
+                                          >
+                                            <img
+                                              src="{{ asset_img2 }}"
+                                              id="product-img"
+                                              class="avatar-md img-size-fixed"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="col-md-2">
+                                    <div class="mb-3">
+                                      <div
+                                        class="position-relative d-inline-block"
+                                      >
+                                        <div
+                                          class="position-absolute top-100 start-100 translate-middle"
+                                        >
+                                          <label
+                                            class="mb-0"
+                                            placement="left"
+                                            ngbTooltip="Remove Image"
+                                            *ngIf="isFourthImageVisible"
+                                          >
+                                            <div class="avatar-xs">
+                                              <div
+                                                class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                              >
+                                                <i
+                                                  (click)="
+                                                    crossFourthImage(asset_img3)
+                                                  "
+                                                  class="ri-close-circle-fill"
+                                                ></i>
+                                              </div>
+                                            </div>
+                                          </label>
+                                          <label
+                                            for="asset_id3"
+                                            class="mb-0"
+                                            placement="left"
+                                            ngbTooltip="Select Image"
+                                            *ngIf="!isFourthImageVisible"
+                                          >
+                                            <div class="avatar-xs">
+                                              <div
+                                                class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                              >
+                                                <i class="ri-image-fill"></i>
+                                              </div>
+                                            </div>
+                                          </label>
+                                          <input
+                                            (change)="onSelectFile3($event)"
+                                            accept="image/*"
+                                            formControlName="assetImageURL3"
+                                            class="form-control d-none"
+                                            value=""
+                                            id="asset_id3"
+                                            type="file"
+                                            accept="image/png, image/gif, image/jpeg"
+                                          />
+                                        </div>
+                                        <div class="avatar-lg">
+                                          <div
+                                            class="avatar-title bg-light rounded"
+                                          >
+                                            <img
+                                              src="{{ asset_img3 }}"
+                                              id="product-img"
+                                              class="avatar-md img-size-fixed"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <!-- end col -->
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="text-end mb-3">
+                          <ng-container>
+                            <button
+                              class="btn btn-soft-primary waves-effect mx-3"
+                              type="button"
+                              (click)="onBack()"
+                            >
+                              Back
+                            </button>
+
+                            <button
+                              class="btn btn-success w-sm"
+                              type="button"
+                              (click)="submitAssetvalue()"
+                              [disabled]="editAsset.invalid"
+                            >
+                              Submit
+                            </button>
+                          </ng-container>
+                        </div>
+                      </div>
+                      <!-- end col -->
+                    </div>
+                  </form>
+                  <!-- end row -->
+                </ng-template>
+              </li>
+
+              <li [ngbNavItem]="2" class="nav-item">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Spare Part List
+                </a>
+                <ng-template ngbNavContent>
+                  <app-spare-part
+                    [assestId]="storeAssetID"
+                    [viewButton]="shownButtonSpareList"
+                    *ngIf="storeAssetID"
+                  ></app-spare-part>
+                  <div class="row">
+                    <div class="col-md-12 text-end">
+                      <button
+                        class="btn btn-soft-primary waves-effect mx-3"
+                        type="button"
+                        (click)="onBack()"
+                      >
+                        Back
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- end row -->
+                </ng-template>
+              </li>
+
+              <!-- <li class="ml-auto mb-2">
+                <button type="button" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0"
+                (click)="onBack()">
+                <i class="feather icon-twitter btn-icon-prepend"></i>
+                Back 
+              </button>
+            
+            </li> -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- end row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="tab-content text-muted">
+        <div [ngbNavOutlet]="customNav"></div>
+      </div>
+    </div>
+    <!-- end col -->
+  </div>
+  <!-- end row -->
+
+  <ng-template #assetHandlePopUP let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-title">Select Asset Handler</h6>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close button"
+        aria-describedby="modal-title"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group row">
+        <div class="col-sm-12">
+          <input
+            type="text"
+            [(ngModel)]="filterBy"
+            (keyup)="filter()"
+            class="form-control"
+            placeholder="Search Asset Handler"
+          />
+        </div>
+      </div>
+      <div class="team-list list-view-filter row">
+        <div class="col" *ngFor="let data of employeeList | arrayFilter: filterBy">
+          <div class="card team-box">
+            <div class="card-body p-4">
+              <div class="row align-items-center team-row">
+                <div class="col-lg-4 col">
+                  <div class="team-profile-img">
+                    <div
+                      class="avatar-lg img-thumbnail rounded-circle flex-shrink-0"
+                      *ngIf="data.empImgUrl"
+                    >
+                      <img
+                        src="{{ imageUrl }}{{ data.empImgUrl }}"
+                        class="rounded-circle img-fluid userprofile"
+                        alt=""
+                      />
+                    </div>
+                    <div
+                      class="avatar-lg img-thumbnail rounded-circle flex-shrink-0"
+                      *ngIf="!data.empImgUrl"
+                    >
+                      <div
+                        class="avatar-title border bg-light text-primary rounded-circle text-uppercase"
+                      >
+                        {{ data.employeeName.charAt(0) }}
+                      </div>
+                    </div>
+                    <div class="team-content">
+                      <a
+                        data-bs-toggle="offcanvas"
+                        aria-controls="offcanvasExample"
+                      >
+                        <h5 class="fs-16 mb-1">{{ data.employeeName }}</h5>
+                      </a>
+                      <p class="text-muted mb-0">{{ data.employeeTagId }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-2 col">
+                  <div class="text-end">
+                    <button
+                      class="btn btn-primary"
+                      (click)="toAssignUser(data, modal)"
+                      [disabled]="data.isSelected"
+                    >
+                      Assign
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--end card-->
+        </div>
+      </div>
+
+      <hr />
+      <div class="d-flex justify-content-between p-2">
+        Showing {{ from }} to {{ to }} of {{ totalRecords }} entries
+
+        <div class="d-flex">
+          <ngb-pagination
+            [collectionSize]="collectionSize"
+            [(page)]="page"
+            [pageSize]="pageSize"
+            (pageChange)="getemployeeData()"
+            *ngIf="totalRecords > pageSize"
+          >
+          </ngb-pagination>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-danger"
+        (click)="modal.dismiss('cancel')"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
+</ng-container>
+
+
+<!-- Add Form -->
+<ng-template #modalAddConfirm let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h4 class="modal-title" id="modal-title">Update Asset Status</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('cancel')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="addAccessGroupForm">
+      <div class="mb-2">
+        <div class="card-body">
+          <div class="row">
+            <div class="form-group">
+              <label for="companyId" class="form-label">Update Asset <span class="text-danger">*</span></label>
+              <ng-select [items]="arrayListDropDownAssetStatus" bindLabel="assetStatus"
+               bindValue="assetStatusId" [clearable]="false" id="assetStatusId"
+                formControlName="AssetStatusId" placeholder="Select Asset Status" class="w-100 mr-2 mb-1"
+                [class.is-invalid]="AssetStatusId.invalid && AssetStatusId.touched"
+                [class.is-valid]="AssetStatusId.valid && AssetStatusId.touched"
+                
+                ></ng-select>
+
+                <div *ngIf="AssetStatusId.invalid && AssetStatusId.touched" class="mt-2">
+                  <small
+                    class="text-danger"
+                    *ngIf="AssetStatusId['errors']['required']"
+                  >
+                    Asset Status is Required</small
+                  >
+                </div>
+             
+            </div>
+
+            <div class="form-group col-md-12 mt-2">
+              <label for="name" class="form-label text-muted text-uppercase fw-semibold">Remark <span style="color: red">*</span></label>
+              <textarea class="form-control mb-1 bg-light border-0" id="StatusRemark" formControlName="StatusRemark" rows="5"
+                placeholder="Remark "
+                [class.is-invalid]="StatusRemark.invalid && StatusRemark.touched"
+                [class.is-valid]="StatusRemark.valid && StatusRemark.touched"
+                
+                
+                ></textarea>
+                <label class="nopadding clrlbl">
+                  Characters Remaining:
+                  {{ StatusRemark?.value?.length }}/{{
+                    maxCharsDecision
+                  }}</label
+                >
+
+                <div *ngIf="StatusRemark.invalid && StatusRemark.touched" class="mt-2">
+                  <small
+                    class="text-danger"
+                    *ngIf="StatusRemark['errors']['required']"
+                  >
+                  Remark is  Required</small
+                  >
+                </div>
+                
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn btn-outline-danger mr-2 mb-2 mb-md-0"
+     (click)="modal.dismiss('cancel')">
+      Close
+    </button>
+    <button type="button" [disabled]="addAccessGroupForm.invalid" 
+    ngbAutofocus class="btn btn-success mr-2 mb-2 mb-md-0"
+      (click)="openModalUpdateStatus()">
+      Submit
+    </button>
+  </div>
+</ng-template>
+<!--/ Add Form -->
+
+

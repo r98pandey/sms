@@ -1,0 +1,27 @@
+.w-10 {
+    width: 10%;
+}
+
+.labelforCheckbox {
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.topDisplay {
+    display: flex;
+    align-items: self-start;
+}
+.text-small {
+    font-size: 0.7rem;
+    font-weight: 400;
+}
+
+.textcenter {
+    text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+    .textcenter {
+        text-align: left !important;
+    }
+}

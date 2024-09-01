@@ -1,0 +1,1743 @@
+<div class="card displayShown">
+  <div class="card-header mb-0">
+    <div class="d-flex justify-content-end">
+      <a
+        href="javascript:void(0);"
+        class="text-primary text-decoration-underline fw-medium text-end me-3"
+        (click)="openModalCreateConf()"
+      >
+        <i class="ri-printer-fill text-primary fs-18"></i
+      ></a>
+      <a
+        href="javascript:void(0);"
+        class="text-primary text-decoration-underline fw-medium text-end me-3"
+        (click)="getV2_MX_PM_ScheduleAndAsset()"
+      >
+        <i class="ri-refresh-line text-primary fs-18"></i
+      ></a>
+
+      <div class="dropdown" ngbDropdown>
+        <button
+          class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          ngbDropdownToggle
+        >
+          <i class="ri-more-2-fill"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+          <li>
+            <a
+              class="dropdown-item cursor-pointer"
+              (click)="downloadPdf(masterScheduleList.scheduleId, 'PDF', 'pdf')"
+              ><i class="ri-file-pdf-line align-bottom me-2 text-muted"></i>
+              PDF
+            </a>
+          </li>
+          <!-- <li>
+              <a
+                class="dropdown-item cursor-pointer"
+                (click)="
+                  downloadPdf(masterScheduleList.scheduleId, 'EXCEL', 'xlsx')
+                "
+                ><i class="ri-file-excel-2-line align-bottom me-2 text-muted"></i>
+                Excel
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item cursor-pointer"
+                (click)="
+                  downloadPdf(
+                    masterScheduleList.scheduleId,
+                    'WORDOPENXML',
+                    'docx'
+                  )
+                "
+                ><i class="ri-file-word-2-line align-bottom me-2 text-muted"></i>
+                Word
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item cursor-pointer"
+                (click)="
+                  downloadPdf(masterScheduleList.scheduleId, 'HTML5', 'html')
+                "
+                ><i class="ri-html5-line align-bottom me-2 text-muted"></i>
+                HTML
+              </a>
+            </li> -->
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row me-0 ms-0 ps-0 pe-0">
+      <div class="col-lg-12">
+        <div class="row">
+          <div class="col-sm-3">
+            <div class="mb-2">
+              <img
+                [src]="
+                  companyData?.companyLogoURL
+                    ? imageUrl + companyData?.companyLogoURL
+                    : '../../../../../../assets/images/placeholderimage.png'
+                "
+                class="card-logo"
+                alt="logo light"
+                height="80"
+              />
+            </div>
+          </div>
+          <div
+            class="col-sm-9 d-flex justify-content-md-end justify-content-sm-center"
+          >
+            <div class="">
+              <h3 class="text-uppercase fw-semibold mb-0">
+                {{ companyData?.companyName }}
+              </h3>
+              <p class="mb-0 pt-0 fs-20">
+                {{ companyData.address1 ? companyData.address1 : "" }}
+              </p>
+              <p class="mb-0 pt-0 fs-20">
+                {{ companyData.address2 ? companyData.address2 : "" }}
+              </p>
+              <p class="mb-0 pt-0 fs-20">
+                {{ companyData?.address3 ? companyData?.address3 : " " }}
+
+                {{ companyData?.country ? companyData?.country : "" }}
+              </p>
+            </div>
+          </div>
+          <div class="col-12 mt-2">
+            <div class="border-gradient-1"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 mb-1 mt-2 p-0">
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-12">
+                <h3 class="mt-0 mb-0">
+                  <b> Title: </b
+                  >{{ masterScheduleList?.configPreventivePDescription }}
+                </h3>
+              </div>
+
+              <div class="col-6 mt-1">
+                <p class="mt-0 mb-0 fs-15">
+                  <b>Client: </b>{{ masterScheduleList?.clientName || "NA" }}
+                </p>
+              </div>
+              <div class="col-6 mt-1 d-flex justify-content-between">
+                <p class="mb-0 fs-15">
+                  <b> Project: </b>{{ masterScheduleList?.projectName || "NA" }}
+                </p>
+                <div class="d-flex justify-content-end align-items-baseline">
+                  <button
+                    ngbTooltip="Verify Schedule"
+                    *ngIf="
+                      masterScheduleList.scheduleStatusId == 72 &&
+                      pageAction == 'Schedule Verification'
+                    "
+                    (click)="
+                      openModalUpdateSchedularHandler(storeConfigScheduleId)
+                    "
+                    class="btn btn-primary"
+                  >
+                    Verify Schedule
+                  </button>
+                  <i
+                    class="ri-layout-right-line text-primary fs-15 cursor ms-2"
+                    ngbTooltip="Open Schedule Details"
+                    *ngIf="sideColumValue"
+                    (click)="openSideColum()"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <ul
+              ngbNav
+              #nav="ngbNav"
+              [activeId]="1"
+              class="nav nav-tabs-custom card-header-tabs border-bottom-0"
+            >
+              <li [ngbNavItem]="1" (click)="getV2_MX_PM_ScheduleAndAsset()">
+                <a ngbNavLink> Details </a>
+                <ng-template ngbNavContent>
+                  <div class="row">
+                    <div class="col-xxl-8" [class.col-xxl-12]="sideColumValue">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="card">
+                            <div class="card-body">
+                              <h6 class="fw-semibold text-uppercase mb-3">
+                                Remark
+                              </h6>
+                              <p class="text-muted mb-2">
+                                {{ masterScheduleList.remark || "-" }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div
+                          class="col-md-12 mt-2"
+                          *ngIf="masterScheduleList.verifiedRemark"
+                        >
+                          <div class="card">
+                            <div class="card-body">
+                              <h6 class="fw-semibold text-uppercase mb-3">
+                                Verified Remark
+                              </h6>
+                              <p class="text-muted mb-2">
+                                {{ masterScheduleList.verifiedRemark || "-" }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <h6 class="mb-1 text-dark">
+                        Total Assets
+                        <span class="badge bg-success ms-1">{{
+                          assetTicketItem_new?.length
+                        }}</span>
+                      </h6>
+
+                      <div class="row">
+                        <div class="col-sm-12 col-md-4">
+                          <div class="card">
+                            <div class="card-body">
+                              <p class="text-warning mb-0 fs-15">
+                                <b>Pending</b>
+                              </p>
+                              <h4 class="mb-0">
+                                {{ scheduleAssetItemCheckStatusPending2 }}
+                              </h4>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                          <div class="card">
+                            <div class="card-body">
+                              <p class="text-info mb-0 fs-15">
+                                <b>In-Progress</b>
+                              </p>
+                              <h4 class="mb-0">
+                                {{ scheduleAssetItemCheckStatusIn_Progress30 }}
+                              </h4>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                          <div class="card">
+                            <div class="card-body">
+                              <p class="text-success mb-0 fs-15">
+                                <b>Completed</b>
+                              </p>
+                              <h4 class="mb-0">
+                                {{ scheduleAssetItemCheckStatusCompleted25 }}
+                              </h4>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <h6 class="mb-1 text-dark">
+                        Total Checklist
+                        <span class="badge bg-success ms-1">{{
+                          pm_ScheduleAndAssetCheckList?.length
+                        }}</span>
+                      </h6>
+                      <div class="row">
+                        <div class="col-sm-12 col-md-4">
+                          <div class="card">
+                            <div class="card-body">
+                              <p class="mb-0 text-warning fs-15">
+                                <b>Awaiting Action</b>
+                              </p>
+                              <h4 class="mb-0">
+                                {{ scheduleItemCheckStatusAwaitingAction45 }}
+                              </h4>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                          <div class="card">
+                            <div class="card-body">
+                              <p class="mb-0 text-success fs-15">
+                                <b>Verified-Passed</b>
+                              </p>
+                              <h4 class="mb-0">
+                                {{ scheduleItemCheckStatusVerified_Passed24 }}
+                              </h4>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                          <div class="card">
+                            <div class="card-body">
+                              <p class="mb-0 text-danger fs-15">
+                                <b>Verified-Failed</b>
+                              </p>
+                              <h4 class="mb-0">
+                                {{ scheduleItemCheckStatusVerified_Failed49 }}
+                              </h4>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="row m-0 p-0">
+                          <div
+                            class="col-md-12 m-0 p-0"
+                            *ngFor="let list of assetTicketItem; let i = index"
+                          >
+                            <div class="card border ribbon-box right">
+                              <div class="card-header mb-0">
+                                <div class="row topMarger">
+                                  <div class="col-lg">
+                                    <h6 class="mb-0">{{ list.assetName }}</h6>
+                                    <p class="mb-0">
+                                      <span *ngIf="list.assetTagId"
+                                        >{{ list.assetTagId }} |</span
+                                      >
+                                      <span
+                                        class="fs-12"
+                                        [class]="
+                                          returnStatusBadgeClassesStatus(
+                                            list.scheduleItemStatusId
+                                          )
+                                        "
+                                        >{{ list.scheduleItemStatusName }}</span
+                                      >
+                                    </p>
+                                  </div>
+                                  <div class="col-lg-auto text-end">
+                                    <button
+                                      *ngIf="
+                                        scheduleAndAssetCheckList[
+                                          list.scheduleItemId
+                                        ] &&
+                                        scheduleAndAssetCheckList[
+                                          list.scheduleItemId
+                                        ].length != 0
+                                      "
+                                      class="btn btn-primary mb-0"
+                                      (click)="
+                                        getMX_PreventiveMaintenanceTypeDrobDown(
+                                          scheduleAndAssetCheckList[
+                                            list.scheduleItemId
+                                          ],
+                                          addItemSchedule,
+                                          list.scheduleItemId
+                                        )
+                                      "
+                                    >
+                                      Add Items
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                class="card-body p-2"
+                                [attr.id]="
+                                  'scheduleItemId' + list.scheduleItemId
+                                "
+                                [class]="
+                                  scheduleItemIdActiveValue ===
+                                  'scheduleItemId' + list.scheduleItemId
+                                    ? 'cardActive'
+                                    : ''
+                                "
+                              >
+                                <div class="ribbon ribbon-info ribbon-shape">
+                                  <i
+                                    class="ri-flashlight-fill text-white align-bottom me-1"
+                                  ></i>
+                                  <span class="trending-ribbon-text">{{
+                                    i + 1
+                                  }}</span>
+                                </div>
+                                <div class="row mt-2">
+                                  <div
+                                    class="col-12 mb-2"
+                                    *ngFor="
+                                      let data of scheduleAndAssetCheckList[
+                                        list.scheduleItemId
+                                      ]
+                                    "
+                                  >
+                                    <div class="border-bottom mb-3 pb-3">
+                                      <div class="row">
+                                        <div class="col-md-6 mb-2">
+                                          <h6 class="mt-0 mb-1">
+                                            {{ data.preventiveTypeName }}
+                                            <i
+                                              class="ri-video-line text-primary align-bottom"
+                                              ngbTooltip="Play the video clip"
+                                              *ngIf="data.videoFileURL"
+                                              (click)="
+                                                openModaVideeo(
+                                                  data,
+                                                  VideoPlayer
+                                                )
+                                              "
+                                            ></i>
+                                          </h6>
+                                          <span
+                                            class="fs-12"
+                                            [class]="
+                                              returnStatusBadgeClassesStatus(
+                                                data.scheduleItemCheckStatusId
+                                              )
+                                            "
+                                            >{{
+                                              data.scheduleItemCheckStatusName
+                                            }}</span
+                                          >
+                                          <p class="mb-0">
+                                            <span
+                                              class="fs-15"
+                                              *ngIf="data.modifiedBy"
+                                              >{{ data.modifiedBy }} |</span
+                                            >
+                                            <span
+                                              class="fs-15"
+                                              *ngIf="data.modifiedDate"
+                                              >{{ data.modifiedDate }}
+                                            </span>
+                                          </p>
+
+                                          <ng-container
+                                            *ngIf="
+                                              masterScheduleList.scheduleStatusId ==
+                                                72 ||
+                                              masterScheduleList.scheduleStatusId ==
+                                                2
+                                            "
+                                          >
+                                            <ng-container
+                                              *ngIf="
+                                                scheduleAndAssetCheckList[
+                                                  list.scheduleItemId
+                                                ] &&
+                                                scheduleAndAssetCheckList[
+                                                  list.scheduleItemId
+                                                ].length != 1
+                                              "
+                                            >
+                                              <p class="mb-0">
+                                                <span
+                                                  class="fs-15"
+                                                  *ngIf="
+                                                    data.scheduleItemCheckStatusId ==
+                                                    45
+                                                  "
+                                                >
+                                                  <a
+                                                    href="javascript:void(0);"
+                                                    *ngIf="
+                                                      disableAllButtonForStatusUpdate
+                                                    "
+                                                    ngbTooltip="Delete Item"
+                                                    class="text-danger me-2 align-bottom cursor"
+                                                    (click)="
+                                                      openModalDeleteWithScheduleConf(
+                                                        data,
+                                                        list
+                                                      )
+                                                    "
+                                                    >Delete Item</a
+                                                  >
+                                                </span>
+                                              </p></ng-container
+                                            >
+                                          </ng-container>
+
+                                          <p class="mb-0" *ngIf="data.note">
+                                            Note:{{ data.note }}
+                                          </p>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                          <div
+                                            class="row row-cols-2 row-cols-md-3 g-2 d-flex justify-content-md-end"
+                                          >
+                                            <div
+                                              class="col-md-auto"
+                                              *ngIf="data?.pic_url"
+                                            >
+                                              <a
+                                                href="javascript: void(0);"
+                                                class="d-block"
+                                                (click)="
+                                                  open_new(
+                                                    data.imgPath,
+                                                    imageUrl + data?.pic_url
+                                                  )
+                                                "
+                                              >
+                                                <img
+                                                  [src]="
+                                                    imageUrl + data?.pic_url
+                                                  "
+                                                  alt=""
+                                                  class="rounded avatar-lg"
+                                                />
+                                              </a>
+
+                                              <div
+                                                class="rounded avatar-lg"
+                                                *ngIf="!data?.pic_url"
+                                              ></div>
+                                            </div>
+                                            <div
+                                              class="col-md-auto"
+                                              *ngIf="data?.pic_url1"
+                                            >
+                                              <a
+                                                href="javascript: void(0);"
+                                                class="d-block"
+                                                (click)="
+                                                  open_new(
+                                                    data.imgPath,
+                                                    imageUrl + data?.pic_url1
+                                                  )
+                                                "
+                                              >
+                                                <img
+                                                  [src]="
+                                                    imageUrl + data?.pic_url1
+                                                  "
+                                                  alt=""
+                                                  class="rounded avatar-lg"
+                                                />
+                                              </a>
+                                              <div
+                                                class="rounded avatar-lg"
+                                                *ngIf="!data?.pic_url1"
+                                              ></div>
+                                            </div>
+                                            <div
+                                              class="col-md-auto"
+                                              *ngIf="data?.pic_url2"
+                                            >
+                                              <a
+                                                href="javascript: void(0);"
+                                                class="d-block"
+                                                (click)="
+                                                  open_new(
+                                                    data.imgPath,
+                                                    imageUrl + data?.pic_url2
+                                                  )
+                                                "
+                                              >
+                                                <img
+                                                  [src]="
+                                                    imageUrl + data?.pic_url2
+                                                  "
+                                                  alt=""
+                                                  class="rounded avatar-lg"
+                                                />
+                                              </a>
+                                              <div
+                                                class="rounded avatar-lg"
+                                                *ngIf="!data?.pic_url2"
+                                              ></div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xxl-4" *ngIf="!sideColumValue">
+                      <div class="card ribbon-box right">
+                        <div
+                          class="card-header d-flex justify-content-between align-items-baseline"
+                        >
+                          <h5 class="card-title mb-0">Schedule Details</h5>
+                          <i
+                            class="ri-close-circle-line fs-15 text-danger cursor"
+                            ngbTooltip="Close"
+                            (click)="closeSideColum()"
+                          ></i>
+                        </div>
+                        <div class="card-body">
+                          <div class="table-responsive">
+                            <table class="table table-borderless mb-0">
+                              <tbody>
+                                <tr>
+                                  <td class="fw-medium w-10">Schedule Start</td>
+                                  <td>
+                                    {{
+                                      masterScheduleList?.scheduleDate || "-"
+                                    }}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="fw-medium w-10">
+                                    Maintenace Type
+                                  </td>
+                                  <td>
+                                    {{
+                                      masterScheduleList?.maintenanceType || "-"
+                                    }}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="fw-medium w-10">Support Type</td>
+                                  <td id="t-client">
+                                    {{ masterScheduleList?.supportType || "-" }}
+                                  </td>
+                                </tr>
+
+                                <tr>
+                                  <td class="fw-medium w-10">Frequency</td>
+                                  <td>
+                                    {{ masterScheduleList?.frequency || "-" }}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="fw-medium w-10">Frequency Data</td>
+                                  <td>
+                                    {{
+                                      masterScheduleList?.frequencyData || "-"
+                                    }}
+                                  </td>
+                                </tr>
+
+                                <tr>
+                                  <td class="fw-medium w-10">Status</td>
+                                  <td>
+                                    <span
+                                      class="fs-12"
+                                      [class]="
+                                        returnStatusBadgeClassesStatus(
+                                          masterScheduleList.scheduleStatusId
+                                        )
+                                      "
+                                      >{{
+                                        masterScheduleList.scheduleStatusName
+                                      }}</span
+                                    >
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="fw-medium w-10">Checklist type</td>
+
+                                  <td>
+                                    {{
+                                      pm_ScheduleAndAssetCheckList[0]
+                                        ?.preventiveCategoryName
+                                    }}
+                                  </td>
+                                </tr>
+
+                                <tr>
+                                  <td class="fw-medium w-10">Start By</td>
+
+                                  <td>
+                                    {{ masterScheduleList?.startBy || "-" }}
+                                  </td>
+                                </tr>
+
+                                <tr>
+                                  <td class="fw-medium w-10">
+                                    Start Date Time
+                                  </td>
+
+                                  <td>
+                                    {{
+                                      masterScheduleList?.startDateTime || "-"
+                                    }}
+                                  </td>
+                                </tr>
+
+                                <tr>
+                                  <td class="fw-medium w-10">End By</td>
+
+                                  <td>
+                                    {{ masterScheduleList?.endBy || "-" }}
+                                  </td>
+                                </tr>
+
+                                <tr>
+                                  <td class="fw-medium w-10">End Date Time</td>
+
+                                  <td>
+                                    {{ masterScheduleList?.endDatetime || "-" }}
+                                  </td>
+                                </tr>
+
+                                <tr
+                                  *ngIf="masterScheduleList?.scheduleVerifiedBy"
+                                >
+                                  <td class="fw-medium w-10">Verified By</td>
+
+                                  <td>
+                                    {{
+                                      masterScheduleList?.scheduleVerifiedBy ||
+                                        "-"
+                                    }}
+                                  </td>
+                                </tr>
+                                <tr
+                                  *ngIf="
+                                    masterScheduleList?.scheduleVerifiedDateTime
+                                  "
+                                >
+                                  <td class="fw-medium w-10">
+                                    Verified Date Time
+                                  </td>
+
+                                  <td>
+                                    {{
+                                      masterScheduleList?.scheduleVerifiedDateTime ||
+                                        "-"
+                                    }}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <!--end card-body-->
+                      </div>
+
+                      <div
+                        class="card"
+                        *ngIf="
+                          masterScheduleList.scheduleAcknoledgeById ||
+                          masterScheduleList.scheduleClosedById
+                        "
+                      >
+                        <div class="card-body">
+                          <div class="row">
+                            <div
+                              class="col-md-12 mb-3"
+                              *ngIf="masterScheduleList.scheduleAcknoledgeById"
+                            >
+                              <div
+                                class="card border shadow-none mb-lg-0 right"
+                              >
+                                <div class="card-body text-muted">
+                                  <h5 class="fs-14 mb-2">
+                                    {{ masterScheduleList.companyName }}
+                                  </h5>
+                                  <div class="mb-1">
+                                    <div
+                                      class="position-relative d-inline-block"
+                                    >
+                                      <div
+                                        class="avatar-lg"
+                                        *ngIf="
+                                          masterScheduleList.scheduleAcknoledgeById
+                                        "
+                                      >
+                                        <div
+                                          class="avatar-title bg-light rounded"
+                                        >
+                                          <img
+                                            (click)="
+                                              open(
+                                                imageUrl +
+                                                  masterScheduleList.scheduleAcknoledgeSignImageURL
+                                              )
+                                            "
+                                            src="{{ imageUrl }}{{
+                                              masterScheduleList.scheduleAcknoledgeSignImageURL
+                                            }}"
+                                            class="avatar-md img-size-fixed-ack-client-signature"
+                                            *ngIf="
+                                              masterScheduleList.scheduleAcknoledgeSignImageURL
+                                            "
+                                          />
+                                          <img
+                                            (click)="
+                                              open(
+                                                '../../../../../assets/images/placeholderimage.png'
+                                              )
+                                            "
+                                            src="../../../../../assets/images/placeholderimage.png"
+                                            class="avatar-md img-size-fixed-ack-client-signature"
+                                            *ngIf="
+                                              !masterScheduleList.scheduleAcknoledgeSignImageURL
+                                            "
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <p class="text-muted mb-0">
+                                    {{
+                                      masterScheduleList.scheduleAcknoledgeDateTime
+                                    }}
+                                  </p>
+                                  <p class="text-dark mb-0">
+                                    <b>
+                                      {{
+                                        masterScheduleList.scheduleAcknoledgeBy
+                                      }}
+                                    </b>
+                                  </p>
+                                  <p class="text-dark mb-0 fs-12">
+                                    <b>
+                                      {{
+                                        masterScheduleList.scheduleAcknoledgeDesig
+                                      }}
+                                    </b>
+                                  </p>
+                                  <p class="fs-12 text-muted">
+                                    {{
+                                      masterScheduleList.scheduleAcknoledgeRemark
+                                    }}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div
+                              class="col-md-12"
+                              *ngIf="masterScheduleList.scheduleClosedById"
+                            >
+                              <div
+                                class="card border shadow-none mb-lg-0 right"
+                              >
+                                <div class="card-body text-muted">
+                                  <h5 class="fs-14 mb-2">
+                                    {{ masterScheduleList.clientName }}
+                                  </h5>
+                                  <div class="mb-1">
+                                    <div
+                                      class="position-relative d-inline-block"
+                                    >
+                                      <div class="avatar-lg">
+                                        <div
+                                          class="avatar-title bg-light rounded"
+                                        >
+                                          <img
+                                            (click)="
+                                              open(
+                                                imageUrl +
+                                                  masterScheduleList.scheduleCloseSignImageURL
+                                              )
+                                            "
+                                            src="{{ imageUrl }}{{
+                                              masterScheduleList.scheduleCloseSignImageURL
+                                            }}"
+                                            class="avatar-md img-size-fixed-ack-client-signature"
+                                            *ngIf="
+                                              masterScheduleList.scheduleCloseSignImageURL
+                                            "
+                                          />
+                                          <img
+                                            (click)="
+                                              open(
+                                                '../../../../../assets/images/placeholderimage.png'
+                                              )
+                                            "
+                                            src="../../../../../assets/images/placeholderimage.png"
+                                            class="avatar-md img-size-fixed-ack-client-signature"
+                                            *ngIf="
+                                              !masterScheduleList.scheduleCloseSignImageURL
+                                            "
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <p class="text-muted mb-0">
+                                    {{
+                                      masterScheduleList.scheduleClosedDateTime
+                                    }}
+                                  </p>
+                                  <p class="text-dark mb-0">
+                                    <b>
+                                      {{ masterScheduleList.scheduleClosedBy }}
+                                    </b>
+                                  </p>
+                                  <p class="text-dark mb-0 fs-12">
+                                    <b>
+                                      {{
+                                        masterScheduleList.scheduleClosedDesig
+                                      }}
+                                    </b>
+                                  </p>
+
+                                  <p class="fs-12 text-muted">
+                                    {{
+                                      masterScheduleList.scheduleClosedRemark
+                                    }}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+              <li [ngbNavItem]="2" (click)="getV2_MX_PM_ScheduleAndAsset()">
+                <a ngbNavLink> Member List </a>
+                <ng-template ngbNavContent>
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div
+                        class="d-flex align-items-center justify-content-between mb-3 mt-2"
+                      >
+                        <div></div>
+                        <div
+                          class="mb-2"
+                          *ngIf="disableAllButtonForStatusUpdate"
+                        >
+                          <button
+                            *ngIf="deleteButtonAddButtonShown"
+                            class="btn btn-success btn-sm"
+                            type="button"
+                            class="btn btn-soft-primary btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#inviteMembersModal"
+                            (click)="openModalTechnician(TechnicianListModal)"
+                          >
+                            <i class="ri-add-fill align-bottom me-1"></i>
+                            Add Member
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="table-responsive table-card">
+                        <table class="table align-middle mb-0">
+                          <thead class="table-light text-muted">
+                            <tr>
+                              <th scope="col">Name</th>
+                              <th scope="col">Designation</th>
+                              <th scope="col">Phone Number</th>
+                              <th scope="col">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <ng-container
+                              *ngIf="mX_WOTechAssignment.length == 0"
+                            >
+                              <tr>
+                                <td colspan="4" class="text-center">
+                                  No Member Assign
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-container
+                              *ngIf="mX_WOTechAssignment.length != 0"
+                            >
+                              <tr *ngFor="let workTech of mX_WOTechAssignment">
+                                <th scope="row">
+                                  <div class="d-flex align-items-center">
+                                    <img
+                                      [src]="
+                                        workTech.profileImageUrl
+                                          ? imgURl + workTech.profileImageUrl
+                                          : '../../../../../../assets/images/placeholderimage.png'
+                                      "
+                                      alt=""
+                                      style="width: 40px; height: 40px"
+                                      class="rounded-circle avatar-xxs"
+                                    />
+                                    <div class="flex-grow-1 ms-2">
+                                      <a
+                                        href="javascript:void(0);"
+                                        class="fw-medium"
+                                        >{{
+                                          workTech.techName
+                                            ? workTech.techName
+                                            : workTech.fullName
+                                        }}
+                                      </a>
+                                    </div>
+                                  </div>
+                                </th>
+                                <td>{{ workTech.designationName }}</td>
+                                <td>{{ workTech.phoneNumber }}</td>
+                                <td
+                                  *ngIf="
+                                    deleteButtonAddButtonShown &&
+                                      masterScheduleList.scheduleStatusName ==
+                                        'Pending';
+                                    else elseBlock
+                                  "
+                                >
+                                  <ng-container
+                                    *ngIf="
+                                      !workTech.isTechAvailable;
+                                      else elseBlock1
+                                    "
+                                  >
+                                    <a
+                                      href="javascript:void(0)"
+                                      class="dropdown-item cursor-pointer"
+                                      (click)="openModalDeleteConf(workTech)"
+                                    >
+                                      <i
+                                        class="ri-delete-bin-fill align-bottom me-2 text-danger"
+                                      ></i>
+                                    </a>
+                                  </ng-container>
+                                  <ng-template #elseBlock1>
+                                    <i
+                                      class="ri-delete-bin-fill align-bottom me-2 text-danger"
+                                      (click)="sweetAlertDeleteMessage()"
+                                    ></i>
+                                  </ng-template>
+                                </td>
+                                <ng-template #elseBlock>
+                                  <td>
+                                    <i
+                                      class="ri-delete-bin-fill align-bottom me-2 text-danger"
+                                      (click)="sweetAlertDeleteMessage()"
+                                    ></i>
+                                  </td>
+                                </ng-template>
+                              </tr>
+                            </ng-container>
+                          </tbody>
+                        </table>
+                        <!--end table-->
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+              <li [ngbNavItem]="3" (click)="getV2_MX_PM_ScheduleAndAsset()">
+                <a ngbNavLink> Task List </a>
+                <ng-template ngbNavContent>
+                  <app-task-end
+                    [ticketWOStartEndTask]="mx_WOStartEndTask"
+                    [masterScheduleList]="masterScheduleList"
+                    [workorderId]="this.storeConfigScheduleId"
+                    (afterSubmitServiceOrder)="afterSubmitServiceOrder($event)"
+                  ></app-task-end>
+                </ng-template>
+              </li>
+            </ul>
+
+            <div class="tab-content text-muted mt-3">
+              <div [ngbNavOutlet]="nav"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="text-end mb-3">
+  <button
+    class="btn btn-soft-primary waves-effect mx-3"
+    type="button"
+    (click)="goback()"
+  >
+    Back
+  </button>
+</div>
+
+<div class="row displayPrint">
+  <div class="col-lg-12">
+    <app-view-print-schedule
+      *ngIf="imageShown"
+      [masterScheduleList]="masterScheduleList"
+      [assetTicketItem]="assetTicketItem"
+      [scheduleAndAssetCheckList]="scheduleAndAssetCheckList"
+      [pm_ScheduleAndAssetCheckList]="pm_ScheduleAndAssetCheckList"
+    ></app-view-print-schedule>
+
+    <app-view-print-schedule-with-image
+      *ngIf="!imageShown"
+      [masterScheduleList]="masterScheduleList"
+      [assetTicketItem]="assetTicketItem"
+      [scheduleAndAssetCheckList]="scheduleAndAssetCheckList"
+      [pm_ScheduleAndAssetCheckList]="pm_ScheduleAndAssetCheckList"
+    ></app-view-print-schedule-with-image>
+  </div>
+</div>
+
+<ng-template #fullscheduleDetails let-offcanvas>
+  <div class="offcanvas-header border-bottom">
+    <h4 class="offcanvas-title" id="offcanvas-basic-title">
+      {{ seheduleData.preventiveTypeName
+      }}<span class="fs-12">
+        ({{ seheduleData.preventiveCategoryName }} )
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="row border-bottom">
+      <div class="col-md-4">
+        <label class="mb-0">Modified By</label>
+        <p class="fs-15 text-muted fw-bold" *ngIf="seheduleData.modifiedBy">
+          {{ seheduleData.modifiedBy }}
+        </p>
+      </div>
+      <div class="col-md-4">
+        <label class="mb-0">Modified Date</label>
+        <p class="fs-15 text-muted fw-bold" *ngIf="seheduleData.modifiedDate">
+          {{ seheduleData.modifiedDate }}
+        </p>
+      </div>
+      <div class="col-md-4">
+        <label class="mb-0">Status</label>
+        <p>
+          <span
+            class="fs-12"
+            [class]="
+              returnStatusBadgeClassesStatus(
+                seheduleData.scheduleItemCheckStatusId
+              )
+            "
+            >{{ seheduleData.scheduleItemCheckStatusName }}</span
+          >
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mt-3">
+        <div class="text-center mb-3">
+          <h6 class="mb-0">Image 1</h6>
+          <div class="position-relative d-inline-block">
+            <div class="position-absolute top-100 start-100 translate-middle">
+              <input
+                #fileInput
+                (change)="onSelectFile($event)"
+                class="form-control d-none"
+                value=""
+                id="pic_url0"
+                type="file"
+                accept="image/png, image/gif, image/jpeg"
+              />
+            </div>
+            <div class="avatar-lg-new-edit">
+              <div class="avatar-title bg-light rounded">
+                <img
+                  (click)="open(pic_url0)"
+                  src="{{ pic_url0 }}"
+                  class="avatar-md img-size-fixed-edit"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-1">
+          <!-- <button class="btn btn-primary me-3" *ngIf="isFirstImageVisible" >
+              Rotate
+            </button> -->
+          <button
+            class="btn btn-danger"
+            *ngIf="isFirstImageVisible"
+            (click)="crossFirstImage(pic_url0)"
+          >
+            Delete Image 1
+          </button>
+
+          <button
+            class="btn btn-primary"
+            ngbTooltip="Select Image"
+            *ngIf="!isFirstImageVisible"
+            for="pic_url0"
+            (click)="fileInput.click()"
+          >
+            Upload Image 1
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4 mt-3">
+        <div class="text-center mb-3">
+          <h6 class="mb-0">Image 2</h6>
+          <div class="position-relative d-inline-block">
+            <div class="position-absolute top-100 start-100 translate-middle">
+              <input
+                #fileInput1
+                (change)="onSelectFile1($event)"
+                accept="image/*"
+                class="form-control d-none"
+                value=""
+                id="pic_url1"
+                type="file"
+                accept="image/png, image/gif, image/jpeg"
+              />
+            </div>
+            <div class="avatar-lg-new-edit">
+              <div class="avatar-title bg-light rounded">
+                <img
+                  src="{{ pic_url1 }}"
+                  (click)="open(pic_url1)"
+                  id="product-img"
+                  class="avatar-md img-size-fixed-edit"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-1">
+          <!-- <button class="btn btn-primary me-3" *ngIf="isSecondImageVisible">
+              Rotate
+            </button> -->
+          <button
+            class="btn btn-danger"
+            *ngIf="isSecondImageVisible"
+            (click)="crossSecondImage(pic_url1)"
+          >
+            Delete Image 2
+          </button>
+
+          <button
+            class="btn btn-primary"
+            ngbTooltip="Select Image"
+            *ngIf="!isSecondImageVisible"
+            for="pic_url2"
+            (click)="fileInput1.click()"
+          >
+            Upload Image 2
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4 mt-3">
+        <div class="text-center mb-3">
+          <h6 class="mb-0">Image 3</h6>
+          <div class="position-relative d-inline-block">
+            <div class="position-absolute top-100 start-100 translate-middle">
+              <input
+                #fileInput2
+                (change)="onSelectFile2($event)"
+                accept="image/*"
+                class="form-control d-none"
+                value=""
+                id="pic_url2"
+                type="file"
+                accept="image/png, image/gif, image/jpeg"
+              />
+            </div>
+            <div class="avatar-lg-new-edit">
+              <div class="avatar-title bg-light rounded">
+                <img
+                  src="{{ pic_url2 }}"
+                  (click)="open(pic_url2)"
+                  id="product-img"
+                  class="avatar-md img-size-fixed-edit"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-1">
+          <!-- <button class="btn btn-primary me-3" *ngIf="isThirdImageVisible">
+              Rotate 
+            </button> -->
+          <button
+            class="btn btn-danger"
+            *ngIf="isThirdImageVisible"
+            (click)="crossThirdImage(pic_url2)"
+          >
+            Delete Image 3
+          </button>
+
+          <button
+            class="btn btn-primary"
+            ngbTooltip="Select Image"
+            *ngIf="!isThirdImageVisible"
+            for="pic_url3"
+            (click)="fileInput2.click()"
+          >
+            Upload Image 3
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- 
+          <div class="text-end">
+              <button type="button" class="btn btn-outline-dark" (click)="offcanvas.close('Save click')">Save</button>
+          </div> -->
+  </div>
+</ng-template>
+
+<ng-template #ScheduleAssetChecklistDetails let-offcanvas>
+  <div class="offcanvas-header border-bottom">
+    <h4 class="offcanvas-title" id="offcanvas-basic-title">
+      {{ seheduleData.preventiveTypeName
+      }}<span class="fs-12">
+        ({{ seheduleData.preventiveCategoryName }} )
+      </span>
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="row border-bottom">
+      <div class="col-md-4">
+        <label class="mb-0">Modified By</label>
+        <p class="fs-15 text-muted fw-bold" *ngIf="seheduleData.modifiedBy">
+          {{ seheduleData.modifiedBy }}
+        </p>
+      </div>
+      <div class="col-md-4">
+        <label class="mb-0">Modified Date</label>
+        <p class="fs-15 text-muted fw-bold" *ngIf="seheduleData.modifiedDate">
+          {{ seheduleData.modifiedDate }}
+        </p>
+      </div>
+      <div class="col-md-4">
+        <label class="mb-0">Status</label>
+        <p>
+          <span
+            class="fs-12"
+            [class]="
+              returnStatusBadgeClassesStatus(
+                seheduleData.scheduleItemCheckStatusId
+              )
+            "
+            >{{ seheduleData.scheduleItemCheckStatusName }}</span
+          >
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mt-3">
+        <div class="text-center mb-3">
+          <h6 class="mb-0">Image 1</h6>
+          <div class="position-relative d-inline-block">
+            <div class="position-absolute top-100 start-100 translate-middle">
+              <input
+                #fileInput
+                (change)="onSelectFile($event)"
+                class="form-control d-none"
+                value=""
+                id="pic_url0"
+                type="file"
+                accept="image/png, image/gif, image/jpeg"
+              />
+            </div>
+            <div class="avatar-lg-new-edit">
+              <div class="avatar-title bg-light rounded">
+                <img
+                  (click)="open(pic_url0)"
+                  src="{{ pic_url0 }}"
+                  class="avatar-md img-size-fixed-edit"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-1">
+          <!-- <button class="btn btn-primary me-3" *ngIf="isFirstImageVisible" >
+              Rotate
+            </button> -->
+          <button
+            class="btn btn-danger"
+            *ngIf="isFirstImageVisible"
+            (click)="crossFirstImage(pic_url0)"
+          >
+            Delete Image 1
+          </button>
+
+          <button
+            class="btn btn-primary"
+            ngbTooltip="Select Image"
+            *ngIf="!isFirstImageVisible"
+            for="pic_url0"
+            (click)="fileInput.click()"
+          >
+            Upload Image 1
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4 mt-3">
+        <div class="text-center mb-3">
+          <h6 class="mb-0">Image 2</h6>
+          <div class="position-relative d-inline-block">
+            <div class="position-absolute top-100 start-100 translate-middle">
+              <input
+                #fileInput1
+                (change)="onSelectFile1($event)"
+                accept="image/*"
+                class="form-control d-none"
+                value=""
+                id="pic_url1"
+                type="file"
+                accept="image/png, image/gif, image/jpeg"
+              />
+            </div>
+            <div class="avatar-lg-new-edit">
+              <div class="avatar-title bg-light rounded">
+                <img
+                  src="{{ pic_url1 }}"
+                  (click)="open(pic_url1)"
+                  id="product-img"
+                  class="avatar-md img-size-fixed-edit"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-1">
+          <!-- <button class="btn btn-primary me-3" *ngIf="isSecondImageVisible">
+              Rotate
+            </button> -->
+          <button
+            class="btn btn-danger"
+            *ngIf="isSecondImageVisible"
+            (click)="crossSecondImage(pic_url1)"
+          >
+            Delete Image 2
+          </button>
+
+          <button
+            class="btn btn-primary"
+            ngbTooltip="Select Image"
+            *ngIf="!isSecondImageVisible"
+            for="pic_url2"
+            (click)="fileInput1.click()"
+          >
+            Upload Image 2
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4 mt-3">
+        <div class="text-center mb-3">
+          <h6 class="mb-0">Image 3</h6>
+          <div class="position-relative d-inline-block">
+            <div class="position-absolute top-100 start-100 translate-middle">
+              <input
+                #fileInput2
+                (change)="onSelectFile2($event)"
+                accept="image/*"
+                class="form-control d-none"
+                value=""
+                id="pic_url2"
+                type="file"
+                accept="image/png, image/gif, image/jpeg"
+              />
+            </div>
+            <div class="avatar-lg-new-edit">
+              <div class="avatar-title bg-light rounded">
+                <img
+                  src="{{ pic_url2 }}"
+                  (click)="open(pic_url2)"
+                  id="product-img"
+                  class="avatar-md img-size-fixed-edit"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-1">
+          <!-- <button class="btn btn-primary me-3" *ngIf="isThirdImageVisible">
+              Rotate 
+            </button> -->
+          <button
+            class="btn btn-danger"
+            *ngIf="isThirdImageVisible"
+            (click)="crossThirdImage(pic_url2)"
+          >
+            Delete Image 3
+          </button>
+
+          <button
+            class="btn btn-primary"
+            ngbTooltip="Select Image"
+            *ngIf="!isThirdImageVisible"
+            for="pic_url3"
+            (click)="fileInput2.click()"
+          >
+            Upload Image 3
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- 
+          <div class="text-end">
+              <button type="button" class="btn btn-outline-dark" (click)="offcanvas.close('Save click')">Save</button>
+          </div> -->
+  </div>
+</ng-template>
+
+<ng-template #TechnicianListModal role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Add Members</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click'); resetValue()"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div class="search-box mb-3">
+      <input
+        type="text"
+        class="form-control bg-light border-light"
+        (keyup)="filterTechnician($event)"
+        [(ngModel)]="technicianSearchText"
+        placeholder="Search member here..."
+      />
+      <i class="ri-search-line search-icon"></i>
+    </div>
+    <ngx-simplebar class="mx-n4 px-4" style="height: 400px">
+      <div class="vstack gap-3">
+        <div *ngFor="let tech of filteredTechnicianList; let i = index">
+          <div
+            class="d-flex align-items-center"
+            (click)="selectTechnician(filteredTechnicianList, i, tech)"
+          >
+            <div class="flex-shrink-0 me-3">
+              <div class="d-flex align-items-center gap-1">
+                <div class="form-check form-check-flat form-check-primary">
+                  <label class="form-check-label">
+                    <input
+                      type="checkbox"
+                      value="{{ tech }}"
+                      [(ngModel)]="filteredTechnicianList[i].checked"
+                      [disabled]="filteredTechnicianList[i].disabled"
+                      class="form-check-input"
+                    />
+                    <i class="input-frame"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="avatar-xs flex-shrink-0 me-3">
+              <img
+                src="{{
+                  tech.profileImageUrl
+                    ? imgURl + tech.profileImageUrl
+                    : '../../../../../assets/images/placeholderimage.png'
+                }}"
+                style="width: 40px; height: 40px"
+                alt=""
+                class="img-fluid rounded-circle"
+              />
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="fs-14 mb-0">
+                <a href="javascript:void(0);" class="text-body d-block">
+                  {{ tech.fullName }}
+                </a>
+                <p class="mt-0 mb-0">{{ tech.designation }}</p>
+              </h5>
+            </div>
+            <div class="flex-shrink-0 me-3 mb-0">
+              <p class="mb-0">
+                <span
+                  ><i class="ri-phone-fill me-1"></i
+                  >{{ tech.phoneNumber }}</span
+                >
+              </p>
+              <!-- <p class="mb-0"><span><i class=" ri-mail-check-fill me-1"></i>{{ tech.email }}</span></p> -->
+            </div>
+          </div>
+        </div>
+        <div
+          class="text-center mt-3 text-muted"
+          *ngIf="
+            technicianList &&
+            filteredTechnicianList &&
+            technicianSearchText.length > 0
+              ? !filteredTechnicianList.length
+              : !technicianList.length
+          "
+        >
+          <p>No Member Found</p>
+        </div>
+      </div>
+    </ngx-simplebar>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click'); resetValue()"
+    >
+      Close
+    </button>
+
+    <button
+      class="btn btn-success w-xs me-3"
+      type="submit"
+      (click)="sweetAlertUpdateTechinionDetails()"
+      [disabled]="selectedTech.length == 0"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>
+
+<!-- Modal -->
+<ng-template #addItemSchedule let-modal>
+  <div class="modal-header">
+    <div class="row w-100">
+      <div class="col-md-12 d-flex justify-content-between mb-1">
+        <h4 class="modal-title mb-2" id="modal-title">Checklist type</h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="col-md-12">
+        <hr class="mb-0 mt-1" />
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-body modal-scrollbar">
+    <div class="row">
+      <div
+        class="row me-0 ms-0"
+        *ngIf="preventiveMaintenanceTypeList.length != 0"
+      >
+        <div
+          class="col-md-12 mt-2 pe-2 ps-2"
+          *ngFor="let preventive of preventiveMaintenanceTypeList; index as i"
+        >
+          <div class="form-check border-bottom mt-2 mb-2 pb-2">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              (change)="createV2_MX_ScheduleAssetChecklist(preventive, i)"
+              [id]="preventive.preventiveTypeName"
+            />
+            <label
+              class="form-check-label"
+              [for]="preventive.preventiveTypeName"
+            >
+              {{ preventive.preventiveTypeName }}
+            </label>
+          </div>
+        </div>
+      </div>
+      <div
+        class="row me-0 ms-0"
+        *ngIf="preventiveMaintenanceTypeList.length == 0"
+      >
+        <div class="col-md-12">
+          <div class="py-4 text-center">
+            <div>
+              <lord-icon
+                src="https://cdn.lordicon.com/msoeawqm.json"
+                trigger="loop"
+                colors="primary:#405189,secondary:#0ab39c"
+                style="width: 72px; height: 72px"
+              >
+              </lord-icon>
+            </div>
+            <div class="mt-4">
+              <h5>
+                No Records Found
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-danger"
+      (click)="modal.dismiss('cancel')"
+    >
+      Cancel
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #VideoPlayer role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">
+      {{ storeInfomationVideo.preventiveTypeName }}
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div id="instructions">
+      <video
+        id="my_video_1"
+        class="video-js vjs-default-skin"
+        width="100%"
+        height="267px"
+        controls
+        preload="none"
+        data-setup='{ "aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }'
+      >
+        <source src="{{ linkVideo }}" type="video/mp4" />
+      </video>
+      <!-- <button (click)="playPause()">Play/Pause</button>
+      <button (click)="makeBig()">Big</button>
+      <button (click)="makeSmall()">Small</button>
+      <button (click)="makeNormal()">Normal</button>
+      <button (click)="restart();">Restart</button>
+      <button (click)="skip(-10)">Rewind</button>
+      <button (click)="skip(10)">Fastforward</button> -->
+    </div>
+  </div>
+
+  <!-- <div class="video mt-2">
+      <video controls (click)="toggleVideo()" #videoPlayer
+      preload="none" width="100%" height="267px" 
+      data-setup='{ "aspectRatio":"100:267", "playbackRates": [1, 1.5, 2] }'>
+        <source src="{{linkVideo}}" type="video/mp4" />
+        Browser not supported
+      </video>
+    </div> -->
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

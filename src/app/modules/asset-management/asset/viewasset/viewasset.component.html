@@ -1,0 +1,296 @@
+<nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Asset </li>
+        <li class="breadcrumb-item active" aria-current="page">Asset Profile</li>
+    </ol>
+</nav>
+
+
+<ul ngbNav #defaultNav="ngbNav" [(activeId)]="defaultNavActiveId" class="nav-tabs mt-3">
+    <li [ngbNavItem]="1">
+        <a ngbNavLink>
+            <div class="d-flex flex-row flex-lg-column flex-xl-row align-items-center">
+                <i class="feather icon-briefcase icon-xs mr-sm-2 mr-lg-0 mr-xl-2 mb-md-1 mb-xl-0"></i>
+                <p class="d-none d-sm-block">View Asset</p>
+            </div>
+        </a>
+        <ng-template ngbNavContent>
+            <div class="row">
+                <div class="col-md-12 mb-2">
+                    <div class="card p-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="status text-info pt-2"><b>{{assetProfileData.assetTagId}}</b></span>
+                            </div>
+                            <div>
+                                <span class="status text-light"
+                                    [class]="returnClassStatus(assetProfileData.assetStatusId)">{{assetProfileData.assetStatus}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 pr-0 mb-2  grid-margin stretch-card">
+                    <div class="card p-3 ticket-card">
+                        <div class="row">
+                            <div class="col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Asset Name
+                                </label>
+                                <p class="text-muted"> {{assetProfileData.assetName}}</p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Category
+                                </label>
+                                <p class="text-muted">{{assetProfileData.categoryName ||'NA'}}</p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Sub-Category
+                                </label>
+                                <p class="text-muted">{{assetProfileData.subCategoryName ||'NA'}}
+                                </p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Assign
+                                    Type
+                                </label>
+                                <p class="text-muted">{{assetProfileData.assignType ||'NA'}}</p>
+                            </div>
+                            <div class="col-md-12 mt-3" *ngIf="isProject">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">
+                                    Client</label>
+                                <p class="text-muted">{{assetProfileData.clientName ||'NA'}}</p>
+
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">
+                                    {{isProject ? 'Project': 'Department'}}</label>
+                                <p class="text-muted">{{assetProfileData.departmentName ||'NA'}}</p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Asset
+                                    Handler</label>
+                                <p class="text-muted">{{assetProfileData.employeeName ||'NA'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 pr-0 mb-2  grid-margin stretch-card">
+                    <div class="card p-3 ticket-card">
+                        <div class="row">
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Location</label>
+                                <p class="text-muted">{{assetProfileData.locationName ||'NA'}}</p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Vendor
+                                </label>
+                                <p class="text-muted">{{assetProfileData.vendorName ||'NA'}}</p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Model</label>
+                                <p class="text-muted">{{assetProfileData.model ||'NA'}}</p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Serial
+                                    No</label>
+                                <p class="text-muted">{{assetProfileData.serialNo ||'NA'}}</p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Old Asset
+                                    Id</label>
+                                <p class="text-muted">{{assetProfileData.thirdPartySystemAssetId
+                                    ||'NA'}}</p>
+                            </div>
+                            <div class=" col-md-4 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Purchase Price
+                                    Id</label>
+                                <p class="text-muted">{{assetProfileData.purchasePrice
+                                    ||'NA'}}</p>
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Warranty
+                                    Start</label>
+                                <p class="text-muted">{{assetProfileData.warrantyStart ||'NA'}}</p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Warranty
+                                    End</label>
+                                <p class="text-muted">{{assetProfileData.warrantyEnd ||'NA'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-2  grid-margin stretch-card">
+                    <div class="card p-3 ticket-card">
+                        <div class="row">
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Extended
+                                    Start Warranty
+                                </label>
+                                <p class="text-muted">{{assetProfileData.extendedStartWarrenty
+                                    ||'NA'}}</p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Extended
+                                    End Warranty
+                                </label>
+                                <p class="text-muted">{{assetProfileData.extendedEndWarrenty
+                                    ||'NA'}}</p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">RMA Start
+                                </label>
+                                <p class="text-muted">{{assetProfileData.rmaStartWarrenty ||'NA'}}
+                                </p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">RMA End
+                                </label>
+                                <p class="text-muted">{{assetProfileData.rmaEndWarrenty ||'NA'}}</p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Installation Date
+                                </label>
+                                <p class="text-muted">{{assetProfileData.installationDate ||'NA'}}</p>
+                            </div>
+                            <div class=" col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Delivery Date
+                                </label>
+                                <p class="text-muted">{{assetProfileData.deliveryDate ||'NA'}}</p>
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Asset
+                                    Specification</label>
+                                <p class="text-muted">{{assetProfileData.v001 ||'NA'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-2">
+                    <div class="card p-3">
+                        <div class="row">
+                            <div class="col-md-4 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">PO
+                                    Number</label>
+                                <p class="text-muted">{{assetProfileData.poNumber||'NA'}}</p>
+                            </div>
+                            <div class="col-md-4 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Invoice
+                                    No</label>
+                                <p class="text-muted">{{assetProfileData.invoiceNo||'NA'}}</p>
+                            </div>
+                            <div class="col-md-4 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Invoice
+                                    Date</label>
+                                <p class="text-muted">{{assetProfileData.invoiceDate||'NA'}}</p>
+                            </div>
+                            <div class="col-md-2 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Main Asset Image
+                                </label>
+                                <div>
+                                    <img class="img-fluid" src="{{ImageUrl}}{{assetProfileData.assetImagePath}}"  (click)="confirmForViewImage(modalViewImageConfirm, assetProfileData.assetImagePath)" 
+                                        *ngIf="assetProfileData.assetImagePath!=null" alt="">
+                                    <img class="img-fluid" src="../../../../../assets/images/placeholderimage.png"
+                                        *ngIf="assetProfileData.assetImagePath==null" alt="">
+                                </div>
+                            </div>
+                            <div class="col-md-2 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Asset Image-1
+                                </label>
+                                <div>
+                                    <img class="img-fluid" src="{{ImageUrl}}{{assetProfileData.assetImagePath1}}" (click)="confirmForViewImage(modalViewImageConfirm, assetProfileData.assetImagePath1)" 
+                                        *ngIf="assetProfileData.assetImagePath1!=null" alt="">
+                                    <img class="img-fluid" src="../../../../../assets/images/placeholderimage.png"
+                                        *ngIf="assetProfileData.assetImagePath1==null" alt="">
+                                </div>
+                            </div>
+                            <div class="col-md-2 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Asset Image-2
+                                </label>
+                                <div>
+                                    <img class="img-fluid" src="{{ImageUrl}}{{assetProfileData.assetImagePath2}}"  (click)="confirmForViewImage(modalViewImageConfirm, assetProfileData.assetImagePath2)" 
+                                        *ngIf="assetProfileData.assetImagePath2!=null" alt="">
+                                    <img class="img-fluid" src="../../../../../assets/images/placeholderimage.png"
+                                        *ngIf="assetProfileData.assetImagePath2==null" alt="">
+                                </div>
+                            </div>
+                            <div class="col-md-2 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Asset Image-3
+                                </label>
+                                <div>
+                                    <img class="img-fluid" src="{{ImageUrl}}{{assetProfileData.assetImagePath3}}"  (click)="confirmForViewImage(modalViewImageConfirm, assetProfileData.assetImagePath3)" 
+                                        *ngIf="assetProfileData.assetImagePath3!=null" alt="">
+                                    <img class="img-fluid" src="../../../../../assets/images/placeholderimage.png"
+                                        *ngIf="assetProfileData.assetImagePath3==null" alt="">
+                                </div>
+                            </div>
+                            <div class="col-md-2 mt-3">
+                                <label class="tx-11 font-weight-bold mb-0 text-uppercase">Remark
+                                </label>
+                                <p class="text-muted">{{assetProfileData.remarks ||'NA'}}.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-2" *ngIf="assetProfileData.depreciationID==2">
+                    <div class="card p-3">
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="pt-0">Year</th>
+                                        <th class="pt-0">Accumulated</th>
+                                        <th class="pt-0">Expense</th>
+                                        <th class="pt-0">Book Value Year Start</th>
+                                        <th class="pt-0">Net Book Value Year End</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let depr of depriciatioScheduleList">
+                                        <td>{{depr.year}}</td>
+                                        <td>{{depr.accumulatedDepreciation| number:'1.2-2'}}
+                                        </td>
+                                        <td>{{depr.depreciationExpense | number:'1.2-2'}}</td>
+                                        <td>{{depr.bookValueYearStart| number:'1.2-2'}}</td>
+                                        <td>{{depr.netBookValueYearEnd| number:'1.2-2'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-2">
+                <button class="btn btn btn-outline-primary" type="button" (click)="goto()">
+                    Back
+                </button>
+            </div>
+        </ng-template>
+    </li>
+    <li [ngbNavItem]="2" *ngIf="assestIdStore">
+        <a ngbNavLink>
+            <div class="d-flex flex-row flex-lg-column flex-xl-row align-items-center">
+                <i class="feather icon-box icon-xs mr-sm-2 mr-lg-0 mr-xl-2 mb-md-1 mb-xl-0"></i>
+                <p class="d-none d-sm-block">Spare Part</p>
+            </div>
+        </a>
+        <ng-template ngbNavContent>
+            <app-spare-part [assestId]="assestIdStore" [viewButton]="false" *ngIf="assestIdStore"></app-spare-part>
+        </ng-template>
+    </li>
+</ul>
+
+<div [ngbNavOutlet]="defaultNav" class="mt-3"></div>
+
+
+
+<ng-template #modalViewImageConfirm let-modal>
+    <button type="button" class="float-right close" aria-label="Close button" aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')">
+      <span class="float-right mt-1 mr-2" aria-hidden="true">&times;</span>
+    </button>
+  
+  
+    <img class="modal-body" src="{{viewImageValue}}">
+  
+  </ng-template>

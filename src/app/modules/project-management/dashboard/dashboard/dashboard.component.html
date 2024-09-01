@@ -1,0 +1,638 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  [title]="'Dashboard'"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- <button (click)="clearCookies()" class="btn btn-primary mt-5">Clear Cache and Cookies</button> -->
+
+<div class="project-wrapper">
+  <div class="col-md-12 col-xl-12 col-xxl-12">
+    <div class="row">
+      <div class="col-xl-4 col-md-6" *ngFor="let stat of sendDataInProjectStat">
+        <app-projects-stat
+          [title]="stat.title"
+          [value]="stat.value"
+          [icon]="stat.icon"
+          [month]="stat.month"
+          [progressBar]="stat.progressBar"
+          [subItem]="stat.subItem"
+        ></app-projects-stat>
+      </div>
+    </div>
+  </div>
+  <div class="row align-items-center">
+    <div class="col">
+      <!-- Nav tabs -->
+      <ul
+        ngbNav
+        #nav="ngbNav"
+        [(activeId)]="activeIdTop"
+        class="nav nav-tabs-custom card-header-tabs border-bottom-0"
+      >
+        <li [ngbNavItem]="1">
+          <a ngbNavLink > Progress Update </a>
+          <ng-template ngbNavContent>
+            <div class="card card-height-100">
+              <ul
+                ngbNav
+                #Border="ngbNav"
+                [(activeId)]="chartValueActive"
+                class="nav nav-tabs nav-border-top nav-border-top-primary mb-3"
+              >
+                <li [ngbNavItem]="1" >
+                  <a ngbNavLink> Task </a>
+                  <ng-template ngbNavContent>
+                    <app-help-part-chart-dashboard></app-help-part-chart-dashboard>
+                  </ng-template>
+                </li>
+                <li [ngbNavItem]="2" >
+                  <a ngbNavLink> SubTask </a>
+                  <ng-template ngbNavContent>
+                    <app-help-desk-internal-disscussion></app-help-desk-internal-disscussion>
+                  </ng-template>
+                </li>
+              </ul>
+              <div class="card-body">
+                <div class="tab-content text-muted">
+                  <div [ngbNavOutlet]="Border"></div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+
+        <li [ngbNavItem]="2">
+          <a  ngbNavLink> My Task </a>
+          <ng-template ngbNavContent>
+            <div class="row">
+              <div class="col-xl-7">
+                <div class="card card-height-100">
+                  <ul
+                    ngbNav
+                    #todoWorkFlowTabs="ngbNav"
+                    [activeId]="checktheRuleOfTrueValue ? 1 : 3"
+                    class="nav nav-tabs nav-justified nav-border-top nav-border-top-primary mb-0"
+                  >
+                    <li [ngbNavItem]="1" >
+                      <a ngbNavLink>
+                        <i class="ri-todo-line align-middle me-1"></i>My Task
+                      </a>
+                      <ng-template ngbNavContent>
+                        <div class="card-body my-tasks myTaskCardBody">
+                          <h5 class="card-title mb-2">My Task</h5>
+                          <ng-container
+                            *ngIf="checktheRuleOfClientDashbard.newTicket"
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countNewTicket !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!-- >New Ticket -->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countNewTicket ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countNewTicket ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countNewTicket !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskTicketList(
+                                      totalCountTicketServiceOrderIncident.countNewTicket,
+                                      48,
+                                      'New Ticket'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    RWI(Request Work Inspection)
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countNewTicket !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >Kindly generate a service order and assign
+                                    the task to support team or member for
+                                    resolution.</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countNewTicket ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    Haven't been any new support tickets.
+                                  </a>
+                                </div>
+
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countNewTicket
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countNewTicket
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- end New Ticket -->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="checktheRuleOfClientDashbard.awaitQuotation"
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+
+                              <!--  Awaiting Quotation-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskTicketList(
+                                      totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation,
+                                      53,
+                                      'Awaiting Quotation'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Tender Document Submission
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >Account/Project Manager has approved the
+                                    tickets as billable.</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    No billable tickets to be generate quotation
+                                  </a>
+                                </div>
+
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--  End Awaiting Quotation-->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="checktheRuleOfClientDashbard.generateNewSO"
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalServiceOrderPending !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--  Waiting For Generate New Service Order-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderPending ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalServiceOrderPending ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalServiceOrderPending !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskTicketList(
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderPending,
+                                      52,
+                                      'Waiting For Generate New Service Order'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Site Visit
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderPending ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Request For New Service Order .</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderPending !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    Tickets have been approved and are Awaiting
+                                    Service Order Generation.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalServiceOrderPending
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalServiceOrderPending
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- end Waiting For Generate New Service Order-->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              checktheRuleOfClientDashbard.expectedStartTaskDateTime
+                            "
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--   Assign Member & Site Visit Date Time-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskServiceOrderList(
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime,
+                                      2,
+                                      'Assign Member & Site Visit Date Time'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    MAR (Material Request Approval) Document
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Transaction</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    The service order has not yet had the
+                                    expected start task date and time.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-container>
+                            <!--   Assign Member & Site Visit Date Time-->
+                          </ng-container>
+                    
+                    
+                        
+                    
+                    
+                        
+                        
+                
+
+                      
+                        </div>
+                      </ng-template>
+                    </li>
+                  
+                  </ul>
+
+                  <div class="card-body">
+                    <div class="tab-content text-muted">
+                      <div [ngbNavOutlet]="todoWorkFlowTabs"></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- end card -->
+              </div>
+              <div class="col-xl-5">
+                <div class="card card-height-100">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">
+                      Projects By Ticket (Billing)
+                    </h5>
+                  </div>
+
+                  <div class="card-body">
+                    <div *ngFor="let project of projectList">
+                      <h6 class="text-muted">{{ project.projectName }}</h6>
+                      <div class="d-flex flex-wrap justify-content-between">
+                        <p class="text-muted mb-0">
+                          <span class="badge bg-primary ms-1 borderEaduis">{{
+                            project.isBillingRequired_1_Count
+                          }}</span>
+
+                          Billable
+                        </p>
+
+                        <p class="text-muted mb-0">
+                          <span class="badge bg-success ms-1 borderEaduis">{{
+                            project.isBillingRequired_0_Count
+                          }}</span>
+
+                          Non Billable
+                        </p>
+
+                        <p class="text-muted mb-0">
+                          <span class="badge bg-primary ms-1 borderEaduis">{{
+                            project.isBillingRequired_Null_Count
+                          }}</span>
+                          Waiting
+                        </p>
+                      </div>
+                      <hr class="mb-1 mt-1" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="3">
+          <a ngbNavLink >
+            Project Queue
+            
+          </a>
+          <ng-template ngbNavContent>
+            <div class="card card-height-100">
+              <ul
+                ngbNav
+                #Border="ngbNav"
+                [(activeId)]="onTicketAgingId"
+                class="nav nav-tabs nav-border-top nav-border-top-primary"
+              >
+                <li [ngbNavItem]="1" >
+                  <a ngbNavLink>
+                    Project Awarded
+                    <span
+                      class="badge bg-success align-middle ms-1"
+                      
+                      >6</span
+                    ></a
+                  >
+                  <ng-template ngbNavContent>
+                    <app-list-over-due-new-ticket
+                      [listOverDueNewTicket]="listOverDueNewTicket"
+                    ></app-list-over-due-new-ticket>
+                  </ng-template>
+                </li>
+                <li [ngbNavItem]="2" >
+                  <a ngbNavLink>
+                    Project Start
+                    <span
+                      class="badge align-middle ms-1 bg-danger"
+                      
+                        
+                      
+                      >4</span
+                    ></a
+                  >
+                  <ng-template ngbNavContent>
+                    <app-list-over-due-billing-eligible
+                      [listOverDueBillingEligible]="listOverDueBillingEligible"
+                    ></app-list-over-due-billing-eligible>
+                  </ng-template>
+                </li>
+
+                
+              </ul>
+              <div class="card-body">
+                <div class="tab-content text-muted">
+                  <div [ngbNavOutlet]="Border"></div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="4">
+          <a ngbNavLink> Ongoing Task </a>
+          <ng-template ngbNavContent>
+            <app-task-list-dashbaord
+              [storeProjectScheduleId]="19"
+            ></app-task-list-dashbaord>
+          </ng-template>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Tab panes -->
+    <div class="tab-content text-muted mt-3">
+      <div [ngbNavOutlet]="nav"></div>
+    </div>
+  </div>
+  <!-- end col -->
+</div>
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

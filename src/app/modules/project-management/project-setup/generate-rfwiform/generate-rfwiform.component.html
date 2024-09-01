@@ -1,0 +1,412 @@
+<ng-container *ngIf="!viewRFWIPage">
+  <form [formGroup]="InvoicesForm">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <h6 class="card-title mb-3">
+          Ref No. {{ followUpDetailObject?.refNo }}
+        </h6>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="form-group">
+          <label class="form-label"
+            >Inspection By<span class="starRequried">*</span></label
+          >
+          <ng-select
+            [items]="clientList"
+            placeholder="Look-up Inspection By"
+            formControlName="inspectionby"
+            bindLabel="fullName"
+            bindValue="projectUserAccessId"
+            (change)="onChangeClient($event)"
+            [ngClass]="{
+              'is-invalid': inspectionby.invalid && inspectionby.touched,
+              'is-valid': inspectionby.valid && inspectionby.touched
+            }"
+          >
+            <ng-template
+              ng-option-tmp
+              let-teamMember="item"
+              let-index="index"
+              let-search="searchTerm"
+            >
+              <div class="card card-body mb-1">
+                <div class="d-flex mb-2 align-items-center">
+                  <div class="flex-shrink-0">
+                    <img
+                      src="{{
+                        teamMember.profileImageUrl
+                          ? imgUrl + teamMember.profileImageUrl
+                          : '../../../../../assets/images/placeholderimage.png'
+                      }}"
+                      alt=""
+                      class="avatar-sm rounded-circle"
+                    />
+                  </div>
+                  <div class="flex-grow-1 ms-2">
+                    <h5
+                      [ngOptionHighlight]="search"
+                      class="card-title mb-1 text-truncate d-block"
+                    >
+                      {{ teamMember.fullName }}
+                    </h5>
+                    <p class="text-muted mb-0 text-truncate d-block">
+                      {{ teamMember.accessGroupName }}
+                    </p>
+                  </div>
+                </div>
+                <p class="card-text text-muted text-truncate d-block mb-0">
+                  <i class="ri-mail-fill me-1 align-middle text-success"></i>
+                  {{ teamMember.email }}
+                </p>
+
+                <p class="text-muted mb-0 text-truncate d-block mb-0">
+                  <i class="ri-phone-fill me-1 align-middle text-danger"></i>
+                  {{ teamMember.phoneNumber }}
+                </p>
+              </div>
+            </ng-template>
+          </ng-select>
+
+          <div
+            *ngIf="inspectionby.invalid && inspectionby.touched"
+            class="mt-2"
+          >
+            <small
+              class="text-danger"
+              *ngIf="inspectionby['errors']['required']"
+            >
+              Inspection By is Required
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="form-group">
+          <label class="form-label"
+            >Supervised By<span class="starRequried">*</span></label
+          >
+          <ng-select
+            [items]="supervisorList"
+            placeholder="Look-up Supervised by"
+            formControlName="supervisor"
+            bindLabel="fullName"
+            bindValue="id"
+            (change)="onChangeSupervisor($event)"
+          >
+            <ng-template
+              ng-option-tmp
+              let-teamMember="item"
+              let-index="index"
+              let-search="searchTerm"
+            >
+              <div class="card card-body mb-1">
+                <div class="d-flex mb-2 align-items-center">
+                  <div class="flex-shrink-0">
+                    <img
+                      src="{{
+                        teamMember.profileImageUrl
+                          ? imgUrl + teamMember.profileImageUrl
+                          : '../../../../../assets/images/placeholderimage.png'
+                      }}"
+                      alt=""
+                      class="avatar-sm rounded-circle"
+                    />
+                  </div>
+                  <div class="flex-grow-1 ms-2">
+                    <h5
+                      [ngOptionHighlight]="search"
+                      class="card-title mb-1 text-truncate d-block"
+                    >
+                      {{ teamMember.fullName }}
+                    </h5>
+                    <p class="text-muted mb-0 text-truncate d-block">
+                      {{ teamMember.accessGroupName }}
+                    </p>
+                  </div>
+                </div>
+                <p class="card-text text-muted text-truncate d-block mb-0">
+                  <i class="ri-mail-fill me-1 align-middle text-success"></i>
+                  {{ teamMember.email }}
+                </p>
+
+                <p class="text-muted mb-0 text-truncate d-block mb-0">
+                  <i class="ri-phone-fill me-1 align-middle text-danger"></i>
+                  {{ teamMember.phoneNumber }}
+                </p>
+              </div>
+            </ng-template>
+          </ng-select>
+          <div
+            *ngIf="
+              supervisor.invalid && (supervisor.dirty || supervisor.touched)
+            "
+          >
+            <small class="text-danger" *ngIf="supervisor.hasError('required')">
+              Supervised By is required.
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="form-group">
+          <label class="form-label"
+            >Location<span class="starRequried">*</span></label
+          >
+          <ng-select
+            [items]="locationList"
+            bindLabel="locationName"
+            bindValue="locationId"
+            placeholder="Select Location"
+            formControlName="location"
+            (change)="onChangeLocation($event)"
+          >
+          </ng-select>
+          <div *ngIf="location.invalid && (location.dirty || location.touched)">
+            <small class="text-danger" *ngIf="location.hasError('required')">
+              Location is required.
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 mb-3">
+      <div class="form-group">
+        <label for="exampleFormControlTextarea1" class="form-label"
+          >Remark <span class="starRequried">*</span></label
+        >
+        <textarea
+          [disabled]="uploadShown"
+          class="form-control"
+          id="Remark"
+          rows="4"
+          placeholder="Remark"
+          formControlName="comment"
+          [maxlength]="maxCharsDecision"
+        ></textarea>
+        <label class="nopadding clrlbl">
+          Characters Remaining:
+          {{ comment.value?.length }}/{{ maxCharsDecision }}</label
+        >
+        <div class="invalid-feedback">Please enter a Remark</div>
+      </div>
+    </div>
+    <div class="col-lg-12 mb-3">
+      <ul
+        ngbNav
+        #nav="ngbNav"
+        [(activeId)]="activeId"
+        class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+      >
+        <li [ngbNavItem]="1">
+          <a ngbNavLink> Item </a>
+          <ng-template ngbNavContent>
+            <div class="table-responsive">
+              <table
+                class="invoice-table table table-borderless table-nowrap mb-0"
+              >
+                <thead class="align-middle">
+                  <tr class="table-active">
+                    <th scope="col" style="width: 50px">#</th>
+                    <th scope="col">Details</th>
+                    <th scope="col" class="text-end" style="width: 105px"></th>
+                  </tr>
+                </thead>
+                <tbody id="newlink" formArrayName="items">
+                  <tr
+                    id="1"
+                    class="product"
+                    *ngFor="let phone of InvoicesForm.controls?.['items']?.['controls']; let i = index"
+                    [formGroupName]="i"
+                  >
+                    <th scope="row" class="product-id">{{ i + 1 }}</th>
+                    <td class="text-start">
+                      <div class="mb-2 text-desc">
+                        <input
+                          [disabled]="uploadShown"
+                          type="text"
+                          class="form-control bg-light border-0"
+                          id="productName"
+                          placeholder="Item Name"
+                          formControlName="itemName"
+                        />
+                        <div class="invalid-feedback">
+                          Please enter a product name
+                        </div>
+                      </div>
+                      <div class="mb-2 d-flex">
+                        <textarea
+                          [disabled]="uploadShown"
+                          class="form-control bg-light border-0"
+                          [id]="'productDetails' + i"
+                          rows="2"
+                          placeholder="Remark"
+                          formControlName="remark"
+                        ></textarea>
+                      </div>
+                    </td>
+
+                    <td class="text-end">
+                      <i
+                        class="ri-delete-bin-6-line text-danger fs-15"
+                        (click)="deleteBoxItem(i)"
+                      ></i>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="5">
+                      <a
+                        href="javascript:void(0);"
+                        class="btn btn-soft-secondary fw-medium me-3"
+                        id="add-item"
+                        (click)="
+                          addItem(InvoicesForm.get('items').value.length)
+                        "
+                        ><i class="ri-add-fill me-1 align-bottom"></i> Add
+                        Item</a
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!--end table -->
+            </div>
+          </ng-template>
+        </li>
+        <ng-container>
+          <li [ngbNavItem]="2">
+            <a ngbNavLink> Image </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div
+                  class="col-md-12 d-flex justify-content-between align-items-center mb-3"
+                >
+                  <h6>Add Remark & Image</h6>
+                </div>
+                <div>
+                  <div *ngIf="files.length != 0">
+                    <div class="col-lg-12 mx-2">
+                      <div
+                        class="d-flex mb-3"
+                        *ngFor="let image of files; let i = index"
+                      >
+                        <div class="col-lg-2 image-wrapper">
+                          <img
+                            #imgRenderer
+                            [src]="image.imageUrl"
+                            class="img-size-withd-upload"
+                          />
+                          <i
+                            class="ri-close-circle-line ri-close-circle-line2"
+                            type="button"
+                            (click)="onRemove(i); $event.stopPropagation()"
+                          ></i>
+                        </div>
+
+                        <div class="col-lg-9">
+                          <textarea
+                            class="form-control bg-light border-0 "
+                            (change)="submitDescription(i)"
+                            [(ngModel)]="editiorDescription[i]"
+                            [ngModelOptions]="{ standalone: true }"
+                            rows="4"
+                            placeholder="Remark"
+                          ></textarea>
+                        </div>
+                        <div class="col-lg-1 text-end">
+                          <i
+                            class="ri-delete-bin-6-line text-danger fs-15"
+                            (click)="removeItemImage(i)"
+                          ></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row d-flex justify-content-between mt-2">
+                <div class="col-md-3">
+                  <ngx-dropzone
+                    (change)="onSelect($event)"
+                    accept="image/*"
+                    [multiple]="false"
+                    title="All file will be Uploaded"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    class="btn btn-soft-info btn-soft-secondary fw-medium"
+                  >
+                    <ngx-dropzone-label
+                      ><i class="ri-add-fill me-1 align-bottom"></i>Add Image
+                    </ngx-dropzone-label>
+                  </ngx-dropzone>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+        </ng-container>
+      </ul>
+      <div class="card-body">
+        <div [ngbNavOutlet]="nav"></div>
+      </div>
+    </div>
+    <div class="hstack gap-2 justify-content-end d-print-none mt-4 flex-wrap">
+      <!-- <button class="btn btn-soft-primary ms-2 me-2" (click)="goBack()">
+      Back
+    </button> -->
+     <button
+        *ngIf="!rfwiId"
+        type="button"
+        [disabled]="InvoicesForm.invalid || files.length==0 "
+        class="btn btn-success btn-load"
+        (click)="submitGenerateRfw()"
+      >
+        <span class="d-flex align-items-center">
+          <span
+            class="spinner-border flex-shrink-0 me-2"
+            role="status"
+            *ngIf="loadingForSubmitBtn"
+          >
+            <span class="visually-hidden">Loading...</span>
+          </span>
+          <span class="flex-grow-1">Submit </span>
+        </span>
+      </button>
+    </div>
+  </form>
+</ng-container>
+
+<ng-container *ngIf="viewRFWIPage">
+  <app-view-rwif-form
+    [dDetail]="dDetail"
+    [RFWIId]="this.rfwiId"
+    [projectProcessHeaderDocId]="projectProcessHeaderDocId"
+  ></app-view-rwif-form>
+</ng-container>
+<ng-template #openAfter let-modal style="z-index: 9999">
+  <!-- Upload Progress Modal -->
+
+  <div class="modal-header modal-header p-3 bg-info-subtl">
+    <h5 class="modal-title">Uploading Files</h5>
+    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+  </div>
+  <div class="modal-body">
+    <p>
+      Uploading file <span>{{ currentFileIndex }}</span> of
+      <span>{{ totalFiles }}</span>
+    </p>
+
+    <ngb-progressbar
+      [value]="progress"
+      type="success"
+      class="progress-md"
+    ></ngb-progressbar>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="cancelUpload()">
+      Cancel Upload
+    </button>
+  </div>
+</ng-template>

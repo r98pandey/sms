@@ -1,0 +1,128 @@
+<div class="modal-header p-3 bg-primary-subtle">
+  <h5 class="modal-title">Upload</h5>
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="modal"
+    aria-label="Close"
+    (click)="modal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body row">
+  <div class="col-xl-12">
+    <div class="card-body">
+      <div class="row">
+        <div class="mb-2 col-lg-12">
+          <label class="form-label mb-1">File Upload</label>
+          <div class="container-fluid container-view">
+            <ngx-dropzone
+              (change)="onFileSelected($event)"
+              accept=".png,.jpg,.jpeg,.gif,.bmp,.pdf,.dwg,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.mp4,.avi,.mkv,.mov,.zip,.rar,.csv"
+              [multiple]="true"
+              title="All files will be Uploaded"
+              data-toggle="tooltip"
+              data-placement="top"
+              class="dropzone"
+            >
+              <ngx-dropzone-label>
+                Drag and drop/Click here to upload
+              </ngx-dropzone-label>
+            </ngx-dropzone>
+          </div>
+          <p
+            class="mb-0 text-danger fs-12 text-center"
+            *ngIf="showExistFileLabel"
+          >
+            Note: The selected file name already exists. Rename the file and
+            select.
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div
+          class="col-md-12"
+          *ngFor="let fileData of taskAndSubTaskFileValues; let i = index"
+        >
+          <div class="vstack gap-2 mb-2">
+            <div class="p-2">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0 me-3">
+                  <div class="avatar-sm">
+                    <div
+                      class="avatar-title bg-light text-secondary rounded fs-24"
+                    >
+                      <i [class]="getFileIcon(fileData.file)"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex-grow-1 overflow-hidden">
+                  <h5 class="fs-15 mb-1">
+                    <a
+                      href="javascript:void(0);"
+                      class="text-body text-truncate d-block"
+                      >{{ fileData.file.name }}</a
+                    >
+                  </h5>
+                  <div class="text-muted">
+                    {{ fileData.fileType }}
+                  </div>
+                </div>
+                <div class="flex-shrink-0 ms-2">
+                  <div class="d-flex gap-1">
+                    <button
+                      type="button"
+                      (click)="removeFile(i)"
+                      class="btn btn-icon text-muted btn-sm fs-18"
+                    >
+                      <i
+                        class="ri-delete-bin-fill align-bottom me-2 text-muted"
+                      ></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-2">
+            <label for="remarkTextarea{{ i }}" class="form-label"
+              >Remark <span class="starRequried">*</span>
+            </label>
+            <textarea
+              class="form-control bg-light border-light"
+              id="remarkTextarea{{ i }}"
+              [maxlength]="maxCharMessage"
+              [(ngModel)]="fileData.remark"
+              rows="4"
+              cols="5"
+              placeholder="Enter Remark"
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ fileData.remark.length }}/{{ maxCharMessage }}</label
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-danger mr-2 mb-2 mb-md-0"
+    (click)="modal.dismiss('cancel')"
+  >
+    Cancel
+  </button>
+  <button
+    type="button"
+    ngbAutofocus
+    [disabled]="taskAndSubTaskFileValues.length === 0 || !allRemarksEntered()"
+    class="btn btn-success mr-2 mb-2 mb-md-0"
+    (click)="openModalUpload()"
+  >
+    Upload
+  </button>
+</div>

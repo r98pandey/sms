@@ -1,0 +1,61 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close"
+            (click)="close('Close click')"></button>
+    </div>
+    <div class="modal-body">
+        <div class="text-center">
+          <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+        
+            <div class="mt-2 fs-15 mx-2 mx-sm-3">
+                <h5>{{title}}</h5>
+                <p class="text-muted mx-4 mb-3">{{subTitle}}
+
+                </p>
+                <p class="text-muted mx-4 mb-3" *ngIf="subTitle1">{{subTitle1}}
+
+                </p>
+                <p class="text-muted mx-4 mb-0" *ngIf="subTitle2">{{subTitle2}}
+
+                </p>
+            </div>
+            <div class="mt-2 fs-15 mx-2 mx-sm-3">
+
+  <label
+              for="exampleFormControlTextarea1"
+              class="form-label text-muted text-uppercase fw-semibold"
+              >Remark <span class="starRequried">*</span></label
+            >
+            <textarea
+              class="form-control bg-light border-0"
+              id="Remark"
+              rows="4"
+              placeholder="Remark"
+             [(ngModel)]="remarkValue"
+              [maxlength]="maxCharsDecision"
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ remarkValue?.length }}/{{
+                maxCharsDecision
+              }}</label
+            >
+            </div>
+        </div>
+        <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+            <button class="btn w-sm btn-danger  fw-medium text-decoration-none" (click)="close('close')"
+                id="deleteRecord-close">
+                <i class="ri-close-line me-1 align-middle" *ngIf="CancelName=='Close'"></i> {{CancelName}}
+            </button>
+            <button type="button" class="btn w-sm btn-primary" id="delete-product" (click)="close('success')" [disabled]="remarkValue.length==0">
+                Yes {{buttonName ? " ,"+buttonName:''}}!
+            </button>
+        </div>
+    </div>
+</div>

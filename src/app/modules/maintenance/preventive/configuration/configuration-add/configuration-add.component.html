@@ -1,0 +1,1019 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<form [formGroup]="addMasterSchedule">
+  <div class="row">
+    <div class="col-lg-4 ps-0 pe-0 mt-n2 stretch-card">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Basic Information</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="companyId" class="form-label"
+              >Company<span class="starRequried">*</span></label
+            >
+            <ng-select
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              [clearable]="false"
+              bindValue="companyId"
+              placeholder="Select Company"
+              class="custom"
+              [(ngModel)]="selectedDropDownCompanyIdValue"
+              formControlName="CompanyId"
+              (change)="onDropdownCompanyValueChange($event)"
+              [ngClass]="{
+                'is-invalid': CompanyId.invalid && CompanyId.touched,
+                'is-valid': CompanyId.valid && CompanyId.touched
+              }"
+            >
+            </ng-select>
+
+            <div *ngIf="CompanyId.invalid && CompanyId.touched" class="mt-2">
+              <small
+                class="text-danger"
+                *ngIf="CompanyId['errors']['required']"
+              >
+                Company is Required
+              </small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="ClientId" class="form-label"
+                >Client<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [items]="arrayListDropDownClientList"
+                bindLabel="clientName"
+                [clearable]="false"
+                [(ngModel)]="selectedDropDownClientIdValue"
+                bindValue="clientId"
+                placeholder="Select Client"
+                class="custom"
+                formControlName="ClientId"
+                (change)="onDropdownClientValueChange($event)"
+                [ngClass]="{
+                  'is-invalid': ClientId.invalid && ClientId.touched,
+                  'is-valid': ClientId.valid && ClientId.touched
+                }"
+              >
+              </ng-select>
+
+              <div *ngIf="ClientId.invalid && ClientId.touched" class="mt-2">
+                <small
+                  class="text-danger"
+                  *ngIf="ClientId['errors']['required']"
+                >
+                  Client is Required
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label class="form-label"
+                >{{ isProject ? "Project" : "Department"
+                }}<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [items]="arrayListDropDownProjectOrDeparmentList"
+                bindLabel="departmentName"
+                bindValue="departmentId"
+                [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+                [placeholder]="
+                  isProject ? 'Select Project' : 'Select Department'
+                "
+                [clearable]="false"
+                class="custom"
+                formControlName="ProjectId"
+                (change)="onDropdownDepartmentValueChange($event)"
+                [ngClass]="{
+                  'is-invalid': ProjectId.invalid && ProjectId.touched,
+                  'is-valid': ProjectId.valid && ProjectId.touched
+                }"
+              >
+              </ng-select>
+              <div
+                *ngIf="ProjectId?.invalid && ProjectId?.touched"
+                class="mt-2"
+              >
+                <small
+                  class="text-danger"
+                  *ngIf="ProjectId['errors']['required']"
+                >
+                  {{ isProject ? "Project" : "Department" }} is Required</small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="Frequency" class="form-label"
+                >Frequency
+                <span class="starRequried">*</span>
+              </label>
+              <ng-select
+                [items]="frequencyList"
+                formControlName="Frequency"
+                [clearable]="false"
+                (change)="onchangesFrequency($event)"
+                id="Frequency"
+                placeholder="Frequency"
+                class="w-100 mr-2"
+              ></ng-select>
+
+              <div *ngIf="Frequency.invalid && Frequency.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="Frequency.errors?.['required']"
+                >
+                  Frequency is Required
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="FrequencyData" class="form-label"
+                >Frequency Data
+                <span class="starRequried">*</span>
+              </label>
+              <ng-select
+                [items]="droupFrequencyData"
+                formControlName="FrequencyData"
+                [clearable]="false"
+                id="Frequency Data"
+                placeholder="Frequency Data"
+                class="w-100 mr-2"
+              ></ng-select>
+
+              <div *ngIf="FrequencyData.invalid && FrequencyData.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="FrequencyData.errors?.['required']"
+                >
+                  Frequency Data is Required
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="SupportType"
+                >Action Type <span class="starRequried">*</span></label
+              >
+              <ng-select
+                [items]="supportTypeAarry"
+                placeholder="Action type"
+                formControlName="SupportType"
+                [clearable]="false"
+              ></ng-select>
+
+              <div *ngIf="SupportType.invalid && SupportType.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="SupportType.errors?.['required']"
+                >
+                  Action type is Required
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="NextSchduleStart" class="form-label"
+                >Schedule Start On
+                <span class="starRequried">*</span>
+                <i
+                class="ri-close-circle-line text-danger"
+                *ngIf="NextSchduleStart.value"
+                (click)="clearChangDate()"
+              ></i>              </label>
+              <div class="d-flex">
+                <input
+                  type="date"
+                  class="form-control"
+                  id="NextSchduleStart"
+                  formControlName="NextSchduleStart"
+                  placeholder="Schedule Start On"
+                  mwlFlatpickr
+                  [altInput]="false"
+                  [enableTime]="false"
+                  [convertModelValue]="true"
+                  [dateFormat]="'d-m-Y'"
+                  [class.is-invalid]="
+                    NextSchduleStart.invalid && NextSchduleStart.touched
+                  "
+                  [class.is-valid]="
+                    NextSchduleStart.valid && NextSchduleStart.touched
+                  "
+                />
+                <!-- <input
+                  type="time"
+                  id="timeInput"
+                  class="form-control"
+                  formControlName="NextSchduleStarttime"
+                  *ngIf="Frequency.value == 'Hourly'"
+                /> -->
+                <input 
+                  [ngxMatTimepicker]="picker"
+                  id="timeInput"
+                  class="form-control"
+                  placeholder="Select Time"
+                  formControlName="NextSchduleStarttime"
+                  *ngIf="Frequency.value == 'Hourly'">
+                  <ngx-mat-timepicker #picker readonly
+                  dottedMinutesInGap
+                  enableKeyboardInput
+                  ></ngx-mat-timepicker>  
+              </div>
+
+              <div *ngIf="NextSchduleStart.invalid && NextSchduleStart.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="NextSchduleStart.errors?.['required']"
+                >
+                  Schedule Start On is Required
+                </small>
+              </div>
+              <div
+                *ngIf="
+                  NextSchduleStarttime.invalid && NextSchduleStarttime.touched
+                "
+              >
+                <small
+                  class="text-danger"
+                  *ngIf="NextSchduleStarttime.errors?.['required']"
+                >
+                  Time is Required
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8 pe-0 mt-n2 stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <ul
+            ngbNav
+            #defaultNav="ngbNav"
+            [(activeId)]="defaultNavActiveId"
+            class="nav-tabs nav-tabs-custom"
+          >
+            <li [ngbNavItem]="1">
+              <a ngbNavLink>
+                <div
+                  class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                >
+                  <p class="d-none1 d-sm-block mb-0">Basic Detail  <span class="starRequried">*</span></p>
+                </div>
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="card mb-1">
+                      <div class="card-body">
+                        <div class="mb-3">
+                          <label class="form-label"
+                            >Title<span class="starRequried">*</span></label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter Title"
+                            formControlName="ConfigPreventivePDescription"
+                            [class.is-invalid]="
+                              ConfigPreventivePDescription.invalid &&
+                              ConfigPreventivePDescription.touched
+                            "
+                            [class.is-valid]="
+                              ConfigPreventivePDescription.valid &&
+                              ConfigPreventivePDescription.touched
+                            "
+                          />
+
+                          <div
+                            *ngIf="
+                              ConfigPreventivePDescription.invalid &&
+                              ConfigPreventivePDescription.touched
+                            "
+                          >
+                            <small
+                              class="text-danger"
+                              *ngIf="
+                                ConfigPreventivePDescription['errors'][
+                                  'required'
+                                ]
+                              "
+                            >
+                              Title is Required
+                            </small>
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label
+                            >Remark<span class="starRequried">*</span></label
+                          >
+                          <textarea
+                            class="form-control"
+                            formControlName="Remark"
+                            rows="4"
+                            cols="6"
+                            placeholder="Remark"
+                            [class.is-invalid]="
+                              Remark.invalid && Remark.touched
+                            "
+                            [class.is-valid]="Remark.valid && Remark.touched"
+                            [maxlength]="maxCharsDecision"
+                          ></textarea>
+                          <label class="nopadding clrlbl">
+                            Characters Remaining:
+                            {{ Remark?.value?.length }}/{{
+                              maxCharsDecision
+                            }}</label
+                          >
+
+                          <div *ngIf="Remark.invalid && Remark.touched">
+                            <small
+                              class="text-danger"
+                              *ngIf="Remark.errors?.['required']"
+                            >
+                              Remark is Required
+                            </small>
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <div class="form-group">
+                            <label for="PreventiveCategoryId" class="form-label"
+                              >Checklist Category
+                              <span class="starRequried">*</span>
+                            </label>
+                            <ng-select
+                              [items]="preventiveMaintenanceCategoryList"
+                              bindLabel="preventiveCategoryName"
+                              formControlName="PreventiveCategoryId"
+                              (change)="
+                                onchangePreventiveMaintenanceCategory($event)
+                              "
+                              bindValue="preventiveCategoryId"
+                              [clearable]="false"
+                              id="PreventiveCategoryId"
+                              [(ngModel)]="searchPreventCategoryId"
+                              placeholder="Checklist Category"
+                              class="w-100 mr-2"
+                            ></ng-select>
+
+                            <div
+                              *ngIf="
+                                PreventiveCategoryId.invalid &&
+                                PreventiveCategoryId.touched
+                              "
+                            >
+                              <small
+                                class="text-danger"
+                                *ngIf="PreventiveCategoryId.errors?.['required']"
+                              >
+                                Checklist Category Name is Required
+                              </small>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="mb-3"
+                          *ngIf="preventiveMaintenanceTypeList.length != 0"
+                        >
+                          <div class="row mt-3">
+                            <div class="col-12">
+                              <label for="preventiveTypeName" class="form-label"
+                                >Checklist type
+                                <span class="starRequried">*</span>
+                              </label>
+                              <div class="form-check">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  [id]="'selectAll'"
+                                  (change)="checkSelectedAll($event)"
+                                  [checked]="returnaSelectAll()"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  [for]="'selectAll'"
+                                >
+                                  Select All
+                                </label>
+                              </div>
+                            </div>
+                            <div class="mt-2"></div>
+
+                            <div
+                              class="col-4 mt-2"
+                              *ngFor="
+                                let preventive of preventiveMaintenanceTypeList;
+                                index as i
+                              "
+                            >
+                              <div class="form-check">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  (change)="
+                                    checkPreventiveMaintenance(
+                                      $event,
+                                      preventive.preventiveTypeId
+                                    )
+                                  "
+                                  [checked]="
+                                    returnValue(preventive.preventiveTypeId)
+                                  "
+                                  [id]="preventive.preventiveTypeName"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  [for]="preventive.preventiveTypeName"
+                                >
+                                  {{ preventive.preventiveTypeName }}
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+            <li
+              [ngbNavItem]="2"
+              *ngIf="selectedDropDownProjectOrDeparmentIdValue"
+            >
+              <a ngbNavLink>
+                <div
+                  class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                >
+                  <p class="d-none1 d-sm-block mb-0">Asset <span class="starRequried">*</span></p>
+                </div>
+              </a>
+              <ng-template ngbNavContent>
+                <div class="card">
+                  <div class="card-header text-end p-2">
+                    <button class="btn btn-primary" (click)="getAssetList()">
+                      Add Asset
+                    </button>
+                  </div>
+                  <div class="card-body maxHeightCard">
+                    <div class="table-responsive table-card mb-0">
+                      <table class="table">
+                        <thead>
+                          <tr class="bg-light text-muted text-uppercase">
+                            <th>Asset No</th>
+                            <th>Asset</th>
+                            <th>Status</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody *ngIf="selectedAssetList.length != 0">
+                          <tr *ngFor="let asset of selectedAssetList">
+                            <td>
+                              <a
+                                href="javascript:void(0)"
+                                class="fw-medium link-primary"
+                                >{{
+                                  asset.assetTagId ? asset.assetTagId : "NA"
+                                }}</a
+                              >
+                            </td>
+
+                            <td>
+                              {{ asset.assetName }}
+                            </td>
+                            <td class="status">
+                              <span
+                                [ngClass]="
+                                  returnStatusBadgeClassesStatus(
+                                    asset.assetStatusId
+                                  )
+                                "
+                                >{{ asset.assetStatus }}</span
+                              >
+                            </td>
+
+                            <td class="status">
+                              <a
+                              href="javascript:void(0)"
+                              class="dropdown-item cursor-pointer"
+                              (click)="openModalDeleteAssetObject(asset)"
+                              ><i
+                                class="ri-delete-bin-fill align-bottom me-2 text-danger"
+                              ></i>
+                            </a> 
+                            </td>
+                          </tr>
+                        </tbody>
+                        <tbody *ngIf="selectedAssetList.length == 0">
+                          <tr>
+                            <td colspan="4" class="text-center">
+                              No Asset Selected
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+            <ng-container
+              *ngIf="CompanyId.value && ClientId.value && ProjectId.value"
+            >
+              <li [ngbNavItem]="3" class="nav-item">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Assigned To
+                </a>
+                <ng-template ngbNavContent>
+                  <div
+                    class="d-flex align-items-center justify-content-between mb-3 mt-2"
+                  >
+                    <div></div>
+                    <div class="mb-2">
+                      <button
+                        class="btn btn-success btn-sm"
+                        type="button"
+                        class="btn btn-soft-primary btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#inviteMembersModal"
+                        (click)="openModalTechnician(TechnicianListModal)"
+                      >
+                        <i class="ri-add-fill align-bottom me-1"></i> Add
+                        Member
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="table-responsive table-card">
+                    <table class="table align-middle mb-0">
+                      <thead class="table-light text-muted">
+                        <tr>
+                          <th scope="col">Name</th>
+                          <th scope="col">Designation</th>
+                          <th scope="col">Phone Number</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ng-container *ngIf="selectedTech.length == 0">
+                          <tr>
+                            <td colspan="4" class="text-center">
+                              No Member Assign
+                            </td>
+                          </tr>
+                        </ng-container>
+                        <ng-container *ngIf="selectedTech.length != 0">
+                          <tr *ngFor="let workTech of selectedTech">
+                            <th scope="row">
+                              <div class="d-flex align-items-center">
+                                <!-- <img
+                                  [src]="
+                                    workTech.profileImageUrl
+                                      ? imgURl + workTech.profileImageUrl
+                                      : '../../../../../../assets/images/placeholderimage.png'
+                                  "
+                                  alt=""
+                                  style="width: 40px; height: 40px"
+                                  class="rounded-circle avatar-xxs"
+                                /> -->
+
+                                <div
+                                class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0 online"
+                              >
+                                <img
+                                [src]="
+                                    workTech.profileImageUrl
+                                      ? imgURl + workTech.profileImageUrl
+                                      : '../../../../../../assets/images/placeholderimage.png'
+                                  "
+                                  class="rounded-circle avatar-xs"
+                                  alt=""
+                                />
+                                <!-- <span class="user-status"></span> -->
+                                <div class="dropdown" ngbDropdown>
+                                  <span
+                                    class="user-status shadow-none arrow-none cursor-pointer"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                    ngbDropdownToggle
+                                    [class]="
+                                      returnCurrentStatusClassesStatusCircle(
+                                        workTech.currentStatus
+                                      )
+                                    "
+                                    title="{{
+                                      workTech.currentStatus
+                                    }}"
+                                  ></span>
+                                  <div
+                                    *ngIf="workTech.currentStatus"
+                                    class="dropdown-menu dropdown-menu-start drop-con p-0"
+                                    ngbDropdownMenu
+                                  >
+                                    <div
+                                      [class]="
+                                        returnCurrentStatusClassesStatus(
+                                          workTech.currentStatus
+                                        )
+                                      "
+                                      class="text-uppercase p-2"
+                                    >
+                                      <b class="fs-14">
+                                        {{
+                                          workTech.currentStatus
+                                        }}</b
+                                      >
+                                    </div>
+                                    <div
+                                      class="white-space-normal text-muted fs-13 p-2"
+                                      *ngIf="
+                                        workTech.currentStatusRemark
+                                      "
+                                    >
+                                      {{
+                                        workTech.currentStatusRemark
+                                      }}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+
+                                <div class="flex-grow-1 ms-2">
+                                  <a
+                                    href="javascript:void(0);"
+                                    class="fw-medium"
+                                    >{{ workTech.fullName }}
+                                  </a>
+                                </div>
+                              </div>
+                            </th>
+                            <td>{{ workTech.designation }}</td>
+                            <td>{{ workTech.phoneNumber }}</td>
+                            <td>
+                              <a
+                              
+                                href="javascript:void(0)"
+                                class="dropdown-item cursor-pointer"
+                                  (click)="openModalDeleteConf(workTech)"
+                                ><i
+                                  class="ri-delete-bin-fill align-bottom me-2 text-danger"
+                                ></i>
+                              </a>
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                    <!--end table-->
+                  </div>
+                </ng-template>
+              </li>
+            </ng-container>
+
+
+            <li [ngbNavItem]="4">
+              <a ngbNavLink>
+                <div
+                  class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                >
+                  <p class="d-none1 d-sm-block mb-0">Skip Month</p>
+                </div>
+              </a>
+              <ng-template ngbNavContent>
+                <div class="card">
+                  <div class="card-header">
+                    <h6 class="mb-0 card-title">Skip Month</h6>
+                  </div>
+                  <div class="card-body maxHeightCard">
+                    <div class="mb-3">
+                      <div class="form-group">
+                        <label class="form-label"
+                          >Month<span class="starRequried">*</span></label
+                        >
+                        <ng-select
+                          [items]="arrayOfMonth"
+                          [multiple]="true"
+                          bindLabel="name"
+                          [closeOnSelect]="false"
+                          
+                          bindValue="id"
+                          placeholder="Select Month"
+                          [clearable]="false"
+                          [(ngModel)]="selectMonthValue" [ngModelOptions]="{standalone: true}"
+                          (change)="onMonthSkip($event)"
+
+                        >
+                        </ng-select>
+                       
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="defaultNav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-end mb-3">
+    <button
+      class="btn btn-soft-primary waves-effect mx-3"
+      type="button"
+      (click)="goback()"
+    >
+      Back
+    </button>
+    <button
+      class="btn btn-success w-sm"
+      type="button"
+      (click)="addMasterScheduleDetails()"
+      [disabled]="
+        addMasterSchedule.invalid ||
+        selectedAssetList.length == 0 ||
+        selectedPreventiveMaintenanceTypeArray.length == 0
+      "
+    >
+      Submit
+    </button>
+  </div>
+</form>
+
+<ng-template #noMaintenanceTypePopUp let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="text-center">
+        <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+      
+  
+      </div>
+
+      <div class="mt-2 fs-15 text-center">
+        <h4>Information!</h4>
+        <p class="text-muted mx-4 mb-0">
+          To create a Checklist type for a specific company or organization, you
+          may need to request the administrator to create this.
+        </p>
+      </div>
+      <p class="mx-3 mb-0">You can follow these steps:</p>
+      <ol class="pt-0 fs-15">
+        <li>Access the application settings.</li>
+        <li>Navigate to "Maintenance Setup" within the application setting.</li>
+        <li>Look for an option button "Add Checklist type".</li>
+      </ol>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+          type="button"
+          class="swal2-cancel btn btn-primary w-xs mb-1"
+          aria-label=""
+          style="display: inline-block"
+          (click)="modal.close('Close click')"
+        >
+          Ok
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+<ng-template #noMaintenanceCategoryPopUp let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="text-center">
+        <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+      
+  
+      </div>
+
+      <div class="mt-2 fs-15 text-center">
+        <h4>Information!</h4>
+        <p class="text-muted mx-4 mb-0">
+          To create a Checklist Category for a specific company or organization,
+          you may need to request the administrator to create this.
+        </p>
+      </div>
+      <p class="mx-3 mb-0">You can follow these steps:</p>
+      <ol class="pt-0 fs-15">
+        <li>Access the application settings.</li>
+        <li>Navigate to "Maintenance Setup" within the application setting.</li>
+        <li>Look for an option button "Add Checklist Category".</li>
+      </ol>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+          type="button"
+          class="swal2-cancel btn btn-primary w-xs mb-1"
+          aria-label=""
+          style="display: inline-block"
+          (click)="modal.close('Close click')"
+        >
+          Ok
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+<ng-template #TechnicianListModal role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Add Members</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div class="search-box mb-3">
+      <input
+        type="text"
+        class="form-control bg-light border-light"
+        (keyup)="filterTechnician($event)"
+        [(ngModel)]="technicianSearchText"
+        placeholder="Search member here..."
+      />
+      <i class="ri-search-line search-icon"></i>
+    </div>
+    <ngx-simplebar class="mx-n4 px-4" style="height: 400px">
+      <div class="vstack gap-3">
+        <div *ngFor="let tech of filteredTechnicianList; let i = index">
+          <div
+            class="d-flex align-items-center"
+            (click)="selectTechnician(filteredTechnicianList, i, tech)"
+          >
+            <div class="flex-shrink-0 me-3">
+              <div class="d-flex align-items-center gap-1">
+                <div class="form-check form-check-flat form-check-primary">
+                  <label class="form-check-label">
+                    <input
+                      type="checkbox"
+                      value="{{ tech }}"
+                      [(ngModel)]="filteredTechnicianList[i].checked"
+                      class="form-check-input"
+                    />
+                    <i class="input-frame"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="avatar-xs flex-shrink-0 me-3">
+              <!-- <img
+                src="{{
+                  tech.profileImageUrl
+                    ? imgURl + tech.profileImageUrl
+                    : '../../../../../assets/images/placeholderimage.png'
+                }}"
+                style="width: 40px; height: 40px"
+                alt=""
+                class="img-fluid rounded-circle"
+              /> -->
+              <div class="d-flex align-items-center">
+                <div
+              class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0 online"
+            >
+              <img
+              src="{{
+                tech.profileImageUrl
+                  ? imgURl + tech.profileImageUrl
+                  : '../../../../../assets/images/placeholderimage.png'
+              }}"
+                class="rounded-circle avatar-xs"
+                alt=""
+              />
+              <!-- <span class="user-status"></span> -->
+              <div class="dropdown" ngbDropdown>
+                <span
+                  class="user-status shadow-none arrow-none cursor-pointer"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  ngbDropdownToggle
+                  [class]="
+                    returnCurrentStatusClassesStatusCircle(
+                      tech.currentStatus
+                    )
+                  "
+                  title="{{
+                    tech.currentStatus
+                  }}"
+                ></span>
+                <div
+                  *ngIf="tech.currentStatus"
+                  class="dropdown-menu dropdown-menu-start drop-con p-0"
+                  ngbDropdownMenu
+                >
+                  <div
+                    [class]="
+                      returnCurrentStatusClassesStatus(
+                        tech.currentStatus
+                      )
+                    "
+                    class="text-uppercase p-2"
+                  >
+                    <b class="fs-14">
+                      {{
+                        tech.currentStatus
+                      }}</b
+                    >
+                  </div>
+                  <div
+                    class="white-space-normal text-muted fs-13 p-2"
+                    *ngIf="
+                    tech.currentStatusRemark
+                    "
+                  >
+                    {{
+                      tech.currentStatusRemark
+                    }}
+                  </div>
+                </div>
+              </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="fs-14 mb-0">
+                <a href="javascript:void(0);" class="text-body d-block">
+                  {{ tech.fullName }}
+                </a>
+                <p class="mt-0 mb-0">{{ tech.designation }}</p>
+              </h5>
+            </div>
+            <div class="flex-shrink-0 me-3 mb-0">
+              <p class="mb-0">
+                <span
+                  ><i class="ri-phone-fill me-1"></i
+                  >{{ tech.phoneNumber }}</span
+                >
+              </p>
+              <!-- <p class="mb-0"><span><i class=" ri-mail-check-fill me-1"></i>{{ tech.email }}</span></p> -->
+            </div>
+          </div>
+        </div>
+        <div
+          class="text-center mt-3 text-muted"
+          *ngIf="
+            technicianList &&
+            filteredTechnicianList &&
+            technicianSearchText.length > 0
+              ? !filteredTechnicianList.length
+              : !technicianList.length
+          "
+        >
+          <p>No Member Found</p>
+        </div>
+      </div>
+    </ngx-simplebar>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

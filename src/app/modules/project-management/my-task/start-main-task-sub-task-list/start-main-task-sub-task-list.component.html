@@ -1,0 +1,180 @@
+<ng-container *ngIf="projectTaskSubTaskUnionList_StartTask.length != 0">
+  <div class="table-responsive table-card mb-0 text-muted">
+    <table class="table">
+      <thead>
+        <tr class="bg-light text-muted text-uppercase">
+          <th>Task</th>
+        
+          <th>Schedule</th>
+
+          <th>Company , Client & {{ isProject ? "Project" : "Department" }}</th>
+          <th>Planed Date</th>
+
+          <th>Actual Date</th>
+          <th>Time progression</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let data of projectTaskSubTaskUnionList_StartTask;
+            index as index
+          "
+        >
+          <td class="align-top title" *ngIf="data.taskFlag == 'Sub-Task'">
+            <a
+              href="javascript:void(0)"
+              (click)="
+                openViewHandleSubTask(data.taskLinkId, data.projectTaskId, data)
+              "
+              class="fw-medium text-reset"
+            >
+              <p class="mb-0" ngbTooltip="{{ data.taskTitle }}">
+                {{ showinString(data.taskTitle) }}
+              </p>
+              <p class="mb-0 text-primary">#{{ data.taskNo }}</p></a
+            >
+            <p class="mb-0">
+              <span class="text-dark fs-12"
+                ><b>{{ data.taskFlag }}</b></span
+              >
+            </p>
+          </td>
+
+          <td class="align-top title" *ngIf="data.taskFlag == 'Main-Task'">
+            <a
+              href="javascript:void(0)"
+              (click)="openViewHandleTask(data.projectTaskId, data)"
+              class="fw-medium text-reset"
+            >
+              <p class="mb-0" ngbTooltip="{{ data.taskTitle }}">
+                {{ showinString(data.taskTitle) }}
+              </p>
+              <p class="mb-0 text-primary">#{{ data.taskNo }}</p></a
+            >
+            <p class="mb-0">
+              <span class="text-dark fs-12"
+                ><b>{{ data.taskFlag }}</b></span
+              >
+            </p>
+          </td>
+
+        
+          <td class="align-top title">
+            <p class="mb-0 fs-13" ngbTooltip="{{ data.projectScheduleName }}">
+              <b> {{ showinString(data.projectScheduleName) }}</b>
+            </p>
+            <div class="mb-0">
+              <span *ngIf="data.scheduleNo" class="text-primary"
+                >#{{ data.scheduleNo || "-" }}
+              </span>
+              <div class="vr"></div>
+              <span
+                [class]="
+                  returnStatusBadgeClassesStatus(data.projectScheduleStatusId)
+                "
+                >{{ data.projectScheduleStatusName }}</span
+              >
+            </div>
+          </td>
+          <td class="align-top title title">
+            <p class="mb-0 title_new fs-12" [title]="data.companyName">
+              {{ data.companyName }}
+            </p>
+            <p class="mb-0 title_new fs-12" [title]="data.clientName">
+              {{ data.clientName }}
+            </p>
+            <p class="mb-0 title_new fs-12" [title]="data.projectName">
+              {{ data.projectName }}
+            </p>
+          </td>
+          <td class="title align-top title">
+            <p class="mb-0 fs-12"><b> Start</b>: {{ data.startDate || "-" }}</p>
+
+            <p class="mb-0 fs-12">
+              <b>End</b> &nbsp;: {{ data.endDate || "-" }}
+            </p>
+          </td>
+
+          <td class="title align-top title">
+            <p class="mb-0 fs-12">
+              <b>Start</b>: {{ data.actualStartDate || "-" }}
+            </p>
+
+            <p class="mb-0 fs-12">
+              <b>End</b> &nbsp;: {{ data.actualEndDate || "-" }}
+            </p>
+          </td>
+          <td class="title align-top title">
+            <p class="mb-0 fs-14">
+              <b>{{ getTimeProgress(data.startTaskDateTime) || "-" }}</b>
+            </p>
+          </td>
+          <td class="status align-top title">
+            <span [class]="returnStatusBadgeClassesStatus(data.taskStatusId)">{{
+              data.taskStatusName
+            }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="row justify-content-md-between align-items-md-center pb-3">
+    <div class="col-sm-6">
+      <div
+        class="dataTables_info mb-2 mt-2"
+        id="tickets-table_info"
+        role="status"
+        aria-live="polite"
+      >
+        Showing {{ from }} to {{ to }} of {{ totalRecords }} entries
+      </div>
+    </div>
+    <!-- Pagination -->
+    <div class="col-sm-6">
+      <div class="text-sm-right float-end listjs-pagination">
+        <ngb-pagination
+          [collectionSize]="totalRecords"
+          [(page)]="page"
+          [pageSize]="pageSize"
+          [maxSize]="2"
+          [rotate]="true"
+          (pageChange)="loadPage($event)"
+          *ngIf="totalRecords > pageSize"
+        >
+          <ng-template ngbPaginationPrevious let-page let-pages="pages">
+            <i class="ci-arrow-left me-2"></i>
+            Prev
+          </ng-template>
+          <ng-template ngbPaginationNext>
+            Next
+            <i class="ci-arrow-right ms-2"></i>
+          </ng-template>
+        </ngb-pagination>
+      </div>
+    </div>
+    <!-- End Pagination -->
+  </div>
+</ng-container>
+<ng-container *ngIf="projectTaskSubTaskUnionList_StartTask.length == 0">
+  <div class="card">
+    <div class="card-body">
+      <div class="py-4 text-center">
+        <div>
+          <lord-icon
+            src="https://cdn.lordicon.com/msoeawqm.json"
+            trigger="loop"
+            colors="primary:#405189,secondary:#0ab39c"
+            style="width: 72px; height: 72px"
+          >
+          </lord-icon>
+        </div>
+        <div class="mt-4">
+          <h5>No Records Found</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,244 @@
+<div class="modal-header p-3 bg-primary-subtle">
+  <h5 class="modal-title" id="inviteMembersModalLabel">Add {{ nameTitle }}</h5>
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="modal"
+    aria-label="Close"
+    (click)="close('Cross click')"
+  ></button>
+</div>
+<div class="modal-body p-3">
+  <form [formGroup]="userForm">
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <div class="textcenter">
+          <div class="position-relative d-inline-block">
+            <div class="position-absolute top-100 start-100 translate-middle">
+              <label
+                class="mb-0"
+                placement="left"
+                ngbTooltip="Remove Image"
+                *ngIf="isFirstImageVisible"
+              >
+                <div class="avatar-xs">
+                  <div
+                    class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                  >
+                    <i
+                      class="ri-close-circle-fill"
+                      (click)="crossFirstImage(profile_img)"
+                    ></i>
+                  </div>
+                </div>
+              </label>
+              <label
+                for="asset_id0"
+                class="mb-0"
+                placement="left"
+                ngbTooltip="Select Image"
+                *ngIf="!isFirstImageVisible"
+              >
+                <div class="avatar-xs">
+                  <div
+                    class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                  >
+                    <i class="ri-image-fill"></i>
+                  </div>
+                </div>
+              </label>
+              <input
+                (change)="onSelectFile($event)"
+                formControlName="UserImageBase64string"
+                class="form-control d-none"
+                value=""
+                id="asset_id0"
+                type="file"
+                accept="image/png, image/gif, image/jpeg"
+              />
+            </div>
+            <div class="avatar-lg">
+              <div class="avatar-title bg-light rounded">
+                <img
+                  src="{{ profile_img }}"
+                  id="product-img"
+                  class="avatar-md img-size-fixed"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mt-4">
+        <label for="Project-Name" class="form-label"
+          >Full Name <span class="text-danger">*</span></label
+        >
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'Full Name'"
+          formControlName="FullName"
+          id="fullName"
+          name="fullName"
+          [ngClass]="{
+            'is-invalid': form['FullName'].invalid && form['FullName'].touched
+          }"
+        />
+
+        <div *ngIf="form['FullName'].invalid && form['FullName'].touched">
+          <small
+            class="text-danger"
+            *ngIf="form['FullName'].errors['required']"
+          >
+            Full Name is Required</small
+          >
+        </div>
+      </div>
+      <div class="col-md-6 mt-4">
+        <label for="HOD" class="form-label"
+          >Email <span class="text-danger">*</span></label
+        >
+        <input
+          type="email"
+          class="form-control"
+          placeholder="Email"
+          formControlName="Email"
+          id="email"
+          name="email"
+          [ngClass]="{
+            'is-invalid': form['Email'].invalid && form['Email'].touched
+          }"
+        />
+
+        <div *ngIf="form['Email'].invalid && form['Email'].touched">
+          <small class="text-danger" *ngIf="form['Email'].errors['required']">
+            Email is Required</small
+          >
+        </div>
+      </div>
+      <div class="col-md-6 mt-2">
+        <label for="phoneNumber" class="form-label"
+          >Phone Number <span class="text-danger">*</span></label
+        >
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Phone Number"
+          formControlName="PhoneNumber"
+          id="phoneNumber"
+          name="PhoneNumber"
+          [ngClass]="{
+            'is-invalid':
+              form['PhoneNumber'].invalid && form['PhoneNumber'].touched
+          }"
+        />
+
+        <div *ngIf="form['PhoneNumber'].invalid && form['PhoneNumber'].touched">
+          <small
+            class="text-danger"
+            *ngIf="form['PhoneNumber'].errors['required']"
+          >
+            Phone Number is Required</small
+          >
+        </div>
+      </div>
+      <div class="col-md-6 mt-2">
+        <label for="Client" class="form-label"
+          >Role <span class="text-danger">*</span></label
+        >
+        <ng-select
+          [items]="rolesList"
+          bindLabel="name"
+          bindValue="id"
+          [loading]="loading.role"
+          [clearable]="false"
+          (change)="onTypeRole($event)"
+          [clearable]="false"
+          id="roleName"
+          formControlName="roleId"
+          placeholder="Select Role"
+          class="w-100 mr-2"
+        ></ng-select>
+
+        <div *ngIf="form['roleId'].invalid && form['roleId'].touched">
+          <small class="text-danger"> Role is Required </small>
+        </div>
+      </div>
+      <div class="col-md-6 mt-2">
+        <label for="Client" class="form-label"
+          >Access Group <span class="text-danger">*</span></label
+        >
+        <ng-select
+          [items]="accessGroupList"
+          bindLabel="name"
+          bindValue="accessGroupMasterId"
+          [loading]="loading.accessGroup"
+          [clearable]="false"
+          (change)="onTypeAccessGroup($event)"
+          [disabled]="true"
+          [clearable]="false"
+          id="companyName"
+          formControlName="AccessGroupId"
+          placeholder="Select Access Group"
+          class="w-100 mr-2"
+        ></ng-select>
+
+        <div
+          *ngIf="form['AccessGroupId'].invalid && form['AccessGroupId'].touched"
+        >
+          <small class="text-danger"> Access Group is Required </small>
+        </div>
+      </div>
+      <div class="col-md-6 mt-2">
+        <label for="Client" class="form-label">Device Access</label>
+        <div class="row mt-3">
+          <div class="col-6">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value="Portal"
+                formControlName="PortalEnable"
+                id="Portal"
+              />
+              <label class="form-check-label" for="Portal"> Portal </label>
+            </div>
+          </div>
+          <div class="col-6" *ngIf="nameTitle=='Internal Users'">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value="Mobile"
+                formControlName="MobileEnable"
+                id="Mobile"
+              />
+              <label class="form-check-label" for="Mobile">
+                Mobile
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-danger w-xs me-2"
+    data-bs-dismiss="modal"
+    (click)="close('Close click')"
+  >
+    Close
+  </button>
+  <button
+    type="button"
+    [disabled]="userForm.invalid"
+    class="btn w-sm btn-primary"
+    id="delete-product"
+    (click)="openModalCreateClient()"
+  >
+    Submit
+  </button>
+</div>

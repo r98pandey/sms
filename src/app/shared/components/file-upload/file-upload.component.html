@@ -1,0 +1,121 @@
+<div class="modal-header p-3 bg-primary-subtle">
+  <h5 class="modal-title">Upload</h5>
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="modal"
+    aria-label="Close"
+    (click)="modal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <div class="col-xl-12">
+    <div class="card-body">
+      <div class="row">
+        <div class=" mb-2" [class]="files.length == 0?'col-lg-12':'col-lg-6'">
+          <label class="form-label mb-1">{{type}} Upload</label>
+          <div class="container-fluid container-view">
+          <ng-container *ngIf="files.length == 0">
+        
+            <ngx-dropzone
+              (change)="onSelect($event)"
+              [accept]="type=='File'?
+                '.pdf, .doc, .docx, .txt ,.dwg , .ppt , .pptx , .xls , .xlsx , .ods , .csv ,.odt , .rtf ,.odp '
+              :'video/*'"
+              [multiple]="false"
+              title="All file will be Uploaded"
+              data-toggle="tooltip"
+              data-placement="top"
+              class="dropzone"
+              [ngClass]="{ 'same-height': files.length !== 0 }"
+            >
+              <ngx-dropzone-label
+                >Drag and drop/Click here to upload
+              </ngx-dropzone-label>
+            </ngx-dropzone></ng-container>
+            <div class="row me-0 mr-0" *ngIf="files.length != 0">
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table" style="text-align: justify">
+                    <thead>
+                      <tr>
+                        <th colspan="2">File Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let f of files">
+                        <td>
+                          <i
+                            class="ri-close-circle-line text-danger"
+                            type="button"
+                            (click)="onRemove(f)"
+                          ></i>
+                        </td>
+                        <td style="white-space: nowrap" [title]="f.name">
+                          {{ f.name }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p
+            class="mb-0 text-danger fs-12 text-center"
+            *ngIf="showExistFileLabel"
+          >
+            Note: The selected file name already exists, Rename the file and
+            select.
+          </p>
+        </div>
+        <div class="col-lg-6 mb-2" *ngIf="files.length != 0">
+          <label
+          for="exampleFormControlTextarea1"
+          class="form-label"
+          >Remark  <span class="starRequried">*</span> </label
+        >
+        <textarea
+          class="form-control bg-light border-light"
+          id="exampleFormControlTextarea1"
+          [maxlength]="maxCharMessage"
+          [(ngModel)]="remarkContain"
+          rows="4"
+          cols="5"
+          placeholder="Enter Remark"
+          [ngClass]="{ 'same-height': files.length !== 0 }"
+        ></textarea>
+        <label class="nopadding clrlbl">
+          Characters Remaining:
+          {{ remarkContain.length }}/{{
+            maxCharMessage
+          }}</label
+        >
+          
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-danger mr-2 mb-2 mb-md-0"
+          (click)="modal.dismiss('cancel')"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          ngbAutofocus
+          [disabled]="files.length == 0 ||remarkContain.length==0"
+          class="btn btn-success mr-2 mb-2 mb-md-0"
+          (click)="submitprocessFromDetails()"
+        >
+          Upload
+        </button>
+      </div>
+
+      <!-- end card body -->
+    </div>
+    <!-- end card -->
+  </div>
+</div>

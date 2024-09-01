@@ -1,0 +1,104 @@
+<div class="modal-content">
+    <div class="modal-header p-3 bg-info-subtle">
+      <h5 class="modal-title" id="inviteMembersModalLabel">Attachment</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="close('Close click', $event)"
+      ></button>
+    </div>
+    <div class="modal-body" >
+     
+          <div class="row">
+        
+            <div class="col-lg-12 mb-2">
+              <div
+                class="container-fluid container-view"
+            
+              >
+                <!-- accept="video/*" -->
+  
+                <ngx-dropzone
+                  (change)="onSelect($event)"
+                  [accept]="
+                    
+                       '.pdf, .doc, .docx, .txt ,.dwg , .ppt , .pptx , .xls , .xlsx , .ods , .csv ,.odt , .rtf ,.odp '
+                    
+                  "
+                  [multiple]="false"
+                  title="All file will be Uploaded"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  class="dropzone"
+                >
+                  <ngx-dropzone-label>Drag and drop/Click here to upload </ngx-dropzone-label> 
+                 
+                </ngx-dropzone>
+                <p
+                class="mb-0 text-danger fs-12 text-center"
+                *ngIf="showExistFileLabel"
+              >
+                Note: The selected file name already exists, Rename the file and
+                select.
+              </p>
+                <div class="row me-0 mr-0" *ngIf="files.length != 0">
+                  <div class="col-md-12">
+                    <div class="table-responsive">
+                      <table class="table" style="text-align: justify">
+                        <thead>
+                          <tr>
+                            <th colspan="2">File Name</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let f of files">
+                            <td>
+                              <i
+                                class="ri-close-circle-line text-danger"
+                                type="button"
+                                (click)="onRemove(f)"
+                              ></i>
+                            </td>
+                            <td style="white-space: nowrap" [title]="f.name">
+                              {{ f.name }}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              
+
+
+              </div>
+  
+              
+            </div>
+          </div>
+        </div>
+      
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-danger mr-2 mb-2 mb-md-0"
+        (click)="close('cancel', $event)"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        ngbAutofocus
+        [disabled]="checkButtonDisable()"
+        class="btn btn-success mr-2 mb-2 mb-md-0"
+        (click)="submitZBeforConfirmation()"
+      >
+        Submit
+      </button>
+    </div>
+ </div>
+  

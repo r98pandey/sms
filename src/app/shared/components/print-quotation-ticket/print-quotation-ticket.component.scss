@@ -1,0 +1,27 @@
+.remarksNote{
+    background-color: black !important;color: white !important;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.text-desc{
+    word-wrap: break-word !important;
+    white-space: break-spaces !important;
+}
+.text-start{
+    overflow: hidden !important;
+    word-wrap: break-word !important;
+}
+@media only screen and (max-width: 600px) {
+   
+    .text-desc{
+        width: 150px;
+    }
+}
+td.title {
+    cursor: auto;
+    max-width: 200px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: break-spaces!important;;
+}

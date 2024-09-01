@@ -1,0 +1,442 @@
+<nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Audit Management</li>
+        <li class="breadcrumb-item active" aria-current="page">Self-Audit</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-md-12 mb-2">
+        <div class="card p-3">
+            <form [formGroup]="addAuditForm" class="forms-sample">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="auditName">Audit Name</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="Audit Name"
+                                id="auditName" formControlName="auditName"
+                                [class.is-invalid]="auditName.invalid && auditName.touched"
+                                [class.is-valid]="auditName.valid && auditName.touched">
+
+                            <div *ngIf="auditName.invalid && auditName.touched">
+                                <small class="text-danger" *ngIf="auditName.errors?.['required']">
+                                    Audit Name
+                                    is Required
+
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="loanTo">{{isProject ? 'Project': 'Department'}}</label>
+                            <ng-select [items]="departmentListData"
+                                [placeholder]="isProject ? 'Select Project': 'Select Department'"
+                                bindLabel="departmentName" bindValue="departmentId" [searchable]="false"
+                                [(ngModel)]="departmentFromValue" [clearable]="false" formControlName="department"
+                                class="custom" [class.is-invalid]="department.invalid && department.touched"
+                                [class.is-valid]="department.valid && department.touched">
+                            </ng-select>
+                            <div *ngIf="department.invalid && department.touched">
+                                <small class="text-danger" *ngIf="department.errors?.['required']">
+                                    Department
+                                    Name
+                                    is Required
+
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-outline-primary" type="button" (click)="getList(assetList)">
+                        Select Asset
+                    </button>
+                </div>
+                <hr />
+                <div class="table-responsive" *ngIf="allSeletectedAsset?.length > 0">
+                    <table class="table table-striped">
+                        <span *ngIf="allSeletectedAsset.length==0?true:false" class="pt-2 m-1">
+                            <br>
+                            No Data Seleted
+                        </span>
+                        <thead>
+                            <tr>
+                                <th class="p-2">Asset </th>
+                                <th class="p-1">Asset Tag Id</th>
+                                <th class="p-1"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let loan of allSeletectedAsset,let i=index">
+                                <td class="p-2" style="width: 45%;">
+                                    <div class="from">
+                                        {{loan.assetName}}
+                                    </div>
+                                </td>
+
+                                <td class="p-2" style="width: 45%;">
+                                    <p class="mt-2">
+                                        <span class="status text-primary" *ngIf="loan.assetTagId!=null;">
+                                            <b>{{loan.assetTagId}}</b>
+                                        </span>
+                                    </p>
+                                </td>
+
+                                <td class="p-2" style="width: 45%;">
+                                    <button class="btn btn-link p-0 mr-3" ngbTooltip="Remove"
+                                        (click)="getLoanListChecked(loan)"> <i
+                                            class="feather text-danger icon-x-circle"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="mt-2">
+    <button class="btn btn-primary mr-3" ngbTooltip="Submit" type="button"
+        [disabled]="addAuditForm.invalid || allSeletectedAsset.length==0||submitButtonDisabled "
+        (click)="subBmitCreateLoanForm()">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="addLoanloding"></span>
+        Submit
+    </button>
+
+    <button class="btn btn-outline-primary" ngbTooltip="Back" type="button" (click)="goback()">
+        Back
+    </button>
+</div>
+
+<ng-template #assetList let-modal>
+    <div class="modal-header">
+        <h6 class="modal-title" id="modal-title">Asset List</h6>
+        <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+            (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="display-lg">
+            <!-- <div class="d-flex align-items-center justify-content-between mb-2">
+                <h6 class="card-title mb-0">Asset List </h6>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-primary mr-3" ngbTooltip="Remove All Serach" (click)="reloadPage()">
+                        Refresh <i class="feather fa-3x icon-refresh-ccw"></i>
+                    </button>
+                    <button class="btn btn-outline-primary" (click)="confirmadvanceSearch(advanceSearch)">
+                        Advance search <i class="feather fa-3x icon-search p-relative"></i>
+                    </button>
+                </div>
+            </div> -->
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <span *ngIf="rows.length==0?true:false" class="pt-2 m-1">
+                        <br>
+                        <p>No Records Found!</p>
+                    </span>
+                    <thead>
+                        <tr>
+                            <th class="p-2" *ngIf="rows.length==0?false:true">
+                                <div class="form-check form-check-flat form-check-primary "
+                                    style="margin-top: 10%;margin-left:13% ;margin-bottom: 4%;">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" [checked]="isAllCheckBoxChecked()"
+                                            (change)="checkAllCheckBox($event,rows)" class="form-check-input">
+                                        <i class="input-frame"></i>
+                                    </label>
+                                </div>
+                            </th>
+                            <th class="p-2 text-center">Asset No</th>
+                            <th class="p-2">Asset</th>
+                            <th class="p-2">{{isProject ? 'Project': 'Department'}}</th>
+                            <th class="p-2">Assign Type</th>
+                            <th class="p-2 text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let asset of rows,let i=index">
+                            <td class="p-2 text-center">
+                                <div class="form-check form-check-flat form-check-primary">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" value="{{asset}}" [(ngModel)]="rows[i].checked"
+                                            (change)="getTodolistChecked(rows[i].checked,asset)"
+                                            class="form-check-input">
+                                        <i class="input-frame"></i>
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="p-2 text-center">
+                                <span class="status text-primary pt-2 mt-2"><b>{{asset.assetTagId}}</b></span>
+                            </td>
+                            <td class="p-2">
+                                <div class="from">
+                                    {{asset.assetName}}
+                                </div>
+                            </td>
+
+                            <td class="p-2">
+                                <div class="from">
+                                    {{asset.departmentName}}
+                                </div>
+                            </td>
+                            <td class="p-2r">
+                                {{ asset.assignType}}
+                            </td>
+                            <td class="p-2 text-center">
+                                <span class="status text-light"
+                                    [class]="returnClassStatus(asset.assetStatusId)">{{asset.assetStatus}}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between p-2">
+                Showing {{from}} to {{to}} of {{totalRecordsFromApi}} entries
+
+                <div class="d-flex">
+                    <span *ngIf="!advanceSearchOn">
+                        <ngb-pagination [collectionSize]="totalRecordsFromApi" [pageSize]="pageSize" [(page)]="page"
+                            [maxSize]="5" [rotate]="true" (pageChange)="loadPage($event)"
+                            *ngIf="totalRecordsFromApi>pageSize"></ngb-pagination>
+                    </span>
+                    <span *ngIf="advanceSearchOn">
+                        <ngb-pagination [collectionSize]="totalRecordsFromApi" [pageSize]="pageSize" [(page)]="page"
+                            [maxSize]="5" [rotate]="true" (pageChange)="loadPage2($event)"
+                            *ngIf="totalRecordsFromApi>pageSize"></ngb-pagination>
+                    </span>
+                    <div class="dataTable-dropdown ml-2">
+                        <label>
+                            <select class="dataTable-selector" [(ngModel)]="pageSize" style="width: auto"
+                                (ngModelChange)="loadData(pageSize,from-1,null,null,null);">
+                                <option [ngValue]="5">5</option>
+                                <option selected [ngValue]="10">10</option>
+                                <option [ngValue]="15">15</option>
+                                <option [ngValue]="20">20</option>
+                                <option [ngValue]="25">25</option>
+                            </select> </label>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+        <div class="display-sm">
+            <div class="d-flex align-items-center mb-2">
+                <p class="heading mr-2">Select All</p>
+                <span>
+                    <div class="form-check form-check-flat form-check-primary ">
+                        <label class="form-check-label">
+                            <input type="checkbox" [checked]="isAllCheckBoxChecked()"
+                                (change)="checkAllCheckBox($event,rows)" class="form-check-input">
+                            <i class="input-frame"></i>
+
+                        </label>
+                    </div>
+                </span>
+            </div>
+            <hr />
+            <div class="row" *ngFor="let asset of rows,let i=index">
+                <div class="col-md-6 mb-2">
+                    <p class="heading"></p>
+                    <span>
+                        <div class="form-check form-check-flat form-check-primary">
+                            <label class="form-check-label">
+                                <input type="checkbox" value="{{asset}}" [(ngModel)]="rows[i].checked"
+                                    (change)="getTodolistChecked(rows[i].checked,asset)" class="form-check-input">
+                                <i class="input-frame"></i>
+                            </label>
+                        </div>
+                    </span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="heading">Asset</p>
+                    <span>
+                        {{asset.assetName}}
+                        <p class="mt-2">
+                            <span class="status text-primary" *ngIf="asset.assetTagId!=null;">{{asset.assetTagId}}
+                            </span>
+                        </p>
+                    </span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="heading">{{isProject ? 'Project': 'Department'}}</p>
+                    <span>
+                        Code:{{asset.departmentCode}}
+                        <p>
+                            {{asset.departmentName}}
+                        </p>
+                    </span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="heading">Assign Type</p>
+                    <span>
+                        {{ asset.assignType}}
+                        <p>
+                            <span *ngIf="asset.assignType=='Individual'"> <i class="feather icon-user " [ngClass]="{'myColor': (asset.assigned==false),
+            'text-info': (asset.assigned==true)
+        }"></i> {{ asset.employeeName}}
+                            </span>
+                            <span *ngIf="asset.assignType=='Department'"> <i class="feather icon-home " [ngClass]="{'myColor': (asset.assigned==false),
+            'text-primary': (asset.assigned==true)}"></i> {{
+                                asset.departmentName}}
+                            </span>
+                        </p>
+                    </span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="heading">Status</p>
+                    <span>
+                        <p class="mt-2">
+                            <span class="status text-light" *ngIf="asset.assetStatusId==1;">{{asset.assetStatus}}</span>
+                            <span class="status text-warning"
+                                *ngIf="asset.assetStatusId==2;">{{asset.assetStatus}}</span>
+                            <span class="status text-success"
+                                *ngIf="asset.assetStatusId==3;">{{asset.assetStatus}}</span>
+                            <span class="status text-danger"
+                                *ngIf="asset.assetStatusId==4;">{{asset.assetStatus}}</span>
+                            <span class="status text-info" *ngIf="asset.assetStatusId==5;">{{asset.assetStatus}}</span>
+                            <span class="status text-info" *ngIf="asset.assetStatusId==6;">{{asset.assetStatus}}</span>
+                            <span class="status text-info" *ngIf="asset.assetStatus==7;">{{asset.assetStatus}}</span>
+                            <span class="status text-danger"
+                                *ngIf="asset.assetStatusId==8;">{{asset.assetStatus}}</span>
+                            <span class="status text-danger"
+                                *ngIf="asset.assetStatusId==9;">{{asset.assetStatus}}</span>
+                            <span class="status text-secondary"
+                                *ngIf="asset.assetStatusId==10;">{{asset.assetStatus}}</span>
+                            <span class="status text-primary"
+                                *ngIf="asset.assetStatusId==11;">{{asset.assetStatus}}</span>
+                            <span class="status text-warning"
+                                *ngIf="asset.assetStatusId==12;">{{asset.assetStatus}}</span>
+                            <span class="status text-danger"
+                                *ngIf="asset.assetStatusId==13;">{{asset.assetStatus}}</span>
+                            <span class="status text-danger"
+                                *ngIf="asset.assetStatusId==14;">{{asset.assetStatus}}</span>
+                            <span class="status text-primary"
+                                *ngIf="asset.assetStatusId==15;">{{asset.assetStatus}}</span>
+                            <span class="status text-danger"
+                                *ngIf="asset.assetStatusId==16;">{{asset.assetStatus}}</span>
+                            <span class="status text-success"
+                                *ngIf="asset.assetStatusId==17;">{{asset.assetStatus}}</span>
+                            <span class="status text-warning"
+                                *ngIf="asset.assetStatusId==18;">{{asset.assetStatus}}</span>
+                            <span class="status text-danger"
+                                *ngIf="asset.assetStatusId==19;">{{asset.assetStatus}}</span>
+                            <span class="status text-dark" *ngIf="asset.assetStatusId==20;">{{asset.assetStatus}}</span>
+                            <span class="status text-success"
+                                *ngIf="asset.assetStatusId==21;">{{asset.assetStatus}}</span>
+                            <span class="status text-warning"
+                                *ngIf="asset.assetStatusId==22;">{{asset.assetStatus}}</span>
+                        </p>
+                    </span>
+                </div>
+                <hr />
+            </div>
+            <div class="d-lg-flex justify-content-between p-2">
+                Showing {{from}} to {{to}} of {{totalRecordsFromApi}} entries
+                <div class="d-flex justify-content-between">
+                    <span *ngIf="!advanceSearchOn">
+                        <ngb-pagination [collectionSize]="totalRecordsFromApi" [pageSize]="pageSize" [(page)]="page"
+                            [maxSize]="5" [rotate]="true" (pageChange)="loadPage($event)"
+                            *ngIf="totalRecordsFromApi>pageSize"></ngb-pagination>
+                    </span>
+                    <span *ngIf="advanceSearchOn">
+                        <ngb-pagination [collectionSize]="totalRecordsFromApi" [pageSize]="pageSize" [(page)]="page"
+                            [maxSize]="5" [rotate]="true" (pageChange)="loadPage2($event)"
+                            *ngIf="totalRecordsFromApi>pageSize"></ngb-pagination>
+                    </span>
+                    <div class="dataTable-dropdown">
+                        <label>
+                            <select class="dataTable-selector" [(ngModel)]="pageSize" style="width: auto"
+                                (ngModelChange)="loadData(pageSize,from-1,null,null,null);">
+                                <option [ngValue]="5">5</option>
+                                <option selected [ngValue]="10">10</option>
+                                <option [ngValue]="15">15</option>
+                                <option [ngValue]="20">20</option>
+                                <option [ngValue]="25">25</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #advanceSearch let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-title">Advance Search</h4>
+        <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+            (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-4">
+                <label class="control-label">{{isProject ? 'Project': 'Department'}}</label>
+                <ng-select [items]="departmentListData"
+                    [placeholder]="isProject ? 'Select Project': 'Select Department'" bindLabel="departmentName"
+                    bindValue="departmentName" [searchable]="false" class="custom" [(ngModel)]="departmentName"
+                    [clearable]="false">
+                </ng-select>
+            </div>
+            <div class="col-md-4">
+                <label class="control-label">Category</label>
+                <ng-select [items]="categoryListData" placeholder="Select Category " bindLabel="categoryName"
+                    bindValue="categoryId" [searchable]="false" [(ngModel)]="categoryId" class="custom"
+                    (change)="getSubCategory(categoryId)" [clearable]="false">
+                </ng-select>
+
+            </div>
+            <div class="col-md-4">
+                <label class="control-label">Sub-Category</label>
+                <ng-select [items]="subCategoryListData" placeholder="Select Sub-Category " bindLabel="subCategoryName"
+                    [disabled]="subCategoryDisable" bindValue="subCategoryName" [searchable]="false" class="custom"
+                    [(ngModel)]="subCategoryName" [clearable]="false">
+                </ng-select>
+
+            </div>
+
+
+            <div class="col-md-4 mt-2 pt-2">
+                <label class="control-label">Asset Name</label>
+
+                <input class="form-control form-control-sm " placeholder="Enter Asset Name"
+                    [(ngModel)]="assetNameValue">
+            </div>
+            <div class="col-md-4  mt-2 pt-2">
+                <label class="control-label">Asset Tag Id</label>
+                <input class="form-control form-control-sm " placeholder="Enter Asset  Tag Id"
+                    [(ngModel)]="assetTagIdValue">
+            </div>
+            <div class="col-md-4  mt-2 pt-2">
+                <label class="control-label">Asset Status</label>
+                <ng-select [items]="assetStatusList" bindLabel="assetStatus" bindValue="assetStatus"
+                    placeholder="Select Asset Status " [searchable]="false" class="custom"
+                    [(ngModel)]="assetStatusValue" [clearable]="false">
+                </ng-select>
+
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn" ngbAutofocus [ngClass]="{             
+            'btn-outline-primary': (advanceSearchOn==false),
+            'btn-outline-   ': (advanceSearchOn==true)}" (click)="modal.close('Ok')">Search</button>
+        <button type="button" class="btn btn-outline-primary " (click)="getclear()">Clear</button>
+        <button type="button" class="btn btn-outline-secondary " (click)="modal.dismiss('cancel')">Close</button>
+    </div>
+</ng-template>

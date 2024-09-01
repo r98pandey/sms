@@ -1,0 +1,28 @@
+.classAsswtTable {
+    height: 300px;
+    overflow-y: auto;
+}
+.displayPrint {
+    display: none;
+}
+
+.displayShown {
+    display: block;
+}
+
+@media print {
+
+    body {
+        margin: 1cm;
+        border: 1px solid black;
+        box-sizing: border-box;
+    }
+
+    .displayPrint {
+        display: block;
+    }
+
+    .displayShown {
+        display: none;
+    }
+}

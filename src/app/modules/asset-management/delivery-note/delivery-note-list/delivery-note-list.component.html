@@ -1,0 +1,415 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<!--end row-->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-lg-auto">
+            <h5 class="card-title mb-0">Delivery List</h5>
+          </div>
+          <div class="col-lg"></div>
+          <!-- <div class=""> -->
+          <div class="col-lg">
+            <input
+              type="text"
+              name="selectedDeliveryNumber"
+              id="selectedDeliveryNumber"
+              class="form-control"
+              [(ngModel)]="selectedDeliveryNumber"
+              placeholder="Delivery No"
+              #inputerDeliveryNumber
+            />
+          </div>
+          <div class="col-lg">
+            <div class="search-box">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                [(ngModel)]="typeDeliveryNoteTitleValue"
+                placeholder="Delivery name"
+                #inputerDeliveryName
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+          </div>
+          <!--  *ngIf="returnValueMenu?.add" -->
+          <div class="col-lg-auto" *ngIf="returnValueMenu.add">
+            <button
+              type="button"
+              class="btn btn-success add-btn"
+              id="create-btn"
+              (click)="navigateToAdd()"
+            >
+              <i class="ri-add-line align-bottom me-1"></i> Add Delivery
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row g-3">
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onDropdownCompanyValueChange($event)"
+              [clearable]="true"
+              id="companyName"
+              [(ngModel)]="selectedDropDownCompanyIdValue"
+              placeholder="Select Company"
+              class="w-100 mr-2"
+              for="companyName"
+              [readonly]="disabledWithAceessGroup" 
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownClientList"
+              bindLabel="clientName"
+              bindValue="clientId"
+              [disabled]="!selectedDropDownCompanyIdValue"
+              (change)="onDropdownClientValueChange($event)"
+              [clearable]="true"
+              id="clientName"
+              [(ngModel)]="selectedDropDownClientIdValue"
+              placeholder="Select Client"
+              class="w-100 mr-2"
+              for="clientName"
+              [readonly]="disabledWithAceessGroup" 
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownProjectOrDeparmentList"
+              bindLabel="departmentName"
+              bindValue="departmentId"
+              [disabled]="
+                !selectedDropDownCompanyIdValue ||
+                !selectedDropDownClientIdValue
+              "
+              (change)="onDropdownDepartmentValueChange($event)"
+              [clearable]="true"
+              [readonly]="projectDepartmentFieldDisiabled"
+              id="departmentName"
+              [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+              [placeholder]="isProject ? 'Select Project' : 'Select Department'"
+              class="w-100 mr-2"
+              for="departmentName"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownDeliveryStatus"
+              bindLabel="assetStatus"
+              bindValue="assetStatusId"
+              (change)="onDropdownDeliveryStatusValueChange($event)"
+              [clearable]="true"
+              id="DeliveryStatus"
+              [(ngModel)]="selectedDropDownDeliveryStatusIdValue"
+              placeholder="Select Delivery Status"
+              class="w-100 mr-2"
+              for="DeliveryStatus"
+            ></ng-select>
+          </div>
+          <div class="col-lg-auto">
+            <button
+              type="button"
+              class="btn btn-danger ms-1"
+              (click)="resetSerachVariable()"
+              ngbTooltip="Remove All Search"
+            >
+              <i class="ri-refresh-fill me-1 align-bottom"></i>
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th>Delivery NO</th>
+                        <th>Title</th>
+                        <th>Company</th>
+                        <th>Client</th>
+                        <th>{{ isProject ? "Project" : "Department" }}</th>
+                        <th>Create Date</th>
+                        <th>Expected Delivery Date</th>
+
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngIf="DeliveryList.length == 0">
+                        <tr>
+                          <td colspan="9" class="text-center">
+                            No Delivery Data
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <ng-container *ngIf="DeliveryList.length != 0">
+                        <tr *ngFor="let Delivery of DeliveryList">
+                          <td>
+                            <a
+                              href="javascript:void(0)"
+                              (click)="viewHandler(Delivery.deliveryNoteId)"
+                              class="fw-medium link-primary"
+                              >{{ Delivery.deliveryNoteNo }}</a
+                            >
+                          </td>
+
+                          <td class="title"   [title]="Delivery.deliveryNoteTitle"
+                           (click)="
+                              expandTitle('deliveryNoteTitle_' + Delivery.deliveryNoteNo)
+                            "
+                            [id]="'deliveryNoteTitle_' + Delivery.deliveryNoteNo">
+                            {{ Delivery.deliveryNoteTitle }}
+                          </td>
+                          <td   [title]="Delivery.companyName" class="title" (click)="
+                              expandTitle('companyName_' + Delivery.deliveryNoteNo)
+                            "
+                            [id]="'companyName_' + Delivery.deliveryNoteNo">
+                            {{ Delivery.companyName }}
+                          </td>
+                          <td  [title]="Delivery.clientName"  class="title" (click)="
+                              expandTitle('clientName_' + Delivery.deliveryNoteNo)
+                            "
+                            [id]="'clientName_' + Delivery.deliveryNoteNo">
+                            {{ Delivery.clientName }}
+                          </td>
+                          <td   [title]="Delivery.projectName " class="title" (click)="
+                              expandTitle('projectName_' + Delivery.deliveryNoteNo)
+                            "
+                            [id]="'projectName_' + Delivery.deliveryNoteNo">
+                            {{ Delivery.projectName }}
+                          </td>
+                          <td >
+                            {{ Delivery.createdDateTime }}
+                          </td>
+                          <td>
+                            {{ Delivery.expectedDeliveryDateTime }}
+                          </td>
+
+                          <td class="status">
+                            <span
+                              [class]="
+                                returnStatusBadgeClassesStatus(
+                                  Delivery.deliveryNoteStatusId
+                                )
+                              "
+                              >{{ Delivery.deliveryNoteStatusName }}</span
+                            >
+                          </td>
+
+                          <td>
+                            <span>
+                              <div class="dropdown" ngbDropdown>
+                                <button
+                                  class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                                  type="button"
+                                  data-bs-toggle="dropdown"
+                                  aria-expanded="false"
+                                  ngbDropdownToggle
+                                >
+                                  <i class="ri-more-fill"></i>
+                                </button>
+                                <ul
+                                  class="dropdown-menu dropdown-menu-end"
+                                  ngbDropdownMenu
+                                >
+                                  <li>
+                                    <a
+                                      class="dropdown-item cursor-pointer"
+                                      (click)="
+                                        viewHandler(Delivery.deliveryNoteId)
+                                      "
+                                      ><i
+                                        class="ri-eye-fill align-bottom me-2 text-muted"
+                                      ></i>
+                                      View
+                                    </a>
+                                  </li>
+                                  <li  *ngIf="Delivery?.deliveryNoteStatusId==2">
+                                    <a
+                                      class="dropdown-item cursor-pointer"
+                                      (click)="
+                                        openUpdateFormModal(
+                                          updateDeliveryModal,
+                                          Delivery
+                                        )
+                                      "
+                                      ><i
+                                        class="ri-edit-box-line align-bottom me-2 text-muted"
+                                      ></i>
+                                      Update Delivery
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </span>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col col-sm-12 col col-md-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="Deliverys-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecordsFromApi }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col col-sm-12 col col-md-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="totalRecordsFromApi"
+                        [pageSize]="pageSize"
+                        [(page)]="page"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="OnChangesPage($event)"
+                        *ngIf="totalRecordsFromApi > pageSize"
+                      ></ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #updateDeliveryModal let-modal>
+  <div class="modal-header bg-info-subtle pb-3">
+    <h4 class="modal-title" id="modal-title">Update Delivery</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="updateDeliveryNoteFrom">
+      <div class="mb-2">
+        <div class="card-body">
+          <div class="row">
+            <div class="form-group col-md-12 mt-2">
+              <label for="name" class="form-label"
+                >Delivery Date <span style="color: red">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control mb-1"
+                id="name"
+                formControlName="deliveryDate"
+                placeholder="Delivery Date "
+                mwlFlatpickr
+                [altInput]="false"
+                [enableTime]="false"
+                [convertModelValue]="true"
+                [dateFormat]="'d-m-Y'"
+                [class.is-invalid]="
+                  deliveryDate.invalid && deliveryDate.touched
+                "
+              />
+
+              <div *ngIf="deliveryDate.invalid && deliveryDate.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="deliveryDate.errors['required']"
+                >
+                  Delivery Date is Required</small
+                >
+              </div>
+            </div>
+
+              <div class="form-group col-md-12 mt-2">
+            <label
+              for="exampleFormControlTextarea1"
+              class="form-label text-muted text-uppercase fw-semibold"
+              >Remark <span class="starRequried">*</span></label
+            >
+            <textarea
+              class="form-control bg-light border-0"
+              id="Remark"
+              rows="4"
+              placeholder="Remark"
+              formControlName="deliveryNoteRemark"
+              
+              [maxlength]="maxCharsDecision"
+              [class.is-invalid]="
+                  deliveryNoteRemark.invalid && deliveryNoteRemark.touched
+                "
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ deliveryNoteRemark?.value?.length }}/{{
+                maxCharsDecision
+              }}</label
+            >
+            <div class="invalid-feedback">Please enter a Remark</div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger mr-2 mb-2 mb-md-0"
+      (click)="modal.dismiss('cancel')"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      [disabled]="updateDeliveryNoteFrom.invalid"
+      ngbAutofocus
+      class="btn btn-success mr-2 mb-2 mb-md-0"
+      (click)="modal.close('Ok', $event)"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>

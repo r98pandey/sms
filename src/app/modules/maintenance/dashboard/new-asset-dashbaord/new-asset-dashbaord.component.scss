@@ -1,0 +1,10 @@
+.ng-select-width {
+   width: 380px;
+}
+
+@media only screen and (max-width: 600px) {
+ 
+    .ng-select-width {
+         width: unset
+     }
+}

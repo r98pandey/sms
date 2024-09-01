@@ -1,0 +1,161 @@
+td {
+    vertical-align: top !important;
+}
+.department-text{
+    width: 30px;
+}
+
+@media only screen and (max-width: 600px) {
+   
+    .text-desc{
+        width: 150px;
+    }
+    .department-text{
+        width: 30px !important;
+        word-wrap: break-word;
+        word-break: break-word;
+    }
+}
+
+.table-bordered {
+    border: 2px solid black; /* Adjust the width and color as needed */
+  }
+  
+  .table-bordered th,
+  .table-bordered td {
+    border: 2px solid black; /* Adjust the width and color as needed */
+  }
+
+  .a-hrf{
+    text-decoration: underline;
+   
+  }
+
+  .wdt-80{
+    width: 80%;
+  }
+
+  .center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Adjust height as needed */
+  }
+
+
+  .check-HW{
+width: 25px; height: 25px;
+  }
+
+
+  
+  ::ng-deep ngx-dropzone {
+    border: 0px dashed #ccc !important;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    height: 60px !important;
+    display: block !important;
+    padding: 0px !important;
+  }
+  
+  ::ng-deep ngx-dropzone:hover {
+    border: 4px dashed #5477e1;
+  }
+  
+  ::ng-deep ngx-dropzone-label {
+    margin: 0px auto!important;
+  }
+  .container-view {
+    border: 2px dashed #717386;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .container-view:hover{
+    border: 4px dashed #5477e1;
+  }
+
+  
+/* Remove duplicate styles */
+.fa-download-diary {
+  font-size: 90px;
+  opacity: 0.4;
+}
+
+
+/* Image preview section styling */
+.preview-section {
+ 
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-container {
+  width:100%;
+  margin-right: 10px;
+ 
+}
+
+.image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+
+
+.ri-close-circle-line2 {
+  position: absolute;
+  top: -3px;
+  right: 17px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  font-size: 31px;
+  z-index: 2;
+  color: white;
+}
+
+.image-wrapper:hover .ri-close-circle-line2{
+  opacity: 1;
+}
+
+.image-wrapper:hover::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  border-radius: 8px;
+}
+
+.new-row {
+  clear: both;
+}
+
+/* Remove duplicate styles */
+.fa-download-diary {
+  font-size: 90px;
+  opacity: 0.4;
+}
+
+.dropzoneLabel {
+  display: grid;
+}
+
+
+.dropzone {
+  min-height: 19px !important;
+}
+
+
+.img-size-withd-upload {
+  width: 100px;
+  height: 100px;
+  
+}

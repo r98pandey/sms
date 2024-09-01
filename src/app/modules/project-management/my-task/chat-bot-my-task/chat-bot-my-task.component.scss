@@ -1,0 +1,85 @@
+.my-tasks {
+    .avatar-sm {
+        height: 3rem !important;
+    }
+}
+.myTaskCardBody {
+    height: 550px;
+    overflow-y: auto;
+}
+.cardbody {
+    height: 700px;
+    overflow: auto;
+    ;
+}
+.borderEaduis {
+    border-radius: 25px;
+}
+
+.custom-marker {
+    .agm-marker-label {
+        color: red!important; /* Change the color as per your preference */
+    }
+}
+.small-d-flex{
+    display: flex;
+ }
+
+ @media screen and (min-width: 800px) and (max-width: 1280px) {
+   
+ .small-d-flex{
+    display: block;
+ }
+
+}
+.img-size{
+    height: 33px;
+    width: 35px;
+}
+
+
+.icon-set{
+    margin-top: -13px;
+    margin-left: 15px;
+}
+
+.chat-user-img .user-status {
+    width: 12px !important;
+    height: 12px !important;
+    border-radius: 50%;
+    border: 2px solid var(--vz-secondary-bg);
+    position: absolute;
+    right: 0;
+    left: auto;
+    bottom: 0;
+}
+
+.word-break{
+    word-wrap: break-word;
+    white-space: unset !important;
+    display: block;
+    width: 100%;
+    padding: var(--vz-dropdown-item-padding-y) var(--vz-dropdown-item-padding-x);
+    clear: both;
+    font-weight: 400;
+    color: var(--vz-dropdown-link-color);
+    text-align: inherit;
+    background-color: transparent;
+    border: 0;
+    border-radius: var(--vz-dropdown-item-border-radius, 0);
+}
+.br-col{
+    color: #fff;
+    margin-top: -8px;
+    border-radius: 2px 2px;
+}
+
+.drop-con{
+    top:-10px !important; 
+    margin-left: 20px !important;
+}
+
+.fade {
+    transition: opacity .15s linear;
+}
+

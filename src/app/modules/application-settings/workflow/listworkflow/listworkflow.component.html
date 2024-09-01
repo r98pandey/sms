@@ -1,0 +1,212 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm-3 col-xxl-3">
+            <h5 class="card-title mb-0">WorkFlow List</h5>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row g-3">
+          <div class="col-lg"></div>
+          <div class="col-lg">
+            <ng-select
+              [items]="companyListArray"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onCompanyValueChange($event)"
+              [clearable]="false"
+              id="companyName"
+              [(ngModel)]="selectedCompanyId"
+              placeholder="Select Company"
+              class="mr-2 w-100 text-start"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <div class="search-box">
+              <input
+                type="search"
+                #inputer
+                name="searchTerm"
+                [(ngModel)]="searchTerm"
+                (input)="searchFilter()"
+                class="form-control"
+                placeholder="Search for WorkFlow name"
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+          </div>
+
+          <div class="col-lg-auto">
+            <div class="d-flex justify-content-end">
+              <button
+                type="button"
+                class="btn btn-danger ms-1"
+                (click)="clearAllPayload()"
+                ngbTooltip="Remove All Search"
+              >
+                <i class="ri-refresh-fill me-1 align-bottom"></i>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th class="p-2">Code</th>
+                        <th class="p-2">
+                          {{ isProject ? "Project" : "Department" }} Name
+                        </th>
+                        <th class="p-2 table-align">WF Active</th>
+                        <th class="p-2 table-align">WF Inactive</th>
+                        <th class="p-2 table-align">WF Pending</th>
+                        <th class="p-2">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        *ngFor="let workFlow of filteredList"
+                        class="text-muted"
+                      >
+                        <td
+                          class="text-primary cursor"
+                          (click)="settingHandler(workFlow)"
+                        >
+                          {{ workFlow.departmentCode }}
+                        </td>
+
+                        <td>
+                          {{ workFlow.departmentName }}
+                        </td>
+                        <td class="table-align">
+                          <span
+                            class="badge bg-success-subtle text-success badge-border"
+                            >{{ workFlow.wfActive }}</span
+                          >
+                        </td>
+                        <td class="table-align">
+                          <span
+                            class="badge bg-danger-subtle text-danger badge-border"
+                            >{{ workFlow.wfInactive }}</span
+                          >
+                        </td>
+                        <td class="table-align">
+                          <span
+                            class="badge bg-warning-subtle text-warning badge-border"
+                            >{{ workFlow.wfPending }}</span
+                          >
+                        </td>
+
+                        <td>
+                          <span>
+                            <div class="dropdown" ngbDropdown>
+                              <button
+                                class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                ngbDropdownToggle
+                              >
+                                <i class="ri-more-fill"></i>
+                              </button>
+                              <ul
+                                class="dropdown-menu dropdown-menu-end"
+                                ngbDropdownMenu
+                              >
+                                <li>
+                                  <a
+                                    class="dropdown-item cursor-pointer"
+                                    (click)="settingHandler(workFlow)"
+                                    ><i
+                                      class="ri-settings-4-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    Setting
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="text-center" *ngIf="filteredList.length === 0">
+                    <p class="text-muted">No Workflow found</p>
+                  </div>
+                </div>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col col-sm-12 col col-md-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecords }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col col-sm-12 col col-md-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="totalRecords"
+                        [(page)]="page"
+                        [pageSize]="pageSize"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="getWorkFlowPagination()"
+                        *ngIf="totalRecords > pageSize"
+                      >
+                        <ng-template
+                          ngbPaginationPrevious
+                          let-page
+                          let-pages="pages"
+                        >
+                          <i class="ci-arrow-left me-2"></i> Prev
+                        </ng-template>
+                        <ng-template ngbPaginationNext>
+                          Next
+                          <i class="ci-arrow-right ms-2"></i>
+                        </ng-template>
+                      </ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

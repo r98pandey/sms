@@ -1,0 +1,437 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<div class="row align-items-center">
+  <div class="col-12">
+    <div class="card card-height-100">
+      <!-- Nav tabs -->
+      <ul
+        ngbNav
+        #nav="ngbNav"
+        [(activeId)]="activeIdTop"
+        class="nav nav-tabs nav-border-top nav-border-top-primary "
+      >
+        <li [ngbNavItem]="1">
+          <a ngbNavLink> Menu Permission levels </a>
+          <ng-template ngbNavContent>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="card" id="orderList">
+                  <div class="card-header">
+                    <div class="row align-items-center gy-3">
+                      <div class="col-lg">
+                        <h5 class="card-title mb-0">
+                          {{ accessGroupData.rolename }}
+                          <span class="text-muted"
+                            >({{ accessGroupData.name }})</span
+                          >
+                        </h5>
+                      </div>
+
+                      <div class="col-lg">
+                        <ng-select
+                          [items]="masterAccessList"
+                          name="master-access-list"
+                          id="masterAccessList"
+                          placeholder="Select Access Group Product"
+                          [(ngModel)]="selectMasterAccess"
+                          (change)="changeMasterAccessHandler()"
+                          [clearable]="false"
+                          bindLabel="masterApplicationName"
+                          bindValue="masterApplicationName"
+                        >
+                        </ng-select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card-body pt-2">
+                    <div
+                      class="col-12 text-center mt-3"
+                      *ngIf="menuSubMenuList.length === 0"
+                    >
+                      <p class="text-muted">No Access Group Product Selected</p>
+                    </div>
+                    <div
+                      class="email-list-item pt-0"
+                      *ngFor="let rows of menuSubMenuList; let i = index"
+                      [attr.data-index]="i"
+                    >
+                      <div class="row from">
+                        <div class="col-md-4">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="15"
+                            height="15"
+                            viewBox="0 1 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="feather feather-box"
+                          >
+                            <path
+                              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                            ></path>
+                            <polyline
+                              points="3.27 6.96 12 12.01 20.73 6.96"
+                            ></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                          </svg>
+                          <span class="ms-1">{{ rows.label }}</span>
+                        </div>
+
+                        <div
+                          class="col-md-8 pb-2 border-bottom mt-2 mb-2"
+                          *ngIf="rows.link == null"
+                        >
+                          <div
+                            class="form-check form-check-flat form-check-primary"
+                          >
+                            <label class="form-check-label"
+                              >Access
+                              <input
+                                type="checkbox"
+                                [checked]="rows.access"
+                                (click)="
+                                  updateCheckboxValue(i, 0, 'Access-i', $event)
+                                "
+                                class="form-check-input"
+                              />
+                              <i class="input-frame"></i>
+                            </label>
+                          </div>
+                        </div>
+
+                        <div class="col-md-8 pb-2" *ngIf="rows.link != null">
+                          <div class="row">
+                            <div class="col-md-3">
+                              <div
+                                class="form-check form-check-flat form-check-primary"
+                              >
+                                <label class="form-check-label"
+                                  >Access
+                                  <input
+                                    type="checkbox"
+                                    (click)="
+                                      updateCheckboxValue(
+                                        i,
+                                        0,
+                                        'Access-i',
+                                        $event
+                                      )
+                                    "
+                                    [checked]="rows.access"
+                                    class="form-check-input"
+                                  />
+                                  <i class="input-frame"></i>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-md-3">
+                              <div class="form-check form-check-primary">
+                                <label class="form-check-label"
+                                  >Add
+                                  <input
+                                    type="checkbox"
+                                    (click)="
+                                      updateCheckboxValue(i, 0, 'Add-i', $event)
+                                    "
+                                    [checked]="rows.add ? rows.access : false"
+                                    class="form-check-input"
+                                    [disabled]="!rows.access"
+                                  />
+                                  <i class="input-frame"></i>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-md-3">
+                              <div class="form-check form-check-primary">
+                                <label class="form-check-label"
+                                  >Edit
+                                  <input
+                                    type="checkbox"
+                                    (click)="
+                                      updateCheckboxValue(
+                                        i,
+                                        0,
+                                        'Edit-i',
+                                        $event
+                                      )
+                                    "
+                                    [checked]="rows.edit ? rows.access : false"
+                                    class="form-check-input"
+                                    [disabled]="!rows.access"
+                                  />
+                                  <i class="input-frame"></i>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-md-3">
+                              <div
+                                class="form-check form-check-flat form-check-primary"
+                              >
+                                <label class="form-check-label"
+                                  >Delete
+                                  <input
+                                    type="checkbox"
+                                    (click)="
+                                      updateCheckboxValue(
+                                        i,
+                                        0,
+                                        'Delete-i',
+                                        $event
+                                      )
+                                    "
+                                    [checked]="
+                                      rows.delete ? rows.access : false
+                                    "
+                                    class="form-check-input"
+                                    [disabled]="!rows.access"
+                                  />
+                                  <i class="input-frame"></i>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        *ngFor="let subMenu of rows.subMenuList; let j = index"
+                        [attr.data-index]="j"
+                      >
+                        <div class="row">
+                          <div class="col-md-4 ps-5">
+                            <span class="text-muted">{{ subMenu.label }}</span>
+                          </div>
+                          <div class="col-md-8 mt-1 mb-1">
+                            <div class="row">
+                              <div class="col-md-3">
+                                <div
+                                  class="form-check form-check-flat form-check-primary"
+                                >
+                                  <label class="form-check-label"
+                                    >Access
+                                    <input
+                                      type="checkbox"
+                                      (click)="
+                                        updateCheckboxValue(
+                                          i,
+                                          j,
+                                          'Access',
+                                          $event
+                                        )
+                                      "
+                                      [checked]="
+                                        subMenu.access ? rows.access : false
+                                      "
+                                      class="form-check-input"
+                                      [disabled]="!rows.access"
+                                    />
+                                    <i class="input-frame"></i>
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div
+                                  class="form-check form-check-flat form-check-primary"
+                                >
+                                  <label class="form-check-label"
+                                    >Add
+                                    <input
+                                      type="checkbox"
+                                      (click)="
+                                        updateCheckboxValue(i, j, 'Add', $event)
+                                      "
+                                      [checked]="
+                                        subMenu.add
+                                          ? subMenu.access
+                                            ? rows.access
+                                            : false
+                                          : false
+                                      "
+                                      class="form-check-input"
+                                      [disabled]="!subMenu.access"
+                                    />
+                                    <i class="input-frame"></i>
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div
+                                  class="form-check form-check-flat form-check-primary"
+                                >
+                                  <label class="form-check-label"
+                                    >Edit
+                                    <input
+                                      type="checkbox"
+                                      (click)="
+                                        updateCheckboxValue(
+                                          i,
+                                          j,
+                                          'Edit',
+                                          $event
+                                        )
+                                      "
+                                      [checked]="
+                                        subMenu.edit
+                                          ? subMenu.access
+                                            ? rows.access
+                                            : false
+                                          : false
+                                      "
+                                      class="form-check-input"
+                                      [disabled]="!subMenu.access"
+                                    />
+                                    <i class="input-frame"></i>
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div
+                                  class="form-check form-check-flat form-check-primary"
+                                >
+                                  <label class="form-check-label"
+                                    >Delete
+                                    <input
+                                      type="checkbox"
+                                      (click)="
+                                        updateCheckboxValue(
+                                          i,
+                                          j,
+                                          'Delete',
+                                          $event
+                                        )
+                                      "
+                                      [checked]="
+                                        subMenu.delete
+                                          ? subMenu.access
+                                            ? rows.access
+                                            : false
+                                          : false
+                                      "
+                                      class="form-check-input"
+                                      [disabled]="!subMenu.access"
+                                    />
+                                    <i class="input-frame"></i>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- <hr> -->
+                      </div>
+                      <hr />
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="d-flex justify-content-end">
+                      <button
+                        class="btn btn btn-soft-primary"
+                        type="button"
+                        (click)="goBack()"
+                      >
+                        Back
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-success ms-2"
+                        (click)="submitUpdateMenuSubMenu()"
+                        *ngIf="selectMasterAccess"
+                      >
+                        Update
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="2">
+          <a ngbNavLink> Project Permission levels </a>
+          <ng-template ngbNavContent>
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <div class="row">
+                  <div
+                    class="col-md-12"
+                    *ngFor="let group of groupOrder"
+                  >
+                    <div class="card mb-2">
+                      <div class="card-header" style="padding-bottom: 5px">
+                        <h6 class="mb-0 card-title fs-14">{{ group }}</h6>
+                      </div>
+                      <div class="card-body cardAccess_height">
+                        <div class="row">
+                          <div
+                            class="col-sm-3 mb-2"
+                            *ngFor="let task of objectMakerToViewAccessRight[group] index as i"
+                          >
+                            <div class="form-check topDisplay"[ngbTooltip]="task.remark ? task.remark : null">
+                              <input
+                                class="form-check-input me-2 p-2"
+                                type="checkbox"
+                                [ngModelOptions]="{ standalone: true }"
+                                (change)="
+                                  changesMyTaskRulesActive($event, group, i)
+                                "
+                                [(ngModel)]="task.value"
+                                [disabled]="isDisabled(task, group)"
+                                value="{{ task.sendtokeys }}"
+                                id="{{ task.sendtokeys }}"
+                              />
+                              <label
+                                class="form-check-label labelforCheckbox fs-12"
+                                for="{{ task.sendtokeys }}"
+                              >
+                                {{ task.name }}
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row mt-4">
+                  <div
+                    class="col-md-12 d-flex align-items-center justify-content-end"
+                  >
+                  <button
+                  class="btn btn btn-soft-primary"
+                  type="button"
+                  (click)="goBack()"
+                >
+                  Back
+                </button>
+                    <button
+                      type="button"
+                    
+      
+                      ngbAutofocus
+                      class="btn btn-success ms-2 mb-2 mb-md-0"
+                      (click)="updateProjectAccess()"
+                    >
+                      Update
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+      </ul>
+      <div class="card-body">
+        <div class="tab-content text-muted">
+          <div [ngbNavOutlet]="nav"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

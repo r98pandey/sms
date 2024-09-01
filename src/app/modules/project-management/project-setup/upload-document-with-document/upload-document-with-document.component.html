@@ -1,0 +1,360 @@
+<ng-container *ngIf="showlistpostion">
+  <div class="d-flex align-items-center mb-3">
+    <h5 class="flex-grow-1 fs-16 mb-0" id="filetype-title">File List</h5>
+    <div class="flex-shrink-0">
+      <button
+        class="btn btn-primary"
+        (click)="uploadFile()"
+        *ngIf="isCompleted"
+      >
+        <i class="ri-add-line align-bottom me-1"></i> Upload File
+      </button>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table align-middle table-nowrap mb-0">
+      <thead class="table-active">
+        <tr>
+          <th scope="col">Name</th>
+
+          <th scope="col">Type</th>
+          <th scope="col">Created Date</th>
+
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="file-list">
+        <ng-container *ngIf="storeFileUpload.length == 0">
+          <tr>
+            <td colspan="5"><p class="text-muted">No Records Found</p></td>
+          </tr>
+        </ng-container>
+        <ng-container *ngIf="storeFileUpload.length != 0">
+          @for(data of storeFileUpload; track $index){
+          <tr>
+            <td class="title">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0 fs-17 me-2 filelist-icon">
+                  <i
+                    class="ri-video-line text-info"
+                    *ngIf="data.type == 'Video'"
+                  ></i>
+
+                  <i
+                    class="ri-image-line text-success"
+                    *ngIf="data.type == 'Image'"
+                  ></i>
+
+                  <i
+                    class="ri-file-line text-warning"
+                    *ngIf="data.type != 'Video'||data.type != 'Image'"
+                  ></i>
+                </div>
+                <div class="flex-grow-1 filelist-name">{{ data.title }}</div>
+              </div>
+            </td>
+            <td class="title">
+              {{ data.type }}
+              <!-- <p class="fs-12 text-primary cursor" >Remark</p> -->
+            </td>
+            <td class="title">{{ data.createdDate }}</td>
+            <!-- <td class="title">
+              <span
+                [class]="
+                  returnStatusBadgeClassesStatus(
+                    data?.projectProcessDocStatusId
+                  )
+                "
+                >{{ data?.projectProcessDocStatusName }}</span
+              >
+            </td> -->
+
+            <td class="title">
+              <div class="flex-shrink-0 ms-2">
+                <div class="d-flex gap-1">
+                  <ul class="list-inline hstack gap-2 mb-0">
+                    <ng-container *ngIf="data?.docURL">
+                      <li class="list-inline-item">
+                        <a
+                          href="javascript:void(0);"
+                          [ngbTooltip]="'View ' + data.type"
+                          (click)="openModaVideeo(data.docURL, VideoPlayer)"
+                          *ngIf="data.type == 'Video'"
+                          class="text-primary d-inline-block"
+                        >
+                          <i class="ri-video-line fs-16"></i>
+                        </a>
+
+                        <a
+                          href="javascript:void(0);"
+                          [ngbTooltip]="'View ' + data.type"
+                          (click)="open(data.docURL)"
+                          *ngIf="data.type == 'Image'"
+                          class="text-primary d-inline-block"
+                        >
+                          <i class="ri-image-line fs-16"></i>
+                        </a>
+
+                        <a
+                          href="javascript:void(0);"
+                          [ngbTooltip]="'View ' + data.type"
+                          (click)="downloadFileDocument(data.docURL)"
+                          *ngIf="data.type != 'Image' || data.type != 'Video'"
+                          class="text-primary d-inline-block"
+                        >
+                          <i class="ri-file-line fs-16"></i>
+                        </a>
+                      </li>
+                    </ng-container>
+
+                    <ng-container *ngIf="isCompleted">
+                      <li
+                        class="list-inline-item edit"
+                      
+                        ngbTooltip="Edit Remark"
+                        *ngIf="
+                          data?.projectProcessDocStatusId != 79 || isCompleted
+                        "
+                      >
+                        <a
+                          href="javascript:void(0);"
+                          class="text-success d-inline-block edit-item-btn"
+                          (click)="openModalPopupEditRemark(UpdateDesc, data)"
+                        >
+                          <i class="ri-edit-2-line fs-16"></i>
+                        </a>
+                      </li>
+                    </ng-container>
+                    <ng-container *ngIf="isCompleted">
+                      <li
+                        class="list-inline-item me-0"
+                        ngbTooltip="Remove"
+                        placement="top"
+                      
+                        *ngIf="data?.projectProcessDocStatusId != 79"
+                      >
+                        <a
+                          class="text-danger d-inline-block remove-item-btn"
+                          (click)="
+                            openModalDeleteConf(data.projectProcessDocId)
+                          "
+                          href="javascript:void(0);"
+                        >
+                          <i class="ri-delete-bin-5-fill fs-16"></i>
+                        </a>
+                      </li>
+                    </ng-container>
+                  </ul>
+                </div>
+              </div>
+            </td>
+          </tr>
+          }
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="!showlistpostion">
+  <div class="d-flex align-items-center mb-3">
+    <h5 class="flex-grow-1 fs-16 mb-0" id="filetype-title">Upload File</h5>
+    <div class="flex-shrink-0">
+      <button
+        class="btn btn-info"
+        (click)="openList()"
+        *ngIf="storeFileUpload.length != 0"
+      >
+        <i class="ri-arrow-go-back-line align-bottom me-1"></i> Go to File list
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="container-fluid container-view">
+        <ngx-dropzone
+          (change)="onSelect($event)"
+          [multiple]="true"
+          title="All files will be Uploaded"
+          data-toggle="tooltip"
+          data-placement="top"
+          class="dropzone"
+        >
+          <ngx-dropzone-label>
+            Drag and drop/Click here to upload
+          </ngx-dropzone-label>
+        </ngx-dropzone>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="row me-0 mr-0 mt-3" *ngIf="files.length != 0">
+    <div class="col-md-12 d-flex justify-content-end">
+      <button class="btn btn-success" (click)="startUpload()">
+        Upload File
+      </button>
+    </div>
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <table class="table" style="text-align: justify">
+          <thead>
+            <tr>
+              <th>File Name</th>
+              <th>Remark</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of files; index as index">
+              <td class="title align-top" [title]="item.file.name">
+                <p class="text-truncate d-block">{{ item.file.name }}</p>
+              </td>
+              <td class="title align-top">
+                <p class=" " style="white-space: normal">
+                  {{ item.remark }}
+                </p>
+              </td>
+
+              <td class="title align-top">
+                <i
+                  class="ri-delete-bin-line text-danger me-2 fs-16"
+                  type="button"
+                  title="Remove"
+                  (click)="openModalDeletePicture(index)"
+                ></i>
+                <i
+                  class="ri-edit-box-line text-info fs-16"
+                  type="button"
+                  title="Edit Remark"
+                  (click)="openModalPopup(UpdateDesc, index, item.remark)"
+                ></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #UpdateDesc let-modal style="z-index: 9999">
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Update Remark</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div class="row">
+      <div class="col-md-12">
+        <label class="form-label" for="formFile"
+          >Remark
+          <span class="starRequried">*</span>
+        </label>
+          <textarea  style="height: 335px"
+            class="form-control bg-light border-0"
+            id="Remark"
+            rows="15"
+            placeholder="Remark"
+            [(ngModel)]="editiorDescription"
+            [maxlength]="maxCharsDecision"
+          ></textarea>
+          <label class="nopadding clrlbl">
+            Characters Remaining:
+            {{ editiorDescription?.length }}/{{ maxCharsDecision }}</label
+          >
+      
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn btn-danger mr-2 mb-2 mb-md-0"
+      (click)="modal.dismiss('cancel')"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      ngbAutofocus
+      class="btn btn-success mr-2 mb-2 mb-md-0"
+      [disabled]="!editiorDescription"
+      (click)="modal.close('Ok', $event)"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #VideoPlayer role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div id="instructions">
+      <video
+        id="my_video_1"
+        class="video-js vjs-default-skin"
+        width="100%"
+        height="267px"
+        controls
+        preload="none"
+        data-setup='{ "aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }'
+      >
+        <source src="{{ linkVideo }}" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #openAfter let-modal style="z-index: 9999">
+  <!-- Upload Progress Modal -->
+
+  <div class="modal-header modal-header p-3 bg-info-subtl">
+    <h5 class="modal-title">Uploading Files</h5>
+    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+  </div>
+  <div class="modal-body">
+    <p>
+      Uploading file <span>{{ currentFileIndex }}</span> of
+      <span>{{ totalFiles }}</span>
+    </p>
+
+    <ngb-progressbar
+      [value]="progress"
+      type="success"
+      class="progress-md"
+    ></ngb-progressbar>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="cancelUpload()">
+      Cancel Upload
+    </button>
+  </div>
+</ng-template>

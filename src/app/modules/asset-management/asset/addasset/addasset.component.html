@@ -1,0 +1,1080 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<form [formGroup]="addAsset">
+  <div class="row">
+    <div class="col-lg-4 stretch-card">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Basic Information</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="companyId" class="form-label"
+              >Company<span class="starRequried">*</span></label
+            >
+            <ng-select
+              [items]="companyList"
+              bindLabel="companyName"
+              [clearable]="false"
+              bindValue="companyName"
+              placeholder="Select Company"
+              class="custom"
+              formControlName="company"
+              (change)="companyHandler($event)"
+            >
+            </ng-select>
+
+            <div *ngIf="company.invalid && company.touched" class="mt-2">
+              <small class="text-danger" *ngIf="company['errors']['required']">
+                Company is Required
+              </small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="companyId" class="form-label"
+                >Client<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [items]="clientList"
+                bindLabel="clientName"
+                [clearable]="false"
+                [(ngModel)]="_clientIdValue"
+                bindValue="clientName"
+                placeholder="Select Client"
+                class="custom"
+                formControlName="client"
+                (change)="clientHandler($event)"
+              >
+              </ng-select>
+
+              <div *ngIf="client.invalid && client.touched" class="mt-2">
+                <small class="text-danger" *ngIf="client['errors']['required']">
+                  Client is Required
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="form-group">
+              <label class="form-label"
+                >{{ isProject ? "Project" : "Department"
+                }}<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [items]="departmentList"
+                bindLabel="departmentName"
+                bindValue="departmentId"
+                [(ngModel)]="_departmentId"
+                [placeholder]="
+                  isProject ? 'Select Project' : 'Select Department'
+                "
+                (change)="getLocation(_departmentId)"
+                (change)="getEmployeeList(_departmentId)"
+                [clearable]="false"
+                class="custom"
+                formControlName="department"
+              >
+              </ng-select>
+              <div
+                *ngIf="department?.invalid && department?.touched"
+                class="mt-2"
+              >
+                <small
+                  class="text-danger"
+                  *ngIf="department['errors']['required']"
+                >
+                  {{ isProject ? "Project" : "Department" }} is Required</small
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="form-group">
+              <label class="form-label"
+                >Location<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [items]="locationList"
+                bindLabel="locationName"
+                bindValue="locationId"
+                placeholder="Select Location"
+                [clearable]="false"
+                [(ngModel)]="_locationId"
+                class="custom"
+                formControlName="location"
+                [readonly]="locationSelectDisable"
+                [class.is-invalid]="location.invalid && location.touched"
+                [class.is-valid]="location.valid && location.touched"
+              >
+              </ng-select>
+
+              <div *ngIf="location.invalid && location.touched" class="mt-2">
+                <small
+                  class="text-danger"
+                  *ngIf="location['errors']['required']"
+                >
+                  Location is Required</small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label class="form-label"
+                >Category<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [items]="categoryWholeData"
+                bindLabel="categoryName"
+                bindValue="categoryId"
+                [readonly]="categorySelectDisable"
+                placeholder="Select Category"
+                [clearable]="false"
+                [(ngModel)]="_categoryId"
+                (change)="getSubCategorydetails(_categoryId)"
+                class="custom"
+                formControlName="category"
+                [class.is-invalid]="category.invalid && category.touched"
+                [class.is-valid]="category.valid && category.touched"
+              >
+              </ng-select>
+
+              <div *ngIf="category.invalid && category.touched" class="mt-2">
+                <small
+                  class="text-danger"
+                  *ngIf="category['errors']['required']"
+                >
+                  Category is Required</small
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="form-group">
+              <label class="form-label"
+                >Sub-Category<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [items]="subCategoryList"
+                bindLabel="subCategoryName"
+                bindValue="subCategoryId"
+                [readonly]="subcategorySelectDisable"
+                placeholder="Select Sub Category"
+                [clearable]="false"
+                [(ngModel)]="_subCategoryId"
+                class="custom"
+                (change)="getLifeSpan(_subCategoryId)"
+                formControlName="subCategory"
+                [class.is-invalid]="subCategory.invalid && subCategory.touched"
+                [class.is-valid]="subCategory.valid && subCategory.touched"
+              >
+              </ng-select>
+
+              <div
+                *ngIf="subCategory.invalid && subCategory.touched"
+                class="mt-2"
+              >
+                <small
+                  class="text-danger"
+                  *ngIf="subCategory['errors']['required']"
+                >
+                  Sub Category is Required</small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Asset Life Span </label>
+            <div class="input-group">
+              <input
+                type="number"
+                class="form-control"
+                placeholder="Enter Asset Life Span"
+                formControlName="assetLifeSpan"
+              /><span class="input-group-text">Month</span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label class="form-label">
+                Asset Assign To<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [items]="_assignType"
+                placeholder="Select  Asset Assign To"
+                [clearable]="false"
+                [(ngModel)]="_assignTypeValue"
+                class="custom"
+                formControlName="assignType"
+                (change)="getEmployeeDisable(_assignTypeValue)"
+                [class.is-invalid]="assignType.invalid && assignType.touched"
+                [class.is-valid]="assignType.valid && assignType.touched"
+              >
+              </ng-select>
+
+              <div
+                *ngIf="assignType.invalid && assignType.touched"
+                class="mt-2"
+              >
+                <small
+                  class="text-danger"
+                  *ngIf="assignType['errors']['required']"
+                >
+                  Assign Type is Required</small
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label"
+              >Asset Handler<span class="starRequried">*</span></label
+            >
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                style="position: relative"
+                placeholder="Look-up Asset Handler"
+                formControlName="employee"
+                readonly
+              />
+              <div
+                class="input-group-append"
+                *ngIf="department?.value && assignType?.value"
+              >
+                <button
+                  class="btn btn-outline-secondary btn-xs"
+                  (click)="confirmUpdate(modalConfirm2)"
+                  style="height: 40px"
+                  [hidden]="EmployeeDisable"
+                >
+                  <i class="ri-user-fill"></i>
+                </button>
+              </div>
+            </div>
+            <div *ngIf="employee.invalid && employee.touched">
+              <small class="text-danger" *ngIf="employee['errors']['required']">
+                Asset Handler is Required</small
+              >
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="form-group">
+              <label class="form-label"
+                >Vendor<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [items]="vendorList"
+                bindLabel="vendorName"
+                bindValue="vendorId"
+                [readonly]="vendorListSelectDisable"
+                placeholder="Select Vendor"
+                [clearable]="false"
+                [(ngModel)]="_vendorId"
+                class="custom"
+                formControlName="vendor"
+                [class.is-invalid]="vendor.invalid && vendor.touched"
+                [class.is-valid]="vendor.valid && vendor.touched"
+              >
+              </ng-select>
+
+              <div *ngIf="vendor.invalid && vendor.touched" class="mt-2">
+                <small class="text-danger" *ngIf="vendor['errors']['required']">
+                  Vendor is Required</small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Model </label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter Model "
+              formControlName="model"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Serial No </label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter SerialNo "
+              formControlName="serialNo"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Active/Passive</label>
+            <ng-select
+              [items]="activePassiveList"
+              id="V017"
+              placeholder="Enter Active/Passive"
+              formControlName="V017"
+              bindLabel="value"
+              bindValue="id"
+              [clearable]="false"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">MTBF</label>
+            <div class="input-group">
+              <input
+                type="number"
+                class="form-control"
+                placeholder="Enter MTBF"
+                formControlName="V018"
+              /><span class="input-group-text">Hours</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label"
+              >Asset Name<span class="starRequried">*</span></label
+            >
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter Asset Name"
+              formControlName="assetName"
+              [class.is-invalid]="assetName.invalid && assetName.touched"
+              [class.is-valid]="assetName.valid && assetName.touched"
+              [maxlength]="maxCharsDecision"
+              >
+              <label class="nopadding clrlbl">
+                Characters Remaining:
+                {{ assetName?.value?.length }}/{{
+                  maxCharsDecision
+                }}</label
+              >
+
+            <div *ngIf="assetName.invalid && assetName.touched">
+              <small
+                class="text-danger"
+                *ngIf="assetName['errors']['required']"
+              >
+                Asset Name is Required
+              </small>
+            </div>
+          </div>
+          <!-- <div class="mb-3">
+                                        <label class="form-label" for="product-title-input">Asset Name</label>
+                                        <input type="text" class="form-control" id="product-title-input" placeholder="Enter Asset Name">
+                                           -->
+          <!-- <label class="form-label">Asset Specification</label>
+                                            <textarea class="text-area form-control form-control-sm" placeholder="Remarks"
+                                                formControlName="assetSpec" [(ngModel)]="text"
+                                                [maxlength]="maxChar"></textarea>
+                                            <label class="nopadding clrlbl"> Characters Remaining:
+                                                {{text.length}}/{{maxChar}}</label> -->
+
+          <!-- </div> -->
+          <div>
+            <label>Specification</label>
+            <ckeditor
+              [editor]="Editor"
+              data=""
+              [config]="{
+                toolbar: [
+                  'heading',
+                  '|',
+                  'bold',
+                  'italic',
+                  '|',
+                  'NumberedList',
+                  'BulletedList'
+                ]
+              }"
+              formControlName="assetSpec"
+            >
+              <!-- <p>Tommy Hilfiger men striped pink sweatshirt. Crafted with cotton. Material composition is 100% organic cotton. This is one of the world’s leading designer lifestyle brands and is internationally recognized for celebrating the essence of classic American cool style, featuring preppy with a twist designs.</p>
+                                            <ul>
+                                                <li>Full Sleeve</li>
+                                                <li>Cotton</li>
+                                                <li>All Sizes available</li>
+                                                <li>4 Different Color</li>
+                                            </ul> -->
+            </ckeditor>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <ul
+            ngbNav
+            #customNav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs-custom card-header-tabs border-bottom-0"
+            role="tablist"
+          >
+            <li [ngbNavItem]="1" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Account Info
+              </a>
+              <ng-template ngbNavContent>
+                <div class="tab-pane" id="addproduct-metadata" role="tabpanel">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="mb-3">
+                        <label class="form-label">PO Number</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Enter PO Number"
+                          formControlName="pONumber"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="form-group mb-3">
+                        <label class="form-label" for="product-price-input"
+                          >Purchase Price</label
+                        >
+                        <div class="input-group mb-3">
+                          <span
+                            *ngIf="department.value"
+                            class="input-group-text"
+                            id="product-price-addon"
+                            >{{ getCurrencyCode(department.value) }}</span
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            formControlName="purchasePrice"
+                            id="product-price-input"
+                            placeholder="Enter Purchase Price"
+                            aria-label="Price"
+                            aria-describedby="product-price-addon"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label class="form-label">Purchase Date</label>
+                        <input
+                          class="form-control flatpickr-input"
+                          type="text"
+                          formControlName="purchasedDate"
+                          placeholder="Enter Purchase Date"
+                          mwlFlatpickr
+                          [altInput]="false"
+                          [enableTime]="false"
+                          [convertModelValue]="true"
+                          [dateFormat]="'d-m-Y'"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label class="form-label"> Invoice No </label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Enter Invoice No"
+                          formControlName="invoiceNo"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label class="form-label">Invoice Date</label>
+                        <input
+                          class="form-control flatpickr-input"
+                          type="text"
+                          formControlName="invoiceDate"
+                          placeholder="Enter Invoice Date"
+                          mwlFlatpickr
+                          [altInput]="false"
+                          [enableTime]="false"
+                          [convertModelValue]="true"
+                          [dateFormat]="'d-m-Y'"
+                        />
+
+                        <!-- <input type="date" class="form-control "
+                                                        placeholder="Enter Invoice Date" formControlName="invoiceDate"> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="2" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Warranty Info
+              </a>
+              <ng-template ngbNavContent>
+                <div class="tab-pane" id="addproduct-metadata" role="tabpanel">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="mb-3">
+                        <label class="form-label">Warranty Period </label>
+                        <div class="d-flex">
+                          <input
+                            class="form-control flatpickr-input me-2"
+                            type="text"
+                            formControlName="warrantyStart"
+                            placeholder=" Start"
+                            mwlFlatpickr
+                            [altInput]="false"
+                            [enableTime]="false"
+                            [convertModelValue]="true"
+                            [dateFormat]="'d-m-Y'"
+                          />
+
+                          <input
+                            class="form-control flatpickr-input"
+                            type="text"
+                            formControlName="warrantyEnd"
+                            placeholder=" End"
+                            mwlFlatpickr
+                            [altInput]="false"
+                            [enableTime]="false"
+                            [convertModelValue]="true"
+                            [dateFormat]="'d-m-Y'"
+                          />
+                        </div>
+                      </div>
+                      <div *ngIf="error1.isError">
+                        <small class="text-danger">{{
+                          error1.errorMessage
+                        }}</small>
+                      </div>
+                    </div>
+                    <div class="col-lg-12">
+                      <label class="form-label"
+                        >Extended Warranty Period
+                      </label>
+                      <div class="mb-3 d-flex">
+                        <input
+                          class="form-control flatpickr-input me-2"
+                          type="text"
+                          formControlName="ExtendedStartWarrenty"
+                          placeholder="Start "
+                          mwlFlatpickr
+                          [altInput]="false"
+                          [enableTime]="false"
+                          [convertModelValue]="true"
+                          [dateFormat]="'d-m-Y'"
+                        />
+
+                        <input
+                          class="form-control flatpickr-input"
+                          type="text"
+                          formControlName="ExtendedEndWarrenty"
+                          placeholder="End"
+                          mwlFlatpickr
+                          [altInput]="false"
+                          [enableTime]="false"
+                          [convertModelValue]="true"
+                          [dateFormat]="'d-m-Y'"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="mb-3">
+                        <label class="form-label">RMA Warranty Period</label>
+                        <div class="d-flex">
+                          <input
+                            class="form-control flatpickr-input me-2"
+                            type="text"
+                            formControlName="RMAStartWarrenty"
+                            placeholder="Start"
+                            mwlFlatpickr
+                            [altInput]="false"
+                            [enableTime]="false"
+                            [convertModelValue]="true"
+                            [dateFormat]="'d-m-Y'"
+                          />
+
+                          <input
+                            class="form-control flatpickr-input"
+                            type="text"
+                            formControlName="RMAEndWarrenty"
+                            placeholder="End "
+                            mwlFlatpickr
+                            [altInput]="false"
+                            [enableTime]="false"
+                            [convertModelValue]="true"
+                            [dateFormat]="'d-m-Y'"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Delivery Date
+                          <i
+                            class="ri-close-circle-line text-danger"
+                            *ngIf="deliveryDate.value"
+                            (click)="clearChangDeliveryDate()"
+                          ></i
+                        ></label>
+                        <input
+                          class="form-control flatpickr-input"
+                          type="text"
+                          formControlName="deliveryDate"
+                          placeholder="Enter Delivery Date"
+                          mwlFlatpickr
+                          [altInput]="false"
+                          [enableTime]="false"
+                          [convertModelValue]="true"
+                          [dateFormat]="'d-m-Y'"
+                        />
+
+                        <!-- <input type="date" class="form-control "
+                                                                placeholder="Enter Delivery Date" formControlName="deliveryDate"> -->
+                      </div>
+                    </div>
+                    <div class="col-lg-6" *ngIf="deliveryDate.value">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Installation Date
+                          <i
+                            class="ri-close-circle-line text-danger"
+                            *ngIf="installationDate.value"
+                            (click)="clearChangInstallationDate()"
+                          ></i
+                        ></label>
+                        <input
+                          class="form-control flatpickr-input"
+                          type="text"
+                          formControlName="installationDate"
+                          placeholder="Enter Installation Date"
+                          mwlFlatpickr
+                          [altInput]="false"
+                          [enableTime]="false"
+                          [convertModelValue]="true"
+                          [dateFormat]="'d-m-Y'"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+          <div class="tab-content pt-4">
+            <div [ngbNavOutlet]="customNav"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Asset Gallery</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-4">
+            <h5 class="fs-15 mb-1">Asset Image</h5>
+            <p class="text-muted">Add Asset Profile Image.</p>
+            <div class="text-center">
+              <div class="position-relative d-inline-block">
+                <div
+                  class="position-absolute top-100 start-100 translate-middle"
+                >
+                  <label
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Remove Image"
+                    *ngIf="isFirstImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i
+                          class="ri-close-circle-fill"
+                          (click)="crossFirstImage(asset_img0)"
+                        ></i>
+                      </div>
+                    </div>
+                  </label>
+                  <label
+                    for="asset_id0"
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Select Image"
+                    *ngIf="!isFirstImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i class="ri-image-fill"></i>
+                      </div>
+                    </div>
+                  </label>
+                  <input
+                    (change)="onSelectFile($event)"
+                    formControlName="assetImageURL"
+                    class="form-control d-none"
+                    value=""
+                    id="asset_id0"
+                    type="file"
+                    accept="image/png, image/gif, image/jpeg"
+                  />
+                </div>
+                <div class="avatar-lg">
+                  <div class="avatar-title bg-light rounded">
+                    <img
+                      src="{{ asset_img0 }}"
+                      id="product-img"
+                      class="avatar-md img-size-fixed"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h5 class="fs-15 mb-1">Asset Gallery</h5>
+            <p class="text-muted">Add Asset Gallery Images.</p>
+
+            <div class="row text-center">
+              <div class="row justify-content-center">
+                <div class="col-md-2">
+                  <div class="mb-3">
+                    <div class="position-relative d-inline-block">
+                      <div
+                        class="position-absolute top-100 start-100 translate-middle"
+                      >
+                        <label
+                          class="mb-0"
+                          placement="left"
+                          ngbTooltip="Remove Image"
+                          *ngIf="isSecondImageVisible"
+                        >
+                          <div class="avatar-xs">
+                            <div
+                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                            >
+                              <i
+                                (click)="crossSecondImage(asset_img1)"
+                                class="ri-close-circle-fill"
+                              ></i>
+                            </div>
+                          </div>
+                        </label>
+                        <label
+                          for="asset_id1"
+                          class="mb-0"
+                          placement="left"
+                          ngbTooltip="Select Image"
+                          *ngIf="!isSecondImageVisible"
+                        >
+                          <div class="avatar-xs">
+                            <div
+                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                            >
+                              <i class="ri-image-fill"></i>
+                            </div>
+                          </div>
+                        </label>
+                        <input
+                          (change)="onSelectFile1($event)"
+                          accept="image/*"
+                          formControlName="assetImageURL1"
+                          class="form-control d-none"
+                          value=""
+                          id="asset_id1"
+                          type="file"
+                          accept="image/png, image/gif, image/jpeg"
+                        />
+                      </div>
+                      <div class="avatar-lg">
+                        <div class="avatar-title bg-light rounded">
+                          <img
+                            src="{{ asset_img1 }}"
+                            id="product-img"
+                            class="avatar-md img-size-fixed"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- end col -->
+
+                <div class="col-md-2">
+                  <div class="mb-3">
+                    <div class="position-relative d-inline-block">
+                      <div
+                        class="position-absolute top-100 start-100 translate-middle"
+                      >
+                        <label
+                          for="asset_id2"
+                          class="mb-0"
+                          placement="left"
+                          ngbTooltip="Select Image"
+                          *ngIf="!isThirdImageVisible"
+                        >
+                          <div class="avatar-xs">
+                            <div
+                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                            >
+                              <i class="ri-image-fill"></i>
+                            </div>
+                          </div>
+                        </label>
+                        <label
+                          class="mb-0"
+                          placement="left"
+                          ngbTooltip="Remove Image"
+                          *ngIf="isThirdImageVisible"
+                        >
+                          <div class="avatar-xs">
+                            <div
+                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                            >
+                              <i
+                                (click)="crossThirdImage(asset_img2)"
+                                class="ri-close-circle-fill"
+                              ></i>
+                            </div>
+                          </div>
+                        </label>
+                        <input
+                          (change)="onSelectFile2($event)"
+                          accept="image/*"
+                          formControlName="assetImageURL2"
+                          class="form-control d-none"
+                          value=""
+                          id="asset_id2"
+                          type="file"
+                          accept="image/png, image/gif, image/jpeg"
+                        />
+                      </div>
+                      <div class="avatar-lg">
+                        <div class="avatar-title bg-light rounded">
+                          <img
+                            src="{{ asset_img2 }}"
+                            id="product-img"
+                            class="avatar-md img-size-fixed"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-2">
+                  <div class="mb-3">
+                    <div class="position-relative d-inline-block">
+                      <div
+                        class="position-absolute top-100 start-100 translate-middle"
+                      >
+                        <label
+                          class="mb-0"
+                          placement="left"
+                          ngbTooltip="Remove Image"
+                          *ngIf="isFourthImageVisible"
+                        >
+                          <div class="avatar-xs">
+                            <div
+                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                            >
+                              <i
+                                (click)="crossFourthImage(asset_img3)"
+                                class="ri-close-circle-fill"
+                              ></i>
+                            </div>
+                          </div>
+                        </label>
+                        <label
+                          for="asset_id3"
+                          class="mb-0"
+                          placement="left"
+                          ngbTooltip="Select Image"
+                          *ngIf="!isFourthImageVisible"
+                        >
+                          <div class="avatar-xs">
+                            <div
+                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                            >
+                              <i class="ri-image-fill"></i>
+                            </div>
+                          </div>
+                        </label>
+                        <input
+                          (change)="onSelectFile3($event)"
+                          accept="image/*"
+                          formControlName="assetImageURL3"
+                          class="form-control d-none"
+                          value=""
+                          id="asset_id3"
+                          type="file"
+                          accept="image/png, image/gif, image/jpeg"
+                        />
+                      </div>
+                      <div class="avatar-lg">
+                        <div class="avatar-title bg-light rounded">
+                          <img
+                            src="{{ asset_img3 }}"
+                            id="product-img"
+                            class="avatar-md img-size-fixed"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- end col -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="text-end mb-3">
+  <button
+    class="btn btn-soft-primary waves-effect mx-3"
+    type="button"
+    (click)="onBack()"
+  >
+    Back
+  </button>
+  <ng-container *ngIf="!assestIdStore">
+    <button
+      class="btn btn-success w-sm"
+      type="button"
+      (click)="addAssetAddSucessModal()"
+      [disabled]="addAsset.invalid || error1.isError || addAssetLoading"
+    >
+      <span
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+        *ngIf="addAssetLoading"
+      ></span>
+      Submit
+    </button>
+  </ng-container>
+</div>
+
+<ng-template #modalConfirm2 let-modal>
+  <div class="modal-header">
+    <h6 class="modal-title" id="modal-title">Select Asset Handler</h6>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <div
+    class="search-box mb-3 d-flex justify-content-between align-items-center"
+  >
+    <input
+      type="text"
+      class="form-control bg-light border-light"
+      [(ngModel)]="filterBy"
+          (keyup)="filter()"
+      placeholder="Search member here..."
+    />
+    <i class="ri-search-line search-icon"></i>
+
+    <button
+      type="button"
+      class="btn btn-danger ms-1"
+      (click)="clearTeach()"
+      ngbTooltip="Clear"
+    >
+      Clear
+    </button>
+  </div>
+  <ngx-simplebar class="mx-n4 px-4" style="height: 400px">
+    <table class="table table-hover table-centered align-middle table-nowrap mb-0">
+      <tbody>
+        
+        
+          <tr  *ngFor="let data of employeeList | arrayFilter: filterBy">
+              <td>
+                  <div class="d-flex align-items-center">
+                      <div class="avatar-sm bg-light rounded p-1 me-2"   *ngIf="data.empImgUrl">
+                          <img src="{{data.image}}" alt="" class="img-fluid d-block" />
+                      </div>
+                      <div   *ngIf="!data.empImgUrl" style="font-size: 20px;    align-items: center;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;"
+                      class="avatar-sm bg-light rounded p-1 me-2  border bg-light text-primary rounded-circle text-uppercase"
+                    >
+                    {{ data.employeeName.charAt(0) }}  {{ data.employeeName.charAt(1) }}
+                    </div>
+                      <div>
+                          <h5 class="fs-14 my-1"><a  href="javascript:void(0);"  class="text-reset">{{data.employeeName}}</a></h5>
+                          <span class="text-muted">{{data.employeeTagId}}</span>
+                      </div>
+                  </div>
+              </td>
+            
+              
+              <td>
+                <div class="text-end">
+                  <button
+                    class="btn btn-primary"
+                    (click)="toAssignUser(data, modal)"
+                    [disabled]="data.isSelected"
+                  >
+                    Assign
+                  </button>
+                </div>
+              </td>
+          </tr>
+      
+      </tbody>
+    </table>
+    
+  </ngx-simplebar>
+
+
+    <hr />
+    <div class="d-flex justify-content-between p-2">
+      Showing {{ from }} to {{ to }} of {{ totalRecords }} entries
+
+      <div class="d-flex">
+        <ngb-pagination
+          [collectionSize]="collectionSize"
+          [(page)]="page"
+          [pageSize]="pageSize"
+          (pageChange)="getemployeeData()"
+          *ngIf="totalRecords > pageSize"
+        >
+        </ngb-pagination>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-danger"
+      (click)="modal.dismiss('cancel')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

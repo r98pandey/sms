@@ -1,0 +1,171 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="col-xl-12 client-view">
+  <div class="card" id="client-view-detail">
+    <div
+      class="card-header d-flex justify-content-between align-items-center p-2 mb-0"
+    >
+      <h6 class="mb-0 fw-semibold text-uppercase">
+        {{ clientData.clientName }}
+      </h6>
+      <button class="btn btn-primary" (click)="openStatusModal(clientData)" *ngIf="clientData.clientStatusId != 49">
+        Update Status
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="row gy-4">
+        <div class="col-lg-12">
+          <div class="d-flex flex-wrap">
+            <div class="flex-grow-1 fw-bold">
+            
+              <div class="mt-sm-2 mt-4 mb-4">
+                <img
+                  src="{{ clientLogoImg }}"
+                  class="rounded-circle avatar-xl img-thumbnail user-profile-image"
+                  alt="user-profile-image"
+                  *ngIf="
+                    !clientData?.clientImageUrl?.includes('defaultlogo.png')
+                  "
+                />
+                <div
+                  class="flex-shrink-0"
+                  *ngIf="
+                    clientData?.clientImageUrl?.includes('defaultlogo.png')
+                  "
+                >
+                  <div class="avatar-lg">
+                    <span class="rounded">
+                      <ng-container>
+                        <app-avatar-photo
+                          *ngIf="
+                            !clientData.clientImageUrl ||
+                            (clientData.clientImageUrl &&
+                              clientData.clientImageUrl.length)
+                          "
+                          [name]="toUpperCaseword(clientData.clientName)"
+                        ></app-avatar-photo>
+                      </ng-container>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="align-self-center mt-sm-0 mt-5"></div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="row border-top border-top-dashed py-3">
+            <div class="col-lg-3 col-4">
+              <p class="mb-2 fw-bold">Company Name</p>
+              <p class="fs-14 mb-0">
+                {{ clientData.companyName }}
+              </p>
+            </div>
+            <div class="col-lg-3 col-4">
+              <p class="mb-2 fw-bold">Client Code</p>
+              <p class="fs-14 mb-0">
+                {{ clientData.clientCode || "-" }}
+              </p>
+            </div>
+            <div class="col-lg-3 col-4">
+              <p class="mb-2 fw-bold">Contact person</p>
+              <p class="fs-14 mb-0">
+                {{ clientData.contactPerson || "-" }}
+              </p>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row border-top border-top-dashed py-3">
+              <div class="col-lg-3 col-4">
+                <p class="mb-2 fw-bold">Country</p>
+                <p class="fs-14 mb-0">
+                  {{ clientData.country || "-" }}
+                </p>
+              </div>
+              <div class="col-lg-3 col-4">
+                <p class="mb-2 fw-bold">Mobile No</p>
+                <p class="fs-14 mb-0">
+                  {{ clientData.mobileNo || "-" }}
+                </p>
+              </div>
+              <div class="col-lg-3 col-4">
+                <p class="mb-2 fw-bold">Office Phone No</p>
+                <p class="fs-14 mb-0">
+                  {{ clientData.officePhoneNo || "-" }}
+                </p>
+              </div>
+              <div class="col-lg-3 col-4">
+                <p class="mb-2 fw-bold">Office Fax No</p>
+                <p class="fs-14 mb-0">
+                  {{ clientData.officeFaxNo || "-" }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row border-top border-top-dashed py-3">
+              <div class="col-lg-3 col-4">
+                <p class="mb-2 fw-bold">Tax Category</p>
+                <p class="fs-14 mb-0">
+                  {{ clientData.serviceTaxType || "-" }}
+                </p>
+              </div>
+
+              <div class="col-lg-3 col-4">
+                <p class="mb-2 fw-bold">Tax Value</p>
+                <p class="fs-14 mb-0">
+                  {{ clientData.serviceTaxValue || "-" }}
+                </p>
+              </div>
+
+              <div class="col-lg-3 col-4" *ngIf="clientData.clientStatusId">
+                <p class="mb-2 fw-bold">Status</p>
+                <p class="fs-14 mb-0">
+                  <span
+                    [class]="
+                      returnStatusBadgeClassesStatus(clientData.clientStatusId)
+                    "
+                    >{{ clientData.clientStatusName }}</span
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-12 px-0">
+            <div class="card-body pt-0 px-0 pb-0">
+              <div class="row">
+                <div class="col-12 border-top border-top-dashed">
+                  <h6 class="mb-2 fw-bold mt-3">Address</h6>
+                  <p class="fs-14 mb-0" id="address-details">
+                    {{ clientData.address1 }}
+                    {{ clientData.address2 }}
+                    {{ clientData.address3 }}
+                    {{ clientData.country }}
+                    {{ clientData.postalCode }}
+                  </p>
+                </div>
+              </div>
+              <!--end row-->
+            </div>
+            <!--end card-body-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--end card-->
+  </div>
+
+  <div class="hstack justify-content-end gap-2 mb-3">
+    <button
+      (click)="goBack()"
+      type="button"
+      class="btn btn-soft-primary waves-effect"
+    >
+      <i class="align-bottom"></i>Back
+    </button>
+  </div>
+</div>

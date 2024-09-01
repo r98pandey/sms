@@ -1,0 +1,178 @@
+
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-lg-5">
+            <ng-select
+              [items]="arrayListDropDownAssetStatus"
+              bindLabel="assetStatus"
+              bindValue="assetStatusId"
+              (change)="onDropdownAssetStatusValueChange($event)"
+              [clearable]="false"
+              id="assetStatus"
+              [(ngModel)]="selectedDropDownAssetStatusIdValue"
+              placeholder="Select Asset Status"
+              class="w-100 mr-2"
+              for="assetStatus"
+            ></ng-select>
+          </div>
+          <div class="col-lg-5 ">
+            <div class="search-box">
+              <input
+                type="text"
+                name="searchTerm"
+                class="form-control"
+                [(ngModel)]="typeAssetNameValue"
+                placeholder="Search for asset name"
+                (keyup)="onTypeAssetNameChange()"
+                #inputer
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+        </div>
+           <div class="col-lg-2 ">
+             <div class="d-flex justify-content-end">
+                <button
+                  type="button"
+                  class="btn btn-danger ms-1"
+                  (click)="resetSerachVariable()"
+                  ngbTooltip="Remove All Search"
+                >
+                  <i class="ri-refresh-fill me-1 align-bottom"></i>
+                  Clear
+                </button>
+              </div>
+           </div>
+        </div>
+      </div>
+      <div class="card-body pt-0">
+        <div class="table-responsive mb-0">
+          <table class="table" >
+            <thead>
+              <tr class="bg-light text-muted text-uppercase">
+                <th scope="col" style="width: 50px">
+                  <div class="form-check" *ngIf="assetList.length!=0">
+                    <!-- <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="checkAll"
+                      value="option"
+                      [checked]="checkUncheckAll()"
+                      (change)="onCheckboxChange($event)"
+                    /> -->
+                  </div>
+                </th>
+
+                <th>Asset</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="assetList.length==0">
+                <tr>
+                  <td colspan="2"><p class="text-muted">No Records Found</p></td>
+                </tr>
+              </ng-container>  
+              <ng-container *ngIf="assetList.length!=0">
+
+            
+              <tr *ngFor="let asset of assetList; let i = index">
+                <th scope="row">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      name="checkAll"
+                      value="{{ asset.id }}"
+                      [(ngModel)]="assetList[i].checked"
+                      (change)="
+                        getAssetlistChecked(assetList[i].checked, asset)
+                      "
+                    />
+                  </div>
+                </th>
+                <td>
+                  <span>
+                    <div class="d-flex align-items-center">
+                      <div class="flex-shrink-0 me-3">
+                        <div class="avatar-sm bg-light rounded p-1">
+                          <img
+                            [src]="
+                              asset.assetImagePath
+                                ? imageUrl + asset.assetImagePath
+                                : '../../../../../assets/images/placeholderimage.png'
+                            "
+                            alt=""
+                            class="img-fluid d-block"
+                          />
+                        </div>
+                      </div>
+                      <div class="flex-grow-1">
+                        <h5 class="fs-14 mb-0">
+                          <a href="javascript:void(0)" class="text-body">{{
+                            asset.assetName
+                          }}</a>
+                        </h5>
+                        <p class="text-muted mb-0">
+                          <a
+                            href="javascript:void(0)"
+                            class="fw-sm link-primary"
+                            >{{ asset.assetTagId }}
+                          </a>
+                        </p>
+                        <p class="text-muted mb-0 status">
+                          <span
+                            class="badge text-uppercase bg-secondary-subtle text-secondary"
+                            >{{ asset.assetStatus }}</span
+                          >
+                        </p>
+                      </div>
+                    </div>
+                  </span>
+                </td>
+              </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <div
+          class="row justify-content-md-between align-items-md-center gy-2"
+        
+        >
+          <div class="col-sm-6">
+            <div
+              class="dataTables_info mb-2"
+              id="tickets-table_info"
+              role="status"
+              aria-live="polite"
+            >
+              Showing {{ from }} to {{ to }} of
+              {{ totalRecordsFromApi }} entries
+            </div>
+          </div>
+          <!-- Pagination -->
+          <div class="col-sm-6">
+            <div class="text-sm-right float-end listjs-pagination">
+              <ngb-pagination
+                [collectionSize]="totalRecordsFromApi"
+                [(page)]="page"
+                [pageSize]="pageSize"
+                [maxSize]="1"
+                [rotate]="true"
+                (pageChange)="OnChangesPage($event)"
+                *ngIf="totalRecordsFromApi > pageSize"
+              >
+                <ng-template ngbPaginationPrevious let-page let-pages="pages">
+                  <i class="ci-arrow-left me-2"></i> Prev
+                </ng-template>
+                <ng-template ngbPaginationNext>
+                  Next
+                  <i class="ci-arrow-right ms-2"></i>
+                </ng-template>
+              </ngb-pagination>
+            </div>
+          </div>
+          <!-- End Pagination -->
+        </div>
+      </div>
+    </div>
+ 

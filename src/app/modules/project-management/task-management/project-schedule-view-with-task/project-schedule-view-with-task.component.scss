@@ -1,0 +1,35 @@
+.progress-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-circle-inner {
+  width: 80%;
+  height: 80%;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-circle-inner-content {
+  text-align: center;
+}
+
+.progress-value {
+  font-size: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
+.progress-text {
+  font-size: 9px;
+  color: #275993;
+  font-weight: 700;
+}

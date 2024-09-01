@@ -1,0 +1,811 @@
+<div class="row me-0 ms-0 ps-0 pe-0">
+  <div class="col-lg-12">
+    <div class="row">
+      <div class="col-3">
+        <div class="mb-2">
+          <img
+            [src]="
+              ticketData[0]?.companyLogoURL
+                ? imageUrl + ticketData[0]?.companyLogoURL
+                : '../../../../../../assets/images/placeholderimage.png'
+            "
+            class="card-logo"
+            alt="logo light"
+            height="80"
+          />
+        </div>
+      </div>
+      <div class="col-9 d-flex justify-content-end">
+        <div class="">
+          <h3 class="text-uppercase fw-semibold mb-0">
+            {{ ticketData[0]?.companyName }}
+          </h3>
+          <p class="mb-0 pt-0 fso-20">
+            {{
+              ticketData[0]?.companyAddress1
+                ? ticketData[0]?.companyAddress1
+                : "17, Jalan Ekoperniagaan 2/6"
+            }}
+          </p>
+          <p class="mb-0 pt-0 fso-20">
+            {{
+              ticketData[0]?.companyAddress2
+                ? ticketData[0]?.companyAddress2
+                : "Taman Ekoperniagaan 81100,"
+            }}
+          </p>
+          <p class="mb-0 pt-0 fso-20">
+            {{
+              ticketData[0]?.companyAddress3
+                ? ticketData[0]?.companyAddress3
+                : "Johor Bahru, Johor, "
+            }}
+
+            {{
+              ticketData[0]?.companyCountry
+                ? +ticketData[0]?.companyCountry
+                : "Malaysia"
+            }}
+          </p>
+        </div>
+      </div>
+      <div class="col-12 mt-2">
+        <div class="border-gradient-1"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 mb-3 mt-2 d-flex justify-content-end">
+    <!-- <h3 class="mb-0 ">Ticket Report</h3> -->
+    <h3 class="mb-0">#{{ ticketData[0]?.ticketNo }}</h3>
+  </div>
+
+  <div class="col-12 mb-3 mt-2">
+    <div class="row">
+      <div class="col-12">
+        <h3 class="mt-2 mb-3">
+          <b> Title: </b>{{ ticketData[0]?.ticketTitle }}
+        </h3>
+      </div>
+      <div class="col-6 mt-1">
+        <p class="mt-0 mb-0 fso-17">
+          <b>Client: </b>{{ ticketData[0]?.clientName || "NA" }}
+        </p>
+        <p class="mt-0 mb-0 fso-17">
+          <b> Project: </b>{{ ticketData[0]?.projectName || "NA" }}
+        </p>
+      </div>
+      <div class="col-6 mt-1">
+        <p class="mb-0 fso-17">
+          <b> Created Date: </b>{{ ticketData[0]?.createdDate || "NA" }}
+        </p>
+        <p class="mt-0 mb-0 fso-17">
+          <b>Created By: </b>{{ ticketData[0]?.requesterName || "NA" }}
+        </p>
+        <p class="mt-0 mb-0 fso-17">
+          <b> Email: </b> {{ ticketData[0]?.requesterEmail || "NA" }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 mb-3 mt-4">
+    <table class="table table-bordered">
+      <tbody>
+        <tr
+          class="p-2 text-center"
+          style="background-color: black; color: white"
+        >
+          <td colspan="2"><h2 class="mb-0 text-white">Ticket Details</h2></td>
+        </tr>
+        <tr class="p-2">
+          <td class="fw-bold fs-21" style="width: 30%">Service Type</td>
+          <td class="fw-semibold fs-21" style="width: 70%">
+            {{ ticketData[0]?.operationType || "NA" }}
+          </td>
+        </tr>
+         <tr class="p-2">
+          <td class="fw-bold fs-21" style="width: 30%">Issue Type</td>
+          <td class="fw-semibold fs-21" style="width: 70%">
+           {{ ticketData[0]?.isDeviceRelated == true ? "Hardware" : "Non-Hardware" }}
+          </td>
+        </tr>
+         <tr class="p-2">
+          <td class="fw-bold fs-21" style="width: 30%">Service Type</td>
+          <td class="fw-semibold fs-21" style="width: 70%">
+            {{ ticketData[0]?.operationType || "NA" }}
+          </td>
+        </tr>
+         <tr class="p-2">
+          <td class="fw-bold fs-21" style="width: 30%">Service Type</td>
+          <td class="fw-semibold fs-21" style="width: 70%">
+            {{ ticketData[0]?.operationType || "NA" }}
+          </td>
+        </tr>
+         <tr class="p-2">
+          <td class="fw-bold fs-21" style="width: 30%">Service Type</td>
+          <td class="fw-semibold fs-21" style="width: 70%">
+            {{ ticketData[0]?.operationType || "NA" }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<!-- 
+  <div class="col-4 border-around mt-2 align-items-center">
+    <div class="fw-semibold fso-17 mt-1 mb-1 ps-3">Service Type</div>
+  </div>
+  <div class="col-8 border-around mt-2 align-items-center">
+    <div class="mt-1 mb-1 fso-17 ps-2">
+      {{ ticketData[0]?.operationType || "NA" }}
+    </div>
+  </div> -->
+
+  <!-- <div class="col-4 border-around align-items-center">
+    <div class="fw-semibold fso-17 mt-1 mb-1 ps-3">Issue Type</div>
+  </div>
+  <div class="col-8 border-around align-items-center">
+    <div class="mt-1 mb-1 fso-17 ps-2">
+      {{ ticketData[0]?.isDeviceRelated == true ? "Hardware" : "Non-Hardware" }}
+    </div>
+  </div> -->
+
+  <div class="col-4 border-around align-items-center">
+    <div class="fw-semibold fso-17 mt-1 mb-1 ps-3">Ticket Category</div>
+  </div>
+  <div class="col-8 border-around align-items-center">
+    <div class="mt-1 mb-1 fso-17 ps-2">
+      {{ ticketData[0]?.ticketTypeName || "NA" }}
+    </div>
+  </div>
+
+  <div class="col-4 border-around align-items-center">
+    <div class="fw-semibold fso-17 mt-1 mb-1 ps-3">Bill Type</div>
+  </div>
+  <div class="col-8 border-around align-items-center">
+    <div class="mt-1 mb-1 fso-17 ps-2">
+      {{
+        ticketData[0]?.isBillingRequired === true ? "Billable" : "Not Billable"
+      }}
+    </div>
+  </div>
+
+  <div class="col-4 border-around align-items-center">
+    <div class="fw-semibold fso-17 mt-1 mb-1 ps-3">Priority</div>
+  </div>
+  <div class="col-8 border-around align-items-center">
+    <div class="mt-1 mb-1 fso-17 ps-2">
+      {{ ticketData[0]?.urgencyTypeName || "-" }}
+    </div>
+  </div>
+  <div class="col-4 border-around align-items-center">
+    <div class="fw-semibold fso-17 mt-1 mb-1 ps-3">Status</div>
+  </div>
+  <div class="col-8 border-around align-items-center">
+    <div class="mt-1 mb-1 fso-17 ps-2">
+      {{ ticketData[0]?.ticketStatusName }}
+    </div>
+  </div>
+
+  <div class="col-12 mt-3">
+    <hr />
+  </div>
+  <div class="col-12 mt-1">
+    <h4 class="fw-semibold fso-17 mb-2">Summary</h4>
+
+    <div class="fso-17">
+      The ticket with the title {{ ticketData[0]?.ticketTitle }}, created by
+      {{ ticketData[0]?.requesterName || "NA" }} on
+      {{ ticketData[0]?.createdDate || "NA" }} , has been
+      {{ ticketData[0]?.ticketStatusName }}. The ticket was related to
+      {{
+        ticketData[0]?.isDeviceRelated == true ? "Hardware" : "Non-Hardware"
+      }}under the category of {{ ticketData[0]?.ticketTypeName || "NA" }} . The
+      service is classified as
+      {{
+        ticketData[0]?.isBillingRequired === true ? "Billable" : "Not Billable"
+      }}, and the priority was marked as
+      {{ ticketData[0]?.urgencyTypeName || "-" }}.
+    </div>
+  </div>
+
+  <div
+    class="col-12 me-0 ms-0 ps-0 pe-0"
+    *ngIf="ticketData[0].issueDescription"
+  >
+    <hr class="me-0 ms-0 ps-0 pe-0" />
+  </div>
+
+  <div class="col-12 mb-3" *ngIf="ticketData[0].issueDescription">
+    <h4 class="fw-semibold fso-17 mb-2">Description</h4>
+
+    <p class="mb-2 fso-17" [innerHTML]="ticketData[0].issueDescription"></p>
+  </div>
+
+  <div
+    class="col-12 breakthepage"
+    *ngIf="
+      ticketData[0]?.pic1_URL ||
+      ticketData[0]?.pic2_URL ||
+      ticketData[0]?.remark_Pic1 ||
+      ticketData[0]?.remark_Pic2
+    "
+  >
+    <hr />
+    <h4 class="fw-semibold fso-17 mb-2 mt-3">Image Attachment</h4>
+  </div>
+  <div
+    class="col-12 mt-2"
+    *ngIf="ticketData[0]?.remark_Pic1 || ticketData[0].pic1_URL"
+  >
+    <figure class="figure text-center">
+      <h4 class="mb-0 text-decoration-underline mt-2">Image 1</h4>
+      <img
+        [src]="
+          ticketData[0].pic1_URL
+            ? imageUrl + ticketData[0].pic1_URL
+            : '../../../../../assets/images/placeholderimage.png'
+        "
+        class="img-fluid rounded img-size-fixed"
+      />
+      <figcaption class="figure-caption">
+        <p class="mt-2 fs-16 mb-1">
+          <b> Remark: {{ ticketData[0]?.remark_Pic1 || "No Remark" }}.</b>
+        </p>
+      </figcaption>
+    </figure>
+  </div>
+  <div
+    class="col-12 mt-2"
+    *ngIf="ticketData[0]?.remark_Pic2 || ticketData[0].pic2_URL"
+  >
+    <figure class="figure text-center">
+      <h4 class="mb-0 text-decoration-underline mt-1">Image 2</h4>
+
+      <img
+        [src]="
+          ticketData[0].pic2_URL
+            ? imageUrl + ticketData[0].pic2_URL
+            : '../../../../../assets/images/placeholderimage.png'
+        "
+        class="img-fluid rounded img-size-fixed"
+      />
+      <figcaption class="figure-caption">
+        <p class="mt-2 fs-16 mb-1">
+          <b> Remark: {{ ticketData[0]?.remark_Pic2 || "No Remark" }}.</b>
+        </p>
+      </figcaption>
+    </figure>
+  </div>
+
+  <div class="col-12" *ngIf="ticketData[0].ticketAcknoledgeRemark">
+    <hr />
+  </div>
+
+  <div class="col-6 mt-3" *ngIf="ticketData[0].ticketAcknoledgeRemark">
+    <h4 class="fw-semibold fso-17 mb-2">
+      Acknowledge By {{ ticketData[0].companyName }}
+    </h4>
+
+    <p class="fs-13 text-dark mb-0">
+      <b>
+        <i class="ri-user-3-line align-bottom"></i>
+        {{ ticketData[0].ticketAcknoledgeBy }}
+      </b>
+    </p>
+    <p class="fs-13 text-dark mb-0">
+      <i class="ri-outlet-2-line align-bottom"></i>
+      {{ ticketData[0].ticketAcknoledgeDesig }}
+    </p>
+    <p class="fs-13 mb-0">
+      <i class="ri-calendar-2-line align-bottom"></i>
+      {{ ticketData[0].ticketAcknoledgeDateTime }}
+    </p>
+    <p class="fs-12">
+      <i class="ri-edit-2-line align-bottom"></i>
+      {{ ticketData[0].ticketAcknoledgeRemark }}
+    </p>
+  </div>
+
+  <div class="col-6 mt-3" *ngIf="ticketData[0].ticketClosedRemark">
+    <h4 class="fw-semibold fso-17 mb-2">
+      Acknowledge By {{ ticketData[0].clientName }}
+    </h4>
+
+    <p class="fs-13 text-dark mb-0">
+      <b>
+        <i class="ri-user-3-line align-bottom"></i>
+        {{ ticketData[0].ticketClosedBy }}
+      </b>
+    </p>
+    <p class="fs-13 text-dark mb-0">
+      <i class="ri-outlet-2-line align-bottom"></i>
+      {{ ticketData[0].ticketClosedDesig }}
+    </p>
+    <p class="fs-13 mb-0">
+      <i class="ri-calendar-2-line align-bottom"></i>
+      {{ ticketData[0].ticketClosedDateTime }}
+    </p>
+    <p class="fs-12">
+      <i class="ri-edit-2-line align-bottom"></i>
+      {{ ticketData[0].ticketClosedRemark }}
+    </p>
+  </div>
+</div>
+
+<!-- Incident Part -->
+<div
+  class="row me-0 ms-0 ps-0 pe-0 breakthepage"
+  *ngIf="incidentList?.length != 0"
+>
+  <div class="col-12 mb-3 mt-2 text-center">
+    <h4 class="mb-0 text-decoration-underline">Incident Details</h4>
+  </div>
+
+  <div class="col-12 mb-3 mt-2">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="mt-2 mb-3">
+          <b> Title: </b>{{ ticketData[0]?.ticketTitle }}
+        </h2>
+      </div>
+      <div class="col-6 mt-1">
+        <p class="mt-0 mb-0 fso-17">
+          <b>Client: </b>{{ ticketData[0]?.clientName || "NA" }}
+        </p>
+        <p class="mt-0 mb-0 fso-17">
+          <b> Project: </b>{{ ticketData[0]?.projectName || "NA" }}
+        </p>
+      </div>
+      <div class="col-6 mt-1">
+        <p class="mb-0 fso-17">
+          <b> Created Date: </b>{{ ticketData[0]?.createdDate || "NA" }}
+        </p>
+        <p class="mt-0 mb-0 fso-17">
+          <b>Created By: </b>{{ ticketData[0]?.requesterName || "NA" }}
+        </p>
+        <p class="mt-0 mb-0 fso-17">
+          <b> Email: </b> {{ ticketData[0]?.requesterEmail || "NA" }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 mb-3 mt-4 text-center">
+    <h4 class="mb-0 text-decoration-underline">
+      The following sections should be completed for all incidents:
+    </h4>
+  </div>
+
+  <div class="col-3 border-around mt-2 align-items-center">
+    <div class="fw-semibold fso-17 mt-1 mb-1 ps-3">Date of incident</div>
+  </div>
+  <div class="col-3 border-around mt-2 align-items-center">
+    <div class="mt-1 mb-1 fso-17 ps-2">
+      {{ incidentList.dateOfincident || "Na" }}
+    </div>
+  </div>
+  <div class="col-3 border-around mt-2 align-items-center">
+    <div class="fw-semibold fso-17 mt-1 mb-1 ps-3">Approx. Time</div>
+  </div>
+  <div class="col-3 border-around mt-2 align-items-center">
+    <div class="mt-1 mb-1 fso-17 ps-2">
+      {{ incidentList.approxTimeOfIncident || "Na" }}
+    </div>
+  </div>
+
+  <div class="col-12 border-around align-items-center">
+    <div class="fso-17 mt-1 mb-1 ps-3">
+      <span class="fw-semibold">Incident Type: </span
+      >{{ incidentList.incidentTypeName || "Na" }}
+    </div>
+  </div>
+  <div class="col-12 border-around align-items-center">
+    <div class="fso-17 mt-1 mb-1 ps-3">
+      <span class="fw-semibold">Location: </span>
+      {{ incidentList.locationName || "Na" }}
+    </div>
+  </div>
+
+  <div
+    class="col-12 border-around align-items-center"
+    *ngIf="incidentList.incidentRemark"
+  >
+    <div
+      class="fso-17 mt-1 mb-1 ps-3"
+      [innerHTML]="
+        '<span class=\'fw-semibold\'>Cause of Incident: </span>' +
+        incidentList.incidentRemark
+      "
+    ></div>
+  </div>
+
+  <div
+    class="col-12 border-around align-items-center"
+    *ngIf="incidentList.impactOfIncident"
+  >
+    <div
+      class="fso-17 mt-1 mb-1 ps-3"
+      [innerHTML]="
+        '<span class=\'fw-semibold\'>Impact of Incident: </span>' +
+        incidentList.impactOfIncident
+      "
+    ></div>
+  </div>
+
+  <div
+    class="col-12 border-around align-items-center"
+    *ngIf="incidentList.isSolvedRemark"
+  >
+    <div class="fso-17 mt-1 mb-1 ps-3">
+      <div class="fw-semibold">
+        Is the problem solved? (Yes /No) -
+        {{ incidentList.isSolved ? "Yes" : "No" }}
+      </div>
+      <div>
+        <div class="fso-17 mt-2 mb-1">
+          If yes, what was the solution. If no, state why:
+        </div>
+        <div [innerHTML]="incidentList.isSolvedRemark"></div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="col-8 border-around align-items-center"
+    *ngIf="incidentList.incindetTechSignByName"
+  >
+    <div class="fso-17 mt-1 mb-1 ps-3">
+      <b>Involved Party Signature:</b>
+      <br />
+      {{ incidentList.incindetTechSignByName }}
+
+      <br />
+      <img
+        src="{{ imageUrl }}{{ incidentList.incindetTechSignImageURL }}"
+        height="100"
+        class="mt-2 mb-2"
+        *ngIf="incidentList.incindetTechSignImageURL"
+      />
+    </div>
+  </div>
+  <div
+    class="col-4 border-around align-items-center"
+    *ngIf="incidentList.incindetTechSignDateTime"
+  >
+    <div class="fso-17 mt-1 mb-1 ps-3">
+      <b>Date:</b>
+      {{ incidentList.incindetTechSignDateTime }}
+    </div>
+  </div>
+  <div
+    class="col-12 border-around align-items-center"
+    *ngIf="incidentList.techFinalRemark"
+  >
+    <div class="fso-17 mt-1 mb-1 ps-3">
+      {{ incidentList.techFinalRemark }}
+    </div>
+  </div>
+  <div
+    class="col-8 border-around align-items-center"
+    *ngIf="incidentList.incindetClientSignByName"
+  >
+    <div class="fso-17 mt-1 mb-1 ps-3">
+      <b>Received Party Signature:</b>
+      <br />
+      {{ incidentList.incindetClientSignByName }}
+
+      <br />
+      <img
+        src="{{ imageUrl }}{{ incidentList.incindetClientSignImageURL }}"
+        height="100"
+        class="mt-2 mb-2"
+        *ngIf="incidentList.incindetClientSignImageURL"
+      />
+    </div>
+  </div>
+  <div
+    class="col-4 border-around align-items-center"
+    *ngIf="incidentList.incindetClientSignDateTime"
+  >
+    <div class="fso-17 mt-1 mb-1 ps-3">
+      <b>Date:</b>
+      {{ incidentList.incindetClientSignDateTime }}
+    </div>
+  </div>
+  <div
+    class="col-12 border-around align-items-center"
+    *ngIf="incidentList.clientFinalRemark"
+  >
+    <div class="fso-17 mt-1 mb-1 ps-3">
+      {{ incidentList.clientFinalRemark }}
+    </div>
+  </div>
+
+  <div
+    class="col-12 breakthepage mt-4"
+    *ngIf="
+      incidentList.incidentImage1URL ||
+      incidentList.incidentImage2URL ||
+      incidentList.incidentImage3URL ||
+      incidentList.incidentImage4URL
+    "
+  >
+    <h4 class="mb-3 mt-3">Picture of Incident- Before</h4>
+    <div class="row mb-3 mt-3">
+      <div class="col-6" *ngIf="incidentList.incidentImage1URL">
+        <figure class="figure">
+          <img
+            [src]="
+              incidentList.incidentImage1URL
+                ? imageUrl + incidentList.incidentImage1URL
+                : '../../../../../assets/images/placeholderimage.png'
+            "
+            alt=""
+            class="img-fluid rounded img-size-fixed"
+          />
+          <figcaption class="figure-caption">Incident Images 1</figcaption>
+        </figure>
+      </div>
+      <div class="col-6" *ngIf="incidentList.incidentImage2URL">
+        <figure class="figure">
+          <img
+            [src]="
+              incidentList.incidentImage2URL
+                ? imageUrl + incidentList.incidentImage2URL
+                : '../../../../../assets/images/placeholderimage.png'
+            "
+            alt=""
+            class="img-fluid rounded img-size-fixed"
+          />
+          <figcaption class="figure-caption">Incident Images 2</figcaption>
+        </figure>
+      </div>
+      <div class="col-6" *ngIf="incidentList.incidentImage3URL">
+        <figure class="figure">
+          <img
+            [src]="
+              incidentList.incidentImage3URL
+                ? imageUrl + incidentList.incidentImage3URL
+                : '../../../../../assets/images/placeholderimage.png'
+            "
+            alt=""
+            class="img-fluid rounded img-size-fixed"
+          />
+          <figcaption class="figure-caption">Incident Images 3</figcaption>
+        </figure>
+      </div>
+      <div class="col-6" *ngIf="incidentList.incidentImage4URL">
+        <figure class="figure">
+          <img
+            [src]="
+              incidentList.incidentImage4URL
+                ? imageUrl + incidentList.incidentImage4URL
+                : '../../../../../assets/images/placeholderimage.png'
+            "
+            alt=""
+            class="img-fluid rounded img-size-fixed"
+          />
+          <figcaption class="figure-caption">Incident Images 4</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+  <div
+    class="col-12 breakthepage mt-4"
+    *ngIf="
+      incidentList.tecgUpdatemage1URL ||
+      incidentList.tecgUpdatemage2URL ||
+      incidentList.tecgUpdatemage3URL ||
+      incidentList.tecgUpdatemage4URL
+    "
+  >
+    <h4 class="mb-3 mt-3">Picture of Incident- Before</h4>
+    <div class="row mt-3 mb-3">
+      <div class="col-6" *ngIf="incidentList.tecgUpdatemage1URL">
+        <figure class="figure">
+          <img
+            [src]="
+              incidentList.tecgUpdatemage1URL
+                ? imageUrl + incidentList.tecgUpdatemage1URL
+                : '../../../../../assets/images/placeholderimage.png'
+            "
+            alt=""
+            class="img-fluid rounded img-size-fixed"
+          />
+          <figcaption class="figure-caption">Updated Images 1</figcaption>
+        </figure>
+      </div>
+      <div class="col-6" *ngIf="incidentList.tecgUpdatemage2URL">
+        <figure class="figure">
+          <img
+            [src]="
+              incidentList.tecgUpdatemage2URL
+                ? imageUrl + incidentList.tecgUpdatemage2URL
+                : '../../../../../assets/images/placeholderimage.png'
+            "
+            alt=""
+            class="img-fluid rounded img-size-fixed"
+          />
+          <figcaption class="figure-caption">Updated Images 2</figcaption>
+        </figure>
+      </div>
+      <div class="col-6" *ngIf="incidentList.tecgUpdatemage3URL">
+        <figure class="figure">
+          <img
+            [src]="
+              incidentList.tecgUpdatemage3URL
+                ? imageUrl + incidentList.tecgUpdatemage3URL
+                : '../../../../../assets/images/placeholderimage.png'
+            "
+            alt=""
+            class="img-fluid rounded img-size-fixed"
+          />
+          <figcaption class="figure-caption">Updated Images 3</figcaption>
+        </figure>
+      </div>
+      <div class="col-6" *ngIf="incidentList.tecgUpdatemage4URL">
+        <!-- figures Images -->
+        <figure class="figure">
+          <img
+            [src]="
+              incidentList.tecgUpdatemage4URL
+                ? imageUrl + incidentList.tecgUpdatemage4URL
+                : '../../../../../assets/images/placeholderimage.png'
+            "
+            alt=""
+            class="img-fluid rounded img-size-fixed"
+          />
+          <figcaption class="figure-caption">Updated Images 4</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end Incident Part -->
+
+<div
+  class="row me-0 ms-0 ps-0 pe-0 breakthepage"
+  *ngIf="assetTicketList?.length != 0"
+>
+  <div class="col-12 mb-3 mt-3 text-center">
+    <h4 class="mb-0 text-decoration-underline mt-3">Asset List Reports</h4>
+  </div>
+
+  <div class="col-12 mb-3 mt-2">
+    <div class="row">
+      <div class="col-12">
+        <h3 class="mt-2 mb-3">
+          <b> Title: </b>{{ ticketData[0]?.ticketTitle }}
+        </h3>
+      </div>
+      <div class="col-6 mt-1">
+        <p class="mt-0 mb-0 fso-17">
+          <b>Client: </b>{{ ticketData[0]?.clientName || "NA" }}
+        </p>
+        <p class="mt-0 mb-0 fso-17">
+          <b> Project: </b>{{ ticketData[0]?.projectName || "NA" }}
+        </p>
+      </div>
+      <div class="col-6 mt-1">
+        <p class="mb-0 fso-17">
+          <b> Created Date: </b>{{ ticketData[0]?.createdDate || "NA" }}
+        </p>
+        <p class="mt-0 mb-0 fso-17">
+          <b>Created By: </b>{{ ticketData[0]?.requesterName || "NA" }}
+        </p>
+        <p class="mt-0 mb-0 fso-17">
+          <b> Email: </b> {{ ticketData[0]?.requesterEmail || "NA" }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 mb-3 mt-4 text-center">
+    <h4 class="mb-0 text-decoration-underline">
+      The following sections are part of the Asset List:
+    </h4>
+  </div>
+  <div class="col-12 mb-3 mt-4">
+    <div class="row">
+      <div class="col-12" *ngFor="let data of assetTicketList">
+        <div class="card profile-project-card shadow-none">
+          <div class="card-body p-4">
+            <div class="row">
+              <div class="col-2">
+                <img
+                  [src]="
+                    data.reqIMGURL
+                      ? imageUrl + data.reqIMGURL
+                      : '../../../../../../assets/images/placeholderimage.png'
+                  "
+                  alt=""
+                  height="50"
+                  class="rounded"
+                />
+              </div>
+              <div class="col-5">
+                <a href="javascript:void(0);">
+                  <h6 class="fs-14 mb-0">{{ data.assetName }}</h6>
+                </a>
+                <p class="text-primary fw-bold mb-0 fs-12">
+                  #{{ data.assetTagId }}
+                </p>
+
+                <div>{{ data.ticketItemStatusName }}</div>
+              </div>
+              <div class="col-5">
+                <a href="javascript:void(0);" *ngIf="data.techUpdName">
+                  <h6 class="fs-14 mb-0">Tech Name:{{ data.techUpdName }}</h6>
+                </a>
+                <p
+                  class="text-primary fw-bold mb-0 fs-12"
+                  *ngIf="data.techUpdateDate"
+                >
+                  Update Date:{{ data.techUpdateDate }}
+                </p>
+              </div>
+            </div>
+            <div
+              class="row border-top border-top-dashed p-2 mt-1"
+              *ngIf="data.techIMGURL3 || data.techIMGURL2 || data.techIMGURL1"
+            >
+              <div class="col-4 mt-2" *ngIf="data.techIMGURL1">
+                <img
+                  [src]="
+                    data.techIMGURL1
+                      ? imageUrl + data.techIMGURL1
+                      : '../../../../../assets/images/placeholderimage.png'
+                  "
+                  id="product-img"
+                  height="100"
+                  width="100"
+                />
+              </div>
+              <div class="col-4 mt-2" *ngIf="data.techIMGURL2">
+                <img
+                  [src]="
+                    data.techIMGURL2
+                      ? imageUrl + data.techIMGURL2
+                      : '../../../../../assets/images/placeholderimage.png'
+                  "
+                  id="product-img"
+                  height="100"
+                  width="100"
+                />
+              </div>
+              <div class="col-4 mt-2" *ngIf="data.techIMGURL3">
+                <img
+                  [src]="
+                    data.techIMGURL3
+                      ? imageUrl + data.techIMGURL3
+                      : '../../../../../assets/images/placeholderimage.png'
+                  "
+                  id="product-img"
+                  height="100"
+                  width="100"
+                />
+              </div>
+            </div>
+
+            <div
+              class="row border-top border-top-dashed p-2 mt-1"
+              *ngIf="data.technitionRemark"
+            >
+              <div class="col-md-12 d-flex align-items-center">
+                <div>
+                  <h5 class="fs-12 text-muted mb-0">Remark:</h5>
+                  <p class="text-muted mb-0">{{ data.technitionRemark }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="row me-0 ms-0 ps-0 pe-0 breakthepage"
+  *ngIf="assetTicketList?.length != 0"
+></div>

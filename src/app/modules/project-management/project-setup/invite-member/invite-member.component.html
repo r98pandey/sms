@@ -1,0 +1,102 @@
+<div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Members</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+
+
+        <div class="search-box mb-3">
+            <input type="text" class="form-control bg-light border-light" placeholder="Search here...">
+            <i class="ri-search-line search-icon"></i>
+        </div>
+      
+        <ngx-simplebar class="mx-n4 px-4" style="max-height: 225px;">
+            <div class="vstack gap-3">
+                <div *ngFor="let tech of filteredTechnicianList; let i = index">
+                  <div
+                    class="d-flex align-items-center"
+                    (click)="selectTechnician(filteredTechnicianList, i, tech)"
+                  >
+                    <div class="flex-shrink-0 me-3">
+                      <div class="d-flex align-items-center gap-1">
+                        <div class="form-check form-check-flat form-check-primary">
+                          <label class="form-check-label">
+                            <input
+                              type="checkbox"
+                              value="{{ tech }}"
+                              [(ngModel)]="filteredTechnicianList[i].checked"
+                            
+                            
+                              class="form-check-input"
+                            />
+                            <i class="input-frame"></i>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+        
+                    <div class="avatar-xs flex-shrink-0 me-3">
+                      <img
+                        src="{{
+                          tech.profileImageUrl
+                            ? apiUrl + tech.profileImageUrl
+                            : '../../../../../assets/images/placeholderimage.png'
+                        }}"
+                        alt=""
+                        class="img-fluid rounded-circle"
+                        style="width: 40px; height: 35px;"
+                      />
+                    </div>
+                    <div class="flex-grow-1">
+                      <h5 class="fs-14 mb-0">
+                        <a href="javascript:void(0);" class="text-body d-block">
+                          {{ tech?.fullName }}
+                        </a>
+                        <p class="mt-0 mb-0">{{ tech.roleName }}</p>
+                      </h5>
+                    </div>
+                  
+                  </div>
+                </div>
+                <div
+                  class="text-center mt-3 text-muted"
+                  *ngIf="
+                    technicianList &&
+                    filteredTechnicianList &&
+                    technicianSearchText.length > 0
+                      ? !filteredTechnicianList.length
+                      : !technicianList.length
+                  "
+                >
+                  <p>No Member Found</p>
+                </div>
+              </div>
+            <!-- end list -->
+        </ngx-simplebar>
+
+    </div>
+  <div class="modal-footer">
+            <button *ngIf="filteredTechnicianList.length!=0"
+                type="button" [disabled]="selectedTech.length==0"
+                class="btn w-sm btn-primary"
+                id="delete-product"
+                (click)="submit('submit')"
+              >
+                Submit
+              </button>
+            <button
+              type="button"
+              class="btn btn-danger w-xs"
+              data-bs-dismiss="modal"
+              (click)="close('Close click')"
+            >
+              Close
+            </button>
+  </div>
+ 

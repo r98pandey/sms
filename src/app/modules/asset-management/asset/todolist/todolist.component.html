@@ -1,0 +1,430 @@
+<nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Dashboard</li>
+        <li class="breadcrumb-item active" aria-current="page">To Do List</li>
+
+    </ol>
+
+</nav>
+
+
+
+<div class="row">
+    <div class="col-md-12 stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title">Todo List
+                    <button class="btn btn-xs float-right mr-3" ngbTooltip="Refresh" (click)="reloadPage()"
+                        style="background-color:#8A2BE2;color:white">
+                        <i class="feather fa-3x icon-refresh-ccw p-1"></i>
+                    </button>
+                    <button class="btn btn-outline-primary float-right mr-3" ngbTooltip="Back" (click)="goto()">
+                        Back
+                    </button>
+                    <span class="float-right mr-3 mb-2 mt-2" *ngIf="!(allSeletectedAsset.length>=1)">
+                        <span class="mr-2 mt-3" *ngIf="_approverType=='Approver'"><i
+                                class="feather icon-check-circle mr-1 text-primary"></i>Approve</span>
+                        <span class="mr-2 mt-3" *ngIf="_approverType=='Reviewer'"><i
+                                class="feather icon-target mr-1 text-primary "></i>Review</span>
+                        <span class="mr-2 mt-3"><i class="feather icon-x-circle mr-1 text-danger"></i>Reject</span>
+                        <span class="mr-2 mt-3"><i class="feather icon-eye mr-1 text-info"></i>View</span>
+
+
+                    </span>
+                    <span class="float-right mr-3" *ngIf="allSeletectedAsset.length>=1">
+
+
+                        <button class="btn btn-primary mr-2 mb-2 mb-md-0" *ngIf="_approverType=='Approver'"
+                            (click)="sweetAlertApproverMultiConfirmation()"> Approver</button>
+                        <button class="btn btn-primary mr-2 mb-2 mb-md-0" *ngIf="_approverType=='Reviewer'"
+                            (click)="sweetAlertReviewerMultiConfirmation()">Reviewer</button>
+
+                        <button class="btn btn-danger mr-2 mb-2 mb-md-0 "
+                            (click)=" sweetAlertRejectMultiConfirmation()">Reject
+                        </button>
+
+                    </span>
+
+                </h6>
+                <div class="table-responsive">
+
+                    <table cellpadding="0" cellspacing="0" width="100%" class="table_loader" *ngIf="!isTableView">
+                        <tr>
+                            <th class="col1">
+                                <span></span>
+                            </th>
+                            <th class="col4">
+                                <span></span>
+                            </th>
+                            <th class="col5">
+                                <span></span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="col1">
+                                <span></span>
+                            </td>
+                            <td class="col4">
+                                <span></span>
+                                <span class="sub-temp"></span>
+                                <span class="sub-temp sub-temp-three"></span>
+                            </td>
+                            <td class="col5">
+                                <span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col1">
+                                <span></span>
+                            </td>
+                            <td class="col4">
+                                <span></span>
+                                <span class="sub-temp"></span>
+                                <span class="sub-temp sub-temp-three"></span>
+                            </td>
+                            <td class="col5">
+                                <span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col1">
+                                <span></span>
+                            </td>
+                            <td class="col4">
+                                <span></span>
+                                <span class="sub-temp"></span>
+                                <span class="sub-temp sub-temp-three"></span>
+                            </td>
+                            <td class="col5">
+                                <span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col1">
+                                <span></span>
+                            </td>
+                            <td class="col4">
+                                <span></span>
+                                <span class="sub-temp"></span>
+                                <span class="sub-temp sub-temp-three"></span>
+                            </td>
+                            <td class="col5">
+                                <span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col1">
+                                <span></span>
+                            </td>
+                            <td class="col4">
+                                <span></span>
+                                <span class="sub-temp"></span>
+                                <span class="sub-temp sub-temp-three"></span>
+                            </td>
+                            <td class="col5">
+                                <span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col1">
+                                <span></span>
+                            </td>
+                            <td class="col4">
+                                <span></span>
+                                <span class="sub-temp"></span>
+                                <span class="sub-temp sub-temp-three"></span>
+                            </td>
+                            <td class="col5">
+                                <span></span>
+                            </td>
+                        </tr>
+
+                    </table>
+                    <table class="table" *ngIf="isTableView">
+                        <span *ngIf="rows.length==0?true:false" class="pt-2 m-1">
+                            <br>
+                             <p>No Records Found!</p>
+                        </span>
+                        <thead>
+                            <tr>
+                                <th class="p-0">
+                                    <div class="form-check form-check-flat form-check-primary "
+                                        style="margin-top: 10%;margin-left:18% ;">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" [checked]="isAllCheckBoxChecked()"
+                                                (change)="checkAllCheckBox($event,rows)" class="form-check-input">
+                                            <i class="input-frame"></i>
+
+                                        </label>
+                                    </div>
+                                </th>
+                                <th class="p-2">Asset</th>
+                                <th class="p-2"> {{isProject ? 'Project': 'Department'}} </th>
+                                <th class="p-2">Category</th>
+                                <th class="p-2">Sub-Category</th>
+                                <th class="p-2">Asset Assign To</th>
+                                <th class="p-2">WorKflow</th>
+                                <!-- <th class="p-2">Status</th> -->
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- -->
+                            <tr *ngFor="let asset of rows,let i=index">
+                                <td class="p-2">
+
+                                    <div class="form-check form-check-flat form-check-primary">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" value="{{asset}}" [(ngModel)]="rows[i].checked"
+                                                (change)="getTodolistChecked(rows[i].checked,asset)"
+                                                class="form-check-input">
+                                            <i class="input-frame"></i>
+
+                                        </label>
+                                    </div>
+
+
+                                </td>
+                                <td class="p-2">
+                                    <div class="from">
+                                        {{asset.assetName}}
+                                        <!-- <p>
+                                            <span class="badge  badge-font badge-primary"
+                                               // *ngIf="asset.assetTagId!=null;">{{asset.assetTagId}}</span>
+
+                                            <span// *ngIf="asset.assetTagId==null"> NA</span>
+                                        </p> -->
+
+                                    </div>
+                                </td>
+                                <td class="p-2">
+                                    <div class="from">
+                                        Code:{{asset.departmentCode}}
+                                        <p class="msg">
+                                            {{asset.departmentName}}
+                                        </p>
+
+                                    </div>
+                                </td>
+                                <td class="p-2">
+                                    <div class="from">
+                                        Code: {{asset.categoryCode}}
+                                        <p class="msg">
+                                            {{asset.categoryName}}
+                                        </p>
+
+                                    </div>
+                                </td>
+                                <td class="p-2">
+                                    <div class="from">
+                                        Code: {{asset.subCategoryCode}}
+                                        <p class="msg">
+                                            {{asset.subCategoryName}}
+                                        </p>
+
+                                    </div>
+                                </td>
+                                <td class="p-2">
+                                    <div class="from">
+                                        {{ asset.assignType}}
+                                        <p class="msg">
+                                            <span *ngIf="asset.assignType=='Individual'"> <i class="feather icon-user "
+                                                    [ngClass]="{'myColor': (asset.assigned==false),
+                                                    'text-info': (asset.assigned==true)
+                                                }"></i> {{ asset.employeeName}} </span>
+                                            <span *ngIf="asset.assignType=='Department'"> <i class="feather icon-home "
+                                                    [ngClass]="{'myColor': (asset.assigned==false),
+                                                    'text-primary': (asset.assigned==true)}"></i> {{
+                                                asset.departmentName}} </span>
+                                        </p>
+
+                                    </div>
+                                </td>
+                                <td class="p-2">
+                                    <div class="from">
+                                        <span *ngIf="asset.masterWorkflowId!=0">
+                                            <a href="javascript:void(0)"
+                                                (click)="viewWFActivityData(modalConfirm2,asset)">
+                                                {{asset.workflowName}}</a> </span>
+                                        <span *ngIf="asset.masterWorkflowId==0"> {{asset.workflowName}} </span>
+                                        <p class="msg">
+                                            {{asset.assetWorkflowStatus}}
+                                        </p>
+
+                                    </div>
+                                </td>
+                                <!-- <td class="p-2">
+                                    <div class="from">
+                                        <span class="badge  badge-font badge-warning"
+                                            *ngIf="asset.assetStatus=='Pending';">{{asset.assetStatus}}</span>
+                                        <span class="badge  badge-font badge-success"
+                                            *ngIf="asset.assetStatus=='In-Service';">{{asset.assetStatus}}</span>
+                                        <span class="badge  badge-font badge-danger"
+                                            *ngIf="asset.assetStatus=='Inactive';">{{asset.assetStatus}}</span>
+                                        <span class="badge  badge-font badge-danger"
+                                            *ngIf="asset.assetStatus=='Damaged';">{{asset.assetStatus}}</span>
+                                        <span class="badge  badge-font badge-danger"
+                                            *ngIf="asset.assetStatus=='Missing';">{{asset.assetStatus}}</span>
+                                        <span class="badge  badge-font badge-info"
+                                            *ngIf="asset.assetStatus=='Disposal';">{{asset.assetStatus}}</span>
+                                        <span class="badge  badge-font badge-info"
+                                            *ngIf="asset.assetStatus=='Retired';">{{asset.assetStatus}}</span>
+                                        <span class="badge  badge-font badge-info"
+                                            *ngIf="asset.assetStatus=='Sold';">{{asset.assetStatus}}</span>
+                                        <span class="badge  badge-font badge-secondary"
+                                            *ngIf="asset.assetStatus=='Transfered';">{{asset.assetStatus}}</span>
+                                        <span class="badge  badge-font badge-primary"
+                                            *ngIf="asset.assetStatus=='Ready Stock';">{{asset.assetStatus}}</span>
+
+                                    </div>
+                                </td> -->
+                                <td class="p-2">
+                                    <span style="float:right;">
+                                        <button class="btn btn-link p-0 mr-1" ngbTooltip="Approve"
+                                            [disabled]="allSeletectedAsset.length>=1 && rows[i].checked"
+                                            *ngIf="_approverType=='Approver'"
+                                            (click)="sweetAlertApproverConfirmation(asset)"> <i
+                                                class="feather icon-check-circle"></i></button>
+                                        <button class="btn btn-link p-0 mr-1" ngbTooltip="Review"
+                                            [disabled]="allSeletectedAsset.length>=1 && rows[i].checked"
+                                            *ngIf="_approverType=='Reviewer'"
+                                            (click)="sweetAlertReviewerConfirmation(asset)"> <i
+                                                class="feather icon-target"></i></button>
+
+                                        <button class="btn btn-link text-danger p-0 mr-1" ngbTooltip="Reject"
+                                            [disabled]="allSeletectedAsset.length>=1 && rows[i].checked"
+                                            (click)="sweetAlertRejectConfirmation(asset)"><i
+                                                class="feather icon-x-circle "></i>
+                                        </button>
+                                        <button class="btn btn-link text-info p-0 mr-1" ngbTooltip="View"
+                                            (click)="viewHandler($event,asset)"><i class="feather icon-eye "></i>
+                                        </button>
+
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between p-2">
+                    Showing {{from}} to {{to}} of {{totalRecordsFromApi}} entries
+
+
+                    <ngb-pagination [collectionSize]="totalRecordsFromApi" [pageSize]="pageSize" [(page)]="page"
+                        [maxSize]="2" [rotate]="true" (pageChange)="loadPage($event)"
+                        *ngIf="totalRecordsFromApi>pageSize"></ngb-pagination>
+
+                    <div class="dataTable-dropdown">
+                        <label>
+                            <select class="dataTable-selector" [(ngModel)]="pageSize" style="width: auto"
+                                (ngModelChange)="loadData(_masterWorkflowId,_approverType,pageSize,from-1);">
+                                <option [value]="5">5</option>
+                                <option selected [value]="10">10</option>
+                                <option [value]="15">15</option>
+                                <option [value]="20">20</option>
+                                <option [value]="25">25</option>
+                            </select> </label>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="spinner-border text-primary mr-5" style="position: absolute; left: 50%;top:50%"
+        *ngIf="loadingTableData|| bulkUpdate||loadingIndicator">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+
+<ng-template #modalConfirm2 let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-title">WorkFlow</h4>
+        <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+            (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Asset Information</h6>
+
+
+                        <img src="{{ImageUrl}}{{assetImagePath}}" style=" 
+                        padding-top: 2%;
+                        padding-bottom: 8%;
+                        height:200px;
+                        width:200px" *ngIf="assetImagePath!=null">
+                        <img src="../../../../../assets/images/placeholderimage.png" style=" 
+                        padding-top: 2%;
+                        padding-bottom: 8%;
+                        height:200px;
+                        width:200px" *ngIf="assetImagePath==null">
+
+                        <h6 class="card-title " style="margin-bottom: 0.2rem; padding-top:2%"> <i
+                                class="feather icon-briefcase  pr-1"></i>{{assetName}}</h6>
+                        <p *ngIf="assetTagId!=null"> <i class="feather icon-star  pr-1 "></i>{{assetTagId}}</p>
+                        <p> <i class="feather icon-user pr-1"></i>{{wFActivityList.fullName}}</p>
+                        <p> <i class="feather icon-clock  pr-1"></i>{{wFActivityList.requestedDateTime}}</p>
+                        <p> <i class="feather icon-tag  pr-1"></i>{{wFActivityList.assetWorkFlowStatus}}</p>
+                        <p class="msg pt-2">
+                            <i>{{wFActivityList.statusDescription}}</i>
+                        </p>
+
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">WorkFlow Audit</h6>
+                        <div id="content">
+                            <ul class="timeline" *ngFor="let details of wFActivityList.detail; let i = index ; "
+                                [attr.data-index]="i" style="max-width: 64%;padding-top: 20px;
+                            padding-bottom: 15px;
+                        ">
+                                <li class="event" [ngClass]="{    
+                                    'eventApproved': (details.assetWorkFlowStatus=='Approved'),
+                                    'eventRejected ': (details.assetWorkFlowStatus=='Rejected'),
+                                    'eventReviewed ': (details.assetWorkFlowStatus=='Reviewed'),
+                                 
+                                    'event1': (details.startDateTime!=null && details.endDateTime==null)}
+                                    " [attr.data-text]="details.approverTypeName">
+                                    <h3><i class="feather icon-user pr-1 pb-1"> </i>{{details.fullName}}</h3>
+                                    <span>Start Time: {{details.startDateTime || 'NA'}}</span><br>
+
+                                    <span>End Time: {{details.endDateTime || 'NA'}}</span>
+                                    <br>
+
+                                    <span>Status: {{details.assetWorkFlowStatus || 'NA'}}</span>
+
+                                    <p class="msg"> <i>{{details.statusDescription}} </i></p>
+                                </li>
+
+                            </ul>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" (click)="modal.dismiss('cancel')">Ok</button>
+    </div>
+</ng-template>

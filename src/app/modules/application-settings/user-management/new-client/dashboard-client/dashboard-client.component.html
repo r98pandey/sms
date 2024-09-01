@@ -1,0 +1,244 @@
+<div class="user-detail profile-foreground position-relative mx-n4 mt-n4">
+  <div class="profile-wid-bg">
+    <img src="assets/images/profile-bg.jpg" alt="" class="profile-wid-img" />
+  </div>
+  <div class="pt-4 mb-4 mb-lg-3 px-4 pb-lg-4 profile-wrapper">
+    <div class="row g-4">
+      <div class="col-auto">
+       <div class="textcenter mt-2">
+              <div class="position-relative d-inline-block">
+                <div
+                  class="position-absolute top-100 start-100 translate-middle"
+                >
+                  <label
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Remove Image"
+                    *ngIf="isFirstImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i
+                          class="ri-close-circle-fill"
+                          (click)="openModalDeleteConfimage(profile_img)"
+                        ></i>
+                      </div>
+                    </div>
+                  </label>
+                  <label
+                    for="asset_id0"
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Select Image"
+                    *ngIf="!isFirstImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i class="ri-image-fill"></i>
+                      </div>
+                    </div>
+                  </label>
+                  <input
+                    (change)="onSelectFile($event)"
+                    formControlName="UserImageBase64string"
+                    class="form-control d-none"
+                    value=""
+                    id="asset_id0"
+                    type="file"
+                    accept="image/png, image/gif, image/jpeg"
+                  />
+                </div>
+                <div class="avatar-lg">
+                  <div class="avatar-title bg-light rounded">
+                    <img
+                      src="{{ profile_img }}"
+                      id="product-img"
+                      class="avatar-md img-size-fixed"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+      </div>
+      <div class="col d-flex align-items-center">
+        <div class="p-2">
+          <h3 class="text-white mb-0 fs-35">{{ userData.fullName }}</h3>
+          <p class="text-white mb-0 fs-20">
+            {{ rolesList[userData.roleId] }}
+          </p>
+          <div class="hstack text-white-50 gap-1 fs-15">
+            <i class="ri-shield-fill me-1 text-white fs-16 align-middle"></i>
+            {{ accessGroupList[userData.accessGroupId] }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-sm-5">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title mb-0">Contact Information &nbsp;</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-borderless mb-0">
+                <tbody>
+                  <tr>
+                    <th scope="row" class="w-25">Mobile Number</th>
+                    <td class="text-muted">: {{ userData.phoneNumber }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="w-25">Email</th>
+                    <td class="text-muted">: {{ userData.email }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="w-25">Username</th>
+                    <td class="text-muted">: {{ userData.userName }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-header">
+            <h4 class="card-title mb-0">Email And Notification Setup</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-borderless mb-0">
+                <tbody>
+                  <tr>
+                    <th scope="row" class="ps-0 w-10">Portal Access</th>
+                    <td class="text-muted">
+                      :
+                      <span
+                        class="badge text-uppercase"
+                        [ngClass]="
+                          userData.portalEnable ? 'bg-primary' : 'bg-danger'
+                        "
+                        >{{ userData.portalEnable ? "Yes" : "No" }}</span
+                      >
+                    </td>
+                  </tr>
+
+                  <tr *ngFor="let emailNot of portalArrayList; index as i">
+                    <th scope="row" class="ps-0 w-10">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input me-2"
+                          type="checkbox"
+                          [(ngModel)]="emailNot.checked"
+                          value="{{ emailNot.name }}"
+                          id="{{ emailNot.name }}"
+                          [disabled]="true"
+                        />
+                        <label style="opacity: 1;"
+                          class="form-check-label labelforCheckbox"
+                          for="{{ emailNot.name }}"
+                        >
+                          {{ emailNot.name }}
+                        </label>
+                      </div>
+                    </th>
+                    <td class="text-muted">
+                      :
+                      <span
+                        class="badge text-uppercase"
+                        [ngClass]="
+                          emailNot.checked ? 'bg-primary' : 'bg-danger'
+                        "
+                        >{{ emailNot.checked ? "Yes" : "No" }}</span
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-7">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title mb-0">Access Right &nbsp;</h4>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-12 mb-4" *ngFor="let access of userData.list">
+                <h4>{{ companyList[access.companyId] }}</h4>
+                <p>
+                  <b>{{ isProject ? "Project" : "Department" }} </b>
+                </p>
+
+                <div class="mt-2">
+                  <div class="d-flex flex-wrap gap-2 fs-15">
+                    <a
+                      href="javascript:void(0);"
+                      class="badge bg-primary-subtle text-primary"
+                      *ngFor="let department of access.departmentId.split(',')"
+                      >{{ projectList[department] }}</a
+                    >
+                  </div>
+                  <!-- <span
+                        *ngFor="
+                          let department of access.departmentId.split(',')
+                        "
+                        class="badge bg-primary me-2 mb-2"
+                        >{{ projectList[department] }}</span
+                      > -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-2">
+          <div class="card-header">
+            <h4 class="card-title mb-0">My Task</h4>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div
+                class="col-sm-4 mb-4"
+                *ngFor="let task of myTaskRulesActiveCount; index as i"
+              >
+                <div class="form-check topDisplay">
+                  <input
+                    class="form-check-input me-2 p-2"
+                    type="checkbox"
+                    [disabled]="true"
+                    [(ngModel)]="task.checked"
+                    value="{{ task.type }}"
+                    id="{{ task.type }}"
+                  />
+                  <label
+                    class="form-check-label labelforCheckbox"
+                    for="{{ task.type }}"
+                    style="opacity: 1;"
+                  >
+                    {{ task.name }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end px-4 mb-3">
+    <button
+      class="btn btn-soft-primary waves-effect back-button"
+      (click)="goBack()"
+    >
+      Back
+    </button>
+  </div>
+</div>

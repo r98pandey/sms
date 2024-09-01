@@ -1,0 +1,188 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+    
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                 <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th>TICKET</th>
+                        <th>Project Detail</th>
+                        <th>Ageing </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container
+                        *ngIf="listOverDueTicketInternalAcknowledge.length == 0"
+                      >
+                        <tr>
+                          <td colspan="4" class="text-center">
+                            No Ticket Data
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <ng-container
+                        *ngIf="listOverDueTicketInternalAcknowledge.length != 0"
+                      >
+                        <tr
+                          *ngFor="
+                            let ticket of listOverDueTicketInternalAcknowledge;
+                            let i = index
+                          "
+                        >
+                          <td class="title">
+                            <a
+                              href="javascript:void(0)"
+                              (click)="viewHandler(ticket.ticketId)"
+                              class="fw-medium link-primary"
+                              >{{ ticket.ticketNo }}</a
+                            >
+
+                            <i
+                              *ngIf="!ticket.isGlobal"
+                              ngbTooltip="Internal"
+                              class="ri-home-gear-line align-bottom ms-2 text-info fs-15"
+                            ></i>
+                            <p
+                              class="fotTitle"
+                              [title]="ticket.ticketTitle"
+                              [id]="
+                                ' ticket.ticketTitle' +
+                                ticket.ticketId +
+                                '_' +
+                                i
+                              "
+                            >
+                              {{ ticket.ticketTitle }}
+                            </p>
+                            <p
+                              class="fotTitle"
+                              [title]="ticket.createdDate"
+                              [id]="
+                                ' ticket.createdDate' +
+                                ticket.ticketId +
+                                '_' +
+                                i
+                              "
+                            >
+                              {{ ticket.createdDate }}
+                            </p>
+                          
+                          </td>
+                          <td
+                            [title]="ticket.companyName"
+                            class="title"
+                            [id]="'companyName_' + ticket.ticketId + '_' + i"
+                          >
+                            {{ ticket.companyName }}
+                            <p
+                              class="fotTitle"
+                              [title]="ticket.clientName"
+                              [id]="
+                                ' ticket.clientName' + ticket.ticketId + '_' + i
+                              "
+                            >
+                              {{ ticket.clientName }}
+                            </p>
+                            <p
+                              class="fotTitle"
+                              [title]="ticket.projectName"
+                              [id]="
+                                ' ticket.projectName' +
+                                ticket.ticketId +
+                                '_' +
+                                i
+                              "
+                            >
+                              {{ ticket.projectName }}
+                            </p>
+                          </td>
+
+                          <td class="width-35">
+                            <div>
+                                <span
+                                [class]="
+                                  returnStatusBadgeClassesStatus(
+                                    ticket.ticketStatusId
+                                  )
+                                "
+                                >{{ ticket.ticketStatusName }}</span
+                              >
+                          
+                                <p
+                                  class="fotTitle"
+                                   [title]="'Aging Value:'+ticket.overdueValue"
+                                  [id]="
+                                    'overdueValue' + ticket.ticketId + '_' + i
+                                  "
+                                >
+                                  {{ ticket.overdueValue }}
+                                </p> 
+                                <p
+                                  class="fotTitle text-danger"
+                                  [title]="ticket.remark"
+                                  [id]="
+                                    'remark' + ticket.ticketId + '_' + i
+                                  "
+                                >
+                                  {{ ticket.remark }}
+                                </p>
+                              </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col col-sm-12 col col-md-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecordsFromApi }} entries
+                    </div>
+                  </div>
+                 <div class="col col-sm-12 col col-md-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="totalRecordsFromApi"
+                        [pageSize]="pageSize"
+                        [(page)]="page"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="OnChangesPage($event)"
+                        *ngIf="totalRecordsFromApi > pageSize"
+                      ></ngb-pagination>
+                    </div>
+                  </div>
+                 
+                </div> -->
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

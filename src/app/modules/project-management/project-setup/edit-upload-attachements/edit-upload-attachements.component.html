@@ -1,0 +1,80 @@
+<div class="modal-content">
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Update Attachment</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="btn-close"
+      (click)="close('Close click', $event)"
+    ></button>
+  </div>
+  <div class="modal-body" style="height: 500px; overflow-y: auto">
+    <form [formGroup]="EditAttachementModalForm">
+      <div class="col-xl-12">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12 mb-2">
+              <label for="formFile" class="form-label"
+                >Title
+                <span class="starRequried">*</span>
+              </label>
+              <input
+                class="form-control"
+                bindValue="companyId"
+                formControlName="frmtitle"
+                type="text"
+                placeholder="Title"
+              />
+            </div>
+            <div class="col-md-12 mb-2">
+              <label class="form-label" for="des-info-description-input"
+                >Remark
+                <span class="starRequried">*</span>
+              </label>
+              <ckeditor
+                [editor]="Editor"
+                [config]="{
+                  toolbar: [
+                    'heading',
+                    '|',
+                    'bold',
+                    'italic',
+                    '|',
+                    'NumberedList',
+                    'BulletedList'
+                  ]
+                }"
+                placeholder="Enter Remark"
+                formControlName="frmdescription"
+              >
+              </ckeditor>
+            </div>
+          </div>
+
+          <!-- end card body -->
+        </div>
+        <!-- end card -->
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger mr-2 mb-2 mb-md-0"
+      (click)="close('cancel', $event)"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      ngbAutofocus
+      [disabled]="EditAttachementModalForm.invalid"
+      class="btn btn-success mr-2 mb-2 mb-md-0"
+      (click)="submitprocessFromDetails()"
+    >
+      Submit
+    </button>
+  </div>
+</div>

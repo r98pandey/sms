@@ -1,0 +1,420 @@
+<div class="row me-0 ms-0 ps-0 pe-0">
+  <div class="col-lg-12">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="mb-2">
+          <img
+            [src]="
+              companyData?.companyLogoURL
+                ? imageUrl + companyData?.companyLogoURL
+                : '../../../../../../assets/images/placeholderimage.png'
+            "
+            class="card-logo"
+            alt="logo light"
+            height="80"
+          />
+        </div>
+      </div>
+      <div class="col-sm-9 d-flex justify-content-md-end justify-content-sm-center ">
+        <div class="">
+          <h3 class="text-uppercase fw-semibold mb-0">
+            {{ companyData?.companyName }}
+          </h3>
+          <p class="mb-0 pt-0 fs-20">
+            {{ companyData.address1 ? companyData.address1 : "" }}
+          </p>
+          <p class="mb-0 pt-0 fs-20">
+            {{ companyData.address2 ? companyData.address2 : "" }}
+          </p>
+          <p class="mb-0 pt-0 fs-20">
+            {{ companyData?.address3 ? companyData?.address3 : " " }}
+
+            {{ companyData?.country ? companyData?.country : "" }}
+          </p>
+        </div>
+      </div>
+      <div class="col-12 mt-2">
+        <div class="border-gradient-1"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 mb-1 mt-2 p-0">
+    <div class="row">
+      <div class="col-12">
+        <h3 class="mt-2 mb-3 fs-19">
+          <b> Title: </b>{{ masterScheduleList?.configPreventivePDescription }}
+        </h3>
+      </div>
+      <div class="col-6 mt-1">
+        <p class="mt-0 mb-0 fs-17">
+          <b>Client: </b>{{ masterScheduleList?.clientName || "NA" }}
+        </p>
+      </div>
+      <div class="col-6 mt-1">
+        <p class="mb-0 fs-17">
+          <b> Project: </b>{{ masterScheduleList?.projectName || "NA" }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 mb-0 mt-1 p-0">
+    <table class="table table-bordered mb-0">
+      <tbody>
+        <tr
+          class="p-0 m-0 text-center"
+          style="background-color: black; color: white"
+        >
+          <td colspan="3">
+            <h2 class="mb-0 text-white fs-19">Schedule Details</h2>
+          </td>
+        </tr>
+        <tr class="p-0 m-0">
+          <td class="fw-bold fs-19 w-30">Schedule Start</td>
+          <td class="fs-19 w-70" colspan="2">
+            {{ masterScheduleList?.scheduleDate || "NA" }}
+          </td>
+        </tr>
+        <tr class="p-0 m-0">
+          <td class="fw-bold fs-19 w-30">Maintenace Type</td>
+          <td class="fs-19 w-70" colspan="2">
+            {{ masterScheduleList?.maintenanceType || "NA" }}
+          </td>
+        </tr>
+        <tr class="p-0 m-0">
+          <td class="fw-bold fs-19 w-30">Support Type</td>
+          <td class="fs-19 w-70" colspan="2">
+            {{ masterScheduleList?.supportType || "NA" }}
+          </td>
+        </tr>
+        <tr class="p-0 m-0">
+          <td class="fw-bold fs-19 w-30">Frequency</td>
+          <td class="fs-19 w-70" colspan="2">
+            {{ masterScheduleList?.frequency || "NA" }}
+          </td>
+        </tr>
+        <tr class="p-0 m-0">
+          <td class="fw-bold fs-19 w-30">Frequency Data</td>
+          <td class="fs-19 w-70" colspan="2">
+            {{ masterScheduleList?.frequencyData || "NA" }}
+          </td>
+        </tr>
+        <tr class="p-0 m-0">
+          <td class="fw-bold fs-19 w-30">Start By</td>
+          <td class="fs-19 w-70" colspan="2">
+            {{ masterScheduleList?.startBy || "-" }}
+          </td>
+        </tr>
+        <tr class="p-0 m-0">
+          <td class="fw-bold fs-19 w-30">Start Date Time</td>
+          <td class="fs-19 w-70" colspan="2">
+            {{ masterScheduleList?.startDateTime || "-" }}
+          </td>
+        </tr>
+        <tr class="p-0 m-0">
+          <td class="fw-bold fs-19 w-30">End By</td>
+          <td class="fs-19 w-70" colspan="2">
+            {{ masterScheduleList?.endBy || "-" }}
+          </td>
+        </tr>
+        <tr class="p-0 m-0">
+          <td class="fw-bold fs-19 w-30">End Date Time</td>
+          <td class="fs-19 w-70" colspan="2">
+            {{ masterScheduleList?.endDatetime || "-" }}
+          </td>
+        </tr>
+        <tr class="p-0 m-0" *ngIf=" masterScheduleList?.scheduleVerifiedBy">
+          <td class="fs-19 w-70" colspan="2" >Verified By</td>
+
+          <td>
+            {{ masterScheduleList?.scheduleVerifiedBy || "-" }}
+          </td>
+
+
+
+
+
+        </tr>
+        <tr  class="p-0 m-0" *ngIf="masterScheduleList?.scheduleVerifiedDateTime">
+          <td class="fs-19 w-70" colspan="2" >Verified Date Time</td>
+
+          <td>
+            {{ masterScheduleList?.scheduleVerifiedDateTime || "-" }}
+          </td>
+
+
+
+
+
+        </tr>
+
+
+        <tr class="p-0 m-0">
+          <td class="fw-bold fs-19 w-30">Status</td>
+          <td class="fs-19 w-70" colspan="2">
+            {{ masterScheduleList?.scheduleStatusName || "NA" }}
+          </td>
+        </tr>
+        <tr
+          class="p-0 m-0 text-center"
+          style="background-color: black; color: white"
+        >
+          <td colspan="3" *ngIf="masterScheduleList.remark">
+            <h2 class="mb-0 text-white fs-19">Remark</h2>
+          </td>
+        </tr>
+        <tr class="p-0 m-0" *ngIf="masterScheduleList.remark">
+          <td colspan="3" class="fs-19 w-100">
+            <div class="break-word">{{ masterScheduleList.remark }}</div>
+          </td>
+        </tr>
+
+
+        <tr
+          class="p-0 m-0 text-center"
+          style="background-color: black; color: white"
+        >
+          <td colspan="3">
+            <h2 class="mb-0 text-white fs-19">
+              Total Checklist [{{ assetTicketItem.length }}]
+            </h2>
+          </td>
+        </tr>
+
+       
+
+        <tr class="p-0 m-0 text-center">
+          <td class="fs-19">
+            <p class="text-dark fs-19 mb-0 text-warning">
+              <b>Pending</b>
+            </p>
+            <h5 class="mb-0 fs-19">
+              {{ scheduleAssetItemCheckStatusPending2 }}
+            </h5>
+          </td>
+          <td class="fs-19">
+            <p class="text-dark fs-19 mb-0 text-success">
+              <b>In-Progress</b>
+            </p>
+            <h5 class="mb-0 fs-19">
+              {{ scheduleAssetItemCheckStatusIn_Progress30 }}
+            </h5>
+          </td>
+          <td class="fs-19">
+            <p class="text-dark fs-19 mb-0 text-danger">
+              <b>Completed</b>
+            </p>
+            <h5 class="mb-0 fs-19">
+              {{ scheduleAssetItemCheckStatusCompleted25 }}
+            </h5>
+          </td>
+        </tr>
+ <tr
+          class="p-0 m-0 text-center"
+          style="background-color: black; color: white"
+        >
+          <td colspan="3">
+            <h2 class="mb-0 text-white fs-19">
+              Total Checklist [{{pm_ScheduleAndAssetCheckList.length }}]
+            </h2>
+          </td>
+        </tr>
+
+
+        <tr class="p-0 m-0 text-center">
+          <td class="fs-19">
+            <p class="text-dark fs-19 mb-0 text-warning">
+              <b>Awaiting Action</b>
+            </p>
+            <h5 class="mb-0 fs-19">
+              {{ scheduleItemCheckStatusAwaitingAction45 }}
+            </h5>
+          </td>
+          <td class="fs-19">
+            <p class="text-dark fs-19 mb-0 text-success">
+              <b>Verified-Passed</b>
+            </p>
+            <h5 class="mb-0 fs-19">
+              {{ scheduleItemCheckStatusVerified_Passed24 }}
+            </h5>
+          </td>
+          <td class="fs-19">
+            <p class="text-dark fs-19 mb-0 text-danger">
+              <b>Verified-Failed</b>
+            </p>
+            <h5 class="mb-0 fs-19">
+              {{ scheduleItemCheckStatusVerified_Failed49 }}
+            </h5>
+          </td>
+        </tr>
+
+        <tr
+          *ngIf="
+            masterScheduleList.scheduleAcknoledgeById ||
+            masterScheduleList.scheduleClosedById
+          "
+          class="p-0 m-0 text-center"
+          style="background-color: black; color: white"
+        >
+          <td colspan="3">
+            <h2 class="mb-0 text-white fs-19">Signature</h2>
+          </td>
+        </tr>
+        <tr
+          class="p-0 m-0"
+          *ngIf="
+            masterScheduleList.scheduleAcknoledgeBy ||
+            masterScheduleList.scheduleClosedBy
+          "
+        >
+          <td
+            class="fs-19 w-50"
+            *ngIf="masterScheduleList.scheduleAcknoledgeBy"
+          >
+            <b>{{ masterScheduleList.companyName }}</b>
+            <br />
+            {{ masterScheduleList.scheduleAcknoledgeBy }}
+            <br />
+            {{ masterScheduleList.scheduleAcknoledgeDesig }}
+
+            <br />
+            <img
+              src="{{ imageUrl }}{{
+                masterScheduleList.scheduleAcknoledgeSignImageURL
+              }}"
+              class="mt-2 mb-2 img-sign-fixed"
+              *ngIf="masterScheduleList.scheduleAcknoledgeSignImageURL"
+            />
+
+            <p
+              class="fs-19 mb-0"
+              *ngIf="masterScheduleList.scheduleAcknoledgeDateTime"
+            >
+              <b>Date:</b>
+              {{ masterScheduleList.scheduleAcknoledgeDateTime }}
+            </p>
+            <div
+              class="break-word"
+              *ngIf="masterScheduleList.scheduleAcknoledgeRemark"
+            >
+              <p class="word-break">
+                Note: {{ masterScheduleList.scheduleAcknoledgeRemark }}
+              </p>
+            </div>
+          </td>
+
+          <td
+            colspan="2"
+            class="fs-19 w-50"
+            *ngIf="masterScheduleList.scheduleClosedBy"
+          >
+            <b> {{ masterScheduleList.clientName }}</b>
+            <br />
+            {{ masterScheduleList.scheduleClosedBy }}
+
+            <br />
+            {{ masterScheduleList.scheduleClosedDesig }}
+
+            <br />
+
+            <img
+              src="{{ imageUrl }}{{
+                masterScheduleList.scheduleCloseSignImageURL
+              }}"
+              class="mt-2 mb-2 img-sign-fixed"
+              *ngIf="masterScheduleList.scheduleCloseSignImageURL"
+            />
+
+            <p
+              class="fs-19 mb-0"
+              *ngIf="masterScheduleList.scheduleClosedDateTime"
+            >
+              <b>Date:</b>
+              {{ masterScheduleList.scheduleClosedDateTime }}
+            </p>
+            <div
+              class="break-word"
+              *ngIf="masterScheduleList.scheduleClosedRemark"
+            >
+              <p class="word-break">
+                Note:
+                {{ masterScheduleList.scheduleClosedRemark }}
+              </p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-12 mb-0 mt-2 p-0">
+    <div class="row m-0 p-0">
+      <div
+        class="col-md-12 m-0 p-0"
+        *ngFor="let list of assetTicketItem; let i = index"
+      >
+        <div class="card">
+          <div
+            class="card-header mb-0"
+            style="
+              border-top: 3px solid;
+              border-left: 3px solid;
+              border-right: 3px solid;
+            "
+          >
+            <h5 class="fs-19 mb-0">{{ list.assetName }}</h5>
+            <p class="fs-17 mb-0">
+              <span *ngIf="list.assetTagId">  {{ list.assetTagId }} | </span>{{ list?.scheduleItemStatusName }}
+            </p>
+          </div>
+          <div class="card-body p-2" style="border: 3px solid !important">
+            <div class="row mt-2">
+              <div
+                class="col-12 mb-2"
+                *ngFor="
+                  let data of scheduleAndAssetCheckList[list.scheduleItemId]
+                "
+              >
+                <div class="d-flex justify-content-between">
+                  <div class="">
+                    <h5 class="mt-0 mb-1">
+                      {{ data.preventiveTypeName }}
+                    </h5>
+                    <p class="mb-0">
+                      <span class="fs-15" *ngIf="data.modifiedBy">
+                        {{ data.modifiedBy }} |
+                      </span>
+                      <span class="fs-15" *ngIf="data.modifiedDate"
+                        >{{ data.modifiedDate }} |</span
+                      >
+                    </p>
+                    <p class="mb-0">
+                      {{ data.scheduleItemCheckStatusName }}
+                    </p>
+                    <p class="mb-0" *ngIf="data.note">Note:{{ data.note }}</p>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-6 mb-2 " *ngFor="
+                  let data of scheduleAndAssetCheckList[list.scheduleItemId]
+                ">
+                <h5 class="fs-19 mt-0 mb-1">
+                  {{ data.preventiveTypeName }}
+                </h5>
+                <p class="mb-0">
+                  <span class="fs-17" *ngIf="data.modifiedBy">
+                    {{ data.modifiedBy }} |
+                  </span>
+                  <span class="fs-17" *ngIf="data.modifiedDate">{{ data.modifiedDate }} |</span>
+                </p>
+                <p class="fs-17 mb-0">{{ data.scheduleItemCheckStatusName }}</p>
+                <p class="fs-17 mb-0" *ngIf="data.note">Note:{{ data.note }}</p>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,131 @@
+.fso-17 {
+    font-size: 18px;
+}
+
+.fs-25 {
+    font-size: 25px;
+}
+
+.fso-20 {
+    font-size: 22px;
+}
+.activeCard{
+    border: 3px double #2044b6 !important
+    
+}
+
+.border-gradient-1 {
+    border-width: 4px;
+    border-style: solid;
+    border-color: #5ea3cb;
+    margin-bottom: 8px;
+}
+
+.border-left {
+    padding-top: 5px;
+    border-left: 5px solid white;
+    margin-bottom: 5px;
+}
+
+
+.bgDark {
+    background-color: black !important;
+}
+
+.border-around {
+    border: 1px solid #e9ebec;
+    border-radius: 1px;
+
+}
+
+.pl-4p {
+    padding-left: 4px;
+}
+
+.w-30 {
+    width: 30%
+}
+
+.w-70 {
+    width: 70%
+}
+
+.w-50 {
+    width: 50%;
+}
+
+.break-word {
+    white-space: initial;
+}
+
+@media print {
+    .card {
+        border: 3px solid #2f2f2f;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .breakthepage {
+        page-break-before: always !important;
+    }
+
+    .bgDark {
+        background-color: black !important;
+    }
+
+    .breaktheAfterpage {
+        page-break-after: always !important;
+    }
+}
+
+
+
+.img-size-fixed {
+    width: 350px !important;
+    height: 350px !important;
+
+}
+
+.img-size-fixed-sign {
+    width: 350px !important;
+    height: 350px !important;
+}
+
+.img-sign-fixed {
+    height: 100px;
+    width: 200px;
+}
+
+
+.displayPrint {
+    display: none;
+}
+
+.displayShown {
+    display: block;
+}
+
+@media print {
+
+    body {
+        margin: 1cm;
+        border: 1px solid black;
+        box-sizing: border-box;
+    }
+
+    .displayPrint {
+        display: block;
+    }
+
+    .displayShown {
+        display: none;
+    }
+}
+.img-size-fixed-ack-client-signature {
+    width: 80px !important;
+    height: 80px !important;
+}
+.img-size-fixed-edit {
+    width: 300px !important;
+    height: 300px !important;
+}

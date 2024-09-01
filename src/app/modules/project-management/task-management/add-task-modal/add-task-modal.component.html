@@ -1,0 +1,242 @@
+<div class="modal-header bg-info-subtle d-flex align-items-baseline">
+  <h6 class="card-title mb-2">Create Task</h6>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close button"
+    aria-describedby="modal-title"
+    (click)="close('Cross click')"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="addTaskForm">
+    <div class="mt-2">
+      <div class="row">
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <label class="form-label" for="formFile"
+              >Title
+              <span class="starRequried">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Title"
+              id="TaskTitle"
+              formControlName="TaskTitle"   [maxlength]="maxCharsDecision"
+            />
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ TaskTitle?.value?.length }}/{{
+                maxCharsDecision
+              }}</label
+            >
+
+            <div *ngIf="TaskTitle.invalid && TaskTitle.touched">
+              <small class="text-danger" *ngIf="TaskTitle.errors?.['required']">
+                Title is Required
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <label class="form-label"
+              >Project Owner
+              <span class="starRequried">*</span>
+            </label>
+            <ng-select
+              [items]="projectOwnerList"
+              placeholder="Look-up Project Owner"
+              formControlName="ProjectOwner"
+              bindLabel="fullName"
+              bindValue="userId"
+              (change)="onChangeProjectOwner($event)"
+            >
+              <ng-template
+                ng-option-tmp
+                let-teamMember="item"
+                let-index="index"
+                let-search="searchTerm"
+              >
+                <div class="card card-body mb-1">
+                  <div class="d-flex mb-2 align-items-center">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="{{
+                          teamMember.profileImageUrl
+                            ? imgUrl + teamMember.profileImageUrl
+                            : '../../../../../assets/images/placeholderimage.png'
+                        }}"
+                        alt=""
+                        class="avatar-sm rounded-circle"
+                      />
+                    </div>
+                    <div class="flex-grow-1 ms-2">
+                      <h5
+                        [ngOptionHighlight]="search"
+                        class="card-title mb-1 text-truncate d-block"
+                      >
+                        {{ teamMember.fullName }}
+                      </h5>
+                      <p class="text-muted mb-0 text-truncate d-block">
+                        {{ teamMember.accessGroupName }}
+                      </p>
+                    </div>
+                  </div>
+                  <p class="card-text text-muted text-truncate d-block mb-0">
+                    <i class="ri-mail-fill me-1 align-middle text-success"></i>
+                    {{ teamMember.email }}
+                  </p>
+
+                  <p class="text-muted mb-0 text-truncate d-block mb-0">
+                    <i class="ri-phone-fill me-1 align-middle text-danger"></i>
+                    {{ teamMember.phoneNumber }}
+                  </p>
+                </div>
+              </ng-template>
+            </ng-select>
+
+            <div *ngIf="ProjectOwner.invalid && ProjectOwner.touched">
+              <small
+                class="text-danger"
+                *ngIf="ProjectOwner.errors?.['required']"
+              >
+              Project Owner is Required
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <label for="StartDate" class="form-label"
+              >Plan  Start Date
+              <span class="starRequried">*</span>
+              <i
+                class="ri-close-circle-line text-danger"
+                ngbTooltip="Clear"
+                *ngIf="StartDate?.value"
+                (click)="clearChangeStartDate()"
+              ></i>
+            </label>
+            <div class="d-flex">
+              <input
+                type="date"
+                class="form-control"
+                id="StartDate"
+                formControlName="StartDate"
+                placeholder="Enter Plan Start Date"
+                mwlFlatpickr
+                [altInput]="false"
+                [enableTime]="false"
+                [convertModelValue]="true"
+                [dateFormat]="'d-m-Y'"
+              />
+            </div>
+
+            <div *ngIf="StartDate.invalid && StartDate.touched">
+              <small class="text-danger" *ngIf="StartDate.errors?.['required']">
+                Plan Start Date is Required
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <label for="EndDate" class="form-label"
+              >Plan End Date
+              <span class="starRequried">*</span>
+              <i
+                class="ri-close-circle-line text-danger"
+                ngbTooltip="Clear"
+                *ngIf="EndDate.value"
+                (click)="clearChangeEndDate()"
+              ></i>
+            </label>
+            <div class="d-flex">
+              <input
+                type="text"
+                class="form-control"
+                readonly
+                [disabled]="true"
+                *ngIf="!StartDate.value"
+                formControlName="EndDate"
+                placeholder="Enter Plan End Date"
+              />
+              <input
+                *ngIf="StartDate.value"
+                type="date"
+                class="form-control"
+                id="EndDate"
+                formControlName="EndDate"
+                placeholder="Enter Plan End Date"
+                [minDate]="StartDate.value"
+                mwlFlatpickr
+                [altInput]="false"
+                [enableTime]="false"
+                [convertModelValue]="true"
+                [dateFormat]="'d-m-Y'"
+              />
+            </div>
+
+            <div *ngIf="EndDate.invalid && EndDate.touched">
+              <small class="text-danger" *ngIf="EndDate.errors?.['required']">
+                End Date is Required
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <label class="form-label" for="formFile"
+            >Description
+            <span class="starRequried">*</span>
+          </label>
+          <ckeditor
+            [editor]="Editor"
+            [config]="{
+              toolbar: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                '|',
+                'NumberedList',
+                'BulletedList'
+              ]
+            }"
+            formControlName="Description"
+          >
+          </ckeditor>
+
+          <div *ngIf="Description.invalid && Description.touched">
+            <small class="text-danger" *ngIf="Description.errors?.['required']">
+              Description is Required
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <div>
+    <button
+      class="btn btn-primary me-2 mb-2 mb-md-0"
+      (click)="addTaskSucessModal()"
+      [disabled]="addTaskForm.invalid"
+    >
+      Submit
+    </button>
+    <button
+      class="btn btn btn-outline-danger me-2 mb-2 mb-md-0"
+      (click)="close('Cross click')"
+    >
+      Close
+    </button>
+  </div>
+</div>

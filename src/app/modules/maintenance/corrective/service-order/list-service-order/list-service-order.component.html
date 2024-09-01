@@ -1,0 +1,861 @@
+<app-breadcrumbs
+  [title]="'Service'"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-xxl-2 col-sm-6 "  (click)="onCardClickActive('Total',null)">
+    <div class="card">
+      <div class="card-body" [class]="activeCard=='Total'?'activeCardClasss':''" >
+        <div class="d-flex align-items-center">
+          <div class="avatar-sm flex-shrink-0">
+            <span
+              class="avatar-title bg-light text-primary rounded-circle fs-3"
+            >
+              <i class="ri-ticket-2-line align-middle"></i>
+            </span>
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <p class="text-uppercase fw-semibold fs-12  mb-1">
+              Total
+            </p>
+            <ng-container *ngIf="totalCountServiceOrderOnly.countTotalSO != 0">
+              <h4 class="mb-0">
+                <span
+                  [countUp]="totalCountServiceOrderOnly.countTotalSO"
+                  class="counter-value cursor-pointer"
+                
+                  [options]="option"
+                ></span>
+              </h4>
+            </ng-container>
+            <ng-container *ngIf="totalCountServiceOrderOnly.countTotalSO == 0">
+              <h4 class="mb-0">0</h4>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+    <!-- end card-->
+  </div>
+  <!--end col-->
+  <div class="col-xxl-2 col-sm-6 "  (click)="onCardClickActive('Pending',2)">
+    <div class="card">
+      <div class="card-body" [class]="activeCard=='Pending'?'activeCardClasss':''" >
+        <div class="d-flex align-items-center">
+          <div class="avatar-sm flex-shrink-0">
+            <span
+              class="avatar-title bg-light text-primary rounded-circle fs-3"
+            >
+              <i class="ri-coupon-5-line align-middle"></i>
+            </span>
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <p class="text-uppercase fw-semibold fs-12  mb-1">
+              Pending
+            </p>
+            <ng-container
+              *ngIf="totalCountServiceOrderOnly.countPendingSO != 0"
+            >
+              <h4 class="mb-0">
+                <span
+                  [countUp]="totalCountServiceOrderOnly.countPendingSO"
+                  class="counter-value cursor-pointer"
+                
+                  [options]="option"
+                ></span>
+              </h4>
+            </ng-container>
+            <ng-container
+              *ngIf="totalCountServiceOrderOnly.countPendingSO == 0"
+            >
+              <h4 class="mb-0">0</h4>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+  </div>
+  <!--end col-->
+  <div class="col-xxl-2 col-sm-6 "  (click)="onCardClickActive('In-Progress',30)"> 
+    <div class="card">
+      <div class="card-body"[class]="activeCard=='In-Progress'?'activeCardClasss':''" >
+        <div class="d-flex align-items-center">
+          <div class="avatar-sm flex-shrink-0">
+            <span
+              class="avatar-title bg-light text-primary rounded-circle fs-3"
+            >
+              <i class="mdi mdi-timer-sand align-middle"></i>
+            </span>
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <p class="text-uppercase fw-semibold fs-12  mb-1">
+              In-Progress
+            </p>
+            <ng-container
+              *ngIf="totalCountServiceOrderOnly.countInProgressSO != 0"
+            >
+              <h4 class="mb-0">
+                <span
+                  [countUp]="totalCountServiceOrderOnly.countInProgressSO"
+                  class="counter-value cursor-pointer"
+                
+                  [options]="option"
+                ></span>
+              </h4>
+            </ng-container>
+            <ng-container
+              *ngIf="totalCountServiceOrderOnly.countInProgressSO == 0"
+            >
+              <h4 class="mb-0">0</h4>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+  </div>
+  <!--end col--> 
+  <div class="col-xxl-2 col-sm-6 "  (click)="onCardClickActive('Partially',34)"> 
+    <div class="card">
+      <div class="card-body"[class]="activeCard=='Partially'?'activeCardClasss':''" >
+        <div class="d-flex align-items-center">
+          <div class="avatar-sm flex-shrink-0">
+            <span
+              class="avatar-title bg-light text-primary rounded-circle fs-3"
+            >
+              <i class="mdi mdi-clock  align-middle"></i>
+            </span>
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <p class="text-uppercase fw-semibold fs-12  mb-1">
+              Partially
+            </p>
+            <ng-container
+              *ngIf="totalCountServiceOrderOnly.countOnHoldSO != 0"
+            >
+              <h4 class="mb-0">
+                <span
+                  [countUp]="totalCountServiceOrderOnly.countOnHoldSO"
+                  class="counter-value cursor-pointer"
+                
+                  [options]="option"
+                ></span>
+              </h4>
+            </ng-container>
+            <ng-container
+              *ngIf="totalCountServiceOrderOnly.countOnHoldSO == 0"
+            >
+              <h4 class="mb-0">0</h4>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+  </div>
+  <!--end col-->
+
+  <div class="col-xxl-2 col-sm-6 "  (click)="onCardClickActive('Completed',25)">
+    <div class="card">
+      <div class="card-body" [class]="activeCard=='Completed'?'activeCardClasss':''" >
+        <div class="d-flex align-items-center">
+          <div class="avatar-sm flex-shrink-0">
+            <span
+              class="avatar-title bg-light text-primary rounded-circle fs-3"
+            >
+              <i class="mdi mdi-ticket-confirmation-outline align-middle"></i>
+            </span>
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <p class="text-uppercase fw-semibold fs-12  mb-1">
+              Completed
+            </p>
+            <ng-container
+              *ngIf="totalCountServiceOrderOnly.countCompletedSO != 0"
+            >
+              <h4 class="mb-0">
+                <span
+                  [countUp]="totalCountServiceOrderOnly.countCompletedSO"
+                  class="counter-value cursor-pointer"
+                
+                  [options]="option"
+                ></span>
+              </h4>
+            </ng-container>
+            <ng-container
+              *ngIf="totalCountServiceOrderOnly.countCompletedSO == 0"
+            >
+              <h4 class="mb-0">0</h4>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+  </div>
+  <!--end col-->
+  <div class="col-xxl-2 col-sm-6 "  (click)="onCardClickActive('Canceled',19)">
+    <div class="card">
+      <div class="card-body" [class]="activeCard=='Canceled'?'activeCardClasss':''" >
+        <div class="d-flex align-items-center">
+          <div class="avatar-sm flex-shrink-0">
+            <span
+              class="avatar-title bg-light text-primary rounded-circle fs-3"
+            >
+              <i class="mdi mdi-cancel align-middle"></i>
+            </span>
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <p class="text-uppercase fw-semibold fs-12  mb-1">
+              Canceled
+            </p>
+            <ng-container
+              *ngIf="totalCountServiceOrderOnly.countCanceledSO != 0"
+            >
+              <h4 class="mb-0">
+                <span
+                  [countUp]="totalCountServiceOrderOnly.countCanceledSO"
+                  class="counter-value cursor-pointer"
+                
+                  [options]="option"
+                ></span>
+              </h4>
+            </ng-container>
+            <ng-container
+              *ngIf="totalCountServiceOrderOnly.countCanceledSO == 0"
+            >
+              <h4 class="mb-0">0</h4>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+  </div>
+  <!--end col-->
+
+  
+</div>
+<!--end row-->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-lg-auto">
+            <h5 class="card-title mb-0">Service Order List</h5>
+          </div>
+           <div
+            class="col-lg"
+          ></div> <div
+            class="col-lg"
+          ></div>
+
+          <div
+            class="col-lg"
+          >
+            <!-- <div class=""> -->
+            <div class="search-box ">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                [(ngModel)]="typeServiceOrderValue"
+                placeholder="Service order name"
+                #inputerServiceName
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row g-3">
+          <div class="col-lg">
+            <ng-select
+
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onDropdownCompanyValueChange($event)"
+              [clearable]="true"
+              id="companyName"
+              [(ngModel)]="selectedDropDownCompanyIdValue"
+              placeholder="Select Company"
+              class="w-100 mr-2"
+              for="companyName"
+               [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownClientList"
+              bindLabel="clientName"
+              bindValue="clientId"
+              [disabled]="!selectedDropDownCompanyIdValue"
+              (change)="onDropdownClientValueChange($event)"
+              [clearable]="true"
+              id="clientName"
+              [(ngModel)]="selectedDropDownClientIdValue"
+              placeholder="Select Client"
+              class="w-100 mr-2"
+              for="clientName"
+               [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+             [readonly]="projectDepartmentFieldDisiabled"
+              [items]="arrayListDropDownProjectOrDeparmentList"
+              bindLabel="departmentName"
+              bindValue="departmentId"
+              [disabled]="
+                !selectedDropDownCompanyIdValue ||
+                !selectedDropDownClientIdValue
+              "
+              (change)="onDropdownDepartmentValueChange($event)"
+              [clearable]="true"
+              id="departmentName"
+              [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+              placeholder="Select Project"
+              class="w-100 mr-2"
+              for="departmentName"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownTicketStatus"
+              bindLabel="assetStatus"
+              bindValue="assetStatusId"
+              (change)="onDropdownTicketStatusValueChange($event)"
+              [clearable]="true"
+              id="ticketStatus"
+              [(ngModel)]="selectedDropDownWOStatusIdValue"
+              placeholder="Select Service order Status"
+              class="w-100 mr-2"
+              for="ticketStatus"
+            ></ng-select>
+          </div>
+          <div class="col-lg-auto">
+            <div class="d-flex justify-content-end">
+
+              <button
+              type="button"
+              class="btn"
+              [class]="
+                selectedExpWrkStartDate ||
+                selectedPriority ||
+                selectedTicketNo ||
+                selectedCreatedDate||
+                selectedSupportType ||
+                selectedDropDownOperationValue ||selectedDropDownOperationValue||selectedWONo
+                
+                  ? 'btn-success'
+                  : 'btn-primary'
+              "
+              (click)="openFilter(filtetcontent)"
+            >
+              <i class="ri-equalizer-fill align-bottom me-1"></i> Filters
+            </button>
+             
+              <button
+                type="button"
+                class="btn btn-danger ms-1"
+                (click)="resetSerachVariable()"
+                ngbTooltip="Remove All Search"
+              >
+                <i class="ri-refresh-fill me-1 align-bottom"></i>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th>SO No</th>
+                        <th>Title</th>
+                        <th>Client</th>
+                        <th>{{ isProject ? "Project" : "Department" }}</th>
+                        <th>Create Date</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngIf="serviceOrderList.length == 0">
+                        <tr>
+                          <td colspan="8"  class="text-center">
+                            No Service Order Data
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <ng-container *ngIf="serviceOrderList.length != 0">
+                        <tr *ngFor="let data of serviceOrderList">
+                          <td class="align-top">
+                            <a
+                              href="javascript:void(0)"
+                              (click)="viewHandler(data.ticketId)"
+                              class="fw-medium link-primary"
+                              >{{ data.woNo }}</a
+                            > 
+                              <i  class="ri-eye-fill align-bottom ms-2 text-success fs-15" (click)="getV2_MaintenanceWorkflowAudit(data.ticketId,openAduitOffSet,data.ticketStatusId)"></i>
+              
+                            
+                         
+                          </td>
+                          <td [title]="data.woName " class="title align-top" (click)="
+                              expandTitle('woName_' + data.woNo)
+                            "
+                            [id]="'woName_' + data.woNo">
+                            {{ data.woName }}
+                          </td>
+                          <td [title]="data.clientName "  class="title align-top" (click)="
+                              expandTitle('clientName_' + data.woNo)
+                            "
+                            [id]="'clientName_' + data.woNo">
+                            {{ data.clientName }}
+                          </td>
+                          <td [title]="data.projectName "  class="title align-top" (click)="
+                              expandTitle('projectName_' + data.woNo)
+                            "
+                            [id]="'projectName_' + data.woNo">
+                            {{ data.projectName }}
+                          </td>
+                          <td [title]="data.createdDate "  class="title align-top" (click)="
+                              expandTitle('createdDate_' + data.woNo)
+                            "
+                            [id]="'createdDate_' + data.woNo">
+                            {{ data.createdDate }}<br>
+                            
+                          </td>
+                          <td class="status align-top">
+                            <span
+                              [ngClass]="getTicketStatus(data.woStatusId)"
+                              >{{ data.woStatusName }}</span
+                            >
+                          </td>
+                          <td class="priority align-top">
+                            <span
+                              class="badge text-uppercase"
+                              [ngClass]="{
+                                'bg-success ': data.urgencyTypeName === 'Low',
+                                'bg-danger': data.urgencyTypeName === 'High',
+                                'bg-warning': data.urgencyTypeName === 'Medium'
+                              }"
+                              >{{ data.urgencyTypeName }}</span
+                            >
+                          </td>
+                          <td class="align-top">
+                            <div class="dropdown" ngbDropdown>
+                              <button
+                                class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                ngbDropdownToggle
+                              >
+                                <i class="ri-more-fill align-middle"></i>
+                              </button>
+                              <ul
+                                class="dropdown-menu dropdown-menu-end"
+                                ngbDropdownMenu
+                              >
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="javascript:void(0)"
+                                     (click)="viewHandler(data.ticketId)"
+                                    ><i
+                                      class="ri-eye-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    View</a
+                                  >
+                                </li>
+                                <!-- <li>
+                                  <a
+                                    class="dropdown-item edit-item-btn"
+                                    href="javascript:void(0)"
+                                    data-bs-toggle="modal"
+                                    ><i
+                                      class="ri-pencil-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    Edit</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    class="dropdown-item remove-item-btn"
+                                    href="javascript:void(0)"
+                                    data-bs-toggle="modal"
+                                  >
+                                    <i
+                                      class="ri-delete-bin-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    Delete
+                                  </a>
+                                </li> -->
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col col-sm-12 col col-md-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecordsFromApi }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col col-sm-12 col col-md-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="totalRecordsFromApi"
+                        [pageSize]="pageSize"
+                        [(page)]="page"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="OnChangesPage($event)"
+                        *ngIf="totalRecordsFromApi > pageSize"
+                      ></ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <ng-template #filtetcontent let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="exampleModalLabel">Filters</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-6 mb-3">
+        <label for="selectedRequesterName" class="form-label fw-semibold"
+          >Requester Name</label
+        >
+        <input
+          type="text"
+          name="selectedRequesterName"
+          id="selectedRequesterName"
+          class="form-control"
+          [(ngModel)]="selectedRequesterName"
+          placeholder="Requester Name "
+        />
+      </div>
+      <div class="col-lg-6 mb-3">
+        <label for="selectedRequesterEmail" class="form-label fw-semibold"
+          >Requester Email</label
+        >
+        <input
+          type="email"
+          name="selectedRequesterEmail"
+          id="selectedRequesterEmail"
+          class="form-control"
+          [(ngModel)]="selectedRequesterEmail"
+          placeholder="Search Requester Email"
+        />
+      </div>
+      <div class="col-lg-6 mb-3">
+        <label for="selectedIssueDescription" class="form-label fw-semibold"
+          >Description</label
+        >
+        <input
+          type="text"
+          name="selectedIssueDescription"
+          id="selectedIssueDescription"
+          class="form-control"
+          [(ngModel)]="selectedIssueDescription"
+          placeholder="Issue Description"
+        />
+      </div> 
+      <div class="col-lg-6 mb-3">
+        <label for="selectedTicketTagId" class="form-label fw-semibold"
+          >Ticket Tag Id</label
+        >
+        <input
+          type="text"
+          name="selectedTicketTagId"
+          id="selectedTicketTagId"
+          class="form-control"
+          [(ngModel)]="selectedTicketTagId"
+          placeholder="Ticket Tag Id"
+        />
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <label for="selectedCreatedDate" class="form-label fw-semibold"
+          >Created Date</label
+        >
+        <input
+          type="text"
+          name="selectedCreatedDate"
+          id="selectedCreatedDate"
+          class="form-control"
+          [(ngModel)]="selectedCreatedDate"
+          placeholder="Created Date"
+          mwlFlatpickr
+          [altInput]="false"
+          [enableTime]="false"
+          [convertModelValue]="true"
+          [dateFormat]="'d-m-Y'"
+        />
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <label for="selectedTicketTypeId" class="form-label fw-semibold"
+          >Service Type</label
+        >
+        <ng-select
+          [items]="operationList"
+          bindLabel="name"
+          bindValue="name"
+          placeholder="Select Operation Type"
+          [clearable]="false"
+          [(ngModel)]="selectedOperationType"
+          placeholder="Ticket Type"
+        >
+        </ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      class="btn btn-light"
+      (click)="resetSerachVariable()"
+      (click)="modal.dismiss('Close click')"
+    >
+      Clear
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      (click)="modal.close('Ok', $event)"
+    >
+      Search
+    </button>
+  </div>
+</ng-template> -->
+
+<ng-template #filtetcontent  let-offcanvas>
+  <div class="offcanvas-header mb-0">
+    <h5 class="modal-title mb-0" id="exampleModalLabel">Filters</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="offcanvas-body mt-0">
+    <div class="row">
+      <div class="col-lg-12 mb-3">
+        <label for="selectedTicketNo" class="form-label fw-semibold"
+          >Ticket No</label
+        >
+        <input
+          type="text"
+          name="selectedTicketNo"
+          id="selectedTicketNo"
+          class="form-control"
+          [(ngModel)]="selectedTicketNo"
+          placeholder="Ticket No "
+        />
+      </div>
+      <div class="col-lg-12 mb-3">
+        <label for="selectedWONo" class="form-label fw-semibold">SO No.</label>
+        <input
+          type="text"
+          name="selectedWONo"
+          id="selectedWONo"
+          class="form-control"
+          [(ngModel)]="selectedWONo"
+          placeholder="SO No."
+        />
+      </div>
+
+      <div class="col-lg-12 mb-3">
+        <label for="selectedTicketTagId" class="form-label fw-semibold"
+          >Service Type</label
+        >
+        <ng-select
+          [items]="operationList"
+          bindLabel="name"
+          bindValue="name"
+          (change)="onDropdownOperationValueChange($event)"
+          [clearable]="false"
+          id="ticketStatus"
+          [(ngModel)]="selectedDropDownOperationValue"
+          placeholder="Select Service Type"
+          class="w-100 mr-2"
+          for="ticketStatus"
+        ></ng-select>
+      </div>
+
+      <div class="col-lg-12 mb-3">
+        <label for="selectedTicketTypeId" class="form-label fw-semibold"
+          >Support Type</label
+        >
+        <ng-select
+          [items]="supportTypeAarry"
+          placeholder="Select Support Type"
+          [clearable]="false"
+          [(ngModel)]="selectedSupportType"
+          placeholder="Ticket Type"
+        >
+        </ng-select>
+      </div>
+
+      <div class="col-lg-12 mb-3">
+        <label for="selectedTicketTypeId" class="form-label fw-semibold"
+          >Priority</label
+        >
+        <ng-select
+          [items]="priorityList"
+          bindLabel="urgencyTypeName"
+          bindValue="urgencyTypeId"
+          placeholder="Select Support Type"
+          [clearable]="false"
+          [(ngModel)]="selectedPriority"
+          placeholder="Select Priority"
+        >
+        </ng-select>
+      </div>
+
+      <div class="col-lg-12 mb-3">
+        <label for="selectedTicketTypeId" class="form-label fw-semibold"
+        > Expected Completion Date</label
+      >
+          <input
+            class="form-control flatpickr-input"
+            type="text"
+            mwlFlatpickr
+            [altInput]="true"
+            [convertModelValue]="true"
+            placeholder="Select Expected Completion Date"
+            [dateFormat]="'d-m-Y'"
+            [(ngModel)]="selectedExpWrkStartDate"
+         
+          />
+          
+      
+      </div>
+
+
+      <div class="col-lg-12 mb-3">
+        <label for="selectedCreatedDate" class="form-label fw-semibold"
+        > Service Order Created Date</label
+      >
+          <input
+            class="form-control flatpickr-input"
+            type="text"
+            mwlFlatpickr
+            [altInput]="true"
+            [convertModelValue]="true"
+            placeholder="Select Service Order Created Date"
+            [dateFormat]="'d-m-Y'"
+            [(ngModel)]="selectedCreatedDate"
+         
+          />
+          
+      
+      </div>
+    </div>
+  </div>
+  <div class="offcanvas-footer text-end mb-3">
+    <button
+      class="btn btn-light me-2"
+      (click)="resetSerachVariableWithModal()"
+    
+    >
+      Clear
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary me-2"
+      (click)="offcanvas.close('Ok', $event)"
+    >
+      Search
+    </button>
+  </div>
+</ng-template>
+
+
+
+
+<ng-template #openAduitOffSet let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title">WorkFlow Audit</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="text-danger m-auto" *ngIf="currentStatus==19 ">
+    <p class="fs-17 mb-0"><b>Ticket has been canceled</b></p>
+  </div>
+  <div class="offcanvas-body pt-0">
+    <app-audit-chart [Data]="maintenanceWorkflowAuditList"></app-audit-chart>
+    <div class="text-end">
+      <button
+        type="button"
+        class="btn btn-outline-danger"
+        (click)="offcanvas.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>

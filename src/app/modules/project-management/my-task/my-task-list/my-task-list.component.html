@@ -1,0 +1,722 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  title="My Dashboard"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row dash-nft">
+  <div class="col-md-12 col-lg-12">
+    <div class="row">
+      <!-- <div class="col-xl-6 stretch-card">
+        <div class="card overflow-hidden">
+          <div class="card-body d-flex">
+            <div class="flex-grow-1">
+              <h4 class="fs-16 lh-base mb-0">
+                Total hours attended in {{ currentMonthName }} <br />
+                <span class="text-success">{{ grandTotalFormattedTime }}</span>
+              </h4>
+              <div class="hstack gap-3 flex-wrap fs-13 mt-1">
+                <div>
+                  <b class="fs-14">Office </b>
+                  <br />
+                  <span *ngIf="officeFormattedTime === '00 hrs : 00 min'">{{
+                    officeFormattedTime
+                  }}</span>
+                  <span
+                    class="text-info"
+                    *ngIf="officeFormattedTime !== '00 hrs : 00 min'"
+                    >{{ officeFormattedTime }}</span
+                  >
+                </div>
+                <div class="vr"></div>
+                <div>
+                  <b class="fs-14">On-Site </b>
+                  <br />
+                  <span *ngIf="onSiteFormattedTime === '00 hrs : 00 min'">{{
+                    onSiteFormattedTime
+                  }}</span>
+                  <span
+                    class="text-secondary"
+                    *ngIf="onSiteFormattedTime !== '00 hrs : 00 min'"
+                    >{{ onSiteFormattedTime }}</span
+                  >
+                </div>
+                <div class="vr"></div>
+                <div>
+                  <b class="fs-14">Home </b>
+                  <br />
+                  <span *ngIf="homeFormattedTime === '00 hrs : 00 min'">{{
+                    homeFormattedTime
+                  }}</span>
+                  <span
+                    class="text-secondary"
+                    *ngIf="homeFormattedTime !== '00 hrs : 00 min'"
+                    >{{ homeFormattedTime }}</span
+                  >
+                </div>
+                <div class="vr"></div>
+                <div>
+                  <b class="fs-14">Attended </b>
+                  <br />
+                  <span class="text-info">{{
+                    myDailyAttendance_AttendAndAbsent.totalDaysAttended
+                  }}</span>
+                </div>
+                <div class="vr"></div>
+                <div>
+                  <b class="fs-14 text-danger">Absent</b>
+                  <br />
+                  <span>{{
+                    myDailyAttendance_AttendAndAbsent.totalDaysAbsent
+                  }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+      @for(stat of attendanceWorkingHoursByCurrentList; track $index){
+      <div class="col-xl-3 col-md-6">
+        <app-nft-stat
+          [previousMonthHoursMinutes]="stat.previousMonthHoursMinutes"
+          [icon]="stat.icon"
+          [title]="stat.title"
+          [currentMonthHoursMinutes]="stat.currentMonthHoursMinutes"
+          [percentageDifference]="stat.percentageDifference"
+          [changeIndicator]="stat.changeIndicator"
+        ></app-nft-stat>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+<div class="row align-items-center">
+  <div class="col">
+    <!-- Nav tabs -->
+    <ul
+      ngbNav
+      #topnav="ngbNav"
+      [activeId]="activeIdTop"
+      (navChange)="onNavTopChange($event)"
+      class="nav nav-tabs-custom card-header-tabs border-bottom-0"
+    >
+      <li [ngbNavItem]="1" (click)="onNavTopChange(1)">
+        <a
+          title="Have a list of all progress updates by members under each task and subtask. Clicking on any update navigates to a detail page where you can perform related activities"
+          ngbNavLink
+        >
+          Progress Update
+        </a>
+        <ng-template ngbNavContent>
+          <div class="card">
+            <div class="card-body">
+              <app-chat-bot-my-task (completeEmit)="AfterEmitCall($event)"></app-chat-bot-my-task>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+
+      <li [ngbNavItem]="2" (click)="onNavTopChange(2)">
+        <a
+          ngbNavLink
+          title="In my task section, you can find all tasks categorized under Pending, In Progress, Completed, Approval Pending, and Task Aging"
+        >
+          My Task
+          <span
+            class="badge align-middle ms-1"
+            [class]="
+              totalCountProjectManagementTaskStatusTab.totalProjectMyTaskTab !=
+              0 &&   totalCountProjectManagementTaskStatusTab.totalProjectMyTaskTab !=
+              null
+                ? 'bg-danger'
+                : 'bg-success'
+            "
+            >{{
+              totalCountProjectManagementTaskStatusTab.totalProjectMyTaskTab
+                ? totalCountProjectManagementTaskStatusTab.totalProjectMyTaskTab
+                : 0
+            }}</span
+          >
+        </a>
+        <ng-template ngbNavContent>
+          <div class="card">
+            <div class="card-body">
+              <ul
+                ngbNav
+                #MyTask="ngbNav"
+                [activeId]="myTaskActiveId"
+                class="nav nav-tabs nav-tabs-custom nav-primary mb-0"
+              >
+                <li [ngbNavItem]="1" (click)="onNavChange(1)">
+                  <a
+                    ngbNavLink
+                    title="List of all tasks that are pending. Click on the required task to view the details and perform the task activities"
+                  >
+                    <i class="ri-todo-line align-middle me-1"></i> Pending
+                    <span
+                      class="badge align-middle ms-1"
+                      [class]="
+                        totalCountProjectManagementTaskStatusTab.totalProjectPending !=
+                        0
+                          ? 'bg-danger'
+                          : 'bg-success'
+                      "
+                      >{{
+                        totalCountProjectManagementTaskStatusTab.totalProjectPending
+                          ? totalCountProjectManagementTaskStatusTab.totalProjectPending
+                          : 0
+                      }}</span
+                    >
+                  </a>
+                  <ng-template ngbNavContent>
+                    <div class="card card-height-100">
+                      <div class="card-body p-0">
+                        <app-assign-main-task-sub-task-list (completeEmit)="AfterEmitCall($event)"
+                          [CurrentStatusId]="2"
+                        ></app-assign-main-task-sub-task-list>
+                      </div>
+                    </div>
+                  </ng-template>
+                </li>
+                <li [ngbNavItem]="2" (click)="onNavChange(2)">
+                  <a
+                    ngbNavLink
+                    title="Ongoing task list, where you can click to visit the detail page and perform the required activity"
+                  >
+                    <i class="ri-todo-line align-middle me-1"></i>
+                    In-Progress
+                    <span
+                      class="badge align-middle ms-1"
+                      [class]="
+                        totalCountProjectManagementTaskStatusTab.totalProjectInProgress !=
+                        0
+                          ? 'bg-danger'
+                          : 'bg-success'
+                      "
+                      >{{
+                        totalCountProjectManagementTaskStatusTab.totalProjectInProgress
+                          ? totalCountProjectManagementTaskStatusTab.totalProjectInProgress
+                          : 0
+                      }}</span
+                    >
+                  </a>
+                  <ng-template ngbNavContent>
+                    <div class="card card-height-100">
+                      <div class="card-body p-0">
+                        <app-assign-main-task-sub-task-list (completeEmit)="AfterEmitCall($event)"
+                          [CurrentStatusId]="30"
+                        ></app-assign-main-task-sub-task-list>
+                      </div></div
+                  ></ng-template>
+                </li>
+                <li [ngbNavItem]="3" (click)="onNavChange(3)">
+                  <a
+                    ngbNavLink
+                    title="List of all tasks that are awaiting approval. Clicking on a task will navigate you to the detail page, where you can view all activities related to the task"
+                  >
+                    <i class="ri-todo-line align-middle me-1"></i>
+                    Approval Pending
+                    <span
+                      class="badge align-middle ms-1"
+                      [class]="
+                        totalCountProjectManagementTaskStatusTab.totalProjectApprovalPending ==
+                        0
+                          ? 'bg-danger'
+                          : 'bg-success'
+                      "
+                      >{{
+                        totalCountProjectManagementTaskStatusTab.totalProjectApprovalPending
+                          ? totalCountProjectManagementTaskStatusTab.totalProjectApprovalPending
+                          : 0
+                      }}</span
+                    >
+                  </a>
+                  <ng-template ngbNavContent>
+                    <div class="card card-height-100">
+                      <div class="card-body p-0">
+                        <app-assign-task-appvoval-pending (completeEmit)="AfterEmitCall($event)"></app-assign-task-appvoval-pending>
+                      </div></div
+                  ></ng-template>
+                </li>
+                <li [ngbNavItem]="4" (click)="onNavChange(4)">
+                  <a
+                    ngbNavLink
+                    title="Here is the completed task list. Clicking on a task will navigate you to the detail page, where you can view all activities related to the task."
+                  >
+                    <i class="ri-todo-line align-middle me-1"></i>
+                    Complete
+                    <span
+                      class="badge align-middle ms-1"
+                      [class]="
+                        totalCountProjectManagementTaskStatusTab.totalProjectCompleted ==
+                        0
+                          ? 'bg-danger'
+                          : 'bg-success'
+                      "
+                      >{{
+                        totalCountProjectManagementTaskStatusTab.totalProjectCompleted
+                          ? totalCountProjectManagementTaskStatusTab.totalProjectCompleted
+                          : 0
+                      }}</span
+                    >
+                  </a>
+                  <ng-template ngbNavContent>
+                    <div class="card card-height-100">
+                      <div class="card-body p-0">
+                        <app-assign-main-task-sub-task-list (completeEmit)="AfterEmitCall($event)"
+                          [CurrentStatusId]="25"
+                        ></app-assign-main-task-sub-task-list>
+                      </div></div
+                  ></ng-template>
+                </li>
+
+                <li [ngbNavItem]="5" (click)="onNavChange(5)">
+                  <a
+                    ngbNavLink
+                    title="Task aging refers to the length of time a task has been open or pending without being completed. It usually highlights tasks that have been active for an extended period, indicating potential delays or bottlenecks. Tracking task aging helps in prioritizing and addressing overdue or stalled tasks"
+                  >
+                    <i class="ri-todo-line align-middle me-1"></i> Task Aging
+                    <span
+                      class="badge align-middle ms-1"
+                      [class]="
+                        myProjectManagementTaskAging.length == 0
+                          ? 'bg-danger'
+                          : 'bg-success'
+                      "
+                      >{{
+                        myProjectManagementTaskAging.length
+                          ? myProjectManagementTaskAging.length
+                          : 0
+                      }}</span
+                    >
+                  </a>
+                  <ng-template ngbNavContent>
+                    <div class="card mb-0">
+                      <div class="card-body">
+                        <div class="table-responsive table-card">
+                          <table class="table">
+                            <thead>
+                              <tr class="bg-light text-muted text-uppercase">
+                                <th>Task</th>
+                                <th>
+                                  {{ isProject ? "Project" : "Department" }}
+                                </th>
+                                <th>Affiliate</th>
+                                <th class="text-center">Start-End Date</th>
+
+                                <th class="text-center">
+                                  Actual Start-End Date
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                *ngFor="
+                                  let project of myProjectManagementTaskAging
+                                "
+                                class="text-muted"
+                              >
+                                <td
+                                  class="fw-medium link-primary align-top title"
+                                >
+                                  <p
+                                    class="mb-0 title_new"
+                                    [title]="project.taskTitle"
+                                    (click)="
+                                      openViewHandleTask(
+                                        project.projectTaskId,
+                                        project
+                                      )
+                                    "
+                                  >
+                                    {{ project.taskTitle }}
+                                  </p>
+                                  <p
+                                    class="mb-0 title_new text-muted"
+                                    [title]="project.taskNo"
+                                  >
+                                    #{{ project.taskNo || "NA" }}
+                                  </p>
+                                </td>
+                                <td class="fw-medium align-top title">
+                                  <p
+                                    class="mb-0 title_new"
+                                    [title]="project.projectScheduleName"
+                                  >
+                                    {{ project.projectScheduleName }}
+                                  </p>
+                                  <p
+                                    class="mb-0 title_new text-muted"
+                                    [title]="project.projectName"
+                                  >
+                                    {{ project.projectName || "NA" }}
+                                  </p>
+                                </td>
+
+                                <td class="align-top title">
+                                  <p
+                                    class="mb-0 title_new"
+                                    [title]="project.companyName"
+                                  >
+                                    {{ project.companyName }}
+                                  </p>
+                                  <p
+                                    class="mb-0 title_new"
+                                    [title]="project.clientName"
+                                  >
+                                    {{ project.clientName }}
+                                  </p>
+                                </td>
+                                <td class="align-top title text-center">
+                                  <p class="mb-0 title_new">
+                                    {{
+                                      project.startDate
+                                        ? project.startDate + " - "
+                                        : ""
+                                    }}
+                                    {{ project.endDate || "NA" }}
+                                  </p>
+                                  <p class="mb-0 title_new text-center">
+                                    <b class="text-dark"
+                                      >{{
+                                        project.startDateStatus == "-"
+                                          ? ""
+                                          : project.startDateStatus
+                                      }}
+                                      {{
+                                        project.startDateStatus != "-" &&
+                                        project.endDateStatus != "-"
+                                          ? " - "
+                                          : ""
+                                      }}
+                                      {{
+                                        project.endDateStatus == "-"
+                                          ? ""
+                                          : project.endDateStatus
+                                      }}</b
+                                    >
+                                  </p>
+                                </td>
+
+                                <td class="align-top title text-center">
+                                  <p class="mb-0 title_new">
+                                    {{
+                                      project.actualStartDate
+                                        ? project.actualStartDate + " - "
+                                        : ""
+                                    }}
+                                    {{ project.actualEndDate || "NA" }}
+                                  </p>
+                                  <p class="mb-0 title_new text-center">
+                                    <b class="text-dark"
+                                      >{{
+                                        project.actualStartDateStatus == "-"
+                                          ? ""
+                                          : project.actualStartDateStatus
+                                      }}
+                                      {{
+                                        project.actualStartDateStatus != "-" &&
+                                        project.completionStatus != "-"
+                                          ? " - "
+                                          : ""
+                                      }}
+                                      {{
+                                        project.completionStatus == "-"
+                                          ? ""
+                                          : project.completionStatus
+                                      }}</b
+                                    >
+                                  </p>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div
+                            class="text-center text-muted"
+                            *ngIf="myProjectManagementTaskAging.length === 0"
+                          >
+                            No Records Found
+                          </div>
+                        </div>
+                      </div>
+                    </div></ng-template
+                  >
+                </li>
+              </ul>
+
+              <div class="tab-content text-muted">
+                <div [ngbNavOutlet]="MyTask"></div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="3" (click)="onNavTopChange(3)">
+        <a
+          ngbNavLink
+          title="All started tasks that are assigned are listed here, so you can verify your work. Clicking on a task will navigate you to the detail page, where you can view all activities related to the task"
+        >
+          Started Task
+          <span
+            class="badge align-middle ms-1"
+            [class]="
+              totalCountProjectManagementTaskStatusTab.totalProjectTaskStarted !=
+              0 &&   totalCountProjectManagementTaskStatusTab.totalProjectTaskStarted !=
+              null
+                ? 'bg-danger'
+                : 'bg-success'
+            "
+            >{{
+              totalCountProjectManagementTaskStatusTab.totalProjectTaskStarted
+                ? totalCountProjectManagementTaskStatusTab.totalProjectTaskStarted
+                : 0
+            }}</span
+          ></a
+        >
+        <ng-template ngbNavContent>
+          <div class="card">
+            <div class="card-body">
+              <app-start-main-task-sub-task-list (completeEmit)="AfterEmitCall($event)"></app-start-main-task-sub-task-list>
+            </div></div
+        ></ng-template>
+      </li>
+
+      <li [ngbNavItem]="4" (click)="onNavTopChange(4)">
+        <a
+          ngbNavLink
+          title="Under the approval process, we have categories like project process documents, maintenance agreements, warranties, and task approvals."
+        >
+        Approval Process
+          <span
+            class="badge align-middle ms-1"
+            [class]="
+              totalCountProjectManagementTaskStatusTab.totalProjectApprovalPendingForMainTab !=
+              0 &&   totalCountProjectManagementTaskStatusTab.totalProjectApprovalPendingForMainTab !=
+              null
+                ? 'bg-danger'
+                : 'bg-success'
+            "
+            >{{
+              totalCountProjectManagementTaskStatusTab.totalProjectApprovalPendingForMainTab
+                ? totalCountProjectManagementTaskStatusTab.totalProjectApprovalPendingForMainTab
+                : 0
+            }}</span
+          >
+        </a>
+        <ng-template ngbNavContent>
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div
+                  class="col-lg-12"
+                  *ngIf="ProjectManagement_MyTask_Verification_Ack_ApprovalList"
+                >
+                  <div class="card">
+                    <div class="card-body pt-0 p-0">
+                      <div>
+                        <ul
+                          ngbNav
+                          #AppovalProcessNav="ngbNav"
+                          [activeId]="1"
+                        
+                          class="nav nav-tabs nav-tabs-custom nav-primary mb-2"
+                        >
+                          <li
+                            [ngbNavItem]="1"
+                            (click)="
+                              getV3_ProjectManagement_MyTask_Verification_Ack_Approval()
+                            "
+                            
+                          >
+                            <a
+                              ngbNavLink
+                              title="This contains all the documents related to the project process that are ready for acknowledgment, verification, or approval."
+                            >
+                              <i class="ri-todo-line align-middle me-1"></i>
+                              Project Process Document
+                              <span
+                                class="badge align-middle ms-1"
+                                [class]="
+                                  returnNonCount(
+                                    myTasKDocumentSubmissionProcess
+                                      ? myTasKDocumentSubmissionProcess
+                                      : []
+                                  ) != 0
+                                    ? 'bg-danger'
+                                    : 'bg-success'
+                                "
+                                >{{
+                                  returnNonCount(
+                                    myTasKDocumentSubmissionProcess
+                                      ? myTasKDocumentSubmissionProcess
+                                      : []
+                                  )
+                                }}</span
+                              >
+                            </a>
+                            <ng-template ngbNavContent>
+                              <app-project-document
+                                [myTasKDocumentSubmissionProcess]="
+                                  myTasKDocumentSubmissionProcess
+                                "
+                              ></app-project-document>
+                            </ng-template>
+                          </li>
+                          <li
+                            [ngbNavItem]="2"
+                            (click)="
+                              GetV3_Maintenance_MyTask_Verification_Ack_Approval()
+                            "
+                          >
+                            <a
+                              ngbNavLink
+                              title="Here we have all the project maintenance agreements that are ready for acknowledgment, verification, or approval."
+                            >
+                              <i class="ri-todo-line align-middle me-1"></i>
+                              Maintenance Agreement
+                              <span
+                                class="badge align-middle ms-1"
+                                [class]="
+                                  returnNonCount(
+                                    myMaintenanceSubmissionProcess
+                                      ? myMaintenanceSubmissionProcess
+                                      : []
+                                  ) != 0
+                                    ? 'bg-danger'
+                                    : 'bg-success'
+                                "
+                                >{{
+                                  returnNonCount(
+                                    myMaintenanceSubmissionProcess
+                                      ? myMaintenanceSubmissionProcess
+                                      : []
+                                  )
+                                }}</span
+                              >
+                            </a>
+                            <ng-template ngbNavContent>
+                              <app-maintenance-documentions
+                                [myMaintenanceSubmissionProcess]="
+                                  myMaintenanceSubmissionProcess
+                                "
+                              ></app-maintenance-documentions>
+                            </ng-template>
+                          </li>
+                          <li
+                            [ngbNavItem]="3"
+                            (click)="
+                              GetV3_Warrenty_MyTask_Verification_Ack_Approval()
+                            "
+                          >
+                            <a
+                              ngbNavLink
+                              title="Here we have all the project warranties document that are ready for acknowledgment, verification, or approval."
+                            >
+                              <i class="ri-todo-line align-middle me-1"></i
+                              >Warranty
+                              <span
+                                class="badge align-middle ms-1"
+                                [class]="
+                                  returnNonCount(
+                                    myWarrantyPeriodSubmissionProcess
+                                      ? myWarrantyPeriodSubmissionProcess
+                                      : []
+                                  ) != 0
+                                    ? 'bg-danger'
+                                    : 'bg-success'
+                                "
+                                >{{
+                                  returnNonCount(
+                                    myWarrantyPeriodSubmissionProcess
+                                      ? myWarrantyPeriodSubmissionProcess
+                                      : []
+                                  )
+                                }}</span
+                              >
+                            </a>
+                            <ng-template ngbNavContent>
+                              <app-warranty-document
+                                [myWarrantyPeriodSubmissionProcess]="
+                                  myWarrantyPeriodSubmissionProcess
+                                "
+                              ></app-warranty-document>
+                            </ng-template>
+                          </li>
+
+                          <li
+                            [ngbNavItem]="4"
+                            (click)="
+                              GetV3_ProjectManagement_MainTask_Verification_Ack_Approval_Latest()
+                            "
+                          >
+                            <a
+                              ngbNavLink
+                              title="Here we have all the task that are ready for acknowledgment, verification, or approval."
+                            >
+                              <i class="ri-todo-line align-middle me-1"></i>Task
+                              Approval
+                              <span
+                                class="badge align-middle ms-1"
+                                [class]="
+                                  returnNonCount(
+                                    myProjectTaskProcess
+                                      ? myProjectTaskProcess
+                                      : []
+                                  ) != 0
+                                    ? 'bg-danger'
+                                    : 'bg-success'
+                                "
+                                >{{
+                                  returnNonCount(
+                                    myProjectTaskProcess
+                                      ? myProjectTaskProcess
+                                      : []
+                                  )
+                                }}</span
+                              >
+                            </a>
+                            <ng-template ngbNavContent>
+                              <app-main-task-sub-task
+                                [myProjectTaskProcess]="myProjectTaskProcess"
+                              ></app-main-task-sub-task>
+                            </ng-template>
+                          </li>
+                        </ul>
+
+                        <div class="tab-content text-muted">
+                          <div [ngbNavOutlet]="AppovalProcessNav"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+
+      <!-- <li [ngbNavItem]="5" (click)="onNavTopChange(5)">
+        <a
+          ngbNavLink
+          title="The assigned to-do work is listed here. Clicking on a to-do will navigate you to the detail page, where you can view all activities related to it."
+        >
+          Todo List
+        </a>
+        <ng-template ngbNavContent>
+          <div class="card card-height-100">
+            <div class="card-body">
+              <app-master-follow-list-pending></app-master-follow-list-pending>
+            </div>
+          </div>
+        </ng-template>
+      </li> -->
+    </ul>
+  </div>
+  <div class="tab-content text-muted mt-2">
+    <div [ngbNavOutlet]="topnav"></div>
+  </div>
+</div>

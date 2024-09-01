@@ -1,0 +1,590 @@
+/* You can add global styles to this file, and also import other style files */
+@use "@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+.mat-mdc-mini-fab {
+    background-color: transparent !important;
+    color: #333 !important;
+}
+
+.gap-3_new {
+    gap: 15px !important;
+}
+
+body .mat-mdc-mini-fab.mat-primary {
+    --mdc-fab-small-container-color: #3f51b5 !important;
+    --mat-fab-small-foreground-color: white !important;
+    --mat-fab-small-state-layer-color: white !important;
+    --mat-fab-small-ripple-color: rgba(255, 255, 255, .1) !important;
+}
+
+.mat-toolbar.mat-primary {
+    --mat-toolbar-container-background-color: #5ea3cb !important;
+    --mat-toolbar-container-text-color: white;
+}
+
+.mat-mdc-button.mat-primary {
+    --mdc-text-button-label-text-color: #5ea3cb !important;
+    --mat-text-button-state-layer-color: #5ea3cb !important;
+    --mat-text-button-ripple-color: rgba(63, 81, 181, 0.1);
+}
+
+
+.cdk-overlay-container {
+
+    z-index: 9999 !important;
+}
+
+
+.steps-indicator {
+    font-size: 23px !important;
+}
+
+.text-body {
+    word-break: break-all !important;
+}
+
+.ng-select .ng-select-container {
+    border: 1px solid #ccc;
+    min-height: 39px !important;
+    align-items: center;
+}
+
+thead,
+tbody,
+tfoot,
+tr,
+td,
+th {
+    white-space: nowrap;
+}
+
+.starRequried {
+    color: red;
+}
+
+.ng-select.is-invalid {
+    border: 1px solid #dc3545;
+    border-radius: 4px;
+}
+
+.ng-select.is-valid {
+    border: 1px solid #6ada7d;
+    border-radius: 4px;
+}
+
+.stretch-card {
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+}
+
+.stretch-card>.card {
+    width: 100%;
+    min-width: 100%;
+}
+
+.transparent-card {
+    border: none !important;
+    background: none !important;
+    color: transparent !important;
+    box-shadow: 0 0px 0px transparent !important;
+}
+
+.img-size-fixed {
+    width: 80px !important;
+    height: 80px !important;
+}
+
+
+.ml-auto {
+    margin-left: auto;
+}
+
+.mr-auto {
+    margin-right: auto;
+}
+
+.m-auto {
+    margin: auto;
+}
+
+.workflow-badge-font-size {
+    font-size: 15px !important;
+    font-weight: 500;
+    border-radius: 0px !important;
+}
+
+.disabled-class {
+    background-color: var(--vz-tertiary-bg) !important;
+    opacity: 1;
+}
+
+.modal-scrollbar {
+    height: 500px;
+    overflow: scroll;
+}
+
+.ng-select.tableClass ::ng-deep .ng-select-container {
+    min-height: 0px;
+    border-radius: 0;
+    background-color: rgba(243, 246, 249, 1) !important;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.status-workTaskStatuId-35-Start {
+    border-left: 7px solid #78C1F3 !important;
+}
+
+.status-workTaskStatuId-36-End {
+    border-left: 7px solid #9BE8D8 !important;
+}
+
+.status-workTaskStatuId-19-Canceled {
+    border-left: 7px solid #FF9B9B !important;
+}
+
+.badge-on-site {
+    color: #9376E0 !important;
+}
+
+.badge-Remote {
+    color: #068DA9 !important;
+}
+
+.badge-Phone-Call {
+    color: #8696FE !important;
+}
+
+.offcanvas-header {
+    background-color: #ffffff !important;
+}
+
+.custom-offcanvas {
+    width: 70% !important;
+    overflow: auto;
+    background-color: #f1f1f1 !important;
+}
+
+.custom-offcanvas2 {
+    width: 50% !important;
+    overflow: auto;
+    background-color: #f1f1f1;
+}
+
+.bg-color {
+    background-color: #f1f1f1 !important;
+
+}
+
+.custom-offcanvas3 {
+    width: 35% !important;
+    overflow: auto;
+    background-color: #f1f1f1 !important;
+}
+
+.custom-offcanvas4 {
+    width: 100% !important;
+    overflow: auto;
+    background-color: #f1f1f1 !important;
+}
+
+.custom-offcanvasNooverflow {
+    width: 100% !important;
+    overflow: hidden !important;
+    background-color: #f1f1f1 !important;
+}
+
+.table-card {
+    min-height: 600px;
+}
+
+.w-10 {
+    width: 10%;
+}
+
+input[readonly] {
+    background-color: #f2f2f2;
+    color: #333;
+    border: 1px solid #ccc;
+    // pointer-events: none;
+}
+
+@page {
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+@media print {
+
+    body,
+    .content {
+        background: #fff !important;
+        color: black;
+        margin: 0px;
+        /* Ensure readable text when printing */
+    }
+
+    .card {
+        border: 0px solid !important;
+    }
+
+    .card-body {
+        border: 0px solid !important;
+    }
+
+    .page-content {
+        border: 0px solid !important;
+
+    }
+
+    /* Add any additional print-specific styles here */
+}
+
+[data-bs-theme="dark"] {
+
+    .offcanvas-header {
+        background-color: #000000 !important
+    }
+
+    .offcanvas-body {
+        background-color: #000000 !important
+    }
+
+    .form-control:disabled {
+        background-color: var(--vz-tertiary-bg);
+        opacity: 1;
+        color: #ffff;
+    }
+
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+        background-color: var(--vz-tertiary-bg);
+        color: #ffff;
+
+    }
+
+    input[readonly] {
+        background-color: var(--vz-tertiary-bg);
+        color: #ffff;
+        border: 0px solid #ccc;
+    }
+
+    .swal2-popup.swal2-toast {
+        background-color: var(--vz-tertiary-bg);
+        color: #ffff;
+    }
+
+
+    .h-head {
+        height: 140px;
+        background: black !important;
+    }
+
+    ngb-offcanvas-panel {
+        background-color: #000 !important;
+    }
+
+    .bg-color {
+        background-color: #0c0c0c !important;
+    }
+
+    ngx-dropzone {
+        background-color: #000 !important;
+    }
+
+    .blur {
+        .arrow-box:before {
+            left: 0;
+            top: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 22px solid transparent;
+            border-right: 21px solid #212529 !important;
+            margin-left: 0px;
+            transform: rotate(180deg);
+        }
+    }
+
+    .success {
+        .arrow-box:before {
+            left: 0;
+            top: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 22px solid transparent;
+            border-right: 21px solid #212529 !important;
+            margin-left: 0px;
+            transform: rotate(180deg);
+        }
+    }
+
+    .warning {
+        .arrow-box:before {
+            left: 0;
+            top: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 22px solid transparent;
+            border-right: 21px solid #212529 !important;
+            margin-left: 0px;
+            transform: rotate(180deg);
+        }
+    }
+
+    .danger {
+        .arrow-box:before {
+            left: 0;
+            top: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 22px solid transparent;
+            border-right: 21px solid #212529 !important;
+            margin-left: 0px;
+            transform: rotate(180deg);
+        }
+    }
+}
+
+p {
+    word-break: break-word;
+}
+
+@media only screen and (max-width: 768px) {
+    .custom-offcanvas {
+        width: 100% !important;
+        background-color: #ffffff !important;
+    }
+
+    .custom-offcanvas2 {
+        width: 100% !important;
+        overflow: auto;
+        background-color: #ffffff !important;
+    }
+
+    .custom-offcanvas3 {
+        width: 100% !important;
+        overflow: auto;
+        background-color: #ffffff !important;
+    }
+
+    .custom-offcanvas4 {
+        width: 100% !important;
+        overflow: auto;
+        background-color: #ffffff !important;
+    }
+
+    .custom-offcanvasNooverflow {
+        width: 100% !important;
+        overflow: hidden !important;
+        background-color: #ffffff !important;
+    }
+
+
+    .nav-link {
+        .d-none {
+            display: block !important;
+        }
+    }
+}
+
+
+
+.table td.title {
+    cursor: auto;
+    max-width: 400px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.table td.title.expanded {
+    white-space: pre;
+    max-width: 100% !important;
+}
+
+.title-cut-text {
+    cursor: auto;
+    max-width: 200px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+// input {
+//     text-transform: capitalize !important;
+// }
+
+// input::first-letter {
+//     text-transform: uppercase !important;
+// }
+
+// input::placeholder::first-letter {
+//     text-transform: capitalize !important;
+// }
+
+// input[type="email"] {
+//     text-transform: inherit !important;
+// }
+
+// input::first-letter:not([type="email"]) {
+//     text-transform: inherit !important;
+// }
+
+// input::placeholder::first-letter:not([type="email"]) {
+//     text-transform: inherit !important;
+// }
+
+
+.ng-select.ng-select-disabled>.ng-select-container {
+    background-color: rgba(var(--vz-light-rgb), 0.99) !important;
+    cursor: no-drop !important;
+}
+
+ngx-dropzone-label {
+    width: 230px !important;
+}
+
+
+.displayPrint {
+    display: none !important;
+}
+
+.displayShown {
+    display: block !important;
+}
+
+@media print {
+
+    body {
+        margin: 1cm;
+        border: 1px solid black;
+        box-sizing: border-box;
+    }
+
+    .displayPrint {
+        display: block !important;
+    }
+
+    .displayShown {
+        display: none !important;
+    }
+}
+
+
+
+.ng-dropdown-panel.ng-select-top {
+    bottom: 100%;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-bottom-color: #e6e6e6;
+    margin-bottom: -1px;
+    background-color: white !important;
+    z-index: 99999 !important;
+}
+
+
+.ng-dropdown-panel .scroll-host {
+    overflow: scroll;
+    overflow-y: scroll;
+    position: relative;
+    display: block;
+    -webkit-overflow-scrolling: touch;
+    background: white !important;
+}
+
+
+.text-black {
+    color: black !important;
+}
+
+.fs-34 {
+    font-size: 34px !important;
+}
+
+.chat-image-success {
+    height: 100% !important;
+    width: 20% !important;
+}
+
+
+.white-space-normal {
+    white-space: normal !important;
+}
+
+
+//   . {
+//     width: 11px!important;
+//     height: 11px!important;;
+
+//     right: -12px;
+//     left: auto;
+//     top: 7px;
+// }
+.chat-user-img-without .user-status {
+    width: 10px;
+    height: 10px;
+    background-color: #adb5bd;
+    border-radius: 50%;
+    border: 2px solid var(--vz-secondary-bg);
+    position: absolute;
+    right: -13px;
+    left: auto;
+    top: 6px;
+}
+
+.avatar-title-custom {
+    align-items: center;
+    background-color: #5ea3cb !important;
+    ;
+    color: #fff !important;
+    ;
+    display: flex !important;
+    ;
+    font-weight: 500 !important;
+    ;
+    height: 35px !important;
+    ;
+    justify-content: center !important;
+    ;
+    width: 35px !important;
+    ;
+}
+
+
+.top-class {
+    display: flex !important;
+    ;
+    justify-content: center !important;
+    ;
+    align-items: center !important;
+    ;
+}
+
+
+.chat-image {
+    height: 79% !important;
+    width: 64% !important;
+    opacity: 0.5;
+}
+
+
+
+@media only screen and (max-width: 600px) {
+
+    .text-desc {
+        width: 200px !important;
+    }
+
+    .department-text {
+        width: 30px !important;
+        word-wrap: break-word;
+        word-break: break-word;
+    }
+}
+
+
+.title_new {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+

@@ -1,0 +1,301 @@
+<div
+  class="container-fluid p-0 d-flex flex-column justify-content-between newmodalclass"
+>
+  <div class="d-flex p-4 justify-content-between">
+    <h4>View Asset</h4>
+    <div class="float-right d-flex justify-content-between">
+      <button
+        type="button"
+        class="close ml-4"
+        aria-label="Close button"
+        (click)="passBack(false)"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="flex-grow-1 px-4"
+    style="background-color: white !important; overflow-y: auto"
+  >
+    <div class="row">
+      <div
+        class="col-md-12 grid-margin stretch-card"
+        *ngFor="let list of ticketingAssetList; let i = index"
+      >
+        <div class="card box-border" *ngIf="ticketingAssetList.length >= 0">
+          <div
+            class="card-header d-flex justify-content-between align-items-baseline p-2"
+            [ngClass]="returnClassname(list)"
+          >
+            <div class="d-flex align-items-center">
+              <h6>Asset-{{ i + 1 }}</h6>
+              <div>
+                <span
+                  class="ml-2 status text-primary"
+                  *ngIf="list?.assetTagId != null"
+                  ><b>{{ list?.assetTagId }}</b></span
+                >
+              </div>
+            </div>
+            <div>
+              <span
+                class="status text-light"
+                [class]="returnClassStatus(list?.ticketItemStatusId)"
+                >{{ list?.ticketItemStatusName }}</span
+              >
+            </div>
+          </div>
+          <div class="card-body padding-5">
+            <div class="row">
+              <div class="col-md-9">
+                <label class="tx-11 font-weight-bold mb-0 text-uppercase"
+                  >Name & Request Remark
+                </label>
+                <p class="text-muted">{{ list?.assetName }}</p>
+
+                <p class="text-muted msg">
+                  <b>Requester Remark-</b>{{ list?.requesterRemark || "NA" }}
+                </p>
+                <p *ngIf="list?.assetType === 'Parent Asset'" class="my-1">
+                  <span class="badge bg-blue text-light badge-pill">{{
+                    list?.assetType
+                  }}</span>
+                </p>
+                <p *ngIf="list?.assetType === 'Child Asset'" class="my-1">
+                  <span class="badge bg-info text-light badge-pill">{{
+                    list?.assetType
+                  }}</span>
+                </p>
+              </div>
+              <div class="col-md-3 d-flex justify-content-end">
+                <img
+                  src="{{ baseUrl }}{{ list?.sitePicUrlStart }}"
+                  (click)="
+                    confirmForViewImage(
+                      modalViewImageConfirm,
+                      list?.sitePicUrlStart
+                    )
+                  "
+                  class="image-card-size"
+                  *ngIf="list?.sitePicUrlStart"
+                />
+                <img
+                  src="../../../../../../../assets/images/placeholder.jpg"
+                  class="image-card-size"
+                  *ngIf="!list?.sitePicUrlStart"
+                />
+              </div>
+              <div class="col-md-12">
+                <p
+                  class="text-muted truncate-text"
+                  ngbTooltip="{{ list?.technitionRemark }}"
+                  *ngIf="list?.technitionRemark"
+                >
+                  <b>Member Remark-</b>{{ list?.technitionRemark }}
+                </p>
+                <p *ngIf="!list?.technitionRemark">No Reamrk by Member</p>
+              </div>
+              <div
+                class="col-md-12 mt-2"
+                *ngIf="
+                  list?.ticketItemStatusId !== 46 &&
+                  list?.ticketItemStatusId !== 31
+                "
+              >
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="updateAsset(updatePopup, list)"
+                >
+                  Update Status
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="col-md-12 grid-margin stretch-card"
+        *ngIf="ticketingAssetList?.length == 0"
+      >
+        <div class="card box-border mt-2">
+          <div class="card-header">
+            <h6 class="text-danger">NO ASSETS AVAILABLE</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #updatePopup let-modal>
+  <div class="modal-header d-flex align-items-baseline">
+    <h6 class="card-title mb-0">Update Asset</h6>
+    <button
+      type="button"
+      class="close mt-1"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formGroup">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="control-label"
+              >Asset Status <span style="color: red">*</span></label
+            >
+            <ng-select
+              [items]="assetList"
+              bindLabel="assetStatus"
+              bindValue="assetStatusId"
+              placeholder="Select Status"
+              [clearable]="false"
+              class="custom"
+              formControlName="status"
+            >
+            </ng-select>
+            <div *ngIf="status?.invalid && status?.touched">
+              <small class="text-danger" *ngIf="status?.errors?.['required']">
+                Asset Status is Required
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="control-label"
+              >Remark <span style="color: red">*</span></label
+            >
+            <textarea
+              type="text"
+              class="form-control"
+              placeholder="Enter Remark Here..."
+              maxlength="300"
+              formControlName="remark"
+              rows="7"
+              [maxlength]="maxCharsDecision"
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ remark?.value?.length }}/{{ maxCharsDecision }}</label
+            >
+            <div *ngIf="remark?.invalid && remark?.touched">
+              <small class="text-danger" *ngIf="remark?.errors?.['required']">
+                Remark is Required
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 d-flex align-items-center">
+          <div
+            class="image-section align-center mx-2"
+            style="text-align: -webkit-center"
+          >
+            <div class="icon-cross" *ngIf="isFirstImageVisible">
+              <i
+                class="fa fa-times-circle text-danger"
+                aria-hidden="true"
+                (click)="crossFirstImage(imageOneUrl)"
+              ></i>
+            </div>
+            <label class="hoverable" for="picOne">
+              <img src="{{ imageOneUrl }}" />
+              <div class="hover-text">Image-1</div>
+              <div class="background"></div>
+            </label>
+            <br />
+            <input
+              id="picOne"
+              type="file"
+              (change)="onSelectFirstFile($event)"
+              accept="image/*"
+              formControlName="picOne"
+            />
+          </div>
+          <div
+            class="image-section align-center mx-2"
+            style="text-align: -webkit-center"
+          >
+            <div class="icon-cross-two" *ngIf="isSecondImageVisible">
+              <i
+                class="fa fa-times-circle"
+                aria-hidden="true"
+                (click)="crossSecondImage(imageTwoUrl)"
+              ></i>
+            </div>
+            <label class="hoverable" for="picTwo">
+              <img src="{{ imageTwoUrl }}" />
+              <div class="hover-text">Image-</div>
+              <div class="background"></div>
+            </label>
+            <br />
+            <input
+              id="picTwo"
+              type="file"
+              (change)="onSelectSecondFile($event)"
+              accept="image/*"
+              formControlName="picTwo"
+            />
+          </div>
+          <div
+            class="image-section align-center mx-2"
+            style="text-align: -webkit-center"
+          >
+            <div class="icon-cross-three" *ngIf="isThirdImageVisible">
+              <i
+                class="fa fa-times-circle"
+                aria-hidden="true"
+                (click)="crossThirdImage(imageThreeUrl)"
+              ></i>
+            </div>
+            <label class="hoverable" for="picThree">
+              <img src="{{ imageThreeUrl }}" />
+              <div class="hover-text">Image-</div>
+              <div class="background"></div>
+            </label>
+            <br />
+            <input
+              id="picThree"
+              type="file"
+              (change)="onSelectThirdFile($event)"
+              accept="image/*"
+              formControlName="picThree"
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div>
+      <button class="btn btn-primary" (click)="Submit()" [disabled]="formGroup.invalid">Update</button>
+      <button
+        class="btn btn-outline-danger ml-2"
+        (click)="modal.dismiss('Cross click')"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalViewImageConfirm let-modal>
+  <button
+    type="button"
+    class="float-right close"
+    aria-label="Close button"
+    aria-describedby="modal-title"
+    (click)="modal.dismiss('Cross click')"
+  >
+    <span class="float-right mt-1 mr-2" aria-hidden="true">&times;</span>
+  </button>
+
+  <img class="modal-body" src="{{ viewImageValue }}" />
+</ng-template>

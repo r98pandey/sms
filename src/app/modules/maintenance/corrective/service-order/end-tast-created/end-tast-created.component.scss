@@ -1,0 +1,194 @@
+/* width */
+::-webkit-scrollbar {
+  width: 10px !important;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888 !important;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555 !important;
+}
+
+
+.newmodalclass {
+  width: 700px !important;
+  height: 100vh !important;
+  background-color: #F7F8F8 !important;
+}
+
+@media only screen and (max-width: 480px),
+only screen and (max-device-width: 480px) {
+  .newmodalclass {
+    width: 380px !important;
+    height: 100vh !important;
+    background-color: #F7F8F8 !important;
+  }
+
+}
+
+
+.img {
+  width: 200px;
+  height: 200px;
+  object-fit: fill;
+}
+
+.brown {
+  background-color: #964B00 !important;
+  color: white !important;
+}
+
+.remark-img {
+  width: 100px;
+  height: 100px;
+}
+
+.requester-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 0px;
+}
+
+.technical-remark {
+  width: 80px;
+  height: 80px;
+}
+
+.card-img {
+  box-shadow: 0px 18px 30px #00000014;
+}
+
+.aside-body {
+  width: 100%;
+}
+
+.task-image {
+  width: 200px;
+  height: 200px;
+  object-fit: fill;
+}
+
+.trans-image {
+  width: 80px;
+  height: 80px;
+  object-fit: fill;
+}
+
+
+.overflow {
+  height: 100% !important;
+  overflow-y: scroll;
+}
+
+.table td img {
+  width: 70px;
+  height: 70px;
+  border-radius: 0%;
+}
+
+.image-card-size {
+  height: 60px;
+  width: 60px;
+  object-fit: cover;
+  border-radius: 30%;
+}
+
+.bg-blue {
+  background-color: #6571ff !important;
+}
+
+.padding-5 {
+  padding: 0.5rem !important;
+}
+
+.icon-cross {
+  position: absolute;
+  top: -10px;
+  z-index: 1000;
+  left: 110px;
+}
+
+.icon-cross-two {
+  position: absolute;
+  top: -10px;
+  z-index: 1000;
+  left: 225px;
+}
+
+.icon-cross-three {
+  position: absolute;
+  top: -10px;
+  z-index: 1000;
+  left: 340px;
+}
+
+
+
+.fa-times-circle {
+  color: #727cf5;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.image-section {
+  img {
+    height: 80px;
+    width: 80px;
+    border-radius: 0%;
+    margin-top: 15px;
+  }
+
+  .hoverable {
+    position: relative;
+    display: block;
+    cursor: pointer;
+    height: 100px;
+    width: 100px;
+    border: 1px dashed lightgrey;
+    border-radius: 0%;
+    padding: 10px;
+  }
+
+  .hoverable .hover-text {
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+
+  .hoverable .background {
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+    border-radius: 0%;
+    z-index: 1;
+  }
+
+  .hoverable:hover .hover-text {
+    display: block;
+  }
+
+  .hoverable:hover .background {
+    display: block;
+  }
+
+  input {
+    display: none;
+  }
+}

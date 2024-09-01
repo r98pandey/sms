@@ -1,0 +1,77 @@
+.qr-img {
+    width: 75.60px;
+    height: 75.60px;
+}
+
+.card {
+    border-radius: 20px;
+    height: 120px;
+    border: 1px solid #a8cc8e;
+    box-shadow: none !important;
+}
+
+.f-8 {
+    font-size: 10px;
+}
+.showprint{
+    display: block;
+}
+.print {
+    display: none;
+}
+@media print {
+    header,
+    footer,
+    aside,
+    form{
+        display: none;
+    }
+    .showprint{
+        display: none;
+    }
+    .print {
+        display: block;
+    }
+}
+@media print {
+    header,
+    footer,
+    aside,
+    form,
+    … {
+        display: none;
+    }
+    article {
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+}
+@media print {
+   
+    article {
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+}
+@page {
+    margin: 2cm;
+}
+@page: first {
+    margin: 0cm;
+}
+@page: last {
+    margin: 5cm;
+}
+@page: left {
+    margin: 2cm 1.5cm 2cm 2cm;
+}
+@page: right {
+    margin: 2cm 2cm 2cm 1.5cm;
+}
+@media print {
+    a:after {
+        content: "(" attr(href)")";
+    }
+}

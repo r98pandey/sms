@@ -1,0 +1,688 @@
+<div class="row " >
+  <div class="col-xxl-3 stretch-card">
+    <div class="card transparent-card">
+      <div class="card">
+        <div class="card-body text-center">
+          <h6 class="card-title mb-3 flex-grow-1 text-start">Time Tracking</h6>
+          <div class="mb-2">
+            <lord-icon
+              src="https://cdn.lordicon.com/kbtmbyzy.json"
+              trigger="loop"
+              colors="primary:#405189,secondary:#02a8b5"
+              style="width: 90px; height: 90px"
+            >
+            </lord-icon>
+          </div>
+          <h6 class="mb-1">{{ mX_WorkOder.timeTakenToCompleteTask }}</h6>
+          <span
+            [class]="
+              commonFunctionService.returnStatusBadgeClasses(
+                mX_WorkOder.woStatusId
+              )
+            "
+            >{{ mX_WorkOder.woStatusName }}</span
+          >
+        </div>
+      </div>
+      <!--end card-->
+      <div class="card mb-3" >
+        <div class="card-body">
+          <div class="table-card">
+            <table class="table mb-0">
+              <tbody>
+                <tr>
+                  <td class="fw-medium">SO No</td>
+                  <td>{{ mX_WorkOder.woNo || "-" }}</td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium">Task Type</td>
+                  <td>{{ mX_WorkOder.taskType || "-" }}</td>
+                </tr>
+                <tr>
+                  <td class="fw-medium">Service Type</td>
+                  <td>{{ mX_WorkOder.operationType || "-" }}</td>
+                </tr>
+                <tr>
+                  <td class="fw-medium">Support Type</td>
+                  <td>{{ mX_WorkOder.supportType || "-" }}</td>
+                </tr>
+                <tr>
+                  <td class="fw-medium">Ticket Type</td>
+                  <td>{{ mX_WorkOder.ticketTypeName || "-" }}</td>
+                </tr>
+                <tr>
+                  <td class="fw-medium">Priority</td>
+                  <td>
+                    <span
+                      class="badge text-uppercase"
+                      [ngClass]="{
+                        'bg-success ': mX_WorkOder.urgencyTypeName === 'Low',
+                        'bg-danger': mX_WorkOder.urgencyTypeName === 'High',
+                        'bg-warning': mX_WorkOder.urgencyTypeName === 'Medium'
+                      }"
+                      >{{ mX_WorkOder.urgencyTypeName }}</span
+                    >
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium">Created By</td>
+                  <td>{{ mX_WorkOder.createdBy || "-" }}</td>
+                </tr>
+                <tr>
+                  <td class="fw-medium">Created Date</td>
+                  <td>{{ mX_WorkOder.createdDate || "-" }}</td>
+                </tr>
+
+                <tr>
+                  <td
+                    class="fw-medium"
+                    title="Exp. Completion Date"
+                    *ngIf="mX_WorkOder.expectedComplitionDateTime"
+                  >
+                    Exp. Comp. Date
+                  </td>
+                  <td *ngIf="mX_WorkOder.expectedComplitionDateTime">
+                    {{
+                      returnDate(mX_WorkOder.expectedComplitionDateTime) || "-"
+                    }}
+                  </td>
+                  <td colspan="2">
+                    <div class="actions" >
+                      <ng-container
+                        *ngIf="!mX_WorkOder.expectedComplitionDateTime"
+                      >
+                        <button
+                          class="btn btn-primary mb-0"
+                          *ngIf="updateLinkOfDateCom()"
+                          href="javascript:void(0);"
+                          (click)="
+                            openmodalUpdateDate(
+                              mX_WorkOder,
+                              openModelUodateDate
+                            )
+                          "
+                        >
+                          Update Exp. Comp. Date
+                        </button>
+                        <span *ngIf="!updateLinkOfDateCom()">-</span>
+                      </ng-container>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium">Exp. Site Visit</td>
+                  <td>
+                    {{ mX_WorkOder.expWrkStartDate }}
+                    {{ mX_WorkOder.expWrkStartTime || "-" }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium">Started By</td>
+                  <td>{{ mX_WorkOder.taskStartByName || "-" }}</td>
+                </tr>
+                <tr>
+                  <td class="fw-medium">Started Date</td>
+                  <td>{{ mX_WorkOder.taskStartDateTime || "-" }}</td>
+                </tr>
+                <tr>
+                  <td class="fw-medium">Ended By</td>
+                  <td c>{{ mX_WorkOder.taskEndByName || "-" }}</td>
+                </tr>
+                <tr>
+                  <td class="fw-medium">Ended Date</td>
+                  <td>{{ mX_WorkOder.taskEndDateTime || "-" }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <!--end table-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--end card-->
+  </div>
+  <!---end col-->
+  <div class="col-xxl-9 stretch-card">
+    <div class="card transparent-card">
+      <div class="card" *ngIf="mX_WorkOder.addtionalNote">
+        <div class="card-body">
+          <div class="text-muted">
+            <h6 class="fw-semibold text-uppercase mb-3">Note For Member</h6>
+            <p [innerHTML]="mX_WorkOder.addtionalNote"></p>
+          </div>
+        </div>
+      </div>
+      <div class="card" *ngIf="mX_WorkOder.wO_Tec_Remark">
+        <div class="card-body">
+          <div class="text-muted">
+            <h6 class="fw-semibold text-uppercase mb-3">Action Taken</h6>
+            <p [innerHTML]="mX_WorkOder.wO_Tec_Remark"></p>
+          </div>
+        </div>
+      </div>
+
+      <!--end card-->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <ul
+              ngbNav
+              #customNav="ngbNav"
+              [activeId]="1"
+              class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0"
+              role="tablist"
+            >
+              <li [ngbNavItem]="1" class="nav-item" (click)="getafterSubmitServiceOrder($event)">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Task Details
+                </a>
+                <ng-template ngbNavContent>
+                  <app-task-end-service-order
+                    [mX_WorkOder]="mX_WorkOder"
+                    [ticketData]="ticketData"
+                    [workorderId]="mX_WorkOder.woId"
+                    [expectedComplitionDateTime]="
+                      mX_WorkOder.expectedComplitionDateTime
+                    "
+                    (afterSubmitServiceOrder)="
+                      getafterSubmitServiceOrder($event)
+                    "
+                    [ticketWOStartEndTask]="mx_WOStartEndTask"
+                  ></app-task-end-service-order>
+                </ng-template>
+              </li>
+
+              <li [ngbNavItem]="2" class="nav-item" (click)="getafterSubmitServiceOrder($event)">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Assigned To
+                  <span
+                    class="badge align-middle ms-1"
+                    [class]="
+                      mX_WOTechAssignment.length != 0
+                        ? 'bg-danger'
+                        : 'bg-success'
+                    "
+                    >{{ mX_WOTechAssignment.length }}</span
+                  >
+                </a>
+                <ng-template ngbNavContent>
+                  <div
+                    class="d-flex align-items-center justify-content-between mb-3"
+                  >
+                    <div>
+                      <h6 class="card-title mb-4 pb-2">Member List</h6>
+                    </div>
+                    <div>
+                      <button
+                        *ngIf="shownAddTechButton"
+                        class="btn btn-success btn-sm"
+                        type="button"
+                        class="btn btn-soft-primary btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#inviteMembersModal"
+                        (click)="openModalTechnician(TechnicianListModal)"
+                      >
+                        <i class="ri-add-fill align-bottom me-1"></i> Add Member
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="table-responsive table-card">
+                    <table class="table align-middle mb-0">
+                      <thead class="table-light text-muted">
+                        <tr>
+                          <th scope="col">Name</th>
+                          <th scope="col">Designation</th>
+                          <th scope="col">Phone Number</th>
+                          <th scope="col" *ngIf="deleteButtonShown">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ng-container *ngIf="mX_WOTechAssignment.length == 0">
+                          <tr>
+                            <td colspan="4" class="text-center">
+                              No Member Assign
+                            </td>
+                          </tr>
+                        </ng-container>
+                        <ng-container *ngIf="mX_WOTechAssignment.length != 0">
+                          <tr *ngFor="let workTech of mX_WOTechAssignment">
+                            <th scope="row">
+                              <div
+                                class="d-flex align-items-center"
+                                *ngIf="workTech.profileImageUrl"
+                              >
+                                <div class="flex-grow-0">
+                                  <div class="d-flex align-items-center">
+                                    <div
+                                      class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0 online"
+                                    >
+                                      <img
+                                        [src]="
+                                          imgUrl + workTech.profileImageUrl
+                                        "
+                                        class="rounded-circle avatar-xs"
+                                        alt=""
+                                      />
+                                      <!-- <span class="user-status"></span> -->
+                                      <div class="dropdown" ngbDropdown>
+                                        <span
+                                          class="user-status shadow-none arrow-none cursor-pointer"
+                                          data-bs-toggle="dropdown"
+                                          aria-expanded="false"
+                                          ngbDropdownToggle
+                                          [class]="
+                                            returnCurrentStatusClassesStatusCircle(
+                                              workTech.currentStatus
+                                            )
+                                          "
+                                          title="{{ workTech.currentStatus }}"
+                                        ></span>
+                                        <div
+                                          *ngIf="workTech.currentStatus"
+                                          class="dropdown-menu dropdown-menu-start drop-con p-0"
+                                          ngbDropdownMenu
+                                        >
+                                          <div
+                                            [class]="
+                                              returnCurrentStatusClassesStatus(
+                                                workTech.currentStatus
+                                              )
+                                            "
+                                            class="text-uppercase p-2"
+                                          >
+                                            <b class="fs-14">
+                                              {{ workTech.currentStatus }}</b
+                                            >
+                                          </div>
+                                          <div
+                                            class="white-space-normal text-muted fs-13 p-2"
+                                            *ngIf="workTech.currentStatusRemark"
+                                          >
+                                            {{ workTech.currentStatusRemark }}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="flex-grow-1 overflow-hidden">
+                                      <h5 class="text-truncate mb-0 fs-14">
+                                        <a
+                                          class="text-primary username"
+                                          data-bs-toggle="offcanvas"
+                                          href="javascript:void(0);"
+                                          aria-controls="userProfileCanvasExample"
+                                        >
+                                          {{ workTech.techName }}</a
+                                        >
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                class="d-flex align-items-center"
+                                *ngIf="!workTech.profileImageUrl"
+                              >
+                                <div class="flex-grow-0">
+                                  <div class="d-flex align-items-center">
+                                    <div
+                                      class="flex-shrink-0 chat-user-img-without user-own-img align-self-center me-3 ms-0 online rounded-circle avatar-title-custom"
+                                      [class]="
+                                        returnCurrentStatusClassesStatus(
+                                          workTech.currentStatus
+                                        )
+                                      "
+                                    >
+                                      {{ workTech.techName?.charAt(0)
+                                      }}{{ workTech.techName?.charAt(1) }}
+
+                                      <!-- <span class="user-status"></span> -->
+                                      <div class="dropdown" ngbDropdown>
+                                        <span
+                                          class="user-status shadow-none arrow-none cursor-pointer"
+                                          data-bs-toggle="dropdown"
+                                          aria-expanded="false"
+                                          ngbDropdownToggle
+                                          [class]="
+                                            returnCurrentStatusClassesStatusCircle(
+                                              workTech.currentStatus
+                                            )
+                                          "
+                                          title="{{ workTech.currentStatus }}"
+                                        ></span>
+                                        <div
+                                          *ngIf="workTech.currentStatus"
+                                          class="dropdown-menu dropdown-menu-start drop-con p-0"
+                                          ngbDropdownMenu
+                                        >
+                                          <div
+                                            [class]="
+                                              returnCurrentStatusClassesStatus(
+                                                workTech.currentStatus
+                                              )
+                                            "
+                                            class="text-uppercase p-2"
+                                          >
+                                            <b class="fs-14">
+                                              {{ workTech.currentStatus }}</b
+                                            >
+                                          </div>
+                                          <div
+                                            class="white-space-normal text-muted fs-13 p-2"
+                                            *ngIf="workTech.currentStatusRemark"
+                                          >
+                                            {{ workTech.currentStatusRemark }}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="flex-grow-1 overflow-hidden">
+                                      <h5 class="text-truncate mb-0 fs-14">
+                                        <a
+                                          class="text-primary username"
+                                          data-bs-toggle="offcanvas"
+                                          href="javascript:void(0);"
+                                          aria-controls="userProfileCanvasExample"
+                                        >
+                                          {{ workTech.techName }}</a
+                                        >
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </th>
+                            <td>{{ workTech.designationName }}</td>
+                            <td>{{ workTech.phoneNumber }}</td>
+                            <td *ngIf="deleteButtonShown">
+                              <ng-container
+                                *ngIf="
+                                  workTech.techId != mX_WorkOder.taskStartById
+                                "
+                              >
+                                <ng-container
+                                  *ngIf="mX_WorkOder.woStatusId != 25"
+                                >
+                                  <a
+                                    *ngIf="!workTech.isTechAvailable"
+                                    href="javascript:void(0)"
+                                    class="dropdown-item cursor-pointer"
+                                    (click)="openModalDeleteConf(workTech)"
+                                    ><i
+                                      class="ri-delete-bin-fill align-bottom me-2 text-danger"
+                                    ></i>
+                                  </a>
+                                </ng-container>
+                              </ng-container>
+                              <ng-container
+                                *ngIf="
+                                  workTech.techId == mX_WorkOder.taskStartById
+                                "
+                              >
+                                <a
+                                  *ngIf="!workTech.isTechAvailable"
+                                  href="javascript:void(0)"
+                                  class="dropdown-item cursor-pointer"
+                                  (click)="openModalNotDekleteTech()"
+                                  ><i
+                                    class="ri-delete-bin-fill align-bottom me-2 text-danger"
+                                  ></i>
+                                </a>
+                              </ng-container>
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                    <!--end table-->
+                  </div>
+                </ng-template>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="tab-content">
+            <div [ngbNavOutlet]="customNav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+<ng-template #TechnicianListModal role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Add Members</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div class="search-box mb-3">
+      <input
+        type="text"
+        class="form-control bg-light border-light"
+        (keyup)="filterTechnician($event)"
+        [(ngModel)]="technicianSearchText"
+        placeholder="Search member here..."
+      />
+      <i class="ri-search-line search-icon"></i>
+    </div>
+    <ngx-simplebar class="mx-n4 px-4" style="height: 400px">
+      <div class="vstack gap-3">
+        <div *ngFor="let tech of filteredTechnicianList; let i = index">
+          <div
+            class="d-flex align-items-center"
+            (click)="selectTechnician(filteredTechnicianList, i, tech)"
+          >
+            <div class="flex-shrink-0 me-3">
+              <div class="d-flex align-items-center gap-1">
+                <div class="form-check form-check-flat form-check-primary">
+                  <label class="form-check-label">
+                    <input
+                      type="checkbox"
+                      value="{{ tech }}"
+                      [(ngModel)]="filteredTechnicianList[i].checked"
+                      [disabled]="filteredTechnicianList[i].disabled"
+                      class="form-check-input"
+                    />
+                    <i class="input-frame"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="avatar-xs flex-shrink-0 me-3">
+              <!-- <img
+                src="{{
+                  tech.profileImageUrl
+                    ? imgUrl + tech.profileImageUrl
+                    : '../../../../../assets/images/placeholderimage.png'
+                }}"
+                style="width: 40px; height: 40px"
+                alt=""
+                class="img-fluid rounded-circle"
+              /> -->
+
+              <div class="d-flex align-items-center">
+                <div
+                  class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0 online"
+                >
+                  <img
+                    src="{{
+                      tech.profileImageUrl
+                        ? imgUrl + tech.profileImageUrl
+                        : '../../../../../assets/images/placeholderimage.png'
+                    }}"
+                    class="rounded-circle avatar-xs"
+                    alt=""
+                  />
+                  <!-- <span class="user-status"></span> -->
+                  <div class="dropdown" ngbDropdown>
+                    <span
+                      class="user-status shadow-none arrow-none cursor-pointer"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      ngbDropdownToggle
+                      [class]="
+                        returnCurrentStatusClassesStatusCircle(
+                          tech.currentStatus
+                        )
+                      "
+                      title="{{ tech.currentStatus }}"
+                    ></span>
+                    <div
+                      *ngIf="tech.currentStatus"
+                      class="dropdown-menu dropdown-menu-start drop-con p-0"
+                      ngbDropdownMenu
+                    >
+                      <div
+                        [class]="
+                          returnCurrentStatusClassesStatus(tech.currentStatus)
+                        "
+                        class="text-uppercase p-2"
+                      >
+                        <b class="fs-14"> {{ tech.currentStatus }}</b>
+                      </div>
+                      <div
+                        class="white-space-normal text-muted fs-13 p-2"
+                        *ngIf="tech.currentStatusRemark"
+                      >
+                        {{ tech.currentStatusRemark }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="fs-14 mb-0">
+                <a href="javascript:void(0);" class="text-body d-block">
+                  {{ tech.fullName }}
+                </a>
+                <p class="mt-0 mb-0">{{ tech.designation }}</p>
+              </h5>
+            </div>
+            <div class="flex-shrink-0 me-3 mb-0">
+              <p class="mb-0">
+                <span
+                  ><i class="ri-phone-fill me-1"></i
+                  >{{ tech.phoneNumber }}</span
+                >
+              </p>
+              <!-- <p class="mb-0"><span><i class=" ri-mail-check-fill me-1"></i>{{ tech.email }}</span></p> -->
+            </div>
+          </div>
+        </div>
+        <div
+          class="text-center mt-3 text-muted"
+          *ngIf="
+            technicianList &&
+            filteredTechnicianList &&
+            technicianSearchText.length > 0
+              ? !filteredTechnicianList.length
+              : !technicianList.length
+          "
+        >
+          <p>No Member Found</p>
+        </div>
+      </div>
+    </ngx-simplebar>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+    <button
+      class="btn btn-success w-xs me-3"
+      type="submit"
+      (click)="sweetAlertUpdateTechinionDetails()"
+      [disabled]="selectedTech.length == 0"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #openModelUodateDate let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h4 class="modal-title" id="modal-title">
+      Update Expected Completion Date
+    </h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="updateDateForm">
+      <div class="mb-2">
+        <div class="card-body">
+          <div class="row">
+            <div class="form-group">
+              <label class="form-label mb-0"
+                >Expected Completion Date
+                <i
+                  class="ri-close-circle-line text-danger"
+                  *ngIf="expectedComplitionDateTime.value"
+                  (click)="clearChangeExpectedComplitionDate()"
+                ></i>
+              </label>
+              <input
+                type="text"
+                class="form-control flatpickr-input"
+                placeholder="Enter Expected Completion Date "
+                formControlName="expectedComplitionDateTime"
+                mwlFlatpickr
+                [altInput]="false"
+                [enableTime]="false"
+                [convertModelValue]="true"
+                [dateFormat]="'d-m-Y'"
+                [minDate]="minDate"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn btn-outline-danger mr-2 mb-2 mb-md-0"
+      (click)="modal.dismiss('cancel')"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      [disabled]="updateDateForm.invalid"
+      ngbAutofocus
+      class="btn btn-success mr-2 mb-2 mb-md-0"
+      (click)="modal.close('Ok', $event)"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>

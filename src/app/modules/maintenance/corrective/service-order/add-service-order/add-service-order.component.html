@@ -1,0 +1,703 @@
+<div class="row">
+  <div class="col-12 col-xl-8">
+    <div class="card card-height-100">
+      <div class="card-body">
+        <form [formGroup]="serviceOrderFrom">
+          <div class="row">
+            <div class="col-md-6 mt-3">
+              <div class="form-group">
+                <label class="form-label mb-0">Maintenance Type</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter Title"
+                  formControlName="taskType"
+                />
+              </div>
+            </div>
+            <div class="col-md-6 mt-3">
+              <div class="form-group">
+                <label class="form-label mb-0"
+                  >Service Order Category<span class="starRequried"
+                    >*</span
+                  ></label
+                >
+                <ng-select
+                  [items]="cetagoryList"
+                  bindLabel="ticketTypeName"
+                  bindValue="ticketTypeId"
+                  placeholder="Select Service Order Category"
+                  (change)="ticketCategoryHandler($event)"
+                  [clearable]="false"
+                  class="custom"
+                  formControlName="category"
+                >
+                </ng-select>
+                <div *ngIf="category?.invalid && category?.touched">
+                  <small
+                    class="text-danger"
+                    *ngIf="category?.errors?.['required']"
+                  >
+                    Category is Required
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mt-3">
+              <div class="form-group">
+                <label class="form-label mb-0"
+                  >Priority<span class="starRequried">*</span></label
+                >
+                <ng-select
+                  [items]="priorityList"
+                  bindLabel="urgencyTypeName"
+                  bindValue="urgencyTypeName"
+                  placeholder="Select Priority"
+                  [clearable]="false"
+                  class="custom"
+                  formControlName="priority"
+                >
+                </ng-select>
+                <div *ngIf="priority.invalid && priority?.touched">
+                  <small
+                    class="text-danger"
+                    *ngIf="priority?.['errors']?.['required']"
+                  >
+                    Priority is Required
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mt-3">
+              <div class="form-group">
+                <label class="form-label mb-0" for="supportType"
+                  >Support Type<span class="starRequried">*</span></label
+                >
+                <ng-select
+                  [items]="supportTypeAarry"
+                  placeholder="Support Type"
+                  [clearable]="false"
+                  formControlName="supportType"
+                  class="custom"
+                  id="supportType"
+                >
+                </ng-select>
+                <div *ngIf="supportType.invalid && supportType?.touched">
+                  <small
+                    class="text-danger"
+                    *ngIf="supportType?.['errors']?.['required']"
+                  >
+                    Support Type is Required
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 mt-3">
+              <div class="form-group">
+                <label class="form-label mb-0"
+                  >Visit/Attend Date
+                  <i
+                    class="ri-close-circle-line text-danger"
+                    *ngIf="date.value"
+                    (click)="clearChangDate()"
+                  ></i>
+                </label>
+                <input
+                  type="text"
+                  class="form-control flatpickr-input"
+                  placeholder="Enter Visit/Attend Date"
+                  formControlName="date"
+                  (change)="changDate()"
+                  mwlFlatpickr
+                  [altInput]="false"
+                  [enableTime]="false"
+                  [convertModelValue]="true"
+                  [dateFormat]="'d-m-Y'"
+                  [minDate]="minDate"
+                />
+              </div>
+            </div>
+            <div class="col-md-6 mt-3" *ngIf="date.value">
+              <div class="form-group">
+                <label class="form-label mb-0"
+                  >Visit/Attend Time
+                  <i
+                    class="ri-close-circle-line text-danger"
+                    *ngIf="time.value"
+                    (click)="clearChangTime()"
+                  ></i>
+                </label>
+                <!-- <input
+                  type="time"
+                  class="form-control"
+                  (blur)="formatTime(time.value)"
+                  placeholder="Enter Visit/Attend Time"
+                  formControlName="time"
+                /> -->
+
+                <input
+                  [ngxMatTimepicker]="picker"
+                  class="form-control"
+                  (blur)="formatTime(time.value)"
+                  placeholder="Enter Visit/Attend Time"
+                  formControlName="time" readonly
+                />
+                <ngx-mat-timepicker
+                  #picker
+                  dottedMinutesInGap
+                  enableKeyboardInput
+                ></ngx-mat-timepicker>
+              </div>
+            </div>
+
+            <div class="col-md-12 mt-3">
+              <div class="row me-0 ms-0">
+                <div class="col-md-6 ps-0">
+                  <div class="form-group">
+                    <label class="form-label mb-0"
+                      >Expected Completion Date
+                      <i
+                        class="ri-close-circle-line text-danger"
+                        *ngIf="expectedComplitionDateTime.value"
+                        (click)="clearChangeExpectedComplitionDate()"
+                      ></i>
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control flatpickr-input"
+                      placeholder="Enter Expected Completion Date"
+                      formControlName="expectedComplitionDateTime"
+                      mwlFlatpickr
+                      [altInput]="false"
+                      [enableTime]="false"
+                      [convertModelValue]="true"
+                      [dateFormat]="'d-m-Y'"
+                      [minDate]="minDate"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 mt-3">
+              <div class="form-group">
+                <label class="form-label mb-0">Note For Member</label>
+                <ckeditor
+                  [editor]="Editor"
+                  data=""
+                  [config]="{
+                    toolbar: [
+                      'heading',
+                      '|',
+                      'bold',
+                      'italic',
+                      '|',
+                      'NumberedList',
+                      'BulletedList'
+                    ]
+                  }"
+                  formControlName="note"
+                >
+                </ckeditor>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-xl-4">
+    <div class="card card-height-100">
+      <div class="card-header align-items-center d-flex border-bottom-dashed">
+        <h4 class="card-title mb-0 flex-grow-1">Members</h4>
+        <div class="flex-shrink-0" *ngIf="time.value">
+          <button
+            type="button"
+            class="btn btn-soft-primary btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#inviteMembersModal"
+            (click)="openModalTechnician(TechnicianListModal)"
+          >
+            <i class="ri-add-fill me-1 align-bottom"></i> Add Members
+          </button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <ngx-simplebar style="height: 400px" class="mx-n3 px-3">
+          <div class="vstack gap-3">
+            <div
+              class="d-flex align-items-center"
+              *ngIf="selectedTech && selectedTech.length"
+            >
+              <div class="flex-grow-1">
+                <h5 class="fs-14 mb-0">
+                  <a href="javascript:void(0);" class="text-body d-block">
+                    Full Name
+                  </a>
+                </h5>
+              </div>
+              <div class="flex-shrink-0 me-3"></div>
+            </div>
+            <div
+              class="d-flex align-items-center justify-content-between"
+              *ngFor="let tech of selectedTech; let i = index"
+            >
+              <div
+                class="d-flex align-items-center"
+                *ngIf="tech.profileImageUrl"
+              >
+                <div class="flex-grow-0">
+                  <div class="d-flex align-items-center">
+                    <div
+                      class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0 online"
+                    >
+                      <img
+                        [src]="apiUrl + tech.profileImageUrl"
+                        class="rounded-circle avatar-xs"
+                        alt=""
+                      />
+                      <!-- <span class="user-status"></span> -->
+                      <div class="dropdown" ngbDropdown>
+                        <span
+                          class="user-status shadow-none arrow-none cursor-pointer"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                          ngbDropdownToggle
+                          [class]="
+                            returnCurrentStatusClassesStatusCircle(
+                              tech.currentStatus
+                            )
+                          "
+                          title="{{ tech.currentStatus }}"
+                        ></span>
+                        <div
+                          *ngIf="tech.currentStatus"
+                          class="dropdown-menu dropdown-menu-start drop-con p-0"
+                          ngbDropdownMenu
+                        >
+                          <div
+                            [class]="
+                              returnCurrentStatusClassesStatus(
+                                tech.currentStatus
+                              )
+                            "
+                            class="text-uppercase p-2"
+                          >
+                            <b class="fs-14"> {{ tech.currentStatus }}</b>
+                          </div>
+                          <div
+                            class="white-space-normal text-muted fs-13 p-2"
+                            *ngIf="tech.currentStatusRemark"
+                          >
+                            {{ tech.currentStatusRemark }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex-grow-1 overflow-hidden">
+                      <h5 class="text-truncate mb-0 fs-14">
+                        <a
+                          class="text-primary username"
+                          data-bs-toggle="offcanvas"
+                          href="javascript:void(0);"
+                          aria-controls="userProfileCanvasExample"
+                        >
+                          {{ tech.fullName }}</a
+                        >
+                      </h5>
+                      <p class="mb-0 mt-0">
+                        <span
+                          ><i class="ri-phone-fill me-1"></i
+                          >{{ tech.phoneNumber }}</span
+                        >
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="d-flex align-items-center"
+                *ngIf="!tech.profileImageUrl"
+              >
+                <div class="flex-grow-0">
+                  <div class="d-flex align-items-center">
+                    <div
+                      class="flex-shrink-0 chat-user-img-without user-own-img align-self-center me-3 ms-0 online rounded-circle avatar-title-custom"
+                      [class]="
+                        returnCurrentStatusClassesStatus(tech.currentStatus)
+                      "
+                    >
+                      {{ tech.fullName?.charAt(0)
+                      }}{{ tech.fullName?.charAt(1) }}
+
+                      <!-- <span class="user-status"></span> -->
+                      <div class="dropdown" ngbDropdown>
+                        <span
+                          class="user-status shadow-none arrow-none cursor-pointer"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                          ngbDropdownToggle
+                          [class]="
+                            returnCurrentStatusClassesStatusCircle(
+                              tech.currentStatus
+                            )
+                          "
+                          title="{{ tech.currentStatus }}"
+                        ></span>
+                        <div
+                          *ngIf="tech.currentStatus"
+                          class="dropdown-menu dropdown-menu-start drop-con p-0"
+                          ngbDropdownMenu
+                        >
+                          <div
+                            [class]="
+                              returnCurrentStatusClassesStatus(
+                                tech.currentStatus
+                              )
+                            "
+                            class="text-uppercase p-2"
+                          >
+                            <b class="fs-14"> {{ tech.currentStatus }}</b>
+                          </div>
+                          <div
+                            class="white-space-normal text-muted fs-13 p-2"
+                            *ngIf="tech.currentStatusRemark"
+                          >
+                            {{ tech.currentStatusRemark }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex-grow-1 overflow-hidden">
+                      <h5 class="text-truncate mb-0 fs-14">
+                        <a
+                          class="text-primary username"
+                          data-bs-toggle="offcanvas"
+                          href="javascript:void(0);"
+                          aria-controls="userProfileCanvasExample"
+                        >
+                          {{ tech.fullName }}</a
+                        >
+                      </h5>
+                      <p class="mb-0 mt-0">
+                        <span
+                          ><i class="ri-phone-fill me-1"></i
+                          >{{ tech.phoneNumber }}</span
+                        >
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-shrink-0">
+                <div class="d-flex align-items-center gap-1">
+                  <div class="dropdown">
+                    <button
+                      class="btn btn-icon btn-sm fs-16 text-danger dropdown arrow-none"
+                      (click)="unCheckItem(tech)"
+                      type="button"
+                      aria-expanded="false"
+                    >
+                      <i class="ri-close-line"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="text-center mt-3 text-muted"
+              *ngIf="selectedTech && !selectedTech.length"
+            >
+              <p>No Member Selected</p>
+            </div>
+          </div>
+        </ngx-simplebar>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 mb-3">
+    <ng-container *ngIf="!serviceOrderDetailOnlyObject">
+      <div class="d-flex justify-content-end">
+        <button
+          class="btn btn-soft-primary waves-effect me-3 back-button"
+          (click)="goBack()"
+        >
+          Back
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-success btn-load"
+          (click)="confirmation()"
+          [disabled]="returnValueDisabled() || loadingForSubmitBtn"
+        >
+          <span class="d-flex align-items-center">
+            <span
+              class="spinner-border flex-shrink-0 me-2"
+              role="status"
+              *ngIf="loadingForSubmitBtn"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </span>
+            <span class="flex-grow-1">Submit</span>
+          </span>
+        </button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="serviceOrderDetailOnlyObject">
+      <div class="d-flex justify-content-end">
+        <button
+          class="btn btn-soft-primary waves-effect me-3 back-button"
+          (click)="goBack()"
+        >
+          Back
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-success btn-load"
+          (click)="serviceOrderConfirmation()"
+          [disabled]="returnValueDisabled2() || loadingForSubmitBtn"
+          [disabled]="
+            (serviceOrderFrom.invalid && !date.value) ||
+            !time.value ||
+            returnValueDisabled() ||
+            (selectedTech.length == 0 && loadingForSubmitBtn)
+          "
+        >
+          <span class="d-flex align-items-center">
+            <span
+              class="spinner-border flex-shrink-0 me-2"
+              role="status"
+              *ngIf="loadingForSubmitBtn"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </span>
+
+            <span class="flex-grow-1">Submit</span>
+          </span>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #TechnicianListModal role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Add Members</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div
+      class="search-box mb-3 d-flex justify-content-between align-items-center"
+    >
+      <input
+        type="text"
+        class="form-control bg-light border-light"
+        (keyup)="filterTechnician($event)"
+        [(ngModel)]="technicianSearchText"
+        placeholder="Search member here..."
+      />
+      <i class="ri-search-line search-icon"></i>
+
+      <button
+        type="button"
+        class="btn btn-danger ms-1"
+        (click)="clearTeach($event)"
+        ngbTooltip="Clear"
+      >
+        Clear
+      </button>
+    </div>
+    <ngx-simplebar class="mx-n4 px-4" style="height: 400px">
+      <div class="vstack gap-3">
+        <div *ngFor="let tech of filteredTechnicianList; let i = index">
+          <div
+            class="d-flex align-items-center"
+            (click)="selectTechnician(filteredTechnicianList, i, tech)"
+          >
+            <div class="flex-shrink-0 me-3">
+              <div class="d-flex align-items-center gap-1">
+                <div class="form-check form-check-flat form-check-primary">
+                  <label class="form-check-label">
+                    <input
+                      type="checkbox"
+                      value="{{ tech }}"
+                      [(ngModel)]="filteredTechnicianList[i].checked"
+                      [disabled]="filteredTechnicianList[i].disabled"
+                      class="form-check-input"
+                    />
+                    <i class="input-frame"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="avatar-xs flex-shrink-0 me-3">
+              <!-- <img
+                src="{{
+                  tech.profileImageUrl
+                    ? apiUrl + tech.profileImageUrl
+                    : '../../../../../assets/images/placeholderimage.png'
+                }}"
+                alt=""
+                class="img-fluid rounded-circle"
+                style="width: 40px; height: 40px"
+              /> -->
+
+              <div class="d-flex align-items-center">
+                <div
+              class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0 online"
+            >
+              <img
+              src="{{
+                tech.profileImageUrl
+                  ? apiUrl + tech.profileImageUrl
+                  : '../../../../../assets/images/placeholderimage.png'
+              }}"
+                class="rounded-circle avatar-xs"
+                alt=""
+              />
+              <!-- <span class="user-status"></span> -->
+              <div class="dropdown" ngbDropdown>
+                <span
+                  class="user-status shadow-none arrow-none cursor-pointer"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  ngbDropdownToggle
+                  [class]="
+                    returnCurrentStatusClassesStatusCircle(
+                      tech.currentStatus
+                    )
+                  "
+                  title="{{
+                    tech.currentStatus
+                  }}"
+                ></span>
+                <div
+                  *ngIf="tech.currentStatus"
+                  class="dropdown-menu dropdown-menu-start drop-con p-0"
+                  ngbDropdownMenu
+                >
+                  <div
+                    [class]="
+                      returnCurrentStatusClassesStatus(
+                        tech.currentStatus
+                      )
+                    "
+                    class="text-uppercase p-2"
+                  >
+                    <b class="fs-14">
+                      {{
+                        tech.currentStatus
+                      }}</b
+                    >
+                  </div>
+                  <div
+                    class="white-space-normal text-muted fs-13 p-2"
+                    *ngIf="
+                    tech.currentStatusRemark
+                    "
+                  >
+                    {{
+                      tech.currentStatusRemark
+                    }}
+                  </div>
+                </div>
+              </div>
+                </div>
+              </div>
+
+
+
+
+
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="fs-14 mb-0">
+                <a href="javascript:void(0);" class="text-body d-block">
+                  {{ tech.fullName }}
+                </a>
+                <p class="mt-0 mb-0">{{ tech.designation }}</p>
+              </h5>
+            </div>
+            <div class="flex-shrink-0 me-3 mb-0">
+              <p class="mb-0">
+                <span
+                  ><i class="ri-phone-fill me-1"></i
+                  >{{ tech.phoneNumber }}</span
+                >
+              </p>
+              <!-- <p class="mb-0"><span><i class=" ri-mail-check-fill me-1"></i>{{ tech.email }}</span></p> -->
+            </div>
+          </div>
+        </div>
+        <div
+          class="text-center mt-3 text-muted"
+          *ngIf="
+            technicianList &&
+            filteredTechnicianList &&
+            technicianSearchText.length > 0
+              ? !filteredTechnicianList.length
+              : !technicianList.length
+          "
+        >
+          <p>No Member Found</p>
+        </div>
+      </div>
+    </ngx-simplebar>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger w-xs"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+
+<!-- Success Modal -->
+<ng-template #successDataModal let-modal>
+  <div class="modal-content">
+    <div class="modal-body text-center p-5">
+      <div class="mt-2">
+        <!-- <lord-icon
+          src="https://cdn.lordicon.com/tqywkdcz.json"
+          trigger="hover"
+          style="width: 150px; height: 150px"
+        >
+        </lord-icon> -->
+        <img
+          src="../../../../assets/images/ticketChatpartImage.png"
+          class="img-fluid rounded chat-image-success"
+        />
+
+        <h4 class="mb-3 mt-4" *ngIf="serviceOrderDetailOnlyObject">
+          Service Order Updated Successfully !
+        </h4>
+        <h4 class="mb-3 mt-4" *ngIf="!serviceOrderDetailOnlyObject">
+          Service Order Generated Successfully !
+        </h4>
+        <div class="hstack gap-2 justify-content-center">
+          <button class="btn btn-primary" (click)="modal.close('Ok', $event)">
+            Ok,Done It
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>

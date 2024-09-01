@@ -1,0 +1,349 @@
+<div class="table-responsive table-card mb-0">
+  <table class="table">
+    <thead>
+      <tr class="bg-light text-muted text-uppercase">
+        <th>Post</th>
+        <th>Message</th>
+        <th>Task</th>
+        <th>{{ isProject ? "Project" : "Department" }} & Client</th>
+        <th class="width-10">Attachment</th>
+        <th class="text-end width-10">Task Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="taskMesageList.length == 0">
+        <tr>
+          <td colspan="6" class="text-center">No Record's Data</td>
+        </tr>
+      </ng-container>
+      <ng-container *ngIf="taskMesageList.length != 0">
+        <tr *ngFor="let task of taskMesageList; let i = index">
+          <td class="width-30 align-top">
+            <div class="d-flex align-items-center" *ngIf="task.profileImageUrl">
+              <div class="flex-grow-0">
+                <div class="d-flex align-items-center">
+                  <div
+                    class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0 online"
+                  >
+                    <img
+                      [src]="imageUrl + task.profileImageUrl"
+                      class="rounded-circle avatar-xs"
+                      alt=""
+                    />
+                    <!-- <span class="user-status"></span> -->
+                    <div class="dropdown" ngbDropdown>
+                      <span
+                        class="user-status shadow-none arrow-none cursor-pointer"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        ngbDropdownToggle
+                        [class]="
+                          returnCurrentStatusClassesStatusCircle(
+                            task.currentStatus
+                          )
+                        "
+                        title="{{ task.currentStatus }}"
+                      ></span>
+                      <div
+                        *ngIf="task.currentStatus"
+                        class="dropdown-menu dropdown-menu-start drop-con p-0"
+                        ngbDropdownMenu
+                      >
+                        <div
+                          [class]="
+                            returnCurrentStatusClassesStatus(task.currentStatus)
+                          "
+                          class="text-uppercase p-2"
+                        >
+                          <b class="fs-14"> {{ task.currentStatus }}</b>
+                        </div>
+                        <div
+                          class="white-space-normal text-muted fs-13 p-2"
+                          *ngIf="task.currentStatusRemark"
+                        >
+                          {{ task.currentStatusRemark }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex-grow-1 overflow-hidden">
+                    <h5 class="mb-0 fs-14" [title]="task.msgByName">
+                      {{ task.accessGroup }}
+                    </h5>
+                    <p class="fs-12 mb-0 text-muted" [title]="task.accessGroup">
+                      {{ task.msgByName }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="d-flex align-items-center"
+              *ngIf="!task.profileImageUrl"
+            >
+              <div class="flex-grow-0">
+                <div class="d-flex align-items-center">
+                  <div
+                    class="flex-shrink-0 chat-user-img-without user-own-img align-self-center me-3 ms-0 online rounded-circle avatar-title-custom"
+                    [class]="
+                      returnCurrentStatusClassesStatus(task.currentStatus)
+                    "
+                  >
+                    {{ task.accessGroup?.charAt(0)
+                    }}{{ task.accessGroup?.charAt(1) }}
+
+                    <!-- <span class="user-status"></span> -->
+                    <div class="dropdown" ngbDropdown>
+                      <span
+                        class="user-status shadow-none arrow-none cursor-pointer"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        ngbDropdownToggle
+                        [class]="
+                          returnCurrentStatusClassesStatusCircle(
+                            task.currentStatus
+                          )
+                        "
+                        title="{{ task.currentStatus }}"
+                      ></span>
+                      <div
+                        *ngIf="task.currentStatus"
+                        class="dropdown-menu dropdown-menu-start drop-con p-0"
+                        ngbDropdownMenu
+                      >
+                        <div
+                          [class]="
+                            returnCurrentStatusClassesStatus(task.currentStatus)
+                          "
+                          class="text-uppercase p-2"
+                        >
+                          <b class="fs-14"> {{ task.currentStatus }}</b>
+                        </div>
+                        <div
+                          class="white-space-normal text-muted fs-13 p-2"
+                          *ngIf="task.currentStatusRemark"
+                        >
+                          {{ task.currentStatusRemark }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex-grow-1 overflow-hidden">
+                    <!-- <h5 class="text-truncate mb-0 fs-14">
+                                <a
+                                  class="text-primary username"
+                                  data-bs-toggle="offcanvas"
+                                  href="javascript:void(0);"
+                                  aria-controls="userProfileCanvasExample"
+                                >
+                                  {{ task.fullName }}</a
+                                >
+                              </h5> -->
+                    <h5 class="fs-13 mb-0" [title]="task.msgByName">
+                      {{ task.accessGroup }}
+                    </h5>
+                    <p class="fs-12 mb-0 text-muted" [title]="task.msgByName">
+                      {{ task.msgByName }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+
+          <td class="align-top title" *ngIf="task.taskFlag == 'Sub-Task'">
+            <div>
+              <h5
+                [title]="
+                  task.messageContain ? removeToHtml(task.messageContain) : ''
+                "
+                class="fs-13 mb-0 padding-bottom-5"
+              >
+                <a
+                (click)="
+                openViewHandleSubTask(task.taskLinkId, task.taskId, task)
+              "
+                  href="javascript:void(0)"
+                  class="fw-medium link-primary mb-0 me-2"
+                  >{{ task.taskNo }}</a
+                >
+              </h5>
+              <div class="d-flex justify-content-between">
+                <p
+                  class="fs-12 mb-0 text-muted align-bottom d-inline-block text-truncate"
+                  style="max-width: 350px"
+                  *ngIf="task.messageContain"
+                >
+                  <i
+                    class="bx bx-check-double text-success align-bottom fs-16"
+                    *ngIf="task.isRead == 'true'"
+                  ></i>
+                  <i
+                    class="ri-check-line align-bottom"
+                    *ngIf="task.isRead == 'false'"
+                  ></i>
+
+                  {{
+                    task.messageContain
+                      ? removeToHtml(
+                          removetheWordTicketTitle(task.messageContain)
+                        )
+                      : ""
+                  }}
+                </p>
+                <p
+                  class="fs-12 mb-0 text-muted align-bottom"
+                  *ngIf="!task.messageContain"
+                >
+                  No Message
+                </p>
+              </div>
+            </div>
+        
+            <p class="mb-0">
+              <span class="text-dark fs-12"
+                ><b>{{ task.taskFlag }}</b></span
+              >
+            </p>
+          </td>
+
+          <td class="align-top title" *ngIf="task.taskFlag == 'Main-Task'">
+            <div>
+              <h5
+                [title]="
+                  task.messageContain ? removeToHtml(task.messageContain) : ''
+                "
+                class="fs-13 mb-0 padding-bottom-5"
+              >
+                <a
+                (click)="openViewHandleTask(task.taskId, task)"
+                  href="javascript:void(0)"
+                  class="fw-medium link-primary mb-0 me-2"
+                  >{{ task.taskNo }}</a
+                >
+              </h5>
+              <div class="d-flex justify-content-between">
+                <p
+                  class="fs-12 mb-0 text-muted align-bottom d-inline-block text-truncate"
+                  style="max-width: 350px"
+                  *ngIf="task.messageContain"
+                >
+                  <i
+                    class="bx bx-check-double text-success align-bottom fs-16"
+                    *ngIf="task.isRead == 'true'"
+                  ></i>
+                  <i
+                    class="ri-check-line align-bottom"
+                    *ngIf="task.isRead == 'false'"
+                  ></i>
+
+                  {{
+                    task.messageContain
+                      ? removeToHtml(
+                          removetheWordTicketTitle(task.messageContain)
+                        )
+                      : ""
+                  }}
+                </p>
+                <p
+                  class="fs-12 mb-0 text-muted align-bottom"
+                  *ngIf="!task.messageContain"
+                >
+                  No Message
+                </p>
+              </div>
+            </div>
+
+        
+            <p class="mb-0">
+              <span class="text-dark fs-12"
+                ><b>{{ task.taskFlag }}</b></span
+              >
+            </p>
+          </td>
+          
+
+          <td class="align-top title">
+            <div>
+              <h5
+                [title]="
+                  task.messageContain ? removeToHtml(task.messageContain) : ''
+                "
+                class="fs-13 mb-0 padding-bottom-5"
+              >
+                {{ task.taskTitle }}
+              </h5>
+              <div class="d-flex justify-content-between">
+                <p class="fs-12 mb-0 text-muted align-bottom text-truncate">
+                  <b>Schedule :- </b> {{ task.projectScheduleName }}
+                </p>
+              </div>
+            </div>
+          </td>
+          <td class="align-top title">
+            <div>
+              <h5 class="fs-13 mb-0 padding-bottom-5  text-truncate">
+                {{ task.projectName }}
+              </h5>
+
+              <p class="fs-12 mb-0 text-muted align-bottom text-truncate">
+                {{ task.clientName }}
+              </p>
+            </div>
+          </td>
+
+          <td class="width-10 align-top">
+            <div class="d-flex justify-content-start align-items-bottom">
+              <app-chat-meaasge-file [chat]="task" [singlerow]="true">
+              </app-chat-meaasge-file>
+              <ng-container *ngIf="!task.fileType">
+                <div class="fs-16 me-3"><b>-</b></div></ng-container
+              >
+            </div>
+          </td>
+          <td class="text-end width-10 align-top">
+            <div>
+              <h5 class="fs-13 mb-0 padding-bottom-5">
+                <span [class]="returnStatusBadgeClassesStatus(task.statusId)">{{
+                  task.statusName
+                }}</span>
+              </h5>
+              <div class="d-flex justify-content-end">
+                <p class="fs-12 mb-0 text-muted align-bottom">
+                  {{ task.createDateTime }}
+                </p>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+<div class="row justify-content-md-between align-items-md-center gy-2">
+  <div class="col col-sm-12 col col-md-6">
+    <div
+      class="dataTables_info mb-2"
+      id="tickets-table_info"
+      role="status"
+      aria-live="polite"
+    >
+      Showing {{ from }} to {{ to }} of {{ totalRecordsFromApi }} entries
+    </div>
+  </div>
+  <!-- Pagination -->
+  <div class="col col-sm-12 col col-md-6">
+    <div class="text-sm-right float-end listjs-pagination">
+      <ngb-pagination
+        [collectionSize]="totalRecordsFromApi"
+        [pageSize]="pageSize"
+        [(page)]="page"
+        [maxSize]="2"
+        [rotate]="true"
+        (pageChange)="OnChangesPage($event)"
+        *ngIf="totalRecordsFromApi > pageSize"
+      ></ngb-pagination>
+    </div>
+  </div>
+  <!-- End Pagination -->
+</div>

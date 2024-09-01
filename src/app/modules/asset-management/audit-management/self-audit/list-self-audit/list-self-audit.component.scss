@@ -1,0 +1,23 @@
+.ng-select.custom {
+  border: 0px;
+  min-height: 0px;
+ max-height: 37px;
+  border-radius: 0;
+}
+
+.ng-select.custom .ng-select-container {
+  min-height: 0px;
+ max-height: 37px;
+  border-radius: 0;
+}
+
+.ng-select.custom ::ng-deep .ng-select-container {
+  min-height: 0px;
+ max-height: 37px;
+  border-radius: 0;
+}
+
+
+.card-width {
+  min-height: 435px;
+}

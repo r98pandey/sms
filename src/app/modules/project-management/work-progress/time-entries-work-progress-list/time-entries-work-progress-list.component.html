@@ -1,0 +1,292 @@
+
+<div class="card">
+    <div class="card-body">
+      <div class="table-responsive table-card mb-0">
+        <table class="table">
+          <thead>
+            <tr class="bg-light text-muted text-uppercase">
+              <th scope="col">Member</th>
+              <th scope="col">Duration</th>
+              <th scope="col">Type</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let timeType of list" class="text-muted">
+              <td class="title align-top">
+                <div class="d-flex align-items-center">
+                  <img
+                    src="{{ imgUrl }}{{ timeType.profileImageUrl }}"
+                    alt=""
+                    class="rounded-circle avatar-xxs"
+                  />
+                  <div class="flex-grow-1 ms-2">
+                    <a href="javascript:void(0);" class="fw-medium">{{
+                      timeType.fullName
+                    }}</a>
+                    <p class="mt-0 mb-0">Role:{{ timeType.designation }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="title align-top">
+                <p class="mb-0 fs-12">
+                  <b> Start</b>: {{ timeType.startDateTime || "-" }}
+                </p>
+                <p class="mb-0 fs-12">
+                  <b>End</b> &nbsp;: {{ timeType.endDateTime || "-" }}
+                </p>
+              </td>
+              <td class="title align-top">
+                <p class="mb-0 fs-12">
+                  <b>Type</b>: {{ timeType.transactionType || "-" }}
+                </p>
+  
+                <p class="mb-0 fs-12">
+                  <b>Total Duration</b>: {{ timeType.totalWorkingTime || "-" }}
+                </p>
+              </td>
+              <td class="title align-top">
+                <a ngbTooltip="View the time entries of the task process belonging to that user"
+                  class="dropdown-item cursor-pointer"
+                  (click)="viewHandler(viewModal, timeType)"
+                  ><i class="ri-eye-fill me-2 text-info"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+  
+        <div class="text-center text-muted" *ngIf="list.length === 0">
+          No Time Entries Found
+        </div>
+      </div>
+      <div class="row justify-content-md-between align-items-md-center gy-2">
+        <div class="col col-sm-12 col col-md-6">
+          <div
+            class="dataTables_info mb-2"
+            id="tickets-table_info"
+            role="status"
+            aria-live="polite"
+          >
+            Showing {{ from }} to {{ to }} of {{ totalRecords }} entries
+          </div>
+        </div>
+        <!-- Pagination -->
+        <div class="col col-sm-12 col col-md-6">
+          <div class="text-sm-right float-end listjs-pagination">
+            <ngb-pagination
+              [collectionSize]="totalRecords"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [maxSize]="2"
+              [rotate]="true"
+              (pageChange)="loadPage($event)"
+              *ngIf="totalRecords > pageSize"
+            >
+              <ng-template ngbPaginationPrevious let-page let-pages="pages">
+                <i class="ci-arrow-left me-2"></i> Prev
+              </ng-template>
+              <ng-template ngbPaginationNext>
+                Next
+                <i class="ci-arrow-right ms-2"></i>
+              </ng-template>
+            </ngb-pagination>
+          </div>
+        </div>
+        <!-- End Pagination -->
+      </div>
+      <!-- <div class="row justify-content-md-between align-items-md-center gy-2">
+            <div class="d-flex justify-content-between p-2">
+              Showing {{ from }} to {{ to }} of {{ totalRecords }} entries
+              <ngb-pagination [collectionSize]="totalRecords" [(page)]="page" [pageSize]="pageSize"
+                (pageChange)="loadPage($event)" *ngIf="totalRecords > pageSize">
+                <ng-template ngbPaginationPrevious let-page let-pages="pages">
+                  <i class="ci-arrow-left me-2"></i> Prev
+                </ng-template>
+                <ng-template ngbPaginationNext>
+                  Next
+                  <i class="ci-arrow-right ms-2"></i>
+                </ng-template>
+              </ngb-pagination>
+            </div>
+          </div> -->
+    </div>
+  </div>
+  
+  <ng-template #viewModal role="document" let-modal>
+    <div class="modal-header p-3 bg-info-subtle">
+      <h5 class="modal-title" id="modal-title">View Member</h5>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close button"
+        aria-describedby="modal-title"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  
+    <div class="modal-body ">
+      <div class="row">
+        <div class="col-12">
+          <div class="card ">
+            <div class="card-header p-2">
+              <div class="d-flex mb-2 align-items-center">
+                <div class="flex-shrink-0">
+                  <img
+                    src="{{
+                      viewTimeEntiresDetail.profileImageUrl
+                        ? imgUrl + viewTimeEntiresDetail.profileImageUrl
+                        : '../../../../../assets/images/placeholderimage.png'
+                    }}"
+                    alt=""
+                    class="avatar-sm rounded-circle cursor"
+                  />
+                </div>
+                <div class="flex-grow-1 ms-2">
+                  <h5
+                    class="card-title mb-1 text-truncate d-block"
+                    ngbTooltip="{{ viewTimeEntiresDetail.fullName }}"
+                  >
+                    {{ viewTimeEntiresDetail.fullName }}
+                  </h5>
+                  <p class="text-muted mb-0 text-truncate d-block">
+                    {{ viewTimeEntiresDetail.designation }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-2">
+            <p class="card-text text-muted text-truncate d-block mb-0">
+              <i class="mdi mdi-watch me-1 align-middle text-success"></i>
+              {{ viewTimeEntiresDetail.totalWorkingTime }}
+            </p>
+  
+            <p class="text-muted mb-0 text-truncate d-block mb-0">
+              <i class="mdi mdi-sofa-single-outline me-1 align-middle text-danger"></i>
+              <span class="badge bg-primary-subtle text-primary badge-border"*ngIf=" viewTimeEntiresDetail.transactionType=='Check-In'">{{ viewTimeEntiresDetail.transactionType }}</span>
+              
+              <span class="badge bg-success-subtle text-success badge-border" *ngIf=" viewTimeEntiresDetail.transactionType=='Check-Out'">{{ viewTimeEntiresDetail.transactionType }}</span>
+  
+              
+            </p>
+          </div>
+        </div>
+        </div>
+  
+        <div class="col-12">
+          <div class="card ">
+            <div class="card-header p-2">
+              <h6 class="modal-title" id="modal-title">Start information</h6>
+            </div>
+            <div class="card-body p-2">
+              <div class="d-flex mb-2 align-items-center">
+                <div class="flex-shrink-0">
+                  <img (click)="open(viewTimeEntiresDetail.techPicUrlStart
+                  ? imgUrl + viewTimeEntiresDetail.techPicUrlStart
+                  : '../../../../../assets/images/placeholderimage.png')"
+  
+                    src="{{
+                      viewTimeEntiresDetail.techPicUrlStart
+                        ? imgUrl + viewTimeEntiresDetail.techPicUrlStart
+                        : '../../../../../assets/images/placeholderimage.png'
+                    }}"
+                    alt=""
+                    class="avatar-sm  cursor"
+                  />
+                </div>
+                <div class="flex-grow-1 ms-2">
+                  <h5 *ngIf="viewTimeEntiresDetail.startDateTime"
+                    class="card-title mb-1 text-truncate d-block"
+                    ngbTooltip="{{ viewTimeEntiresDetail.startDateTime }}"
+                  >
+                  <i class="ri-calendar-line align-bottom"></i>
+                    {{ viewTimeEntiresDetail.startDateTime }}
+                  </h5>
+                  <p *ngIf="viewTimeEntiresDetail.startRemark"class="text-muted mb-0 text-truncate d-block"  [ngbTooltip]="viewTimeEntiresDetail.address_Start " style="width: 350px;">
+                    <i class="ri-sticky-note-line align-bottom"></i>
+                      {{ viewTimeEntiresDetail.startRemark || '-'}}
+                  </p>
+                  <p *ngIf="viewTimeEntiresDetail.address_Start" class="text-muted mb-0 text-truncate d-block " [ngbTooltip]="viewTimeEntiresDetail.address_Start "  style="width: 350px;">
+                    <i class="ri-map-pin-user-line align-bottom"></i>
+                    {{ viewTimeEntiresDetail.address_Start || '-'}}
+                  </p>
+                  <p  *ngIf="viewTimeEntiresDetail.startGPSLocation" class="text-muted mb-0 text-truncate d-block">
+                    <i class=" ri-map-pin-line align-bottom"></i>
+                    {{ viewTimeEntiresDetail.startGPSLocation || '-'}}
+                  </p>
+                  
+                </div>
+              </div>
+            </div>
+          
+        </div>
+        </div>
+        <div class="col-12" *ngIf="viewTimeEntiresDetail.endDateTime">
+          <div class="card ">
+            <div class="card-header p-2">
+              <h6 class="modal-title" id="modal-title">End information</h6>
+            </div>
+            <div class="card-body p-2">
+              <div class="d-flex mb-2 align-items-center">
+                <div class="flex-shrink-0">
+                  <img
+                    src="{{
+                      viewTimeEntiresDetail.techPicUrlEnd
+                        ? imgUrl + viewTimeEntiresDetail.techPicUrlEnd
+                        : '../../../../../assets/images/placeholderimage.png'
+                    }}"
+                    alt=""
+                    class="avatar-sm "
+                    (click)="open(viewTimeEntiresDetail.techPicUrlEnd
+                  ? imgUrl + viewTimeEntiresDetail.techPicUrlEnd
+                  : '../../../../../assets/images/placeholderimage.png')"
+                  />
+                </div>
+                <div class="flex-grow-1 ms-2">
+                  <h5  *ngIf="viewTimeEntiresDetail.endDateTime"
+                    class="card-title mb-1 text-truncate d-block"
+                    ngbTooltip="{{ viewTimeEntiresDetail.endDateTime }}"
+                  >
+                  <i class="ri-calendar-line align-bottom"></i>
+                    {{ viewTimeEntiresDetail.endDateTime }}
+                  </h5>
+                  <p *ngIf="viewTimeEntiresDetail.endRemark" class="text-muted mb-0 text-truncate d-block"  style="width: 350px;">
+                    <i class="ri-sticky-note-line align-bottom"></i>
+                      {{ viewTimeEntiresDetail.endRemark || '-'}}
+                  </p>
+                  <p  *ngIf="viewTimeEntiresDetail.address_End" class="text-muted mb-0 text-truncate d-block " style="width: 350px;">
+                    <i class="ri-map-pin-user-line align-bottom"></i>
+                    {{ viewTimeEntiresDetail.address_End || '-'}}
+                  </p>
+                  <p *ngIf="viewTimeEntiresDetail.endGPSLocation"class="text-muted mb-0 text-truncate d-block">
+                    <i class=" ri-map-pin-line align-bottom"></i>
+                    {{ viewTimeEntiresDetail.endGPSLocation || '-'}}
+                  </p>
+                  
+                </div>
+              </div>
+            </div>
+          
+        </div>
+        </div>
+  
+  
+  
+      
+      </div>
+    </div>
+  
+    <div class="modal-footer">
+      <button
+        type="button"
+        data-bs-dismiss="modal"
+        class="btn btn-danger"
+        (click)="modal.dismiss('cancel')"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
+  

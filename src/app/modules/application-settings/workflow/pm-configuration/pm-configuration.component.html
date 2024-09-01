@@ -1,0 +1,354 @@
+
+
+<div class="row">
+  <div class="col-xl-4 pe-0 stretch-card">
+    <div class="card config">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md">
+            <h5 class="fs-18 mb-1">Workflow List</h5>
+            <h6 class="fs-13 text-uppercase text-muted">
+              {{ globalDepartmentName }}
+            </h6>
+            <div class="mail-list mt-1 d-inline-flex mb-0">
+              <a href="javascript:void(0)" class="me-3">
+                <span
+                  class="ri-checkbox-blank-circle-line me-2 text-success"
+                ></span>
+                Active
+              </a>
+              <a href="javascript:void(0)" class="me-3">
+                <span
+                  class="ri-checkbox-blank-circle-line me-2 text-danger"
+                ></span>
+                Inactive
+              </a>
+              <a href="javascript:void(0)" class="me-3">
+                <span
+                  class="ri-checkbox-blank-circle-line me-2 text-warning"
+                ></span>
+                Pending
+              </a>
+            </div>
+            <hr class="mt-0 mb-0" />
+            <div
+              class="mail-list mt-1"
+              *ngFor="let config of configurationWorkflowDetailsList"
+            >
+              <a href="javascript:void(0)" (click)="sendConfigDetails(config)">
+                <span [ngClass]="returnClassWithStatus(config.status)"></span>
+                {{ config.workflowName }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  <div class="col-xl-8 ps-0 stretch-card">
+    <div class="card config">
+      <div class="card-body">
+        <div class="text-center" *ngIf="!showWorkflowSetup">
+          <div class="row justify-content-center">
+            <div class="col-lg-9">
+              <h4 class="mt-4 fw-semibold">
+                Workflow of {{ globalDepartmentName }}
+              </h4>
+              <p class="text-muted mt-3">
+                Asset management workflows include asset confirmation, transfer
+                acceptance, existing asset transfer, asset loans, disposals,
+                repair and maintenance requests, billing eligibility checks, and
+                client verification of generated quotations.
+              </p>
+            </div>
+          </div>
+
+          <div class="row justify-content-center mt-5 mb-2">
+            <div class="col-sm-7 col-8">
+              <img
+                src="assets/images/verification-img.png"
+                alt=""
+                class="img-fluid"
+              />
+            </div>
+          </div>
+        </div>
+        <div *ngIf="showWorkflowSetup">
+          <div class="row align-items-baseline">
+            <div class="col-lg-auto pe-0">
+              <h5 class="fs-19 mb-1">Workflow Setup</h5>
+            </div>
+            <div class="col-lg-auto ps-1">
+              <h6 class="fs-13 text-uppercase text-muted">
+                ({{ _workFlowName }})
+              </h6>
+            </div>
+            <div class="col-lg text-end">
+              <span
+                [ngClass]="returnClassBabgeWithStatus(_workFlowStatus)"
+                class="fs-13"
+              >
+                {{ _workFlowStatus }}</span
+              >
+            </div>
+          </div>
+          <hr class="mb-3 mt-2" />
+          <div class="row align-items-center justify-content-between mt-2">
+            <div class="col-lg mb-2">
+              <label class="mr-2"> Workflow Type</label>
+              <ng-select
+                [items]="masterApproverGroupTypeList"
+                bindLabel="approverGroupTypeName"
+                bindValue="aproverGroupTypeId"
+                [searchable]="false"
+                [(ngModel)]="aproverGroupType"
+                [clearable]="false"
+                [disabled]="_workFlowStatus == 'Active'"
+                (change)="getShowWorkFlowSetup(aproverGroupType)"
+              >
+              </ng-select>
+            </div>
+
+            <div class="col-lg text-end mb-2" >
+              <ng-container *ngIf="workflow_Modification">
+
+              
+              <span >
+                <button
+                  type="button"
+                  class="btn btn-danger btn-label waves-effect waves-light me-2"
+                  [hidden]="
+                    _workFlowStatus == 'Pending' ||
+                    _workFlowStatus == 'Inactive'
+                  "
+                  (click)="sweetAlertDeleteConfirmation(deleteModel)"
+                >
+                  <i
+                    class="ri-close-circle-line label-icon align-middle fs-16 me-2"
+                  ></i
+                  >Delete
+                </button>
+              
+              </span>
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="submitInsertWorkflowUser()"
+                [hidden]="!updateButtonShowing"
+              >
+                Submit
+              </button>
+              </ng-container>
+            </div>
+          </div>
+
+          <br />
+          <div
+            class="row align-items-center"
+            *ngFor="
+              let approverType of approverTypeByGroupTypeIdList;
+              let i = index
+            "
+            [attr.data-index]="i"
+          >
+            <div class="col-md">
+              <div>
+                <h5 class="fs-15 mb-0">{{ approverType.approverType }}</h5>
+
+                <p *ngIf="approverType.fullName == null">
+                  <i class="ri-user-add-line"></i>
+                  Please select
+                  {{ approverType.approverType }}
+                </p>
+                <p *ngIf="approverType.fullName != null">
+                  <i class="ri-user-follow-fill"></i>
+                  {{ approverType.fullName }}
+                </p>
+              </div>
+            </div>
+
+            <div class="col-md text-end" *ngIf="_workFlowStatus !== 'Active'">
+              <ng-container *ngIf="workflow_Modification">
+
+            
+              <button
+                type="button"
+                class="btn btn-outline-primary btn-icon"
+                (click)="confirmUpdate(modalConfirm2, i)"
+                (click)="addApproveUser(approverType.seq, i)"
+                [hidden]="approverType.fullName != null"
+              >
+                <i class="fs-12 ri-user-settings-line"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-icon"
+                (click)="
+                  removeApproveUser(approverType.seq, i, approverType.userId)
+                "
+                [hidden]="approverType.fullName == null"
+              >
+                <i class="fs-12 ri-user-unfollow-fill"></i>
+              </button>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<ng-template #modalConfirm2 let-modal>
+  <div class="modal-header">
+    <div class="row w-100">
+      <div class="col-md-12 d-flex justify-content-between mb-1">
+        <h4 class="modal-title mb-2" id="modal-title">Select User</h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close button"
+          aria-describedby="modal-title"
+          (click)="modal.dismiss('Cross click')"
+          (click)="addNoSelectionApproveUser(_index)"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="col-md-12 mb-2">
+        <input
+          type="search"
+          [(ngModel)]="filterBy"
+          
+          (input)="filter()"
+          class="form-control"
+          placeholder="Search User..."
+        />
+      </div>
+      <div class="col-md-12">
+        <hr class="mb-0 mt-1" />
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-body modal-scrollbar">
+    <div class="row">
+      <ng-container *ngFor="let user of filteredUsers; index as i">
+        <div class="col-md-6 d-flex align-items-center" *ngIf="i % 2 == 0">
+          <div class="flex-shrink-0 me-2 avatar-xxs">
+            <img
+              class="img-fluid rounded-circle"
+              src="{{ imagUrl }}{{ user.profileImageUrl }}"
+              alt=""
+            />
+          </div>
+
+          <div class="flex-grow-1 chat-user-box overflow-hidden">
+            <h5 class="fs-14 text-truncate mb-0">{{ user.fullName }}</h5>
+            <small class="text-muted text-truncate mb-0">{{
+              user.roleName
+            }}</small>
+          </div>
+
+          <button
+            [disabled]="user.isSelected"
+            (click)="toAssignUser(user)"
+            (click)="modal.dismiss('Cross click')"
+            class="btn btn-icon btn-sm btn-soft-info rounded-pill"
+          >
+            <i class="bx bx-plus fs-14"></i>
+          </button>
+        </div>
+        <div class="col-md-6 d-flex align-items-center" *ngIf="i % 2 != 0">
+          <div class="flex-shrink-0 me-2 avatar-xxs">
+            <img
+              class="img-fluid rounded-circle"
+              src="{{ imagUrl }}{{ user.profileImageUrl }}"
+              alt=""
+            />
+          </div>
+
+          <div class="flex-grow-1 chat-user-box overflow-hidden">
+            <h5 class="fs-14 text-truncate mb-0">{{ user.fullName }}</h5>
+            <small class="text-muted text-truncate mb-0">{{
+              user.roleName
+            }}</small>
+          </div>
+
+          <button
+            [disabled]="user.isSelected"
+            (click)="toAssignUser(user)"
+            (click)="modal.dismiss('Cross click')"
+            class="btn btn-icon btn-sm btn-soft-info rounded-pill"
+          >
+            <i class="bx bx-plus fs-14"></i>
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-danger"
+      (click)="modal.dismiss('cancel')"
+      (click)="addNoSelectionApproveUser(_index)"
+    >
+      Cancel
+    </button>
+  </div>
+</ng-template>
+<ng-template #deleteModel let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="mt-2 text-center">
+        
+      
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+          
+        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+          <h4>Delete Workflow, Approver, and Reviewer?</h4>
+          <p class="text-muted mx-4 mb-0">
+            Are you sure you want to delete the workflow, approver, and
+            reviewer? Once removed, the workflow will be without any associated
+            process.
+          </p>
+        </div>
+      </div>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+        class="btn  btn-danger"
+          data-bs-dismiss="modal"
+          (click)="modal.close('Close click')"
+        >
+          <i class="ri-close-line me-1 align-middle"></i> Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="deleteHandler()"
+          (click)="modal.close('Close click')"
+        >
+          Yes, Delete It!
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>

@@ -1,0 +1,201 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0 pb-0">
+        <div class="row align-items-center">
+          <div class="col-lg-auto">
+            <h5 class="card-title mb-0">{{ myTaskSendObject.name }} List</h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th>{{ isProject ? "Project" : "Department" }}</th>
+                        <th>Title</th>
+                        <th>Document Process</th>
+                        
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        *ngFor="
+                          let project of projectProcessHeaderDocList_ApprovalPending
+                        "
+                        class="text-muted"
+                      >
+                      <td
+                      class="fw-medium link-primary align-top title"
+                      (click)="navigateToView(project)"
+                    >
+                      <p
+                        class="mb-0 title_new"
+                        [title]="project.projectName"
+                      >
+                        {{ project.projectName }}
+                      </p>
+                    </td>  
+                    <td
+                    class="align-top title"
+                  
+                  >
+                    <p
+                      class="mb-0 title_new"
+                      [title]="project.title"
+                    >
+                      {{ project.title }}
+                    </p>
+                  </td>
+
+                        <td class="align-top title">
+                          <span
+                            class="fs-12"
+                            [class]="
+                              returnStatusBadgeClassesStatus(
+                                project.projectProcessId
+                              )
+                            "
+                            >{{ project.projectProcessName }}</span
+                          >
+                        </td>
+
+                        <td class="align-top title">
+                          <span
+                            class="fs-12"
+                            [class]="
+                              returnStatusBadgeClassesStatus(
+                                project.projectProcessHeaderDocStatusId
+                              )
+                            "
+                            >{{
+                              project.projectProcessHeaderDocStatusName
+                            }}</span
+                          >
+                        </td>
+
+                        <td class="align-top">
+                          <span>
+                            <div class="dropdown" ngbDropdown>
+                              <button
+                                class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                ngbDropdownToggle
+                              >
+                                <i class="ri-more-fill"></i>
+                              </button>
+                              <ul
+                                class="dropdown-menu dropdown-menu-end"
+                                ngbDropdownMenu
+                              >
+                                <li>
+                                  <a
+                                    class="dropdown-item cursor-pointer"
+                                    (click)="navigateToView(project)"
+                                    ><i
+                                      class="ri-eye-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    View
+                                  </a>
+                                </li>
+
+                                <!-- <li>
+                                        <a
+                                          *ngIf="returnValueMenu.edit"
+                                          class="dropdown-item cursor-pointer"
+                                          (click)="editHandler($event, project)"
+                                          ><i
+                                            class="ri-pencil-fill align-bottom me-2 text-muted"
+                                          ></i>
+                                          Edit</a
+                                        >
+                                      </li> -->
+                              </ul>
+                            </div>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div
+                    class="text-center text-muted"
+                    *ngIf="
+                      projectProcessHeaderDocList_ApprovalPending.length === 0
+                    "
+                  >
+                    No {{ myTaskSendObject.name }}  Data Found
+                  </div>
+                </div>
+
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col col-sm-12 col col-md-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecordsFromApi }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col col-sm-12 col col-md-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="totalRecordsFromApi"
+                        [pageSize]="pageSize"
+                        [(page)]="page"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="OnChangesPage($event)"
+                        *ngIf="totalRecordsFromApi > pageSize"
+                      ></ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-end">
+        <button
+          class="btn btn btn-soft-primary"
+          type="button"
+          (click)="goBack()"
+        >
+          Back
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

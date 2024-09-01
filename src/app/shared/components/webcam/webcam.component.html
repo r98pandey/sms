@@ -1,0 +1,16 @@
+<div class="webcam-container" *ngIf="showWebcam">
+    <webcam [width]="460" [height]="450"
+      [trigger]="triggerObservable"
+      [videoOptions]="videoOptions"
+      (imageCapture)="handleImage($event)"
+      (initError)="handleInitError($event)">
+    </webcam>
+  </div>
+  <div class="d-flex justify-content-end" *ngIf="showWebcam">
+    <button class="btn btn-danger mt-3 me-2" (click)="closeWebcam()">Close Webcam</button>
+    <button class="btn btn-success mt-3 me-2" (click)="triggerSnapshot()">Capture</button>
+  </div>
+  <div *ngIf="errors.length > 0" class="alert alert-danger mt-3">
+    <p *ngFor="let error of errors">{{ error.message }}</p>
+  </div>
+  

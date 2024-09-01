@@ -1,0 +1,222 @@
+<div class="row">
+  <div class="col-md-5  stretch-card">
+    <div class="card">
+      <div class="card-header border-0">
+        <h4 class="card-title mb-0">Upcoming Schedules</h4>
+      </div>
+      <!-- end cardheader -->
+      <div class="card-body pt-0">
+        <div class="upcoming-scheduled">
+          <input
+            type="text"
+            class="form-control"
+            mwlFlatpickr
+            [altInput]="true"
+            [convertModelValue]="true"
+            [inline]="true"
+          />
+        </div>
+
+        <h6 class="text-uppercase fw-semibold mt-4 mb-3 text-muted">Schedule:</h6>
+        <ul class="list-group list-group-flush border-dashed">
+        
+          <li class="list-group-item ps-0">
+              <div class="row align-items-center g-3">
+                  <div class="col-auto">
+                      <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
+                          <div class="text-center">
+                              <h5 class="mb-0">14</h5>
+                              <div class="text-muted">Jun</div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col">
+                      <h5 class="text-muted mt-0 mb-1 fs-13">In-PM-Schedule 1</h5>
+                      <a href="javascript:void(0);" class="text-reset fs-14 mb-0">IN-Project 1</a>
+                  </div>
+                  <div class="col-sm-auto">
+                    <span
+                    class="fs-12"
+                    [class]="
+                      returnStatusBadgeClassesStatus(
+                        2
+                      )
+                    "
+                    >Pending</span
+                  >
+                  </div>
+              </div>
+              <!-- end row -->
+          </li>
+
+          <li class="list-group-item ps-0">
+            <div class="row align-items-center g-3">
+                <div class="col-auto">
+                    <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
+                        <div class="text-center">
+                            <h5 class="mb-0">24</h5>
+                            <div class="text-muted">Jun</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <h5 class="text-muted mt-0 mb-1 fs-13">Saturday Schedule July 6</h5>
+                    <a href="javascript:void(0);" class="text-reset fs-14 mb-0">Saturday 1</a>
+                </div>
+                <div class="col-sm-auto">
+                  <span
+                  class="fs-12"
+                  [class]="
+                    returnStatusBadgeClassesStatus(
+                      30
+                    )
+                  "
+                  >In-Progress</span
+                >
+                </div>
+            </div>
+            <!-- end row -->
+        </li>
+
+
+        <li class="list-group-item ps-0">
+          <div class="row align-items-center g-3">
+              <div class="col-auto">
+                  <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
+                      <div class="text-center">
+                          <h5 class="mb-0">21</h5>
+                          <div class="text-muted">Jun</div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col">
+                  <h5 class="text-muted mt-0 mb-1 fs-13">Project Schedule QW1</h5>
+                  <a href="javascript:void(0);" class="text-reset fs-14 mb-0">IN-Project 1</a>
+              </div>
+              <div class="col-sm-auto">
+                <span
+                class="fs-12"
+                [class]="
+                  returnStatusBadgeClassesStatus(
+                    30
+                  )
+                "
+                >In-Progress</span
+              >
+              </div>
+          </div>
+          <!-- end row -->
+      </li>
+
+      <li class="list-group-item ps-0">
+        <div class="row align-items-center g-3">
+            <div class="col-auto">
+                <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
+                    <div class="text-center">
+                        <h5 class="mb-0">14</h5>
+                        <div class="text-muted">Jun</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <h5 class="text-muted mt-0 mb-1 fs-13">GPS Scheduling on site A90</h5>
+                <a href="javascript:void(0);" class="text-reset fs-14 mb-0">Jurong Engineering Limited
+                </a>
+            </div>
+            <div class="col-sm-auto">
+              <span
+              class="fs-12"
+              [class]="
+                returnStatusBadgeClassesStatus(
+                  2
+                )
+              "
+              >Pending</span
+            >
+            </div>
+        </div>
+        <!-- end row -->
+    </li>
+          
+      <!-- end -->
+      </ul>
+      </div>
+      <!-- end cardbody -->
+    </div>
+  </div>
+  <div class="col-md-7 stretch-card">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Under Reviews</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3 cursor">
+          <div class="col-auto">
+            <div class="avatar-sm p-1 py-2 h-auto rounded-3 bg-danger-subtle">
+              <div class="text-center">
+                <h5 class="mb-0">
+                  <i class="bx bx-bell text-danger mt-2"></i>
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col align-items-center">
+            <h5 class="text-muted mt-0 mb-1 fs-14">Verification Required</h5>
+            <a href="javascript:void(0);" class="text-reset fs-13 mb-0"
+              >Project Schedule  waiting for verification process</a
+            >
+          </div>
+          <div class="col-sm-auto">
+            <div class="avatar-group">
+              <div class="avatar-group-item">
+                <a href="javascript: void(0);">
+                  <div class="avatar-xs">
+                    <span
+                      class="avatar-title rounded-circle text-white bg-danger"
+                    >
+                      {{ 7 }}
+                    </span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="my-3" />
+        <div class="row g-3 cursor">
+          <div class="col-auto">
+            <div class="avatar-sm p-1 py-2 h-auto rounded-3 bg-danger-subtle">
+              <div class="text-center">
+                <h5 class="mb-0">
+                  <i class="bx bx-bell text-danger mt-2"></i>
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col align-items-center">
+            <h5 class="text-muted mt-0 mb-1 fs-14">Acknowledgement Required</h5>
+
+            <a href="javascript:void(0);" class="text-reset fs-13 mb-0">
+              Project Schedule waiting for Acknowlegment process
+            </a>
+          </div>
+          <div class="col-sm-auto">
+            <div class="avatar-group">
+              <div class="avatar-group-item">
+                <a href="javascript: void(0);">
+                  <div class="avatar-xs">
+                    <span
+                      class="avatar-title rounded-circle text-white bg-danger"
+                    >
+                      {{ 5 }}
+                    </span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

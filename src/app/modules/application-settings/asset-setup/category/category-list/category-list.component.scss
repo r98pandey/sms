@@ -1,0 +1,38 @@
+
+
+.ngx-datatable:not(.cell-selection) ::ng-deep .datatable-header-cell {
+    border-top: 0;
+      border-bottom-width: 1px;
+      font-size: 12px;
+      text-transform: uppercase;
+      color:#686868;
+      
+      i {
+        margin-left: 0.325rem;
+      }
+   
+}
+
+.search-box{
+  .ng-select {
+    width: 350px!important;
+    height: auto!important;
+  }
+}
+
+.ng-select.custom {
+  border:0px;
+  min-height: 0px;
+  max-height: 37px;
+  border-radius: 0;
+}
+.ng-select.custom .ng-select-container  {            
+  min-height: 0px;
+  max-height: 37px;
+  border-radius: 0;
+}
+.ng-select.custom ::ng-deep .ng-select-container  {            
+  min-height: 0px;
+  max-height: 37px;
+  border-radius: 0;
+}

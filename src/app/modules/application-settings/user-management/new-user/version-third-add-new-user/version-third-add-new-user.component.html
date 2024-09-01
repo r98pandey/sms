@@ -1,0 +1,552 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="">
+  <form [formGroup]="userForm">
+    <div class="mt-2 card">
+      <div class="card-header">
+        <h4 class="card-title mb-0">Basic Detail &nbsp;</h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-10">
+            <div class="row p-0">
+              <div class="col-md-4">
+                <label for="Project-Name" class="form-label"
+                  >Full Name <span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control my-1"
+                  [placeholder]="'Full Name'"
+                  formControlName="FullName"
+                  id="fullName"
+                  name="fullName"
+                  [ngClass]="{
+                    'is-invalid':
+                      form['FullName'].invalid && form['FullName'].touched
+                  }"
+                />
+
+                <div
+                  *ngIf="form['FullName'].invalid && form['FullName'].touched"
+                >
+                  <small
+                    class="text-danger"
+                    *ngIf="form['FullName'].errors['required']"
+                  >
+                    Full Name is Required</small
+                  >
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <label for="HOD" class="form-label"
+                  >Email <span class="text-danger">*</span></label
+                >
+                <input
+                  type="email"
+                  class="form-control my-1"
+                  placeholder="Email"
+                  formControlName="Email"
+                  id="email"
+                  name="email"
+                  [ngClass]="{
+                    'is-invalid': form['Email'].invalid && form['Email'].touched
+                  }"
+                />
+
+                <div *ngIf="form['Email'].invalid && form['Email'].touched">
+                  <small
+                    class="text-danger"
+                    *ngIf="form['Email'].errors['required']"
+                  >
+                    Email is Required</small
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="phoneNumber" class="form-label"
+                  >Phone Number <span class="text-danger">*</span></label
+                >
+                <input
+                  type="number"
+                  class="form-control my-1"
+                  placeholder="Phone Number"
+                  formControlName="PhoneNumber"
+                  id="phoneNumber"
+                  name="PhoneNumber"
+                  [ngClass]="{
+                    'is-invalid':
+                      form['PhoneNumber'].invalid && form['PhoneNumber'].touched
+                  }"
+                />
+
+                <div
+                  *ngIf="
+                    form['PhoneNumber'].invalid && form['PhoneNumber'].touched
+                  "
+                >
+                  <small
+                    class="text-danger"
+                    *ngIf="form['PhoneNumber'].errors['required']"
+                  >
+                    Phone Number is Required</small
+                  >
+                </div>
+              </div>
+
+              <div class="col-md-4 mt-3">
+                <label for="roleId" class="form-label"
+                  >Role <span class="text-danger">*</span></label
+                >
+                <ng-select
+                  [items]="rolesList"
+                  bindLabel="name"
+                  bindValue="id"
+                  [loading]="loading.role"
+                  [clearable]="false"
+                  (change)="onTypeRole($event)"
+                  [clearable]="false"
+                  id="roleId"
+                  formControlName="roleId"
+                  placeholder="Select Role"
+                  class="w-100 mr-2 my-1"
+                ></ng-select>
+
+                <div *ngIf="form['roleId'].invalid && form['roleId'].touched">
+                  <small class="text-danger"> Role is Required </small>
+                </div>
+              </div>
+
+              <div class="col-md-4 mt-3">
+                <label for="AccessGroupId" class="form-label"
+                  >Access Group <span class="text-danger">*</span></label
+                >
+                <ng-select
+                  [items]="accessGroupList"
+                  bindLabel="name"
+                  bindValue="accessGroupMasterId"
+                  [loading]="loading.accessGroup"
+                  [clearable]="false"
+                  (change)="onTypeAccessGroup($event)"
+                  [readonly]="!form['roleId'].value"
+                  [clearable]="false"
+                  id="AccessGroupId"
+                  formControlName="AccessGroupId"
+                  placeholder="Select Access Group"
+                  class="w-100 mr-2 my-1"
+                ></ng-select>
+
+                <div
+                  *ngIf="
+                    form['AccessGroupId'].invalid &&
+                    form['AccessGroupId'].touched
+                  "
+                >
+                  <small class="text-danger"> Access Group is Required </small>
+                </div>
+              </div>
+
+              <div class="col-md-4 mt-3">
+                <label for="Client" class="form-label">Device Access</label>
+                <div class="row mt-3">
+                  <div class="col-6">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value="Portal"
+                        formControlName="PortalEnable"
+                        id="Portal"
+                      />
+                      <label class="form-check-label" for="Portal">
+                        Portal
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value="Mobile"
+                        formControlName="MobileEnable"
+                        id="Mobile"
+                      />
+                      <label class="form-check-label" for="Mobile">
+                        Mobile
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2 textcenter">
+            <label class="form-label">Profile Image</label>
+            <div class="textcenter">
+              <div class="position-relative d-inline-block">
+                <div
+                  class="position-absolute top-100 start-100 translate-middle"
+                >
+                  <label
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Remove Image"
+                    *ngIf="isFirstImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i
+                          class="ri-close-circle-fill"
+                          (click)="crossFirstImage(profile_img)"
+                        ></i>
+                      </div>
+                    </div>
+                  </label>
+                  <label
+                    for="asset_id0"
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Select Image"
+                    *ngIf="!isFirstImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i class="ri-image-fill"></i>
+                      </div>
+                    </div>
+                  </label>
+                  <input
+                    (change)="onSelectFile($event)"
+                    formControlName="UserImageBase64string"
+                    class="form-control d-none"
+                    value=""
+                    id="asset_id0"
+                    type="file"
+                    accept="image/png, image/gif, image/jpeg"
+                  />
+                </div>
+                <div class="avatar-lg">
+                  <div class="avatar-title bg-light rounded">
+                    <img
+                      src="{{ profile_img }}"
+                      id="product-img"
+                      class="avatar-md img-size-fixed"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" *ngIf="isMaintenanceModule || isProjectManagementModule">
+      <div
+        class="card-header d-flex justify-content-between align-items-center"
+      >
+        <h4 class="card-title mb-0">Data Access Level &nbsp;</h4>
+        <div>
+          <i class="ri-information-line align-bottom cursor align-bottom"></i
+          ><a
+            class="fs-14 text-secondary"
+            href="javascript:void(0);"
+            (click)="openInfo(modalViewInfo)"
+          >
+            View Info</a
+          >
+        </div>
+      </div>
+      <div class="card-header">
+        <ul
+          ngbNav
+          #innercustomNav="ngbNav"
+          [activeId]="isMaintenanceModule ? 1 : 2"
+          class="nav nav-tabs-custom border-bottom-0"
+          role="tablist"
+        >
+          <ng-container *ngIf="isMaintenanceModule">
+            <li [ngbNavItem]="1" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Maintenance Project
+              </a>
+
+              <ng-template ngbNavContent>
+                <div class="card p-0">
+                  <div class="card-header text-end p-0">
+                    <button
+                      class="btn btn-soft-success btn-sm mb-3"
+                      (click)="getMaintenanceList()"
+                    >
+                      Select Project
+                    </button>
+                  </div>
+                  <div class="card-body pt-2 pb-0">
+                    <div class="table-responsive table-card mb-0">
+                      <table class="table">
+                        <thead>
+                          <tr class="bg-light text-muted text-uppercase">
+                            <th>
+                              {{ isProject ? "Project" : "Department" }} Code
+                            </th>
+                            <th>{{ isProject ? "Project" : "Department" }}</th>
+                            <th>Company</th>
+                            <th>Client</th>
+
+                            <th>Status</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            *ngFor="
+                              let project of selectedMaintenanceList;
+                              index as index
+                            "
+                            class="text-muted"
+                          >
+                            <td class="fw-medium link-primary">
+                              {{ project.departmentCode }}
+                            </td>
+                            <td>
+                              {{ project.departmentName }}
+                            </td>
+                            <td>
+                              {{ project.companyName }}
+                            </td>
+
+                            <td>
+                              {{ project.clientName }}
+                            </td>
+
+                            <td>
+                              <span
+                                class="fs-12"
+                                [class]="
+                                  returnStatusBadgeClassesStatus(
+                                    project.departmentStatusId
+                                  )
+                                "
+                                >{{ project.departmentStatusName }}</span
+                              >
+                            </td>
+                            <td>
+                              <i
+                                (click)="confirmDeleteForMaintains(index)"
+                                class="ri-delete-bin-fill align-bottom me-2 text-danger cursor"
+                              ></i>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div
+                        class="text-center text-muted"
+                        *ngIf="selectedMaintenanceList.length === 0"
+                      >
+                        No {{ isProject ? "Project" : "Department" }} Found
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+          </ng-container>
+          <ng-container *ngIf="isProjectManagementModule">
+            <li [ngbNavItem]="2" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Ad-hoc Project
+              </a>
+
+              <ng-template ngbNavContent>
+                <div class="card p-0">
+                  <div class="card-header text-end p-0">
+                    <button
+                      class="btn btn-soft-success btn-sm mb-3"
+                      (click)="getProjectList()"
+                    >
+                      Select Project
+                    </button>
+                  </div>
+                  <div class="card-body pt-2 pb-0">
+                    <div class="table-responsive table-card mb-0">
+                      <table class="table">
+                        <thead>
+                          <tr class="bg-light text-muted text-uppercase">
+                            <th>
+                              {{ isProject ? "Project" : "Department" }} Code
+                            </th>
+                            <th>{{ isProject ? "Project" : "Department" }}</th>
+                            <th>Company</th>
+                            <th>Client</th>
+
+                            <th>Status</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            *ngFor="
+                              let project of selectedProjectList;
+                              index as index
+                            "
+                            class="text-muted"
+                          >
+                            <td class="fw-medium link-primary">
+                              {{ project.departmentCode }}
+                            </td>
+                            <td>
+                              {{ project.departmentName }}
+                            </td>
+                            <td>
+                              {{ project.companyName }}
+                            </td>
+
+                            <td>
+                              {{ project.clientName }}
+                            </td>
+
+                            <td>
+                              <span
+                                class="fs-12"
+                                [class]="
+                                  returnStatusBadgeClassesStatus(
+                                    project.departmentStatusId
+                                  )
+                                "
+                                >{{ project.departmentStatusName }}</span
+                              >
+                            </td>
+                            <td>
+                              <i
+                                (click)="confirmDeleteProject(index)"
+                                class="ri-delete-bin-fill align-bottom me-2 text-danger cursor"
+                              ></i>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div
+                        class="text-center text-muted"
+                        *ngIf="selectedProjectList.length === 0"
+                      >
+                        No {{ isProject ? "Project" : "Department" }} Found
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+          </ng-container>
+        </ul>
+        <div class="card-body">
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="innercustomNav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end mt-2 mb-3">
+      <button
+        class="btn btn-soft-primary waves-effect back-button me-2"
+        (click)="goBack()"
+      >
+        Back
+      </button>
+
+      <button
+        class="btn btn-success"
+        (click)="submit()"
+        [disabled]="
+          userForm.invalid ||
+          (this.selectedMaintenanceList.length === 0 &&
+            this.selectedProjectList.length === 0)
+        "
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>
+
+<ng-template #noDepartmentModalPopUp let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="text-center">
+        <img
+          src="../../../../assets/images/ticketChatpartImage.png"
+          class="img-fluid rounded chat-image-success"
+        />
+      </div>
+
+      <div class="mt-2 fs-15 text-center">
+        <h4>Information!</h4>
+        <p class="text-muted mx-4 mb-0">
+          To create a project for a specific company or organization, you may
+          need to request the administrator to create the project.
+        </p>
+      </div>
+      <p class="mx-3 mb-0">You can follow these steps:</p>
+      <ol class="pt-0 fs-15">
+        <li>Access the application settings.</li>
+        <li>Navigate to "My Project" within the application.</li>
+        <li>Look for an option button "Add Project".</li>
+      </ol>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+          type="button"
+          class="swal2-cancel btn btn-primary w-xs mb-1"
+          aria-label=""
+          style="display: inline-block"
+          (click)="modal.close('Close click')"
+        >
+          Ok
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+<ng-template #modalViewInfo let-modal>
+  <div class="modal-header" style="border-bottom: 1px solid #dcdcdc">
+    <h6 class="card-title mb-0">View Info</h6>
+
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span class="" aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body d-flex justify-content-center">
+    <div>
+      <p class="text-center fs-16">
+      <b>  To submit user information, you need to select at least one maintenance
+        project or ad-hoc project.</b>
+      </p>
+    </div>
+  </div>
+</ng-template>

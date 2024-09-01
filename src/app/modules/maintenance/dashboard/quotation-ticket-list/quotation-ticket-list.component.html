@@ -1,0 +1,314 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm-3 col-xxl-3">
+            <h5 class="card-title mb-0">
+              Quotation List<span class="fs-12 ms-1" *ngIf="helpDeskService.pageAction == 'Workflow Page'">
+                (Waiting For
+                {{
+                  storeWorkflowObject.approverType == "Reviewer"
+                    ? "Review"
+                    : "Approve"
+                }})</span
+              >
+            </h5>
+          </div>
+          <div
+            class="col-sm-auto col-xxl-9 d-flex gap-2 flex-nowrap justify-content-end"
+          >
+            <!-- <div class=""> -->
+            <div class="search-box w-50">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                 #inputerQuotationName
+                [(ngModel)]="typeQuotationNameValue"
+                placeholder="Search for quotation name"
+               
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+
+             <div class="search-box w-50">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                 #inputerQuotationUmber
+                [(ngModel)]="typeQuotationNumberValue"
+                placeholder="Search for quotation number"
+               
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+
+             <div class="search-box w-50">
+              <input
+                type="search"
+                name="searchTerm"
+                 #inputerTicketNumber
+                class="form-control"
+                [(ngModel)]="typeTicketNameValue"
+                placeholder="Search for ticket number"
+               
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+            <!--  *ngIf="returnValueMenu?.add" -->
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row g-3">
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onDropdownCompanyValueChange($event)"
+              [clearable]="true"
+              id="companyName"
+              [(ngModel)]="selectedDropDownCompanyIdValue"
+              placeholder="Select Company"
+              class="w-100 mr-2"
+              for="companyName"
+               [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownClientList"
+              bindLabel="clientName"
+              [disabled]="!selectedDropDownCompanyIdValue"
+              bindValue="clientId"
+              (change)="onDropdownClientValueChange($event)"
+              [clearable]="true"
+              id="clientName"
+              [(ngModel)]="selectedDropDownClientIdValue"
+              placeholder="Select Client"
+              class="w-100 mr-2"
+              for="clientName"
+               [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownProjectOrDeparmentList"
+              bindLabel="departmentName"
+              [disabled]="!selectedDropDownCompanyIdValue"
+              bindValue="departmentId"
+              (change)="onDropdownDepartmentValueChange($event)"
+              [clearable]="true"
+              id="departmentName"
+              [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+              placeholder="Select Project"
+              class="w-100 mr-2"
+              for="departmentName"
+                [readonly]="projectDepartmentFieldDisiabled"
+            ></ng-select>
+          </div>
+          <div class="col-lg-auto text-end">
+            <div class="d-flex justify-content-end">
+              <button
+                type="button"
+                class="btn btn-danger ms-1"
+                (click)="resetSerachVariable()"
+                ngbTooltip="Remove All Search"
+              >
+                <i class="ri-refresh-fill me-1 align-bottom"></i>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th>Quotation NO</th>
+                        <th>TICKET NO</th>
+                        <th>Title</th>
+                        <th>Company</th>
+                        <th>Client</th>
+                        <th>{{ isProject ? "Project" : "Department" }}</th>
+                        <th>Create Date</th>
+                        <th>WorkFlow Status</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="ticketList.length == 0">
+                        <tr>
+                          <td colspan="9"  class="text-center">
+                            No Quotation Data
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <ng-container *ngIf="ticketList.length != 0">
+                      <tr *ngFor="let quotation of ticketList">
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            (click)="viewHandler(quotation)"
+                            class="fw-medium link-primary"
+                            >{{ quotation.quotNo }}</a
+                          >
+                        </td>
+                        <td>
+                       
+                            {{ quotation.ticketNo }}
+                        </td>
+
+                          <td  class="title" (click)="
+                              expandTitle('quotTitle_' + quotation.quotNo)
+                            "
+                            [id]="'quotTitle_' + quotation.quotNo">
+                           {{ quotation.quotTitle }} 
+                          </td>
+                          <td class="title" (click)="
+                              expandTitle('companyName_' + quotation.quotNo)
+                            "
+                            [id]="'companyName_' + quotation.quotNo">
+                            {{ quotation.companyName }}
+                          </td>
+                          <td class="title" (click)="
+                              expandTitle('clientName_' + quotation.quotNo)
+                            "
+                            [id]="'clientName_' + quotation.quotNo">
+                            {{ quotation.clientName }}
+                          </td>
+                          <td class="title" (click)="
+                              expandTitle('projectName_' + quotation.quotNo)
+                            "
+                            [id]="'projectName_' + quotation.quotNo">
+                            {{ quotation.projectName }}
+                          </td>
+                          <td class="title" (click)="
+                              expandTitle('createdDate_' + quotation.quotNo)
+                            "
+                            [id]="'createdDate_' + quotation.quotNo">
+                            {{ quotation.createdDate }}
+                          </td>
+                        <td class="status">
+                          <span
+                            [class]="
+                              returnWorkFlowStatusBadgeClasses(
+                                quotation.quotationWorkflowStatusId
+                              )
+                            "
+                            >{{ quotation.quotationWorkflowStatusName }}</span
+                          >
+                        </td>
+
+                        <td class="status">
+                          <span
+                            [class]="
+                              returnStatusBadgeClassesStatus(
+                                quotation.quotStatusId
+                              )
+                            "
+                            >{{ quotation.quotStatusName }}</span
+                          >
+                        </td>
+
+                        <td>
+                          <span>
+                            <div class="dropdown" ngbDropdown>
+                              <button
+                                class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                ngbDropdownToggle
+                              >
+                                <i class="ri-more-fill"></i>
+                              </button>
+                              <ul
+                                class="dropdown-menu dropdown-menu-end"
+                                ngbDropdownMenu
+                              >
+                                <li>
+                                  <a
+                                    class="dropdown-item cursor-pointer"
+                                    (click)="viewHandler(quotation)"
+                                    ><i
+                                      class="ri-eye-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    View
+                                  </a>
+                                </li>
+
+                                <!-- <li class="dropdown-divider"></li> -->
+                              </ul>
+                            </div>
+                          </span>
+                        </td>
+                      </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col col-sm-12 col col-md-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecordsFromApi }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col col-sm-12 col col-md-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="totalRecordsFromApi"
+                        [pageSize]="pageSize"
+                        [(page)]="page"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="OnChangesPage($event)"
+                        *ngIf="totalRecordsFromApi > pageSize"
+                      ></ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

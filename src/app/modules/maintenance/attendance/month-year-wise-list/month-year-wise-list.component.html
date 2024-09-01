@@ -1,0 +1,48 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+<div class="row">
+  <div class="col-md-12 ">
+    <div class="row align-items-center">
+      <div class="col">
+        <!-- Nav tabs -->
+        <ul
+          ngbNav
+          #nav="ngbNav"
+          [(activeId)]="activeIdWorkingHoursTop"
+          class="nav nav-tabs-custom card-header-tabs border-bottom-0"
+        >
+          <li [ngbNavItem]="1">
+            <a ngbNavLink (click)="onNavChange(1)"> Corrective </a>
+            <ng-template ngbNavContent>
+              <app-corrective-month-year-wise
+              
+              ></app-corrective-month-year-wise>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="2">
+            <a ngbNavLink (click)="onNavChange(2)"> Preventive </a>
+            <ng-template ngbNavContent>
+              <app-preventive-month-year-wise
+              
+              ></app-preventive-month-year-wise>
+            </ng-template>
+          </li>    
+          <li [ngbNavItem]="3">
+            <a ngbNavLink (click)="onNavChange(3)">Project Task </a>
+            <ng-template ngbNavContent>
+              <app-project-task-month-year-wise
+              
+              ></app-project-task-month-year-wise>
+            </ng-template>
+          </li>
+        </ul>
+      </div>
+      <div class="tab-content text-muted mt-3">
+        <div [ngbNavOutlet]="nav"></div>
+      </div>
+    </div>
+  </div>
+</div>

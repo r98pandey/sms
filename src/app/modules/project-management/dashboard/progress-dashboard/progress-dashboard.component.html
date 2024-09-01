@@ -1,0 +1,444 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  title="Progress Dashboard"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  @for(stat of projectStatusData; track $index){
+  <div class="col-lg-4">
+      <app-projects-stat [title]="stat.title" [value]="stat.value" [icon]="stat.icon"
+          ></app-projects-stat>
+  </div>
+}
+</div>
+<!-- <div class="row">
+  <div
+    class="col-xxl col-sm stretch-card"
+    *ngFor="let totalCount of activityStatusList"
+  >
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="flex-grow-0 ms-1">
+            <p
+              class="text-uppercase fw-semibold fs-12 mb-1"
+              [class]="totalCount.textColor"
+            >
+              {{ totalCount.name }}
+            </p>
+            <ng-container *ngIf="totalCount.count != 0">
+              <h4 class="mb-0">
+                <span
+                  [countUp]="totalCount.count"
+                  class="counter-value cursor-pointer"
+                  [options]="option"
+                ></span>
+              </h4>
+            </ng-container>
+            <ng-container *ngIf="totalCount.count == 0">
+              <h4 class="mb-0">0</h4>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  
+  </div>
+  
+</div> -->
+<div class="row project-wrapper mb-4">
+
+  <div class="col-sm-4 col-md-8 col-lg-4 mb-2">
+    <div class="row max-heig">
+      <div class="col-md-12">
+        <div class="card mb-3">
+          <div
+            class="card-header border-bottom-dashed align-items-center d-flex"
+          >
+            <h4 class="card-title mb-0 flex-grow-1">Project Type</h4>
+          </div>
+          <!-- end cardheader -->
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6 stretch-card">
+                <div class="card card-animate mb-2">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <div class="avatar-sm">
+                          <span
+                            class="avatar-title bg-secondary-subtle rounded-circle fs-2"
+                          >
+                            <i-feather
+                              name="database"
+                              class="text-secondary feather-icon-align"
+                            ></i-feather>
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <h3 class="mt-1 ff-secondary fw-semibold mb-2">
+                          <span
+                            [countUp]="
+                              totalCountProjectAdHockANdMaintenanceProject
+                                .dataProjectAdHocAndMaintenanceCount
+                                .projectMaintenanceCount
+                            "
+                            class="counter-value"
+                            [options]="option"
+                          ></span>
+                        </h3>
+                      </div>
+                    </div>
+                    <p class="fw-medium mb-0 text-secondary mt-1">
+                      Maintenance
+                    </p>
+                  </div>
+                  <!-- end card body -->
+                </div>
+              </div>
+              <div class="col-md-6 stretch-card">
+                <div class="card card-animate mb-2">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <div class="avatar-sm">
+                          <span
+                            class="avatar-title bg-info-subtle rounded-circle fs-2"
+                          >
+                            <i-feather
+                              name="book"
+                              class="text-info feather-icon-align"
+                            ></i-feather>
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <h3 class="mt-1 ff-secondary fw-semibold mb-2">
+                          <span
+                            [countUp]="
+                              totalCountProjectAdHockANdMaintenanceProject
+                                .dataProjectAdHocAndMaintenanceCount
+                                .projectAdhocCount
+                            "
+                            class="counter-value"
+                            [options]="option"
+                          ></span>
+                        </h3>
+                      </div>
+                    </div>
+                    <p class="fw-medium mb-0 text-info mt-1 ">
+                      Ad-hoc 
+                    </p>
+                  </div>
+                  <!-- end card body -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="card mb-0">
+          <div
+            class="card-header border-bottom-dashed align-items-center d-flex"
+          >
+            <h4 class="card-title mb-0 flex-grow-1">
+              Client/prospect overview
+            </h4>
+          </div>
+          <!-- end cardheader -->
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card card-animate">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <p class="fw-medium mb-0 text-success">Active</p>
+                        <h3 class="mt-1 ff-secondary fw-semibold mb-2">
+                          <span
+                            [countUp]="
+                              totalCountProjectAdHockANdMaintenanceProject
+                                .dataClientStatus.totalClientActive
+                            "
+                            class="counter-value"
+                            [options]="option"
+                          ></span>
+                        </h3>
+                      </div>
+                      <div>
+                        <div class="avatar-sm flex-shrink-0">
+                          <span
+                            class="avatar-title bg-success-subtle rounded-circle fs-2"
+                          >
+                            <i-feather
+                              name="aperture"
+                              class="text-success feather-icon-align"
+                            ></i-feather>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end card body -->
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card card-animate">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <p class="fw-medium mb-0 text-danger">Inactive</p>
+                        <h3 class="mt-1 ff-secondary fw-semibold mb-2">
+                          <span
+                            [countUp]="
+                              totalCountProjectAdHockANdMaintenanceProject
+                                .dataClientStatus.totalClientInactive
+                            "
+                            class="counter-value"
+                            [options]="option"
+                          ></span>
+                        </h3>
+                      </div>
+                      <div>
+                        <div class="avatar-sm flex-shrink-0">
+                          <span
+                            class="avatar-title bg-danger-subtle rounded-circle fs-2"
+                          >
+                            <i-feather
+                              name="stop-circle"
+                              class="text-danger feather-icon-align"
+                            ></i-feather>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end card body -->
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="card card-animate mb-2">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <p class="fw-medium mb-0 text-info">Deleted</p>
+                        <h3 class="mt-1 ff-secondary fw-semibold mb-2">
+                          <span
+                            [countUp]="
+                              totalCountProjectAdHockANdMaintenanceProject
+                                .dataClientStatus.totalClientDeleted
+                            "
+                            class="counter-value"
+                            [options]="option"
+                          ></span>
+                        </h3>
+                      </div>
+                      <div>
+                        <div class="avatar-sm flex-shrink-0">
+                          <span
+                            class="avatar-title bg-info-subtle rounded-circle fs-2"
+                          >
+                            <i-feather
+                              name="trash"
+                              class="text-info feather-icon-align"
+                            ></i-feather>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end card body -->
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="card card-animate mb-2">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <p class="fw-medium mb-0 text-warning">Prospect</p>
+                        <h3 class="mt-1 ff-secondary fw-semibold mb-2">
+                          <span
+                            [countUp]="
+                              totalCountProjectAdHockANdMaintenanceProject
+                                .dataClientStatus.totalClientProspect
+                            "
+                            class="counter-value"
+                            [options]="option"
+                          ></span>
+                        </h3>
+                      </div>
+                      <div>
+                        <div class="avatar-sm flex-shrink-0">
+                          <span
+                            class="avatar-title bg-warning-subtle rounded-circle fs-2"
+                          >
+                            <i-feather
+                              name="layers"
+                              class="text-warning feather-icon-align"
+                            ></i-feather>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end card body -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-8 col-md-8 col-lg-8 mb-4">
+    <div class="row max-heig">
+      <div class="col-xl-12 max-heig">
+        <div class="card max-heig">
+          <div class="card-header border-0 align-items-center d-flex">
+            <h4 class="card-title mb-0 flex-grow-1">Projects Overview</h4>
+            <div class="d-flex gap-1"></div>
+          </div>
+          <!-- end card header -->
+          <div class="card-header p-0 border-0 bg-light-subtle">
+            <div class="row g-0 text-center">
+              <div class="col-6 col-sm-3">
+                <div class="p-3 border border-dashed border-start-0">
+                  <h5 class="mb-1">
+                    <span
+                    [countUp]="
+                    totalCountProjectAdHockANdMaintenanceProject
+                      .dataProjectManagementActivityStatusList
+                      .totalProject
+                  "
+                      class="counter-value"
+                      [options]="option"
+                    ></span>
+                  </h5>
+                  <p class="text-muted mb-0">Number of Projects</p>
+                </div>
+              </div>
+              <!--end col-->
+              <div class="col-6 col-sm-3">
+                <div class="p-3 border border-dashed border-start-0">
+                  <h5 class="mb-1 text-success">
+                    <span
+                      [countUp]="  totalCountProjectAdHockANdMaintenanceProject
+                      .dataProjectManagementActivityStatusList
+                      .totalProjectInitiated"
+                      class="counter-value"
+                      [options]="option"
+                    ></span>
+                  </h5>
+                  <p class="text-muted mb-0">Project Initiated</p>
+                </div>
+              </div>
+              <!--end col-->
+              <div class="col-6 col-sm-3">
+                <div class="p-3 border border-dashed border-start-0">
+                  <h5 class="mb-1 text-warning">
+                    <span
+                      [countUp]="totalCountProjectAdHockANdMaintenanceProject
+                      .dataProjectManagementActivityStatusList
+                      .totalProjectInProgress"
+                      [options]="option"
+                      class="counter-value"
+                    ></span>
+                  </h5>
+                  <p class="text-muted mb-0">In-Progress</p>
+                </div>
+              </div>
+              <!--end col-->
+              <div class="col-6 col-sm-3">
+                <div
+                  class="p-3 border border-dashed border-start-0 border-end-0"
+                >
+                  <h5 class="mb-1 text-info">
+                    <span
+                      [countUp]="totalCountProjectAdHockANdMaintenanceProject
+                      .dataProjectManagementActivityStatusList.totalProjectCompleted"
+                      [options]="option"
+                      class="counter-value"
+                    ></span>
+                  </h5>
+                  <p class="text-muted mb-0">Completed</p>
+                </div>
+              </div>
+              <!--end col-->
+            </div>
+          </div>
+          <!-- end card header -->
+          <div class="card-body p-0 pb-2">
+            <div class="mb-n3">
+              <apx-chart
+                [series]="OverviewChart.series"
+                [chart]="OverviewChart.chart"
+                [xaxis]="OverviewChart.xaxis"
+                [grid]="OverviewChart.grid"
+                [plotOptions]="OverviewChart.plotOptions"
+                dir="ltr"
+              ></apx-chart>
+            </div>
+          </div>
+          <!-- end card body -->
+        </div>
+        <!-- end card -->
+      </div>
+      <!-- end col -->
+    </div>
+    <!-- end row -->
+  </div>
+
+
+
+
+
+  <div class="col-xl-12" *ngIf="projectManagementTaskAttendanceList">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title mb-0">Month/Hours Based Overview</h4>
+        </div><!-- end card header -->
+
+        <div class="card-body">
+          <apx-chart [series]="gradientChart.series" [chart]="gradientChart.chart"
+          [xaxis]="gradientChart.xaxis" [dataLabels]="gradientChart.dataLabels"
+          [grid]="gradientChart.grid" [stroke]="gradientChart.stroke" [title]="gradientChart.title"
+          [markers]="gradientChart.markers" [yaxis]="gradientChart.yaxis" [fill]="gradientChart.fill" dir="ltr">
+          </apx-chart>
+        </div><!-- end card-body -->
+    </div><!-- end card -->
+</div>
+  <!-- end col -->
+</div>
+<!-- end row -->
+
+<div class="row align-items-center mb-3">
+  <div class="col-md-12">
+    <ul
+      ngbNav
+      #nav="ngbNav"
+      [(activeId)]="activeIdTop"
+      class="nav nav-tabs-custom card-header-tabs border-bottom-0"
+    >
+      <li [ngbNavItem]="1">
+        <a title="Awaiting Task Approval is listed here, categorized into Verification Waiting, Pending Approval Waiting (Acknowledgment Completed), and Acknowledgment Waiting." ngbNavLink> Awaiting Task Approval</a>
+        <ng-template ngbNavContent>
+          <app-task-approval-list></app-task-approval-list>
+        </ng-template>
+      </li>
+    
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content text-muted mt-3">
+      <div [ngbNavOutlet]="nav"></div>
+    </div>
+  </div>
+</div>

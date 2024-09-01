@@ -1,0 +1,952 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card mt-n4 mx-n4">
+      <div class="card-body pb-0 px-4">
+        <div class="row mb-3">
+          <div class="col-md">
+            <div class="row align-items-center g-3">
+              <div class="col-md-auto">
+                <div
+                  class="avatar-md"
+                  *ngIf="
+                    dDetail.departmentName && dDetail.departmentName.length
+                  "
+                >
+                  <span class="rounded">
+                    <ng-container>
+                      <app-avatar-photo
+                        [name]="toUpperCaseword(dDetail.departmentName)"
+                      ></app-avatar-photo>
+                    </ng-container>
+                  </span>
+                </div>
+              </div>
+
+              <div class="col-md">
+                <div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="fw-bold">
+                      {{ dDetail.departmentName }}
+
+                      <span class="">
+                        ( {{ dDetail.departmentCode || "-" }})
+
+                        <i
+                        ngbTooltip="Maintenance"
+                        class="align-bottom ri-award-fill fs-20 text-info"
+                        *ngIf="dDetail.isMaintenance"
+                      ></i>
+                      <i
+                        ngbTooltip="Awarded"
+                        class="align-bottom ri-medal-line fs-20 ms-2 text-success"
+                        *ngIf="dDetail.isAwarded"
+                      ></i>
+                      <i
+                      ngbTooltip="Not Awarded"
+                      class="align-bottom ri-medal-line fs-20 ms-2 text-muted"
+                      *ngIf="!dDetail.isAwarded"
+                    ></i>
+                    <i
+                    ngbTooltip="Project Management"
+                    class="align-bottom ri-git-repository-private-line fs-20 ms-2 text-warning"
+                    *ngIf="dDetail.isProjectManagement"
+                  ></i>
+
+                    
+                      </span>
+                    </h4>
+                    <div class="actions">
+                    
+
+                      <button
+                      *ngIf="dDetail.isAwarded == false"
+                      type="button" (click)="openSuccessAwarded()"
+                      class="btn btn-secondary mb-2 me-3"
+                    >
+                      Awarded
+                    </button>
+                  
+                    </div>
+                  </div>
+
+                  <div class="hstack gap-1 flex-wrap">
+                    <!-- <div>
+                      <i class="ri-building-line align-bottom me-1"></i>
+                      {{ dDetail.companyName }}
+                    </div>
+                    <div class="vr"></div> -->
+                    <div>
+                      <i class="ri-building-2-line align-bottom me-1"></i
+                      >{{ dDetail?.clientName || "-" }}
+                    </div>
+
+                    
+                    <div
+                      class="vr"
+                      *ngIf="dDetail.currentProcessId != null"
+                    ></div>
+                    <div *ngIf="dDetail.currentProcessId != null">
+                      Document submission:
+                      <span
+                        class="fs-12"
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            dDetail.currentProcessId
+                          )
+                        "
+                        >{{ dDetail.currentProcessName }}</span
+                      >
+                    </div>
+                    <div
+                    class="vr"
+                    *ngIf="dDetail.projectManagementStatusId != null"
+                  ></div>
+                  <div *ngIf="dDetail.projectManagementStatusId != null">
+                    Project :
+                    <span
+                      class="fs-12"
+                      [class]="
+                        returnStatusBadgeClassesStatus(
+                          dDetail.projectManagementStatusId
+                        )
+                      "
+                      >{{ dDetail.projectManagementStatusName }}</span
+                    >
+                  </div>
+                    
+                  
+                  <div
+                  class="vr"
+                  *ngIf="dDetail.warrentyStatusId != null"
+                ></div>
+                <div *ngIf="dDetail.warrentyStatusId != null">
+                  Warranty:
+                  <span
+                    class="fs-12"
+                    [class]="
+                      returnStatusBadgeClassesStatus(
+                        dDetail.warrentyStatusId
+                      )
+                    "
+                    >{{ dDetail.warrentyStatusName }}</span
+                  >
+                  
+                </div>
+                <div
+                  class="vr"
+                  *ngIf="dDetail.maintenanceStatusId != null"
+                ></div>
+                <div *ngIf="dDetail.maintenanceStatusId != null">
+                  Maintenance:
+                  <span
+                    class="fs-12"
+                    [class]="
+                      returnStatusBadgeClassesStatus(
+                        dDetail.maintenanceStatusId
+                      )
+                    "
+                    >{{ dDetail.maintenanceStatusName }}</span
+                  >
+                
+                </div>
+                  
+                  
+
+
+                    <div class="vr" *ngIf="dDetail.departmentStatusId"></div>
+                    <div *ngIf="dDetail.departmentStatusId">
+                      Status:
+                      <span
+                        class="fs-12"
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            dDetail.departmentStatusId
+                          )
+                        "
+                        >{{ dDetail.departmentStatusName }}</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ul
+          ngbNav
+          #customNav="ngbNav"
+          [activeId]="activateTabs"
+          class="nav nav-tabs-custom border-bottom-0"
+          role="tablist"
+        >
+          <li [ngbNavItem]="1" class="nav-item">
+            <a
+              ngbNavLink
+              class="nav-link"
+              data-bs-toggle="tab"
+              role="tab"
+              (click)="callingFollowListApi()"
+            >
+              Overview
+            </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <div
+                        class="row d-flex mb-2 border-bottom border-bottom-dashed"
+                      >
+                        <div
+                          class="col-lg-12 d-flex align-items-center justify-content-between"
+                        >
+                          <h6 class="mb-3 fw-semibold text-uppercase">
+                            Todo
+                          </h6>
+
+                          <button
+                            ngbTooltip="Users can Add Todo that are associated with a specific project."
+                            class="btn btn-success add-btn fl-r mb-3"
+                            (click)="addFollowUp()"
+                          >
+                            <i class="ri-add-fill align-bottom me-1"></i> Add
+                            Todo
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="row" *ngIf="masterFollowList?.length != 0">
+                        <div
+                          class="col-xl-3 col-lg-4 col-sm-6"
+                          *ngFor="let follow of masterFollowList"
+                        >
+                          <div class="card mb-2">
+                            <div class="card-body">
+                              <div class="topright">
+                                <i
+                                  class="bx bx-navigation icon"
+                                  (click)="
+                                    openEventFullDetailsModalPopup(
+                                      follow.followUpId
+                                    )
+                                  "
+                                ></i>
+                              </div>
+                              <div class="d-flex mb-2">
+                                <h5
+                                  class="fs-16 text-truncate d-block"
+                                  [ngbTooltip]="follow.followUpName"
+                                >
+                                  {{ follow.followUpName }}
+                                </h5>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-md-12 mb-1 d-flex">
+                                  <div class="col-md-6">
+                                    <i
+                                      class="ri-message-line align-bottom align-bottom me-2 cursor"
+                                      ngbTooltip="Type"
+                                    ></i>
+
+                                    <a
+                                      href="javascript:void(0);"
+                                      class="badge bg-primary-subtle text-primary"
+                                      >{{ follow.followUpType }}</a
+                                    >
+                                  </div>
+                                  <div class="col-md-6">
+                                    <i
+                                      class="ri-china-railway-line align-bottom me-2 cursor"
+                                      ngbTooltip="Status"
+                                    ></i>
+                                    <span
+                                      [class]="
+                                        returnStatusBadgeClassesStatus(
+                                          follow.followUpStatusId
+                                        )
+                                      "
+                                      >{{ follow.followUpStatusName }}</span
+                                    >
+                                  </div>
+                                </div>
+
+                                <div class="col-md-12 mb-1">
+                                  <i
+                                    class="ri-time-line align-bottom align-bottom me-2 cursor"
+                                    ngbTooltip="Start Date"
+                                  ></i>
+                                  {{ follow.startDateTime }}
+                                </div>
+                                <div class="col-md-12 mb-1">
+                                  <i
+                                    class="ri-time-line align-bottom align-bottom me-2 cursor"
+                                    ngbTooltip="End date"
+                                  ></i>
+                                  {{ follow.endDateTime }}
+                                </div>
+                                <div class="col-md-12 mb-1">
+                                  <i
+                                    class="ri-user-settings-line align-bottom me-2 cursor"
+                                    ngbTooltip="Created By"
+                                  ></i
+                                  ><b> {{ follow.createdBy }}</b>
+                                </div>
+
+                                <div class="col-md-12 mb-1">
+                                  <i
+                                    class="ri-calendar-event-line cursor align-bottom me-2"
+                                    ngbTooltip="Created Date"
+                                  ></i>
+                                  <b> {{ follow.createdDate }}</b>
+                                </div>
+
+                                <div class="col-md-12 mb-1 d-flex">
+                                  <div class="flex-cont">
+                                    <i
+                                      class="ri-message-2-line align-bottom"
+                                      ngbTooltip="Messages"
+                                      [class]="
+                                        follow.totalMessages != 0
+                                          ? 'text-secondary'
+                                          : 'text-muted'
+                                      "
+                                    ></i>
+                                    {{ follow.totalMessages }}
+                                  </div>
+                                  <div class="flex-cont">
+                                    <i
+                                      class="ri-todo-line cursor align-bottom"
+                                      ngbTooltip="Done/Total Todo"
+                                      [class]="
+                                        follow.totalTodoDone || follow.totalTodo
+                                          ? 'text-secondary'
+                                          : 'text-muted'
+                                      "
+                                    ></i>
+                                    {{
+                                      follow.totalTodoDone || follow.totalTodo
+                                        ? (follow.totalTodoDone || 0) +
+                                          "/" +
+                                          (follow.totalTodo || 0)
+                                        : "0"
+                                    }}
+                                  </div>
+                                  <div class="flex-cont">
+                                    <i
+                                      class="ri-link align-bottom cursor me-2"
+                                      ngbTooltip="Number Of Documents"
+                                      [class]="
+                                        follow.numberOfDocuments != 0
+                                          ? 'text-secondary'
+                                          : 'text-muted'
+                                      "
+                                    ></i>
+                                    {{ follow.numberOfDocuments }}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div
+                                class="col-lg-12 border-top border-top-dashed"
+                              >
+                                <div class="mt-1">
+                                  <h6 class="mb-0">Members</h6>
+                                  <div class="flex-shrink-0">
+                                    <div
+                                      class="avatar-group"
+                                      *ngIf="follow.members.length != 0"
+                                    >
+                                      @for(user of follow.members; track
+                                      $index){
+                                      <a
+                                        href="javascript:void(0);"
+                                        class="avatar-group-item"
+                                        ngbTooltip="{{ user.fullName }}"
+                                        placement="top"
+                                      >
+                                        <img
+                                          [src]="apiUrl + user.profileImageUrl"
+                                          alt=""
+                                          class="rounded-circle avatar-xxs"
+                                          *ngIf="user.profileImageUrl"
+                                        />
+                                        <div
+                                          class="flex-shrink-0 avatar-xs"
+                                          *ngIf="!user.profileImageUrl"
+                                        >
+                                          <div
+                                            class="avatar-title bg-info-subtle text-info rounded-circle fs-13"
+                                          >
+                                            {{
+                                              user?.fullName
+                                                ? user?.fullName
+                                                    ?.charAt(0)
+                                                    .toUpperCase()
+                                                : "N"
+                                            }}{{
+                                              user?.fullName
+                                                ? user?.fullName
+                                                    ?.charAt(1)
+                                                    .toUpperCase()
+                                                : "A"
+                                            }}
+                                          </div>
+                                        </div>
+                                      </a>
+                                      }
+                                    </div>
+                                    <p
+                                      *ngIf="follow.members.length == 0"
+                                      class="mb-0 fs-13"
+                                    >
+                                      No members were added.
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="masterFollowList?.length == 0">
+                        <div class="col-md-12 mb-4">
+                          <div class="py-4 text-center">
+                            <div>
+                              <lord-icon
+                                src="https://cdn.lordicon.com/msoeawqm.json"
+                                trigger="loop"
+                                colors="primary:#405189,secondary:#0ab39c"
+                                style="width: 72px; height: 72px"
+                              >
+                              </lord-icon>
+                            </div>
+                            <div class="mt-4">
+                              <h5>No Records Found</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr *ngIf="masterFollowList?.length != 0">
+                      <div *ngIf="masterFollowList?.length != 0"
+                        class="row justify-content-md-between align-items-md-center gy-2"
+                      >
+                        <div class="col col-sm-12 col col-md-6">
+                          <div
+                            class="dataTables_info mb-2"
+                            id="tickets-table_info"
+                            role="status"
+                            aria-live="polite"
+                          >
+                            Showing {{ from }} to {{ to }} of
+                            {{ totalRecordsFromApi }} entries
+                          </div>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="col col-sm-12 col col-md-6">
+                          <div
+                            class="text-sm-right float-end listjs-pagination"
+                          >
+                            <ngb-pagination
+                              [collectionSize]="totalRecordsFromApi"
+                              [pageSize]="pageSize"
+                              [(page)]="page"
+                              [maxSize]="2"
+                              [rotate]="true"
+                              (pageChange)="OnChangesPage($event)"
+                              *ngIf="totalRecordsFromApi > pageSize"
+                            ></ngb-pagination>
+                          </div>
+                        </div>
+                        <!-- End Pagination -->
+                      </div>
+                    </div>
+                    <!-- end card body -->
+                  </div>
+                </div>
+                <!-- ene col -->
+              </div>
+            </ng-template>
+          </li>
+
+        
+          <li
+            [ngbNavItem]="2"
+            class="nav-item"
+            (click)="getProjectTeamMemberList()"
+          >
+            <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+              Member's
+            </a>
+            <ng-template ngbNavContent>
+              <div class="row g-4 mb-3">
+                <div class="col-md-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <ul
+                        ngbNav
+                        #innercustomNav="ngbNav"
+                        [activeId]="1"
+                        class="nav nav-tabs-custom border-bottom-0"
+                        role="tablist"
+                      >
+                        <li [ngbNavItem]="1" class="nav-item">
+                          <a
+                            ngbNavLink
+                            class="nav-link"
+                            data-bs-toggle="tab"
+                            role="tab"
+                            (click)="getProjectTeamMemberList()"
+                          >
+                            Internal Users
+                          </a>
+                          <ng-template ngbNavContent>
+                            <div class="row g-4 mb-3">
+                              <div class="col-md-12 d-flex justify-content-end">
+                                <button
+                                  type="button"
+                                  (click)="openModalMember()"
+                                  class="btn btn-success"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#inviteMembersModal"
+                                >
+                                  Select Internal Users
+                                </button>
+                              </div>
+                              <div class="col-md-12">
+                                <hr class="mt-0 mb-0" />
+                              </div>
+                              <div class="col-md-12">
+                                <ng-container
+                                  *ngIf="teamMemberList.length != 0"
+                                >
+                                  <ng-container
+                                    *ngIf="teamMemberList?.length != 0"
+                                  >
+                                    <div
+                                      class="row row-cols-xxl-8 row-cols-lg-4 row-cols-1"
+                                    >
+                                      <div
+                                        class="col"
+                                        *ngFor="
+                                          let teamMember of teamMemberList
+                                        "
+                                      >
+                                        <div class="card card-body">
+                                          <div
+                                            class="d-flex mb-2 align-items-center"
+                                          >
+                                            <div class="flex-shrink-0">
+                                              <img
+                                                src="{{
+                                                  teamMember.profileImageUrl
+                                                    ? apiUrl +
+                                                      teamMember.profileImageUrl
+                                                    : '../../../../../assets/images/placeholderimage.png'
+                                                }}"
+                                                alt=""
+                                                class="avatar-sm rounded-circle"
+                                              />
+                                            </div>
+                                            <div class="flex-grow-1 ms-2">
+                                              <h5
+                                                class="card-title mb-1 text-truncate d-block"
+                                                ngbTooltip="{{
+                                                  teamMember.fullName
+                                                }}"
+                                              >
+                                                {{ teamMember.fullName }}
+                                              </h5>
+                                              <p
+                                                class="text-muted mb-0 text-truncate d-block"
+                                              >
+                                                {{ teamMember.accessGroupName }}
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <p
+                                            class="card-text text-muted text-truncate d-block mb-0"
+                                          >
+                                            <i
+                                              class="ri-mail-fill me-1 align-middle text-success"
+                                            ></i>
+                                            {{ teamMember.email }}
+                                          </p>
+
+                                          <p
+                                            class="text-muted mb-0 text-truncate d-block mb-0"
+                                          >
+                                            <i
+                                              class="ri-phone-fill me-1 align-middle text-danger"
+                                            ></i>
+                                            {{ teamMember.phoneNumber }}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                </ng-container>
+                                <ng-container
+                                  *ngIf="teamMemberList.length == 0"
+                                >
+                                  <div class="py-4 text-center">
+                                    <div>
+                                      <lord-icon
+                                        src="https://cdn.lordicon.com/msoeawqm.json"
+                                        trigger="loop"
+                                        colors="primary:#405189,secondary:#0ab39c"
+                                        style="width: 72px; height: 72px"
+                                      >
+                                      </lord-icon>
+                                    </div>
+                                    <div class="mt-4">
+                                      <h5>
+                                        No Records Found
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </li>
+                        <li
+                          [ngbNavItem]="2"
+                          class="nav-item"
+                          (click)="getProjectClientList()"
+                        >
+                          <a
+                            ngbNavLink
+                            class="nav-link"
+                            data-bs-toggle="tab"
+                            role="tab"
+                          >
+                            External Users
+                          </a>
+                          <ng-template ngbNavContent>
+                            <div class="row g-4 mb-3">
+                              <div class="col-md-12 d-flex justify-content-end">
+                                <button
+                                  type="button"
+                                  (click)="openModalClient()"
+                                  class="btn btn-success"
+                                >
+                                  Select External Users
+                                </button>
+                              </div>
+                              <div class="col-md-12">
+                                <hr class="mt-0 mb-0" />
+                              </div>
+                              <div class="col-md-12">
+                                <ng-container *ngIf="clientList.length != 0">
+                                  <ng-container *ngIf="clientList?.length != 0">
+                                    <div
+                                      class="row row-cols-xxl-8 row-cols-lg-4 row-cols-1"
+                                    >
+                                      <div
+                                        class="col"
+                                        *ngFor="let client of clientList"
+                                      >
+                                        <div class="card card-body">
+                                          <div
+                                            class="d-flex mb-2 align-items-center"
+                                          >
+                                            <div class="flex-shrink-0">
+                                              <img
+                                                src="{{
+                                                  client.profileImageUrl
+                                                    ? apiUrl +
+                                                      client.profileImageUrl
+                                                    : '../../../../../assets/images/placeholderimage.png'
+                                                }}"
+                                                alt=""
+                                                class="avatar-sm rounded-circle"
+                                              />
+                                            </div>
+                                            <div class="flex-grow-1 ms-2">
+                                              <h5
+                                                class="card-title mb-1 text-truncate d-block"
+                                                ngbTooltip="{{
+                                                  client.fullName
+                                                }}"
+                                              >
+                                                {{ client.fullName }}
+                                              </h5>
+                                              <p
+                                                class="text-muted mb-0 text-truncate d-block"
+                                              >
+                                                {{ client.accessGroupName }}
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <p
+                                            class="card-text text-muted text-truncate d-block mb-0"
+                                          >
+                                            <i
+                                              class="ri-mail-fill me-1 align-middle text-success"
+                                            ></i>
+                                            {{ client.email }}
+                                          </p>
+
+                                          <p
+                                            class="text-muted mb-0 text-truncate d-block mb-0"
+                                          >
+                                            <i
+                                              class="ri-phone-fill me-1 align-middle text-danger"
+                                            ></i>
+                                            {{ client.phoneNumber }}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                </ng-container>
+                                <ng-container *ngIf="clientList.length == 0">
+                                  <div class="py-4 text-center">
+                                    <div>
+                                      <lord-icon
+                                        src="https://cdn.lordicon.com/msoeawqm.json"
+                                        trigger="loop"
+                                        colors="primary:#405189,secondary:#0ab39c"
+                                        style="width: 72px; height: 72px"
+                                      >
+                                      </lord-icon>
+                                    </div>
+                                    <div class="mt-4">
+                                      <h5>
+                                        No Records Found
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </li>
+                        <li [ngbNavItem]="3" class="nav-item">
+                          <a
+                            ngbNavLink
+                            class="nav-link"
+                            data-bs-toggle="tab"
+                            role="tab"
+                            (click)="get_V2_ProjectProcessUserApprval()"
+                          >
+                            Access Right
+                          </a>
+                          <ng-template ngbNavContent>
+                            <app-list-access-right
+                              [projectDepartmentId]="projectDepartmentId"
+                              (sendBackAfterSubmitUser)="
+                                get_V2_ProjectProcessUserApprval()
+                              "
+                              [projectProcessUserApprvalList]="
+                                projectProcessUserApprvalList
+                              "
+                            ></app-list-access-right>
+                          </ng-template>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="card-body">
+                      <div class="tab-content text-muted">
+                        <div [ngbNavOutlet]="innercustomNav"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+        
+          <li
+            [ngbNavItem]="3"
+            class="nav-item"
+            *ngIf="dDetail.isAwarded == true"
+          >
+          
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Warranty
+              </a>
+              <ng-template ngbNavContent>
+              <app-warranty-list   [clientStatus]="clientStatus?.clientStatusId"
+              [projectId]="projectDepartmentId"
+              [dDetail]="this.dDetail"
+              (completeProcess)="getAfterComplete($event)"></app-warranty-list>
+              </ng-template>
+          </li>
+
+          <li
+            [ngbNavItem]="4"
+            class="nav-item"
+            *ngIf="dDetail.isAwarded == true"
+          >
+            <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+              Maintenance Agreement
+            </a>
+            <ng-template ngbNavContent>
+              <app-maintenance-agreement
+                [clientStatus]="clientStatus?.clientStatusId"
+                [projectId]="projectDepartmentId"
+                [dDetail]="this.dDetail"
+                (completeProcess)="getAfterComplete($event)"
+                [commeToProject]="true"
+                
+              ></app-maintenance-agreement>
+            </ng-template>
+          </li>
+
+          <li class="nav-item ms-auto">
+            <button
+              type="button"
+              class="btn nav-link hy-link me-3"
+              (click)="openViewMore(viewMoreModal)"
+            >
+              View More
+            </button>
+          </li>
+        </ul>
+      </div>
+      <!-- end card body -->
+    </div>
+    <!-- end card -->
+  </div>
+  <!-- end col -->
+</div>
+<!-- end row -->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="tab-content text-muted">
+      <div [ngbNavOutlet]="customNav"></div>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="text-end mb-3">
+      <button
+        class="btn btn-soft-primary waves-effect mx-3"
+        type="button"
+        (click)="goback()"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+  <!-- end col -->
+</div>
+<!-- end row -->
+
+<ng-template #viewMoreModal let-offcanvas>
+  <div class="offcanvas-header p-3 bg-info-subtle">
+    <h5 class="offcanvas-title" id="exampleModalLabel">Contact and SLA</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+      id="close-offcanvas"
+      (click)="offcanvas.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="offcanvas-body">
+    <div class="row">
+      <div class="col-xl-12 col-lg-12">
+        <div class="card-header align-items-center border-bottom-dashed">
+          <h4 class="card-title mb-0 flex-grow-1 pb-3">Contact</h4>
+        </div>
+        <div class="card-body text-muted">
+          <div class="table-responsive">
+            <table class="table table-borderless mb-0">
+              <tbody>
+                <tr>
+                  <td class="fw-medium w-30">HOD</td>
+                  <td>
+                    {{ dDetail.departHeadName || "-" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-30">Person</td>
+                  <td>
+                    {{ dDetail.contactPerson1 || "-" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-30">Designation</td>
+                  <td>
+                    {{ dDetail.contactDesignation1 || "-" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-30 pb-1">Mobile No</td>
+                  <td>
+                    {{ dDetail.contactMobileNo1 || "-" }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium w-30">Phone No</td>
+                  <td>
+                    {{ dDetail.contactPhoneNo1 || "-" }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium w-30">Email</td>
+                  <td>
+                    {{ dDetail.contactEMail1 || "-" }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium w-30">Fax No</td>
+                  <td>
+                    {{ dDetail.contactFaxNo1 || "-" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card-header align-items-center border-bottom-dashed mt-3">
+          <h4 class="card-title mb-0 flex-grow-1 pb-3">SLA</h4>
+        </div>
+        <div class="card-body text-muted">
+          <div class="table-responsive">
+            <table class="table table-borderless mb-0">
+              <tbody>
+                <tr>
+                  <td class="fw-medium w-30">Respond SLA Duration</td>
+                  <td>
+                    {{ dDetail.respondSLA || "-" }}
+                    {{ dDetail.respondSLADurationDesc }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-30">On Site SLA Duration</td>
+                  <td>
+                    {{ dDetail.onSiteSLA || "-" }}
+                    {{ dDetail.onSiteSLADurationDesc || "-" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-30">Expected SLA Duration</td>
+                  <td>
+                    {{ dDetail.exepectedComplitionSLA || "-" }}
+                    {{ dDetail.exepectedComplitionSLADurationDesc || "-" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="offcanvas-footer text-end mb-3"></div>
+</ng-template>

@@ -1,0 +1,13 @@
+.table-card {
+    min-height: 400px;
+    overflow-y: scroll;
+}
+.transparent-card {
+    border: none;
+    background: none;
+    color: transparent;
+    box-shadow: 0 0px 0px transparent;
+}
+.card {
+    height: 100%;
+}

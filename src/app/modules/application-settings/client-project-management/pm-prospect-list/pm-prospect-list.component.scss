@@ -1,0 +1,43 @@
+.ng-select {
+    width: 350px!important;
+    height: auto!important;
+  }
+  
+  .flex-grow-1 {
+    flex-grow: 1 !important;
+    width: 100px!important;;
+  }
+  
+  .client-list{
+    p{
+      margin-bottom: 0px;
+    }
+    .nav-tabs-custom {
+      border-top: 0px;
+    }
+  }
+  
+  
+
+  
+  .marginbottom {
+    margin-bottom: 0px;
+    padding: 4px;
+  
+  }
+  
+  .w-100 {
+    width: 310px!important;;
+  }
+  
+  @media only screen and (max-width: 600px) {
+    .marginbottom {
+      margin-bottom: 10px;
+      padding: 4px;
+  
+    }
+  
+    .w-100 {
+      width: 100% !important;
+    }
+  }

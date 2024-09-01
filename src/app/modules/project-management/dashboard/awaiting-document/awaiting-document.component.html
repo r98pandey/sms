@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-md-7">
+    <div class="card card-height-100">
+    <ul
+      ngbNav
+      #todoWorkFlowTabs="ngbNav"
+      [activeId]="1"
+      class="nav nav-tabs nav-border-top nav-border-top-primary mb-0"
+    >
+      <li [ngbNavItem]="1">
+        <a ngbNavLink>
+          <i class="ri-todo-line align-middle me-1"></i> Maintenance
+          Documentions</a
+        >
+        <ng-template ngbNavContent>
+      <app-maintenance-documentions></app-maintenance-documentions>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="2">
+        <a ngbNavLink>
+          <i class="ri-todo-line align-middle me-1"></i>Warranty Document</a
+        >
+        <ng-template ngbNavContent>
+          <app-warranty-document></app-warranty-document>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="3">
+        <a ngbNavLink>
+          <i class="ri-todo-line align-middle me-1"></i> Project Process Document
+        </a>
+        <ng-template ngbNavContent>
+          <app-project-document></app-project-document>
+        </ng-template>
+      </li>
+    </ul>
+    <div class="card-body">
+      <div class="tab-content text-muted">
+        <div [ngbNavOutlet]="todoWorkFlowTabs"></div>
+      </div>
+    </div>
+  </div></div>
+  <div class="col-md-5">
+    
+    <app-task-list-dashbaord></app-task-list-dashbaord>
+  </div>
+</div>
+

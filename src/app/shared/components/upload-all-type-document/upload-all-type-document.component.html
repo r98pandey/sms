@@ -1,0 +1,81 @@
+<div class="modal-header p-3 bg-primary-subtle">
+  <h5 class="modal-title">Upload</h5>
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="modal"
+    aria-label="Close"
+    (click)="close('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <div class="row" *ngIf="file == null">
+    <div class="col-md-12">
+      <div class="container-fluid container-view">
+        <ngx-dropzone
+          (change)="onSelect($event)"
+          [multiple]="false"
+          accept=".png,.jpg,.jpeg,.gif,.bmp,.pdf,.dwg,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.mp4,.avi,.mkv,.mov,.zip,.rar,.csv"
+          title="All files will be Uploaded"
+          data-toggle="tooltip"
+          data-placement="top"
+          class="dropzone"
+        >
+          <ngx-dropzone-label>
+            Drag and drop/Click here to upload
+          </ngx-dropzone-label>
+        </ngx-dropzone>
+      </div>
+    </div>
+  </div>
+
+  <div class="row me-0 mr-0 mt-3" *ngIf="file">
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <table class="table" style="text-align: justify">
+          <thead>
+            <tr>
+              <th>File Name</th>
+
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="title align-top" [title]="file.name">
+                <p class="text-truncate d-block">{{ file.name }}</p>
+              </td>
+
+              <td class="title align-top">
+                <i
+                  class="ri-delete-bin-line text-danger me-2 fs-16"
+                  type="button"
+                  ngbTooltip="Remove"
+                  (click)="onRemove()"
+                ></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-danger mr-2 mb-2 mb-md-0"
+    (click)="close('cancel')"
+  >
+    Cancel
+  </button>
+  <button
+    type="button"
+    ngbAutofocus
+    [disabled]="file == null"
+    class="btn btn-success mr-2 mb-2 mb-md-0"
+    (click)="upload()"
+  >
+    Upload
+  </button>
+</div>

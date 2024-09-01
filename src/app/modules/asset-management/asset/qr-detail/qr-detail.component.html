@@ -1,0 +1,78 @@
+
+<div id="contentToConvert">
+    <div class="row mt-3">
+        <div class="col-md-12 d-flex justify-content-between py-1 mb-2">
+            <h3>QrCode Details</h3>
+            <button class="btn btn-primary showprint" (click)="closeIcon;downloadPdf()">Download</button>
+        </div>
+
+        <ng-container *ngFor="let asset of list">
+            <div class="col-md-3 mb-2 pr-0 showprint">
+                <div class="card p-3">
+                    <div class="row d-flex align-items-end">
+                        <div class="col-7 col-md-7">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h6>Scan me here </h6>
+                                <i class="feather fa-2x icon-arrow-right"></i>
+                            </div>
+                            <span class="text-primary f-8">{{asset?.assetTagId}}</span>
+                        </div>
+                        <div class="col-5 col-md-5">
+                            <img src="{{imageUrl}}{{asset?.qrCodeImgPath}}" alt="client" class="qr-img">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-2 pr-0 print">
+                <div class="card p-3">
+                    <div class="row d-flex align-items-end">
+                        <div class="col-md-7">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h6>Scan me here </h6>
+                                <i class="feather fa-2x icon-arrow-right"></i>
+                            </div>
+                            <span class="text-primary f-8">{{asset?.assetTagId}}</span>
+                        </div>
+                        <div class="col-md-5">
+                            <img src="{{imageUrl}}{{asset?.qrCodeImgPath}}" alt="client" class="qr-img">
+                        </div>
+                    </div>
+                </div>
+            </div> 
+
+          
+        </ng-container>
+
+        <hr class="showprint">
+        <div class="col-md-12  d-flex justify-content-between py-1 mb-2 ">
+            <p class="showprint">Showing {{from}} to {{to}} of {{totalRecordsFromApi}} entries</p>
+
+            <div class="d-flex showprint">
+                <span class="showprint" *ngIf="!advanceSearchOn"> <ngb-pagination [collectionSize]="totalRecordsFromApi" 
+                        [pageSize]="pageSize" [(page)]="page" [maxSize]="2" [rotate]="true"
+                        (pageChange)="loadPage($event)" *ngIf="totalRecordsFromApi>pageSize"></ngb-pagination>
+                </span>
+                <span  class="showprint"  *ngIf="advanceSearchOn">
+                    <ngb-pagination [collectionSize]="totalRecordsFromApi" [pageSize]="pageSize" [(page)]="page"
+                        [maxSize]="2" [rotate]="true" (pageChange)="loadPage2($event)"
+                        *ngIf="totalRecordsFromApi>pageSize"></ngb-pagination>
+                </span>
+                <div class="dataTable-dropdown ml-2 showprint">
+                    <label>
+                        <select class="dataTable-selector" [(ngModel)]="pageSize" style="width: auto"
+                            (ngModelChange)="loadData(pageSize,from-1);">
+                            <option [value]="5">5</option>
+                            <option selected [value]="10">10</option>
+                            <option [value]="15">15</option>
+                            <option [value]="20">20</option>
+                            <option [value]="25">25</option>
+                        </select> </label>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>

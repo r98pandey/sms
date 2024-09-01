@@ -1,0 +1,503 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  class="displayShown"
+  title="Preventive Management"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row mt-1 displayShown">
+  <div class="col-lg-12">
+    <div class="card mt-n4 mx-n4">
+      <div class="bg-warning-subtle">
+        <div class="card-body pb-0 px-4">
+          <div class="row mb-4">
+            <div class="d-flex justify-content-end">
+              <a
+                href="javascript:void(0);"
+                class="text-primary text-decoration-underline fw-medium text-end me-3"
+                (click)="printReport()"
+              >
+                <i class="ri-printer-fill text-primary fs-18"></i
+              ></a>
+
+              <a
+                href="javascript:void(0);"
+                class="text-primary text-decoration-underline fw-medium text-end"
+                (click)="refreshThePage()"
+              >
+                <i class="ri-refresh-line text-primary fs-18"></i
+              ></a>
+            </div>
+            <div class="col-md">
+              <div class="row align-items-center">
+                <div class="col-md">
+                  <div>
+                    <h4 class="fw-bold">
+                      {{
+                        masterScheduleList?.configPreventivePDescription || "-"
+                      }}
+                    </h4>
+                    <div class="hstack gap-3 flex-wrap">
+                      <div>
+                        <i class="ri-building-line align-bottom me-1"></i>
+                        {{ masterScheduleList?.companyName || "-" }}
+                      </div>
+                      <div class="vr"></div>
+                      <div>
+                        <i class="ri-building-2-line align-bottom me-1"></i
+                        >{{ masterScheduleList?.clientName || "-" }}
+                      </div>
+
+                      <div class="vr"></div>
+                      <div>
+                        <i class="ri-community-line align-bottom me-1"></i
+                        >{{ masterScheduleList?.projectName || "-" }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="displayShown">
+  <div class="row">
+    <div class="col-xxl-8">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="fw-semibold text-uppercase mb-3">Remark</h6>
+              <p class="text-muted mb-2">
+                {{ masterScheduleList.remark || "-" }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 mt-2" *ngIf="masterScheduleList.verifiedRemark">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="fw-semibold text-uppercase mb-3">Verified Remark</h6>
+              <p class="text-muted mb-2">
+                {{ masterScheduleList.verifiedRemark || "-" }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-md-12"
+          *ngFor="let list of assetTicketItem; let i = index"
+        >
+          <div class="card joblist-card">
+            <div
+              class="card-body"
+              [id]="'ass' + i"
+              (click)="openCardWithIndexOpen(i)"
+              (click)="scrollToSection(i)"
+            >
+              <div class="d-flex mb-0">
+                <div class="avatar-sm">
+                  <div class="avatar-title bg-light rounded">
+                    <img
+                      [src]="
+                        list.assetImagePath
+                          ? imageUrl + list.assetImagePath
+                          : '../../../../../../assets/images/placeholderimage.png'
+                      "
+                      alt=""
+                      class="avatar-xxs companyLogo-img"
+                    />
+                  </div>
+                </div>
+                <div class="ms-3 flex-grow-1">
+                  <a href="javascript:void(0);">
+                    <h5 class="job-title">{{ list.assetName }}</h5>
+                  </a>
+                  <p class="company-name text-primary mb-0">
+                    <span *ngIf="list.assetTagId">
+                      {{ list.assetTagId }} |</span
+                    >
+                    <span class="text-muted">
+                      <span
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            list?.scheduleItemStatusId
+                          )
+                        "
+                        >{{ list?.scheduleItemStatusName }}
+                      </span>
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <!-- <p class="text-muted job-description">{{list.content}}</p> -->
+            </div>
+            <div
+              class="card-footer border-top-dashed"
+              *ngIf="assetTicketItem[i].selected"
+            >
+              <ul class="list-group list-group-flush border-dashed">
+                <li
+                  class="list-group-item ps-0"
+                  *ngFor="
+                    let data of scheduleAndAssetCheckList[list.scheduleItemId]
+                  "
+                >
+                  <div class="row align-items-center g-3">
+                    <div class="col">
+                      <h5 class="text-reset fs-14 mt-0 mb-1">
+                        {{ data.preventiveTypeName }}
+                        <i
+                          class="ri-video-line text-primary align-bottom"
+                          ngbTooltip="Play the video clip"
+                          *ngIf="data.videoFileURL"
+                          (click)="openModaVideeo(data, VideoPlayer)"
+                        ></i>
+                      </h5>
+                      <span
+                        class="fs-12"
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            data.scheduleItemCheckStatusId
+                          )
+                        "
+                        >{{ data.scheduleItemCheckStatusName }}</span
+                      >
+                      <p>
+                        <span class="fs-13 text-muted" *ngIf="data.modifiedBy">
+                          {{ data.modifiedBy }} |
+                        </span>
+                        <span class="fs-13 text-muted" *ngIf="data.modifiedDate"
+                          >{{ data.modifiedDate }} |</span
+                        >
+                        <span
+                          class="fs-12"
+                          [class]="
+                            returnStatusBadgeClassesStatus(
+                              data.scheduleItemCheckStatusId
+                            )
+                          "
+                          >{{ data.scheduleItemCheckStatusName }}</span
+                        >
+                      </p>
+
+                      <a
+                        href="javascript:void(0);"
+                        class="text-muted fs-14 mb-0"
+                        *ngIf="data.note"
+                        >Note:{{ data.note }}</a
+                      >
+                    </div>
+                    <div class="col-sm-auto">
+                      <div class="avatar-group">
+                        <div class="avatar-group-item">
+                          <a
+                            href="javascript: void(0);"
+                            class="d-block"
+                            (click)="
+                              open(
+                                data.pic_url
+                                  ? imageUrl + data?.pic_url
+                                  : '../../../../../../assets/images/placeholderimage.png'
+                              )
+                            "
+                          >
+                            <img
+                              [src]="
+                                data.pic_url
+                                  ? imageUrl + data?.pic_url
+                                  : '../../../../../../assets/images/placeholderimage.png'
+                              "
+                              alt=""
+                              class="rounded avatar-xs"
+                            />
+                          </a>
+                        </div>
+                        <div class="avatar-group-item">
+                          <a
+                            href="javascript: void(0);"
+                            class="d-block"
+                            (click)="
+                              open(
+                                data.pic_url1
+                                  ? imageUrl + data?.pic_url1
+                                  : '../../../../../../assets/images/placeholderimage.png'
+                              )
+                            "
+                          >
+                            <img
+                              [src]="
+                                data.pic_url1
+                                  ? imageUrl + data?.pic_url1
+                                  : '../../../../../../assets/images/placeholderimage.png'
+                              "
+                              alt=""
+                              class="rounded avatar-xs"
+                            />
+                          </a>
+                        </div>
+                        <div class="avatar-group-item">
+                          <a
+                            href="javascript: void(0);"
+                            class="d-block"
+                            (click)="
+                              open(
+                                data.pic_url2
+                                  ? imageUrl + data?.pic_url2
+                                  : '../../../../../../assets/images/placeholderimage.png'
+                              )
+                            "
+                          >
+                            <img
+                              [src]="
+                                data.pic_url2
+                                  ? imageUrl + data?.pic_url2
+                                  : '../../../../../../assets/images/placeholderimage.png'
+                              "
+                              alt=""
+                              class="rounded avatar-xs"
+                            />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end row -->
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- pagination -->
+        <div class="col-md-12">
+          <ngb-pagination
+            *ngIf="assetTicketItem"
+            class="d-flex justify-content-end pt-2"
+            [collectionSize]="collectionSize"
+            [(page)]="page"
+            [pageSize]="pageSize"
+            (pageChange)="getAssetData()"
+            [rotate]="true"
+            [maxSize]="2"
+            aria-label="Custom pagination"
+          >
+            <ng-template ngbPaginationPrevious let-page let-pages="pages">
+              <i class="ci-arrow-left me-2"></i>
+              Prev
+            </ng-template>
+            <ng-template ngbPaginationNext>
+              Next
+              <i class="ci-arrow-right ms-2"></i>
+            </ng-template>
+          </ngb-pagination>
+        </div>
+      </div>
+    </div>
+    <div class="col-xxl-4">
+      <div class="card ribbon-box right">
+        <div
+          class="card-header d-flex justify-content-between align-items-baseline"
+        >
+          <h5 class="card-title mb-0">Schedule Details</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-borderless mb-0">
+              <tbody>
+                <tr>
+                  <td class="fw-medium w-10">Schedule Start</td>
+                  <td>
+                    {{ masterScheduleList?.scheduleDate || "-" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-10">Maintenace Type</td>
+                  <td>
+                    {{ masterScheduleList?.maintenanceType || "-" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-10">Support Type</td>
+                  <td id="t-client">
+                    {{ masterScheduleList?.supportType || "-" }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium w-10">Frequency</td>
+                  <td>
+                    {{ masterScheduleList?.frequency || "-" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-10">Frequency Data</td>
+                  <td>
+                    {{ masterScheduleList?.frequencyData || "-" }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium w-10">Status</td>
+                  <td>
+                    <span
+                      class="fs-12"
+                      [class]="
+                        returnStatusBadgeClassesStatus(
+                          masterScheduleList.scheduleStatusId
+                        )
+                      "
+                      >{{ masterScheduleList.scheduleStatusName }}</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-medium w-10">Checklist type</td>
+
+                  <td>
+                    {{
+                      pm_ScheduleAndAssetCheckList[0]?.preventiveCategoryName
+                    }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium w-10">Start By</td>
+
+                  <td>
+                    {{ masterScheduleList?.startBy || "-" }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium w-10">Start Date Time</td>
+
+                  <td>
+                    {{ masterScheduleList?.startDateTime || "-" }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium w-10">End By</td>
+
+                  <td>
+                    {{ masterScheduleList?.endBy || "-" }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fw-medium w-10">End Date Time</td>
+
+                  <td>
+                    {{ masterScheduleList?.endDatetime || "-" }}
+                  </td>
+                </tr>
+
+                <tr *ngIf="masterScheduleList?.scheduleVerifiedBy">
+                  <td class="fw-medium w-10">Verified By</td>
+
+                  <td>
+                    {{ masterScheduleList?.scheduleVerifiedBy || "-" }}
+                  </td>
+                </tr>
+                <tr *ngIf="masterScheduleList?.scheduleVerifiedDateTime">
+                  <td class="fw-medium w-10">Verified Date Time</td>
+
+                  <td>
+                    {{ masterScheduleList?.scheduleVerifiedDateTime || "-" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!--end card-body-->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="text-end mb-3 displayShown">
+  <button
+    class="btn btn-soft-primary waves-effect mx-3"
+    type="button"
+    (click)="goback()"
+  >
+    Back
+  </button>
+</div>
+
+<div class="row">
+  <div class="col-lg-12 displayPrint">
+    <app-view-print-schedule
+      [masterScheduleList]="masterScheduleList"
+      [assetTicketItem]="assetTicketItem"
+      [scheduleAndAssetCheckList]="scheduleAndAssetCheckList"
+      [pm_ScheduleAndAssetCheckList]="pm_ScheduleAndAssetCheckList"
+    ></app-view-print-schedule>
+  </div>
+</div>
+
+<ng-template #VideoPlayer role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">
+      {{ storeInfomationVideo.preventiveTypeName }}
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div id="instructions">
+      <video
+        id="my_video_1"
+        class="video-js vjs-default-skin"
+        width="100%"
+        height="267px"
+        controls
+        preload="none"
+        data-setup='{ "aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }'
+      >
+        <source src="{{ linkVideo }}" type="video/mp4" />
+      </video>
+      <!-- <button (click)="playPause()">Play/Pause</button>
+      <button (click)="makeBig()">Big</button>
+      <button (click)="makeSmall()">Small</button>
+      <button (click)="makeNormal()">Normal</button>
+      <button (click)="restart();">Restart</button>
+      <button (click)="skip(-10)">Rewind</button>
+      <button (click)="skip(10)">Fastforward</button> -->
+    </div>
+  </div>
+
+  <!-- <div class="video mt-2">
+      <video controls (click)="toggleVideo()" #videoPlayer
+      preload="none" width="100%" height="267px" 
+      data-setup='{ "aspectRatio":"100:267", "playbackRates": [1, 1.5, 2] }'>
+        <source src="{{linkVideo}}" type="video/mp4" />
+        Browser not supported
+      </video>
+    </div> -->
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

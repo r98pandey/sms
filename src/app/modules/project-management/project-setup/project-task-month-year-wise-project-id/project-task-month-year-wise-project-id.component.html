@@ -1,0 +1,424 @@
+<div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div
+              (click)="callAfterClickYearMonth(index)"
+              class="col-md text-nowrap carryall cursor"
+              [class.carryall-active]="currentIndex == index"
+              *ngFor="
+                let totalWorkingHours of totalWorkingHours12Month_ProjectTaskList;
+                index as index
+              "
+            >
+              <div
+                class="pt-2 pb-2"
+                ngbTooltip="{{ totalWorkingHours.totalHoursWorkedTime }}"
+              >
+                {{ totalWorkingHours.yearMonthDisplay }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 mt-2">
+      <div class="card">
+        <div class="card-header text-center">
+          <h5 class="card-title mb-0">
+            Details Of {{ selectedIndexData?.yearMonthDisplay }}
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="card">
+                <div class="card-header">
+                  <h6 class="card-title mb-0">
+                    Working Hours Detail List [
+                    {{ selectedIndexData?.totalHoursWorkedTime }}]
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <div
+                    class="table-responsive table-card mb-0"
+                    *ngIf="
+                      selectedIndexData?.totalHoursWorkedTime !=
+                      '0 hours 0 minutes'
+                    "
+                  >
+                    <div>
+                      <table class="table">
+                        <thead>
+                          <tr class="bg-light text-muted text-uppercase">
+                            <th>Name</th>
+  
+                            <th>Check In/Out</th>
+                            <th>Task</th>
+                            <th>Schedule</th>
+  
+                            <th>Total Working</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let user of totalWorkingHoursDetailList">
+                            <td class="customer_name align-top">
+                              <ng-container *ngIf="user.fullName">
+                                <div
+                                  class="d-flex align-items-center"
+                                  *ngIf="user.profileImageUrl"
+                                >
+                                  <div class="flex-grow-0">
+                                    <div class="d-flex align-items-center">
+                                      <div
+                                        class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0 online"
+                                      >
+                                        <img
+                                          (click)="
+                                            open(apiUrl + user.profileImageUrl)
+                                          "
+                                          F
+                                          [src]="apiUrl + user.profileImageUrl"
+                                          class="rounded-circle avatar-xs"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <div class="flex-grow-1 overflow-hidden">
+                                        <h5 class="text-truncate mb-0 fs-14">
+                                          <a
+                                            class="text-primary username"
+                                            data-bs-toggle="offcanvas"
+                                            href="javascript:void(0);"
+                                            aria-controls="userProfileCanvasExample"
+                                          >
+                                            {{ user.fullName }}</a
+                                          >
+                                        </h5>
+                                        <p class="fs-12 mb-0 text-muted">
+                                          {{ user.designationName }}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="d-flex align-items-center"
+                                  *ngIf="!user.profileImageUrl"
+                                >
+                                  <div class="flex-grow-0">
+                                    <div class="d-flex align-items-center">
+                                      <div
+                                        class="flex-shrink-0 chat-user-img-without user-own-img align-self-center me-3 ms-0 online rounded-circle avatar-title-custom"
+                                      >
+                                        {{ user.fullName?.charAt(0)
+                                        }}{{ user.fullName?.charAt(1) }}
+                                      </div>
+                                      <div class="flex-grow-1 overflow-hidden">
+                                        <h5 class="text-truncate mb-0 fs-14">
+                                          <a
+                                            class="text-primary username"
+                                            data-bs-toggle="offcanvas"
+                                            href="javascript:void(0);"
+                                            aria-controls="userProfileCanvasExample"
+                                          >
+                                            {{ user.fullName }}</a
+                                          >
+                                        </h5>
+                                        <p class="fs-12 mb-0 text-muted">
+                                          {{ user.designationName }}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </ng-container>
+                            </td>
+  
+                            <td class="align-top">
+                              <p class="mb-0 fs-12" *ngIf="user.startDateTime">
+                                {{ user.startDateTime }}
+                              </p>
+                              <p class="mb-0 fs-12" *ngIf="user.endDateTime">
+                                {{ user.endDateTime }}
+                              </p>
+                            </td>
+  
+                            <td
+                              class="align-top title"
+                              *ngIf="user.taskType == 'Sub-Task'"
+                            >
+                              <div>
+                                <h5 class="fs-13 mb-0 padding-bottom-5">
+                                  <a
+                                    (click)="
+                                      openViewHandleSubTask(
+                                        user.taskLinkId,
+                                        user.projectTaskId,
+                                        user
+                                      )
+                                    "
+                                    href="javascript:void(0)"
+                                    class="fw-medium link-primary mb-0 me-2"
+                                    >{{ user.taskNo }}</a
+                                  >
+                                </h5>
+                              </div>
+  
+                              <p class="mb-0" style="    white-space: break-spaces;">
+                                <span class="text-dark fs-12"
+                                  ><b>{{ user.taskTitle }}</b></span
+                                >
+                              </p>
+                            </td>
+  
+                            <td
+                              class="align-top title" 
+                              *ngIf="user.taskType == 'Main-Task'"
+                            >
+                              <div>
+                                <h5 class="fs-13 mb-0 padding-bottom-5">
+                                  <a
+                                    (click)="
+                                      openViewHandleTask(user.projectTaskId, user)
+                                    "
+                                    href="javascript:void(0)"
+                                    class="fw-medium link-primary mb-0 me-2"
+                                    >{{ user.taskNo }}</a
+                                  >
+                                </h5>
+                              </div>
+  
+                              <p class="mb-0" style="    white-space: break-spaces;">
+                                <span class="text-dark fs-12" 
+                                  ><b>{{ user.taskTitle }}</b></span
+                                >
+                              </p>
+                            </td>
+  
+                            <td *ngIf="user.taskType != 'Main-Task' && user.taskType != 'Sub-Task'"></td>
+  
+                            <td class="align-top">
+                              
+                              <ng-container
+                                *ngIf="
+                                  user.scheduleNo != 'Total Techs' &&
+                                  user.scheduleNo != 'Grand Total'
+                                "
+                              >
+                              <p class="mb-0 " *ngIf="user.scheduleNo">
+                                  <span class="" ngbTooltip="Schedule No">
+                                    <b>{{ user.scheduleNo }}</b>
+                                    </span>
+                                </p>
+                                <p
+                                  class="mb-0 text-dark fs-12 "  style="    white-space: break-spaces;"
+                                  *ngIf="user.scheduleNo"
+                                  ngbTooltip="Schedule Name"
+                                >{{
+                                  user.projectScheduleName || '-'
+                                }}
+                                  
+                                </p>
+                              </ng-container>
+                              <ng-container
+                                *ngIf="
+                                  user.scheduleNo == 'Total Techs' ||
+                                  user.scheduleNo == 'Grand Total'
+                                "
+                                ><b>{{ user.scheduleNo }}</b></ng-container
+                              >
+                            </td>
+                            <td class="align-top">
+                              <p class="mb-0 fs-12" *ngIf="user.taskType">
+                                <span
+                                  class="badge bg-success me-2"
+                                  *ngIf="user.taskType === 'Sub-Task'"
+                                  >{{ user.taskType }}</span
+                                >
+  
+                                <span
+                                  class="badge bg-primary me-2"
+                                  *ngIf="user.taskType === 'Main-Task'"
+                                  >{{ user.taskType }}</span
+                                >
+                              </p>
+  
+                              <p class="mb-0 fs-12" *ngIf="user.hoursWorkedTime">
+                                {{ user.hoursWorkedTime }}
+                              </p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+  
+                  <div
+                    class="py-4 text-center"
+                    *ngIf="
+                      selectedIndexData?.totalHoursWorkedTime ==
+                      '0 hours 0 minutes'
+                    "
+                  >
+                    <div>
+                      <lord-icon
+                        src="https://cdn.lordicon.com/msoeawqm.json"
+                        trigger="loop"
+                        colors="primary:#405189,secondary:#0ab39c"
+                        style="width: 72px; height: 72px"
+                      >
+                      </lord-icon>
+                    </div>
+                    <div class="mt-4">
+                      <h5>No Records Found</h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-header">
+                  <h6 class="card-title mb-0">
+                    Working Hours By Technician -[{{
+                      selectedIndexData?.totalTechnicians
+                    }}]
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <div
+                    class="table-responsive table-card mb-0"
+                    *ngIf="selectedIndexData?.totalTechnicians != 0"
+                  >
+                    <div *ngIf="totalWorkingHoursByTech_ProjectTask?.length != 0">
+                      <table class="table">
+                        <thead>
+                          <tr class="bg-light text-muted text-uppercase">
+                            <th>Name</th>
+  
+                            <th class="text-center">Total Working</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            *ngFor="
+                              let user of totalWorkingHoursByTech_ProjectTask
+                            "
+                          >
+                            <td class="customer_name align-top">
+                              <ng-container *ngIf="user.fullName">
+                                <div
+                                  class="d-flex align-items-center"
+                                  *ngIf="user.profileImageUrl"
+                                >
+                                  <div class="flex-grow-0">
+                                    <div class="d-flex align-items-center">
+                                      <div
+                                        class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0 online"
+                                      >
+                                        <img
+                                          (click)="
+                                            open(apiUrl + user.profileImageUrl)
+                                          "
+                                          [src]="apiUrl + user.profileImageUrl"
+                                          class="rounded-circle avatar-xs"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <div class="flex-grow-1 overflow-hidden">
+                                        <h5 class="text-truncate mb-0 fs-14">
+                                          <a
+                                            class="text-primary username"
+                                            data-bs-toggle="offcanvas"
+                                            href="javascript:void(0);"
+                                            aria-controls="userProfileCanvasExample"
+                                          >
+                                            {{ user.fullName }}</a
+                                          >
+                                        </h5>
+                                        <p class="fs-12 mb-0 text-muted">
+                                          {{ user.designationName }}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="d-flex align-items-center"
+                                  *ngIf="!user.profileImageUrl"
+                                >
+                                  <div class="flex-grow-0">
+                                    <div class="d-flex align-items-center">
+                                      <div
+                                        class="flex-shrink-0 chat-user-img-without user-own-img align-self-center me-3 ms-0 online rounded-circle avatar-title-custom"
+                                      >
+                                        {{ user.fullName?.charAt(0)
+                                        }}{{ user.fullName?.charAt(1) }}
+                                      </div>
+                                      <div class="flex-grow-1 overflow-hidden">
+                                        <h5 class="text-truncate mb-0 fs-14">
+                                          <a
+                                            class="text-primary username"
+                                            data-bs-toggle="offcanvas"
+                                            href="javascript:void(0);"
+                                            aria-controls="userProfileCanvasExample"
+                                          >
+                                            {{ user.fullName }}</a
+                                          >
+                                        </h5>
+                                        <p class="fs-12 mb-0 text-muted">
+                                          {{ user.designationName }}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </ng-container>
+  
+                              <ng-container *ngIf="!user.fullName">
+                                <b class="ms-2">Total Time</b>
+                              </ng-container>
+                            </td>
+  
+                            <td class="align-top">
+                              <p
+                                class="mb-0 fs-14"
+                                *ngIf="user.totalHoursWorkedTime"
+                              >
+                                {{ user.totalHoursWorkedTime }}
+                              </p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div
+                    class="text-center"
+                    *ngIf="selectedIndexData?.totalTechnicians == 0"
+                  >
+                    <div class="py-4 text-center">
+                      <div>
+                        <lord-icon
+                          src="https://cdn.lordicon.com/msoeawqm.json"
+                          trigger="loop"
+                          colors="primary:#405189,secondary:#0ab39c"
+                          style="width: 72px; height: 72px"
+                        >
+                        </lord-icon>
+                      </div>
+                      <div class="mt-4">
+                        <h5>No Records Found</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

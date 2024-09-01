@@ -1,0 +1,727 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  title="Audit View"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row mt-1">
+  <div class="col-lg-12">
+    <div class="card mt-n4 mx-n4">
+      <div class="bg-warning-subtle">
+        <div class="card-body pb-0 px-4">
+          <div class="row mb-4">
+            <div class="col-md">
+              <div class="row align-items-center">
+                <!-- <div class="col-md-auto">
+                  <div class="avatar-md mb-md-0 mb-4">
+                    <div class="avatar-title bg-white rounded-circle">
+                      <img
+                        [src]="
+                          auditData?.companyLogoURL
+                            ? imageUrl + auditData?.companyLogoURL
+                            : '../../../../../../assets/images/placeholderimage.png'
+                        "
+                        [alt]="auditData?.companyLogoURL"
+                        class="avatar-sm"
+                      />
+                    </div>
+                  </div>
+                </div> -->
+                <div class="col-md">
+                  <div>
+                    <h4 class="fw-bold">
+                      {{ auditData?.assetAuditName || "NA" }}
+                    </h4>
+                    <div class="hstack gap-3 flex-wrap">
+                      <div>
+                        <i class="ri-building-line align-bottom me-1"></i>
+                        {{ auditData?.companyName || "NA" }}
+                      </div>
+                      <div class="vr"></div>
+                      <div>
+                        <i class="ri-building-2-line align-bottom me-1"></i
+                        >{{ auditData?.clientName || "NA" }}
+                      </div>
+
+                      <div class="vr"></div>
+                      <div>
+                        <i class="ri-community-line align-bottom me-1"></i
+                        >{{ auditData?.departmentName || "NA" }}
+                      </div>
+                      <div class="vr"></div>
+                      <div>
+                        <i class="ri-community-line align-bottom me-1"></i
+                        >{{ auditData?.departmentName || "NA" }}
+                      </div>
+                      <div class="vr"></div>
+                      <div>
+                        <i class="ri-calendar-line align-bottom me-1"></i
+                        >{{ auditData?.createdDate || "NA" }}
+                      </div>
+
+                      <div class="vr"></div>
+                      <div>
+                        <span
+                          class="fs-12"
+                          [class]="
+                            returnStatusBadgeClassesStatus(
+                              auditData.auditStatusId
+                            )
+                          "
+                          >{{ auditData.assetStatus }}</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ul
+            ngbNav
+            #customNav="ngbNav"
+            [activeId]="activeId"
+            class="nav nav-tabs-custom border-bottom-0"
+            role="tablist"
+          >
+            <!-- View Ticket  -->
+            <li [ngbNavItem]="1" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Details
+              </a>
+
+              <ng-template ngbNavContent>
+                <div class="row">
+                  <div class="col-lg-5 mb-3 stretch-card">
+                    <div class="card">
+                      <div class="card-header">
+                        <h6 class="card-title mb-0">Audit Overview</h6>
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-lg-6 mb-2">
+                            <div class="card">
+                              <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                  <div class="avatar-sm flex-shrink-0">
+                                    <span
+                                      class="avatar-title bg-light text-primary rounded-circle fs-3"
+                                    >
+                                      <i
+                                        class="ri-thumb-up-line align-middle"
+                                      ></i>
+                                    </span>
+                                  </div>
+                                  <div class="flex-grow-1 ms-3">
+                                    <p
+                                      class="text-uppercase fw-semibold fs-12 text-success mb-1"
+                                    >
+                                      Audited
+                                    </p>
+                                    <h4 class="mb-0">
+                                      <span
+                                        *ngIf="auditData.audited != 0"
+                                        [countUp]="auditData.audited"
+                                        class="counter-value"
+                                      
+                                        [options]="option"
+                                      ></span>
+
+                                      <span *ngIf="auditData.audited == 0"
+                                        >0</span
+                                      >
+                                    </h4>
+                                  </div>
+                                  <div
+                                    class="flex-shrink-0 align-self-end"
+                                  ></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 mb-2">
+                            <div class="card">
+                              <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                  <div class="avatar-sm flex-shrink-0">
+                                    <span
+                                      class="avatar-title bg-light text-primary rounded-circle fs-3"
+                                    >
+                                      <i
+                                        class="ri-pantone-line align-middle"
+                                      ></i>
+                                    </span>
+                                  </div>
+                                  <div class="flex-grow-1 ms-3">
+                                    <p
+                                      class="text-uppercase fw-semibold fs-12 text-warning mb-1"
+                                    >
+                                      Pending
+                                    </p>
+                                    <h4 class="mb-0">
+                                      <span
+                                        *ngIf="auditData.pending != 0"
+                                        [countUp]="auditData.pending"
+                                        class="counter-value"
+                                      
+                                        [options]="option"
+                                      ></span>
+
+                                      <span *ngIf="auditData.pending == 0"
+                                        >0</span
+                                      >
+                                    </h4>
+                                  </div>
+                                  <div
+                                    class="flex-shrink-0 align-self-end"
+                                  ></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="card">
+                              <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                  <div class="avatar-sm flex-shrink-0">
+                                    <span
+                                      class="avatar-title bg-light text-primary rounded-circle fs-3"
+                                    >
+                                      <i
+                                        class="ri-thumb-down-line align-middle"
+                                      ></i>
+                                    </span>
+                                  </div>
+                                  <div class="flex-grow-1 ms-3">
+                                    <p
+                                      class="text-uppercase fw-semibold fs-12 text-danger mb-1"
+                                    >
+                                      Not Match
+                                    </p>
+                                    <h4 class="mb-0">
+                                      <span
+                                        *ngIf="auditData.notMatch != 0"
+                                        [countUp]="auditData.notMatch"
+                                        class="counter-value"
+                                      
+                                        [options]="option"
+                                      ></span>
+                                      <span *ngIf="auditData.notMatch == 0"
+                                        >0</span
+                                      >
+                                    </h4>
+                                  </div>
+                                  <div
+                                    class="flex-shrink-0 align-self-end"
+                                  ></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-6">
+                            <div class="card">
+                              <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                  <div class="avatar-sm flex-shrink-0">
+                                    <span
+                                      class="avatar-title bg-light text-primary rounded-circle fs-3"
+                                    >
+                                      <i
+                                        class="ri-discuss-fill align-middle"
+                                      ></i>
+                                    </span>
+                                  </div>
+                                  <div class="flex-grow-1 ms-3">
+                                    <p
+                                      class="text-uppercase fw-semibold fs-12 mb-1 text-info"
+                                    >
+                                      Not Found
+                                    </p>
+                                    <h4 class="mb-0">
+                                      <span
+                                        *ngIf="auditData.notFound != 0"
+                                        [countUp]="auditData.notFound"
+                                        class="counter-value"
+                                      
+                                        [options]="option"
+                                      ></span>
+
+                                      <span *ngIf="auditData.notFound == 0"
+                                        >0</span
+                                      >
+                                    </h4>
+                                  </div>
+                                  <div
+                                    class="flex-shrink-0 align-self-end"
+                                  ></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-7 mb-3 stretch-card">
+                    <div class="card">
+                      <div class="card-header">
+                        <h6 class="card-title mb-0">Signature</h6>
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-md-6" *ngIf="auditTypeAdminSignature">
+                            <div class="card border shadow-none mb-lg-0 right">
+                              <div class="card-body text-muted">
+                                <h5 class="fs-14 mb-2">
+                                  {{ auditData.companyName }}
+                                </h5>
+                                <div class="text-center mb-1">
+                                  <div class="position-relative d-inline-block">
+                                    <button
+                                      class="btn btn-success mt-2"
+                                      (click)="openSignatureUser()"
+                                      *ngIf="
+                                        auditTypeAdminSignature &&
+                                        !auditData.acknowledgeById
+                                      "
+                                    >
+                                      Signature Here...
+                                    </button>
+
+                                    <div
+                                      class="avatar-lg"
+                                      *ngIf="auditData.acknowledgeById"
+                                    >
+                                      <div
+                                        class="avatar-title bg-light rounded"
+                                      >
+                                        <img
+                                          (click)="
+                                            open(
+                                              imageUrl +
+                                                auditData.acknowledSignImageURL
+                                            )
+                                          "
+                                          src="{{ imageUrl }}{{
+                                            auditData.acknowledSignImageURL
+                                          }}"
+                                          class="avatar-md img-size-fixed"
+                                          *ngIf="
+                                            auditData.acknowledSignImageURL
+                                          "
+                                        />
+                                        <img
+                                          (click)="
+                                            open(
+                                              '../../../../../assets/images/placeholderimage.png'
+                                            )
+                                          "
+                                          src="../../../../../assets/images/placeholderimage.png"
+                                          class="avatar-md img-size-fixed"
+                                          *ngIf="
+                                            !auditData.acknowledSignImageURL
+                                          "
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <p class="text-center text-muted mb-0">
+                                  {{ auditData.acknowledgeDateTime }}
+                                </p>
+                                <p class="text-center text-dark mb-0">
+                                  <b>
+                                    {{ auditData.acknowledgeBy }}
+                                  </b>
+                                </p>
+                                <p class="text-center text-dark mb-0 fs-12">
+                                  <b>
+                                    {{ auditData.acknowledDesig }}
+                                  </b>
+                                </p>
+                                <p class="fs-10 text-muted">
+                                  {{ auditData.acknowledgeRemark }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div
+                            class="col-md-6"
+                            *ngIf="auditTypeClientSignature"
+                          >
+                            <div class="card border shadow-none mb-lg-0 right">
+                              <div class="card-body text-muted">
+                                <h5 class="fs-14 mb-2">
+                                  {{ auditData.clientName }}
+                                </h5>
+                                <div class="text-center mb-1">
+                                  <div class="position-relative d-inline-block">
+                                    <button
+                                      class="btn btn-success mt-2"
+                                      (click)="openSignatureUser()"
+                                      *ngIf="
+                                        auditTypeClientSignature &&
+                                        !auditData.verifiedById
+                                      "
+                                    >
+                                      Signature Here...
+                                    </button>
+
+                                    <div
+                                      class="avatar-lg"
+                                      *ngIf="auditData.verifiedById"
+                                    >
+                                      <div
+                                        class="avatar-title bg-light rounded"
+                                      >
+                                        <img
+                                          (click)="
+                                            open(
+                                              imageUrl +
+                                                auditData.verifiedSignImageURL
+                                            )
+                                          "
+                                          src="{{ imageUrl }}{{
+                                            auditData.verifiedSignImageURL
+                                          }}"
+                                          class="avatar-md img-size-fixed"
+                                          *ngIf="auditData.verifiedSignImageURL"
+                                        />
+                                        <img
+                                          (click)="
+                                            open(
+                                              '../../../../../assets/images/placeholderimage.png'
+                                            )
+                                          "
+                                          src="../../../../../assets/images/placeholderimage.png"
+                                          class="avatar-md img-size-fixed"
+                                          *ngIf="
+                                            !auditData.verifiedSignImageURL
+                                          "
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <p class="text-center text-muted mb-0">
+                                  {{ auditData.verifiedDateTime }}
+                                </p>
+                                <p class="text-center text-dark mb-0">
+                                  <b>
+                                    {{ auditData.verifiedBy }}
+                                  </b>
+                                </p>
+                                <p class="text-center text-dark mb-0 fs-12">
+                                  <b>
+                                    {{ auditData.verifiedDesig }}
+                                  </b>
+                                </p>
+
+                                <p class="fs-10 text-muted">
+                                  {{ auditData.verifiedRemark }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-end mb-3">
+                  <button
+                    class="btn btn-soft-primary waves-effect back-button"
+                    (click)="goBack()"
+                  >
+                    Back
+                  </button>
+                </div>
+                <!-- end row -->
+              </ng-template>
+            </li>
+            <!-- /View Ticket  -->
+            <!-- View Asset  -->
+            <li [ngbNavItem]="2" class="nav-item" *ngIf="assetAuditId">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Assets
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="card">
+                      <div class="card-body">
+                        <app-asset-audit-view
+                          [auditId]="assetAuditId"
+                        ></app-asset-audit-view>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-end mb-3">
+                  <button
+                    class="btn btn-soft-primary waves-effect back-button"
+                    (click)="goBack()"
+                  >
+                    Back
+                  </button>
+                </div>
+              </ng-template>
+            </li>
+            <!--End View Asset  -->
+              <li [ngbNavItem]="3">
+              <a ngbNavLink> Member List </a>
+              <ng-template ngbNavContent>
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div
+                          class="d-flex align-items-center justify-content-between mb-3 mt-2"
+                        >
+                          <div></div>
+                          <div class="mb-2">
+                            <button
+                              *ngIf="deleteButtonAddButtonShown"
+                              class="btn btn-success btn-sm"
+                              type="button"
+                              class="btn btn-soft-primary btn-sm"
+                              data-bs-toggle="modal"
+                              data-bs-target="#inviteMembersModal"
+                              (click)="openModalTechnician(TechnicianListModal)"
+                            >
+                              <i class="ri-add-fill align-bottom me-1"></i>
+                              Add Member
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="table-responsive table-card">
+                          <table class="table align-middle mb-0">
+                            <thead class="table-light text-muted">
+                              <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Designation</th>
+                                <th scope="col">Phone Number</th>
+                                <th
+                                  scope="col"
+                                  *ngIf="deleteButtonAddButtonShown"
+                                >
+                                  Action
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <ng-container
+                                *ngIf="mX_WOTechAssignment.length == 0"
+                              >
+                                <tr>
+                                  <td colspan="4" class="text-center">
+                                    No Member Assign
+                                  </td>
+                                </tr>
+                              </ng-container>
+                              <ng-container
+                                *ngIf="mX_WOTechAssignment.length != 0"
+                              >
+                                <tr
+                                  *ngFor="let workTech of mX_WOTechAssignment"
+                                >
+                                  <th scope="row">
+                                    <div class="d-flex align-items-center">
+                                      <img
+                                        [src]="
+                                          workTech.profileImageUrl
+                                            ? imageUrl +
+                                              workTech.profileImageUrl
+                                            : '../../../../../../assets/images/placeholderimage.png'
+                                        "
+                                        alt=""
+                                        style="width: 40px; height: 40px"
+                                        class="rounded-circle avatar-xxs"
+                                      />
+                                      <div class="flex-grow-1 ms-2">
+                                        <a
+                                          href="javascript:void(0);"
+                                          class="fw-medium"
+                                          >{{
+                                            workTech.techName
+                                              ? workTech.techName
+                                              : workTech.fullName
+                                          }}
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </th>
+                                  <td>{{ workTech.designationName }}</td>
+                                  <td>{{ workTech.phoneNumber }}</td>
+                                  <td *ngIf="deleteButtonAddButtonShown">
+                                    <a
+                                      *ngIf="!workTech.isTechAvailable"
+                                      href="javascript:void(0)"
+                                      class="dropdown-item cursor-pointer"
+                                      (click)="openModalDeleteConf(workTech)"
+                                      ><i
+                                        class="ri-delete-bin-fill align-bottom me-2 text-danger"
+                                      ></i>
+                                    </a>
+                                  </td>
+                                </tr>
+                              </ng-container>
+                            </tbody>
+                          </table>
+                          <!--end table-->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="4">
+              <a ngbNavLink> Task List </a>
+              <ng-template ngbNavContent>
+                <div class="card">
+                  <div class="card-body">
+                    <app-task-end-audit
+                    [ticketWOStartEndTask]="mx_WOStartEndTask"
+                    [masterAuditList]="auditData"
+                    [workorderId]="assetAuditId"
+                    (afterSubmitAudit)="afterSubmitAudit($event)"
+                    ></app-task-end-audit>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="tab-content text-muted">
+      <div [ngbNavOutlet]="customNav"></div>
+    </div>
+  </div>
+  <div class="col-lg-12"></div>
+</div>
+<ng-template #TechnicianListModal role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Add Members</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div class="search-box mb-3">
+      <input
+        type="text"
+        class="form-control bg-light border-light"
+        (keyup)="filterTechnician($event)"
+        [(ngModel)]="technicianSearchText"
+        placeholder="Search member here..."
+      />
+      <i class="ri-search-line search-icon"></i>
+    </div>
+    <ngx-simplebar class="mx-n4 px-4" style="height: 400px">
+      <div class="vstack gap-3">
+        <div *ngFor="let tech of filteredTechnicianList; let i = index">
+          <div
+            class="d-flex align-items-center"
+            (click)="selectTechnician(filteredTechnicianList, i, tech)"
+          >
+            <div class="flex-shrink-0 me-3">
+              <div class="d-flex align-items-center gap-1">
+                <div class="form-check form-check-flat form-check-primary">
+                  <label class="form-check-label">
+                    <input
+                      type="checkbox"
+                      value="{{ tech }}"
+                      [(ngModel)]="filteredTechnicianList[i].checked"
+                      [disabled]="filteredTechnicianList[i].disabled"
+                    
+                      class="form-check-input"
+                    />
+                    <i class="input-frame"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="avatar-xs flex-shrink-0 me-3">
+              <img
+                src="{{
+                  tech.profileImageUrl
+                    ? imageUrl + tech.profileImageUrl
+                    : '../../../../../assets/images/placeholderimage.png'
+                }}"
+                style="width: 40px; height: 40px"
+                alt=""
+                class="img-fluid rounded-circle"
+              />
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="fs-14 mb-0">
+                <a href="javascript:void(0);" class="text-body d-block">
+                  {{ tech.fullName }}
+                </a>
+                <p class="mt-0 mb-0">{{ tech.designation }}</p>
+              </h5>
+            </div>
+            <div class="flex-shrink-0 me-3 mb-0">
+              <p class="mb-0">
+                <span
+                  ><i class="ri-phone-fill me-1"></i
+                  >{{ tech.phoneNumber }}</span
+                >
+              </p>
+              <!-- <p class="mb-0"><span><i class=" ri-mail-check-fill me-1"></i>{{ tech.email }}</span></p> -->
+            </div>
+          </div>
+        </div>
+        <div
+          class="text-center mt-3 text-muted"
+          *ngIf="
+            technicianList &&
+            filteredTechnicianList &&
+            technicianSearchText.length > 0
+              ? !filteredTechnicianList.length
+              : !technicianList.length
+          "
+        >
+          <p>No Member Found</p>
+        </div>
+      </div>
+    </ngx-simplebar>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+
+    <button
+      class="btn btn-success w-xs me-3"
+      type="submit"
+      (click)="sweetAlertUpdateTechinionDetails()"
+      [disabled]="selectedTech.length == 0"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>

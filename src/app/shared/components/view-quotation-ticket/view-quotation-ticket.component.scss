@@ -1,0 +1,27 @@
+@media only screen and (max-width: 600px) {
+   
+    .text-desc{
+        width: 150px;
+    }
+}
+
+.department-text{
+    width: 30px;
+}
+
+.text-desc{
+    word-wrap: break-word;
+    white-space: break-spaces;
+}
+.text-start{
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+td.title {
+    cursor: auto;
+    max-width: 200px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: break-spaces!important;;
+}

@@ -1,0 +1,49 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="btn-close"
+      (click)="close('Close click', $event)"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="text-center">
+      <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+      <div class="mt-2 fs-15 mx-2 mx-sm-3">
+        <h5>{{ title }}</h5>
+        <p class="text-muted mx-4 mb-3">{{ subTitle }}</p>
+        <p class="text-muted mx-4 mb-3">{{ subTitle1 }}</p>
+        <div *ngIf="showProjectCategory">
+          <label>
+            <input type="radio" name="projectCategory" [(ngModel)]="projectCategory" value="Ad-hoc"> Ad-hoc Project
+          </label>
+          <label class="ms-3">
+            <input type="radio" name="projectCategory" [(ngModel)]="projectCategory" value="Maintenance"> Maintenance Project
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+      <button
+        class="btn w-sm btn-danger fw-medium text-decoration-none"
+        (click)="close('close', $event)"
+        id="deleteRecord-close"
+      >
+        <i class="ri-close-line me-1 align-middle" *ngIf="CancelName == 'Close'"></i>
+        {{ CancelName }}
+      </button>
+      <button
+        type="button"
+        class="btn w-sm btn-primary"
+        id="delete-product"
+        [disabled]="showProjectCategory && !projectCategory"
+        (click)="confirm()"
+      >
+        Yes {{ buttonName ? "," + buttonName : "" }}!
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,974 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm-3 col-xxl-3">
+            <h5 class="card-title mb-0">Spare Part List</h5>
+          </div>
+          <div
+            class="col-sm-9 col-xxl-9 d-flex gap-2 flex-wrap justify-content-end"
+          >
+            <button
+              type="button"
+              class="btn btn-success add-btn"
+              (click)="confirmForAdd(modalAddConfirm, $event)"
+              *ngIf="viewButton"
+              #button
+            >
+              <i class="ri-add-line align-bottom me-1 a1"></i> Add Spare Part
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="card-body border border-dashed border-end-0 border-start-0"> -->
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th>Name</th>
+                        <th>Warranty Date</th>
+                        <th>Warranty Duration</th>
+                        <th>Status</th>
+                        <th *ngIf="viewButton"></th>
+                        <th *ngIf="viewButtonShown"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let asset of rows">
+                        <!-- <td>
+                          {{ asset.sparePartQrCode }}
+                        </td> -->
+
+                        <td>
+                          {{ asset.sparePartName }}
+                        </td>
+                        <td>
+                          {{ asset.warrentyExpDate }}
+                        </td>
+                        <td>
+                          {{ asset.warrentyDuration }} Month
+                        </td>
+                        <td class="status">
+                          <span
+                            class="badge text-uppercase bg-success-subtle text-success"
+                            >{{ asset.sparePartStatusName }}</span
+                          >
+                        </td>
+
+                        <td *ngIf="viewButton">
+                          <span>
+                            <div class="dropdown" ngbDropdown>
+                              <button
+                                class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                ngbDropdownToggle
+                              >
+                                <i class="ri-more-fill"></i>
+                              </button>
+                              <ul
+                                class="dropdown-menu dropdown-menu-end"
+                                ngbDropdownMenu
+                              >
+                                <li>
+                                  <a
+                                    class="dropdown-item cursor-pointer"
+                                    (click)="
+                                      viewHandler(asset, modalViewConfirm)
+                                    "
+                                    ><i
+                                      class="ri-eye-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    View
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    (click)="
+                                      editHandler(asset, modalEditConfirm)
+                                    "
+                                    class="dropdown-item cursor-pointer"
+                                    ><i
+                                      class="ri-pencil-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    Edit</a
+                                  >
+                                </li>
+                                <li class="dropdown-divider"></li>
+                                <li>
+                                  <a
+                                    class="dropdown-item cursor-pointer"
+                                    (click)="
+                                      confirm(
+                                        deleteModel,
+                                        asset.assetSparePartId
+                                      )
+                                    "
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#removeItemModal"
+                                    ><i
+                                      class="ri-delete-bin-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    Delete</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </span>
+                        </td>
+                        <td *ngIf="viewButtonShown">
+                          <span>
+                            <div class="dropdown" ngbDropdown>
+                              <button
+                                class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                ngbDropdownToggle
+                              >
+                                <i class="ri-more-fill"></i>
+                              </button>
+                              <ul
+                                class="dropdown-menu dropdown-menu-end"
+                                ngbDropdownMenu
+                              >
+                                <li>
+                                  <a
+                                    class="dropdown-item cursor-pointer"
+                                    (click)="
+                                      viewHandler(asset, modalViewConfirm)
+                                    "
+                                    ><i
+                                      class="ri-eye-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    View
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div *ngIf="rows.length === 0" class="text-center">
+                    <p>No Spare Part Added</p>
+                  </div>
+                </div>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col col-sm-12 col col-md-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecords }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <!-- <div class="col col-sm-12 col col-md-6">
+                            <div class="text-sm-right float-end listjs-pagination">
+                              <ngb-pagination
+                                [collectionSize]="10"
+                                [page]="10"
+                                [pageSize]="10"
+                              >
+                              </ngb-pagination>
+                            </div>
+                          </div> -->
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- </div> -->
+    </div>
+  </div>
+</div>
+
+<!-- Add Form -->
+<ng-template #modalAddConfirm let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h4 class="modal-title a2" id="modal-title">Add Spare Part</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('cancel')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="addspareForm">
+      <div class="row">
+        <div class="col-lg-12">
+          <input
+            type="hidden"
+            id="memberid-input"
+            class="form-control"
+            value=""
+          />
+
+          <div class="text-center mb-4 pt-2">
+            <div class="position-relative d-inline-block">
+              <div class="position-absolute bottom-0 end-0">
+                <label
+                  *ngIf="isFirstImageVisible"
+                  class="mb-0"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="right"
+                  title="Remove Spare Image"
+                  (click)="crossFirstImage(backgroud_img0)"
+                >
+                  <div class="avatar-xs">
+                    <div
+                      class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                    >
+                      <i class="ri-close-circle-fill"></i>
+                    </div>
+                  </div>
+                </label>
+                <label
+                  *ngIf="!isFirstImageVisible"
+                  for="member-image-input"
+                  class="mb-0"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="right"
+                  title="Select Spare Image"
+                >
+                  <div class="avatar-xs">
+                    <div
+                      class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                    >
+                      <i class="ri-image-fill"></i>
+                    </div>
+                  </div>
+                </label>
+
+                <input
+                  class="form-control d-none"
+                  value=""
+                  id="member-image-input"
+                  type="file"
+                  formControlName="SparePartImageBase64"
+                  accept="image/png, image/gif, image/jpeg"
+                  (change)="onSelectFile($event)"
+                />
+              </div>
+              <div class="avatar-lg">
+                <div class="avatar-title bg-light">
+                  <img
+                    src="{{ backgroud_img0 }}"
+                    id="member-img"
+                    class="avatar-md h-auto"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <div class="col-lg-12 mb-2">
+              <label for="SparePartName" class="form-label"
+                >Spare Part Name <span class="starRequried">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="SparePartName"
+                name="SparePartName"
+                formControlName="SparePartName"
+                placeholder="Spare Part Name"
+                [class.is-invalid]="
+                  SparePartName.invalid && SparePartName.touched
+                "
+                [class.is-valid]="SparePartName.valid && SparePartName.touched"
+              />
+
+              <div *ngIf="SparePartName.invalid && SparePartName.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="SparePartName['errors']['required']"
+                >
+                  Spare Part Name is required</small
+                >
+              </div>
+            </div>
+            <div class="col-lg-6 mb-2">
+              <label for="Specification" class="form-label"
+                >Specification <span class="starRequried">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="Specification"
+                formControlName="Specification"
+                placeholder="Specification "
+                [class.is-invalid]="
+                  Specification.invalid && Specification.touched
+                "
+                [class.is-valid]="Specification.valid && Specification.touched"
+              />
+
+              <div *ngIf="Specification.invalid && Specification.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="Specification['errors']['required']"
+                >
+                  Specification is Required</small
+                >
+              </div>
+            </div>
+            <div class="col-lg-6 mb-2">
+              <label for="PartNumber" class="form-label"
+                >Part Number <span class="starRequried">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="PartNumber"
+                formControlName="PartNumber"
+                placeholder="Part Number "
+                [class.is-invalid]="PartNumber.invalid && PartNumber.touched"
+                [class.is-valid]="PartNumber.valid && PartNumber.touched"
+              />
+
+              <div *ngIf="PartNumber.invalid && PartNumber.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="PartNumber['errors']['required']"
+                >
+                  Part Number is Required</small
+                >
+              </div>
+            </div>
+            <div class="col-lg-6 mb-2">
+              <label for="Modal" class="form-label"
+                >Modal <span class="starRequried">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="Modal"
+                formControlName="Modal"
+                placeholder="Modal "
+                [class.is-invalid]="Modal.invalid && Modal.touched"
+                [class.is-valid]="Modal.valid && Modal.touched"
+              />
+
+              <div *ngIf="Modal.invalid && Modal.touched">
+                <small class="text-danger" *ngIf="Modal['errors']['required']">
+                  Modal is Required</small
+                >
+              </div>
+            </div>
+
+            <div class="col-lg-6 mb-2">
+              <label for="WarrentyDuration" class="form-label"
+                >Warranty Duration <span class="starRequried">*</span></label
+              >
+              <div class="input-group">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="WarrentyDuration"
+                  formControlName="WarrentyDuration"
+                  placeholder="Warranty Duration "
+                  [class.is-invalid]="
+                    WarrentyDuration.invalid && WarrentyDuration.touched
+                  "
+                  [class.is-valid]="
+                    WarrentyDuration.valid && WarrentyDuration.touched
+                  "
+                />
+                <span class="input-group-text">Month</span>
+              </div>
+
+              <div *ngIf="WarrentyDuration.invalid && WarrentyDuration.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="WarrentyDuration['errors']['required']"
+                >
+                  Warranty Duration is Required</small
+                >
+              </div>
+            </div>
+            <div class="col-lg-6 mb-2">
+              <label for="WarrentyExpDate" class="form-label"
+                >Warranty Exp Date <span class="starRequried">*</span></label
+              >
+              <!-- <input
+                type="date"
+                class="form-control"
+                id="WarrentyExpDate"
+                formControlName="WarrentyExpDate"
+                placeholder="Warranty Exp Date "
+                [class.is-invalid]="
+                  WarrentyExpDate.invalid && WarrentyExpDate.touched
+                "
+                [class.is-valid]="
+                  WarrentyExpDate.valid && WarrentyExpDate.touched
+                "
+              /> -->
+              <input
+                class="form-control flatpickr-input"
+                type="text"
+                formControlName="WarrentyExpDate"
+                placeholder="Warranty Exp Date"
+                mwlFlatpickr
+                [altInput]="false"
+                [enableTime]="false"
+                [convertModelValue]="true"
+                [dateFormat]="'d-m-Y'"
+                [class.is-invalid]="
+                  WarrentyExpDate.invalid && WarrentyExpDate.touched
+                "
+                [class.is-valid]="
+                  WarrentyExpDate.valid && WarrentyExpDate.touched
+                "
+              />
+
+              <div *ngIf="WarrentyExpDate.invalid && WarrentyExpDate.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="WarrentyExpDate['errors']['required']"
+                >
+                  Warranty Exp Date is Required</small
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="hstack gap-2 justify-content-end">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+              (click)="modal.dismiss('cancel')"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success a1"
+              [disabled]="addspareForm.invalid"
+              ngbAutofocus
+              (click)="modal.close('Ok', $event)"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+<!--/ Add Form -->
+
+<!-- edit Form -->
+<ng-template #modalEditConfirm let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h4 class="modal-title" id="modal-title">Edit Spare Part</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('cancel')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="editspareForm">
+      <div class="row">
+        <div class="col-lg-12">
+          <input
+            type="hidden"
+            id="memberid-input"
+            class="form-control"
+            value=""
+          />
+
+          <div class="text-center mb-4 pt-2">
+            <div class="position-relative d-inline-block">
+              <div class="position-absolute bottom-0 end-0">
+                <label
+                  *ngIf="isSecondImageVisible"
+                  class="mb-0"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="right"
+                  title="Remove Spare Image"
+                  (click)="crossSecondImage(backgroud_img1)"
+                >
+                  <div class="avatar-xs">
+                    <div
+                      class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                    >
+                      <i class="ri-close-circle-fill"></i>
+                    </div>
+                  </div>
+                </label>
+                <label
+                  *ngIf="!isSecondImageVisible"
+                  for="member-image-input"
+                  class="mb-0"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="right"
+                  title="Select Spare Image"
+                >
+                  <div class="avatar-xs">
+                    <div
+                      class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                    >
+                      <i class="ri-image-fill"></i>
+                    </div>
+                  </div>
+                </label>
+
+                <input
+                  class="form-control d-none"
+                  value=""
+                  id="member-image-input"
+                  type="file"
+                  formControlName="SparePartImageBase64Edit"
+                  accept="image/png, image/gif, image/jpeg"
+                  (change)="onSelectFileEdit($event)"
+                />
+              </div>
+              <div class="avatar-lg">
+                <div class="avatar-title bg-light">
+                  <img
+                    src="{{ backgroud_img1 }}"
+                    id="member-img"
+                    class="avatar-md h-auto"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <div class="col-lg-12 mb-2">
+              <label for="SparePartNameEdit" class="form-label"
+                >Spare Part Name <span class="starRequried">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="SparePartNameEdit"
+                name="SparePartNameEdit"
+                formControlName="SparePartNameEdit"
+                placeholder="Spare Part Name"
+                [class.is-invalid]="
+                  SparePartNameEdit.invalid && SparePartNameEdit.touched
+                "
+                [class.is-valid]="
+                  SparePartNameEdit.valid && SparePartNameEdit.touched
+                "
+              />
+
+              <div
+                *ngIf="SparePartNameEdit.invalid && SparePartNameEdit.touched"
+              >
+                <small
+                  class="text-danger"
+                  *ngIf="SparePartNameEdit['errors']['required']"
+                  >spare Spare Part Name is required</small
+                >
+              </div>
+            </div>
+            <div class="col-lg-6 mb-2">
+              <label for="SpecificationEdit" class="form-label"
+                >Specification <span class="starRequried">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="SpecificationEdit"
+                formControlName="SpecificationEdit"
+                placeholder="Specification"
+                [class.is-invalid]="
+                  SpecificationEdit.invalid && SpecificationEdit.touched
+                "
+                [class.is-valid]="
+                  SpecificationEdit.valid && SpecificationEdit.touched
+                "
+              />
+
+              <div
+                *ngIf="SpecificationEdit.invalid && SpecificationEdit.touched"
+              >
+                <small
+                  class="text-danger"
+                  *ngIf="SpecificationEdit['errors']['required']"
+                >
+                  Specification is Required</small
+                >
+              </div>
+            </div>
+            <div class="col-lg-6 mb-2">
+              <label for="PartNumberEdit" class="form-label"
+                >Part Number <span class="starRequried">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="PartNumberEdit"
+                formControlName="PartNumberEdit"
+                placeholder="Part Number "
+                [class.is-invalid]="
+                  PartNumberEdit.invalid && PartNumberEdit.touched
+                "
+                [class.is-valid]="
+                  PartNumberEdit.valid && PartNumberEdit.touched
+                "
+              />
+
+              <div *ngIf="PartNumberEdit.invalid && PartNumberEdit.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="PartNumberEdit['errors']['required']"
+                >
+                  Part Number is Required</small
+                >
+              </div>
+            </div>
+            <div class="col-lg-6 mb-2">
+              <label for="ModalEdit" class="form-label"
+                >Modal <span class="starRequried">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="ModalEdit"
+                formControlName="ModalEdit"
+                placeholder="Modal"
+                [class.is-invalid]="ModalEdit.invalid && ModalEdit.touched"
+                [class.is-valid]="ModalEdit.valid && ModalEdit.touched"
+              />
+
+              <div *ngIf="ModalEdit.invalid && ModalEdit.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="ModalEdit['errors']['required']"
+                >
+                  Modal is Required</small
+                >
+              </div>
+            </div>
+            <div class="col-lg-6 mb-2">
+              <label for="WarrentyDurationEdit" class="form-label"
+                >Warranty Duration <span class="starRequried">*</span></label
+              >
+              <div class="input-group">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="WarrentyDurationEdit"
+                  formControlName="WarrentyDurationEdit"
+                  placeholder="Warranty Duration "
+                  [class.is-invalid]="
+                    WarrentyDurationEdit.invalid && WarrentyDurationEdit.touched
+                  "
+                  [class.is-valid]="
+                    WarrentyDurationEdit.valid && WarrentyDurationEdit.touched
+                  "
+                /><span class="input-group-text">Month</span>
+              </div>
+
+              <div
+                *ngIf="
+                  WarrentyDurationEdit.invalid && WarrentyDurationEdit.touched
+                "
+              >
+                <small
+                  class="text-danger"
+                  *ngIf="WarrentyDurationEdit['errors']['required']"
+                >
+                  Warranty Duration is Required</small
+                >
+              </div>
+            </div>
+            <div class="col-lg-6 mb-2">
+              <label for="WarrentyExpDateEdit" class="form-label"
+                >Warranty Exp Date <span class="starRequried">*</span></label
+              >
+              <!-- <input
+                type="date"
+                class="form-control"
+                id="WarrentyExpDateEdit"
+                formControlName="WarrentyExpDateEdit"
+                placeholder="Warranty Exp Date "
+                [class.is-invalid]="
+                  .invalid && WarrentyExpDateEdit.touched
+                "
+                [class.is-valid]="
+                  WarrentyExpDateEdit.valid && WarrentyExpDateEdit.touched
+                "
+              /> -->
+              <input
+                class="form-control flatpickr-input"
+                type="text"
+                formControlName="WarrentyExpDateEdit"
+                placeholder="Warranty Exp Date"
+                mwlFlatpickr
+                [altInput]="false"
+                [enableTime]="false"
+                [convertModelValue]="true"
+                [dateFormat]="'d-m-Y'"
+                [class.is-invalid]="
+                  WarrentyExpDateEdit.invalid && WarrentyExpDateEdit.touched
+                "
+                [class.is-valid]="
+                  WarrentyExpDateEdit.valid && WarrentyExpDateEdit.touched
+                "
+              />
+              <div
+                *ngIf="
+                  WarrentyExpDateEdit.invalid && WarrentyExpDateEdit.touched
+                "
+              >
+                <small
+                  class="text-danger"
+                  *ngIf="WarrentyExpDateEdit['errors']['required']"
+                >
+                  Warranty Exp Date is Required</small
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="hstack gap-2 justify-content-end">
+            <button
+              type="button"
+              class="btn btn-light"
+              data-bs-dismiss="modal"
+              (click)="modal.dismiss('cancel')"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success"
+              [disabled]="addspareForm.invalid"
+              ngbAutofocus
+              (click)="modal.close('Ok', $event)"
+            >
+              Submit
+            </button>
+          </div> -->
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      [disabled]="editspareForm.invalid"
+      ngbAutofocus
+      class="btn btn-primary mr-2 mb-2 mb-md-0 a1"
+      (click)="modal.close('Ok', $event)"
+    >
+      Update
+    </button>
+    <!-- <button type="button" class="btn btn btn-danger mr-2 mb-2 mb-md-0"
+      (click)="sweetAlertDeleteConfirmation(editSpareData.assetSparePartId)" (click)="modal.dismiss('cancel')">
+      Delete
+    </button> -->
+    <button
+      type="button"
+      class="btn btn btn-danger mr-2 mb-2 mb-md-0"
+      (click)="modal.dismiss('cancel')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+<!--/ edit Form -->
+
+<ng-template #modalViewImageConfirm let-modal>
+  <div class="card-header d-flex justify-content-between">
+    <div>
+      <h5 class="card-title mb-0" style="font-size: 20px">
+        {{ viewImageName }}
+      </h5>
+    </div>
+    <div>
+      <button class="btn btn-primary mr-3">Download QR Code</button>
+      <button
+        type="button"
+        class="float-right close"
+        aria-label="Close button"
+        aria-describedby="modal-title"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span class="float-right mt-1 mr-2" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+
+  <img class="modal-body p-0" src="{{ qrImagesUrl }}{{ viewImageValue }}" />
+</ng-template>
+
+<ng-template #modalViewConfirm let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h4 class="modal-title" id="modal-title">View Spare Part</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('cancel')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-md-12 mb-3">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="text-center">
+            <div class="position-relative d-inline-block">
+              <div class="position-absolute bottom-0 end-0"></div>
+              <div class="avatar-lg p-1">
+                <div class="avatar-title bg-light rounded-circle">
+                  <img
+                    [src]="
+                      spareDetails.sparePartImageURL &&
+                      spareDetails.sparePartImageURL.length
+                        ? qrImagesUrl + spareDetails?.sparePartImageURL
+                        : '../../../../../assets/images/placeholderimage.png'
+                    "
+                    id="companylogo-img"
+                    class="avatar-md rounded-circle object-fit-cover"
+                  />
+                </div>
+              </div>
+            </div>
+            <h5 class="fs-16 mt-3">{{ spareDetails?.sparePartName }}</h5>
+          </div>
+        </div>
+
+        <div class="col-md-12 mt-5">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="tx-11 font-weight-bold mb-0 text-uppercase"
+                >Part Number
+              </label>
+              <p class="text-muted">{{ spareDetails?.partNumber }}</p>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="tx-11 font-weight-bold mb-0 text-uppercase"
+                >Modal
+              </label>
+              <p class="text-muted">{{ spareDetails?.modal }}</p>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="tx-11 font-weight-bold mb-0 text-uppercase"
+                >Specification
+              </label>
+              <p class="text-muted">{{ spareDetails?.specification }}</p>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="tx-11 font-weight-bold mb-0 text-uppercase"
+                >Warranty Duration
+              </label>
+              <p class="text-muted">{{ spareDetails?.warrentyDuration }} Month</p>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="tx-11 font-weight-bold mb-0 text-uppercase"
+                >Warranty Expiry Date
+              </label>
+              <p class="text-muted">{{ spareDetails?.warrentyExpDate }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn btn-danger mr-2 mb-2 mb-md-0"
+      (click)="modal.dismiss('cancel')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #deleteModel let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="mt-2 text-center">
+        <img
+        src
+        ="../../../../assets/images/ticketChatpartImage.png"
+        class
+        ="img-fluid rounded chat-image-success">
+        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+          <h4>You are about to delete a Spare Part ?</h4>
+          <p class="text-muted mx-4 mb-0">
+            Deleting your spare part will remove all of your information from
+            our database.
+          </p>
+        </div>
+      </div>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+          (click)="modal.close('Close click')"
+        >
+          <i class="ri-close-line me-1 align-middle"></i> Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="deleteData(deleteId)"
+          (click)="modal.close('Close click')"
+        >
+          Yes, Delete It!
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>

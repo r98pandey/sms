@@ -1,0 +1,893 @@
+<div class="offcanvas-header h-color s4 mb-2">
+  <h6 class="card-title mb-0">Todo View</h6>
+  <div>
+    <i
+      class="ri-refresh-line align-bottom me-2 ms-3 cursor"
+      (click)="apiCall()"
+      style="font-size: large"
+    ></i>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="close('Cross click')"
+    ></button>
+  </div>
+</div>
+
+<div class="offcanvas-body pt-0 bg-color">
+  <div class="row mb-3">
+    <div class="col-md">
+      <div class="card mb-0">
+        <div class="card-body">
+          <div class="row align-items-center g-3">
+            <div class="col-md-auto">
+              <div
+                class="avatar-md"
+                *ngIf="
+                  followUpDetailObject?.followUpName &&
+                  followUpDetailObject?.followUpName.length
+                "
+              >
+                <span class="rounded">
+                  <ng-container>
+                    <app-avatar-photo
+                      [name]="
+                        toUpperCaseword(followUpDetailObject?.followUpName)
+                      "
+                    ></app-avatar-photo>
+                  </ng-container>
+                </span>
+              </div>
+            </div>
+            <div class="col-md">
+              <div>
+                <h4 class="fw-bold">
+                  {{ followUpDetailObject?.followUpName }}
+                </h4>
+                <div class="hstack gap-3 flex-wrap">
+                  <div>
+                    <i class="ri-building-line align-bottom me-1"></i>
+                    {{ followUpDetailObject?.companyName }}
+                  </div>
+                  <div class="vr"></div>
+                  <div>
+                    <i class="ri-building-2-line align-bottom me-1"></i
+                    >{{ followUpDetailObject?.clientName || "-" }}
+                  </div>
+                  <div class="vr"></div>
+                  <div>
+                    <i class="ri-building-2-line align-bottom me-1"></i
+                    >{{ followUpDetailObject?.departmentName || "-" }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-xl-9 col-lg-8 stretch-card">
+      <!-- Nav tabs -->
+      <div class="card">
+        <ul
+          ngbNav
+          #Border="ngbNav"
+          [(activeId)]="activeTabs"
+          class="nav nav-tabs nav-border-top nav-border-top-primary"
+        >
+          <li [ngbNavItem]="1" (click)="apiCall()">
+            <a ngbNavLink> Summary </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="card-body">
+                  <div class="text-muted">
+                    <div class="d-flex justify-content-between">
+                      <h6 class="mb-3 fw-semibold text-uppercase">
+                        Description
+                      </h6>
+                      <ng-container
+                        *ngIf="
+                          checkDescriptionButtonVisible(
+                            followUpDetailObject?.createdById
+                          )
+                        "
+                      >
+                        <div
+                          *ngIf="
+                            !(
+                              followUpDetailObject?.followUpStatusId == 19 ||
+                              followUpDetailObject?.followUpStatusId == 32
+                            )
+                          "
+                        >
+                          <a
+                            [ngbTooltip]="
+                              tooltipVisibleEditDescription
+                                ? 'The Edit Description function enables users to revise the written details of a Todo scenario.'
+                                : null
+                            "
+                            href="javascript:void(0)"
+                            (click)="
+                              tooltipVisibleEditDescription =
+                                !tooltipVisibleEditDescription
+                            "
+                            (mouseenter)="tooltipVisibleEditDescription = true"
+                            (mouseleave)="tooltipVisibleEditDescription = false"
+                            (click)="openModalPopup(UpdateDesc)"
+                            >Edit Description
+                          </a>
+                        </div>
+                      </ng-container>
+                    </div>
+
+                    <div class="mb-3" style="max-height: 300px; overflow-y: auto;">
+                      <div
+                        [innerHTML]="
+                          transformInnerHTML(followUpDetailObject?.description)
+                        "
+                      ></div>
+                    </div>
+
+                    <div class="pt-3 border-top border-top-dashed mt-4">
+                      <div class="row">
+                        <div class="col-lg-3 col-sm-6">
+                          <div>
+                            <p class="mb-2 text-uppercase fw-medium fs-13">
+                              Create Date
+                            </p>
+                            <h5 class="fs-15 mb-0">
+                              {{ followUpDetailObject?.createdDate }}
+                            </h5>
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                          <div>
+                            <p class="mb-2 text-uppercase fw-medium fs-13">
+                              Created By
+                            </p>
+                            <h5 class="fs-15 mb-0">
+                              {{ followUpDetailObject?.createdBy }}
+                            </h5>
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                          <div>
+                            <p class="mb-2 text-uppercase fw-medium fs-13">
+                              Event Type
+                            </p>
+                            <div class="badge bg-danger fs-12">
+                              {{ followUpDetailObject?.followUpType }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                          <div
+                            class="d-flex justify-content-start align-items-center"
+                          >
+                            <h6 class="mb-2 fw-semibold text-uppercase">
+                              Status
+                            </h6>
+
+                            <div
+                              class="mb-2"
+                              *ngIf="
+                                !(
+                                  followUpDetailObject?.followUpStatusId ==
+                                    19 ||
+                                  followUpDetailObject?.followUpStatusId == 32
+                                )
+                              "
+                            >
+                            <ng-container   *ngIf="
+                            checkUpdateStatusButtonVisible(
+                              followUpDetailObject?.createdById
+                            )
+                          ">
+                              <a
+                              
+                                class="fs-14 ms-2"
+                                ngbTooltip="
+                                  The Edit Status function allows users to modify the status of a Todo activity.
+                                "
+                                href="javascript:void(0)"
+                                (click)="
+                                  getProjectManagementStatus(UpdateStatus)
+                                "
+                                >Edit Status
+                              </a>
+                              </ng-container>
+                            </div>
+                          </div>
+                          <div>
+                            <span
+                              class="fs-12"
+                              [class]="
+                                returnStatusBadgeClassesStatus(
+                                  followUpDetailObject?.followUpStatusId
+                                )
+                              "
+                              >{{
+                                followUpDetailObject?.followUpStatusName
+                              }}</span
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- end card body -->
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="2" (click)="apiCall()">
+            <a ngbNavLink>Check List</a>
+            <ng-template ngbNavContent>
+              <app-todo-list
+                [followUpId]="followUpId"
+                [followUpMemberList]="followUpMemberList"
+                [followUpDetailObject]="followUpDetailObject"
+              ></app-todo-list>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="3" (click)="apiCall()">
+            <a ngbNavLink> Comment </a>
+            <ng-template ngbNavContent>
+              <div class="card-body p-4">
+                <h5 class="card-title mb-4">Discussion</h5>
+                <div
+                  class="text-center"
+                  *ngIf="ticketDiscussionProjFollowUp.length == 0"
+                >
+                  <img
+                    src="../../../../../assets/images/ticketChatpartImage.png"
+                    class="img-fluid rounded chat-image"
+                  />
+                </div>
+                <div *ngIf="ticketDiscussionProjFollowUp.length != 0">
+                  <div
+                    style="height: 300px; overflow-y: auto"
+                    class="px-3 mx-n3"
+                    #scrollframeProjFollowUp
+                  >
+                    <ng-container
+                      *ngFor="let chat of ticketDiscussionProjFollowUp"
+                    >
+                      <div class="d-flex mb-2" *ngIf="chat.isClient == false">
+                        <div class="flex-shrink-0">
+                          <img
+                            src="{{ apiurl }}{{ chat.profileImageUrl }}"
+                            alt=""
+                            class="avatar-xs rounded-circle"
+                          />
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                          <h5 class="fs-13">
+                            {{ chat.msgByName }}
+                            <small class="text-muted">{{
+                              chat.createDateTime
+                            }}</small>
+                          </h5>
+                          <div
+                            class="text-muted"
+                            [innerHTML]="chat.messageContain"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="mt-2 text-end" *ngIf="chat.isClient == true">
+                        <div class="d-flex justify-content-end">
+                          <div class="">
+                            <img
+                              src="{{ apiurl }}{{ chat.profileImageUrl }}"
+                              alt=""
+                              class="avatar-xs rounded-circle"
+                            />
+                          </div>
+                          <div class="ms-3 text-start">
+                            <h5 class="fs-13">
+                              {{ chat.msgByName }}
+                              <small class="text-muted"
+                                >{{ chat.createDateTime }}
+                              </small>
+                            </h5>
+                            <div
+                              class="text-muted"
+                              [innerHTML]="chat.messageContain"
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+
+                <div
+                  class="row g-3"
+                  *ngIf="
+                    !(
+                      followUpDetailObject?.followUpStatusId == 19 ||
+                      followUpDetailObject?.followUpStatusId == 32
+                    )
+                  "
+                >
+                  <div class="col-lg-12">
+                    <label for="exampleFormControlTextarea1" class="form-label"
+                      >Leave a Comment</label
+                    >
+                    <textarea
+                      class="form-control bg-light border-light"
+                      id="exampleFormControlTextarea1"
+                      [maxlength]="maxCharMessage"
+                      [(ngModel)]="MessageContainProjFollowUp"
+                      rows="3"
+                      placeholder="Enter comment"
+                    ></textarea>
+                    <label class="nopadding clrlbl">
+                      Characters Remaining:
+                      {{ MessageContainProjFollowUp.length }}/{{
+                        maxCharMessage
+                      }}</label
+                    >
+                  </div>
+                  <div class="col-lg-12 text-end">
+                    <button
+                      [disabled]="!MessageContainProjFollowUp"
+                      (click)="submitChatProjFollowUp()"
+                      class="btn btn-success"
+                    >
+                      Post Comment
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+        <div class="card-body">
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="Border"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-lg-4">
+      <div class="card">
+        <div
+          class="card-header align-items-center d-flex border-bottom-dashed p-2"
+        >
+          <h4 class="card-title mb-0 flex-grow-1">Members</h4>
+          <div
+            class="flex-shrink-0"
+            *ngIf="
+              checkAddDeleteMemberButtonVisible(
+                followUpDetailObject?.createdById
+              )
+            "
+          >
+            <button
+              *ngIf="
+                !(
+                  followUpDetailObject?.followUpStatusId == 19 ||
+                  followUpDetailObject?.followUpStatusId == 32
+                )
+              "
+              type="button"
+              class="btn btn-soft-success btn-sm mb-0"
+              data-bs-toggle="modal"
+              (click)="openModalMember()"
+              ngbTooltip="The Add Members feature allows those assigned to a Todo to access its information and provide comments specific to that Todo."
+            >
+              <i class="ri-add-fill me-1 align-bottom"></i> Add Member
+            </button>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <ngx-simplebar style="height: 235px" class="">
+            <div class="vstack gap-3">
+              <ng-container *ngIf="followUpMemberList.length != 0">
+                <ng-container *ngFor="let team of followUpMemberList">
+                  <div class="d-flex align-items-center">
+                    <div
+                      class="avatar-xs flex-shrink-0 me-3"
+                      *ngIf="team.profileImageUrl"
+                    >
+                      <img
+                        [src]="apiurl + team.profileImageUrl"
+                        class="img-fluid rounded-circle"
+                      />
+                    </div>
+
+                    <div
+                      class="avatar-xs flex-shrink-0 me-3"
+                      *ngIf="!team.profileImageUrl"
+                    >
+                      <div
+                        class="avatar-title bg-success-subtle text-success rounded-circle fs-13"
+                      >
+                        {{
+                          team?.fullName
+                            ? team?.fullName?.charAt(0).toUpperCase()
+                            : "N"
+                        }}{{
+                          team?.fullName
+                            ? team?.fullName?.charAt(1).toUpperCase()
+                            : "A"
+                        }}
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between w-90">
+                      <div>
+                        <p
+                          href="javascript:void(0);"
+                          class="text-body text-truncate d-block fs-14 mb-0"
+                        >
+                          <b> {{ team?.fullName }}</b>
+                        </p>
+                        <p class="text-muted mb-0">{{ team.designation }}</p>
+                      </div>
+                      <ng-container
+                        *ngIf="
+                          checkAddDeleteMemberButtonVisible(
+                            followUpDetailObject?.createdById
+                          )
+                        "
+                      >
+                        <div
+                          *ngIf="
+                            !(
+                              followUpDetailObject?.followUpStatusId == 19 ||
+                              followUpDetailObject?.followUpStatusId == 32
+                            )
+                          "
+                        >
+                          <i
+                            class="ri-close-circle-fill text-danger align-bottom fs-16 cursor-pointer"
+                            *ngIf="
+                              followUpDetailObject?.createdById != team.userId
+                            "
+                            (click)="
+                              openModalDeleteMember(
+                                team.projectFollowUpMemberId
+                              )
+                            "
+                          ></i>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngIf="followUpMemberList.length == 0">
+                <div class="py-4 text-center">
+                  <div>
+                    <lord-icon
+                      src="https://cdn.lordicon.com/msoeawqm.json"
+                      trigger="loop"
+                      colors="primary:#405189,secondary:#0ab39c"
+                      style="width: 72px; height: 72px"
+                    >
+                    </lord-icon>
+                  </div>
+                  <div class="mt-4">
+                    <h5>No Records Found</h5>
+                  </div>
+                </div>
+              </ng-container>
+              <!-- end member item -->
+            </div>
+            <!-- end list -->
+          </ngx-simplebar>
+        </div>
+        <!-- end card body -->
+      </div>
+      <div class="card">
+        <div class="card-header align-items-center d-flex border-bottom-dashed">
+          <h4 class="card-title mb-0 flex-grow-1">Attachments</h4>
+          <div class="flex-shrink-0">
+            <button
+              *ngIf="
+                !(
+                  followUpDetailObject?.followUpStatusId == 19 ||
+                  followUpDetailObject?.followUpStatusId == 32
+                )
+              "
+              ngbTooltip="Users are permitted to upload pertinent documents related to the Todo for informational purposes, such as meeting minutes, reports, and so forth."
+              type="button"
+              class="btn btn-soft-info btn-sm"
+              (click)="openModalUploadeAttachments()"
+            >
+              <i class="ri-upload-2-fill me-1 align-bottom"></i> Upload
+            </button>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <ngx-simplebar style="height: 235px" class="">
+            <div class="vstack gap-2">
+              <ng-container *ngIf="followUpDocList.length != 0">
+                <ng-container *ngFor="let doc of followUpDocList">
+                  <div class="border rounded border-dashed p-2">
+                    <div class="d-flex align-items-center">
+                      <div class="flex-shrink-0 me-3">
+                        <div class="avatar-sm">
+                          <div
+                            class="avatar-title bg-light text-secondary rounded fs-24"
+                          >
+                            <i
+                              class="ri-video-line"
+                              *ngIf="doc.type == 'Video'"
+                            ></i>
+
+                            <i
+                              class="ri-image-line a1"
+                              *ngIf="doc.type == 'Image'"
+                            ></i>
+
+                            <i
+                              class="ri-file-line"
+                              *ngIf="doc.type != 'Image' && doc.type != 'Video'"
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="flex-grow-1 overflow-hidden">
+                        <h5 class="fs-13 mb-1">
+                          <a
+                            href="javascript:void(0);"
+                            [title]="'View ' + doc.title"
+                            class="text-body text-truncate d-block"
+                            [ngbTooltip]="doc.title"
+                            >{{ doc.title }}</a
+                          >
+                        </h5>
+                        <div>{{ doc.type }}</div>
+                      </div>
+                      <div class="flex-shrink-0 ms-2">
+                        <div class="d-flex gap-1">
+                          <button
+                            type="button"
+                            [ngbTooltip]="'View ' + doc.type"
+                            (click)="openModaVideeo(doc.docURL, VideoPlayer)"
+                            *ngIf="doc.type == 'Video'"
+                            class="btn btn-icon text-muted btn-sm fs-18"
+                          >
+                            <i class="ri-video-line"></i>
+                          </button>
+
+                          <button
+                            [ngbTooltip]="'View ' + doc.type"
+                            (click)="open(doc.docURL)"
+                            *ngIf="doc.type == 'Image'"
+                            type="button"
+                            class="btn btn-icon text-muted btn-sm fs-18"
+                          >
+                            <i class="ri-image-line a2"></i>
+                          </button>
+
+                          <button
+                            [ngbTooltip]="'View ' + doc.type"
+                            (click)="downloadFileDocument(doc.docURL)"
+                            *ngIf="doc.type == 'Document'"
+                            type="button"
+                            class="btn btn-icon text-muted btn-sm fs-18"
+                          >
+                            <i class="ri-file-line"></i>
+                          </button>
+
+                          <div
+                            *ngIf="
+                              !(
+                                followUpDetailObject?.followUpStatusId == 19 ||
+                                followUpDetailObject?.followUpStatusId == 32
+                              )
+                            "
+                            class="dropdown dropdown-menu-end"
+                            ngbDropdown
+                          >
+                            <button
+                              class="btn btn-icon text-muted btn-sm fs-18 dropdown arrow-none"
+                              type="button"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                              ngbDropdownToggle
+                            >
+                              <i class="ri-more-fill"></i>
+                            </button>
+                            <ul class="dropdown-menu" ngbDropdownMenu>
+                              <li>
+                                <a
+                                  class="dropdown-item"
+                                  (click)="openModalUpdateTitleAttachments(doc)"
+                                  ><i
+                                    class="ri-pencil-fill align-bottom me-2 text-muted"
+                                  ></i>
+                                  Edit</a
+                                >
+                              </li>
+                              <li>
+                                <a
+                                  class="dropdown-item"
+                                  href="javascript:void(0);"
+                                  (click)="
+                                    openModalDeleteDocment(
+                                      doc.projectFollowUpDocId
+                                    )
+                                  "
+                                  ><i
+                                    class="ri-delete-bin-fill align-bottom me-2 text-muted"
+                                  ></i>
+                                  Delete</a
+                                >
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngIf="followUpDocList.length == 0">
+                <div class="py-4 text-center">
+                  <div>
+                    <lord-icon
+                      src="https://cdn.lordicon.com/msoeawqm.json"
+                      trigger="loop"
+                      colors="primary:#405189,secondary:#0ab39c"
+                      style="width: 72px; height: 72px"
+                    >
+                    </lord-icon>
+                  </div>
+                  <div class="mt-4">
+                    <h5>No Records Found.</h5>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </ngx-simplebar>
+        </div>
+        <!-- end card body -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!---------Invite Member Modal-------->
+<ng-template #UpdateStatus let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Update Status</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div class="row">
+      <div class="col-md-12">
+        <label class="form-label" for="assetStatus"
+          >Status
+          <span class="starRequried">*</span>
+        </label>
+        <ng-select
+          [items]="statusList"
+          bindLabel="assetStatus"
+          bindValue="assetStatusId"
+          [clearable]="true"
+          id="assetStatus"
+          [(ngModel)]="selectedStatus"
+          placeholder="Select Status"
+          class="custom"
+        ></ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light w-xs"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-success w-xs"
+      [disabled]="!selectedStatus"
+      (click)="submitUpdateStatus()"
+      (click)="modal.close('Close click')"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #UpdateDesc let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Update Description</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div class="row">
+      <div class="col-md-12">
+        <label class="form-label" for="formFile"
+          >Description
+          <span class="starRequried">*</span>
+        </label>
+        <ngx-simplebar style="height: 335px" class="">
+          <ckeditor
+            [editor]="Editor"
+            [config]="{
+              toolbar: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                '|',
+                'NumberedList',
+                'BulletedList'
+              ]
+            }"
+            [(ngModel)]="editiorDescription"
+          >
+          </ckeditor
+        ></ngx-simplebar>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light w-xs"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-success w-xs"
+      [disabled]="!editiorDescription"
+      (click)="modal.close('Close click')"
+      (click)="submitDescription()"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>
+
+<!---------Invite Member Modal-------->
+<ng-template #addInviteMemberButton let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Members</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <app-invite-member></app-invite-member>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light w-xs"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Cancel
+    </button>
+    <button type="button" class="btn btn-success w-xs">Invite</button>
+  </div>
+</ng-template>
+
+<!---------Invite Member Modal-------->
+<ng-template #uploadAttachmentsButton let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Attachment</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <app-uploade-attachments></app-uploade-attachments>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light w-xs"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Cancel
+    </button>
+    <button type="button" class="btn btn-success w-xs">Submit</button>
+  </div>
+</ng-template>
+
+<!---------Edit Attachment Modal-------->
+<ng-template #editAttachementModal let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Edit Attachment</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <app-edit-upload-attachements></app-edit-upload-attachements>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light w-xs"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Cancel
+    </button>
+    <button type="button" class="btn btn-success w-xs">Submit</button>
+  </div>
+</ng-template>
+
+<ng-template #VideoPlayer role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div id="instructions">
+      <video
+        id="my_video_1"
+        class="video-js vjs-default-skin"
+        width="100%"
+        height="267px"
+        controls
+        preload="none"
+        data-setup='{ "aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }'
+      >
+        <source src="{{ linkVideo }}" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

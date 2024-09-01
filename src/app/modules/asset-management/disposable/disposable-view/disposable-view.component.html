@@ -1,0 +1,150 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  title="Disposable Detail"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-md">
+            <div class="d-flex justify-content-between">
+              <h4 class="fw-bold">
+                {{ disposeBatchHeaderMaster?.batchName || "NA" }}
+              </h4>
+              <div class="d-flex">
+                <i
+                  class="ri-refresh-line text-primary fs-18 me-3"
+                  (click)="refreshThePage()"
+                ></i>
+
+                <i
+                  class="ri-printer-fill text-primary fs-18"
+                  (click)="downloadReport('PDF')"
+                ></i>
+              </div>
+            </div>
+
+            <div class="hstack gap-2 flex-wrap">
+              <div class="text-primary">
+                #
+                {{ disposeBatchHeaderMaster?.batchNo || "NA" }}
+              </div>
+              <div class="vr"></div>
+              <div>
+                <i class="ri-building-line align-bottom me-1"></i>
+                {{ disposeBatchHeaderMaster?.companyName || "NA" }}
+              </div>
+              <div class="vr"></div>
+              <div>
+                <i class="ri-building-2-line align-bottom me-1"></i
+                >{{ disposeBatchHeaderMaster?.clientName || "NA" }}
+              </div>
+
+              <div class="vr"></div>
+              <div>
+                <i class="ri-community-line align-bottom me-1"></i
+                >{{ disposeBatchHeaderMaster?.projectName || "NA" }}
+              </div>
+              <div class="vr"></div>
+              <div>
+                <i class="ri-calendar-line align-bottom me-1"></i
+                >{{ disposeBatchHeaderMaster?.createdDate || "NA" }}
+              </div>
+
+              <div class="vr"></div>
+              <div>
+                <i class="ri-user-line align-bottom me-1"></i
+                >{{ disposeBatchHeaderMaster?.fullName || "NA" }}
+              </div>
+              <div class="vr"></div>
+              <div>
+                <span
+                  class="fs-12"
+                  [class]="
+                    returnStatusBadgeClassesStatus(
+                      disposeBatchHeaderMaster.masterDisposeTransactionStatusId
+                    )
+                  "
+                  >{{
+                    disposeBatchHeaderMaster.masterDisposeTransactionStatusName
+                  }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nav tabs -->
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12 mt-2">
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive table-card">
+          <table class="table">
+            <thead>
+              <tr class="bg-light text-muted text-uppercase">
+                <th>Asset No</th>
+                <th>Asset</th>
+                <th>Sales</th>
+                <th>Dispose Status</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="disposeBatchHeaderAndAssetList.length != 0">
+              <tr *ngFor="let asset of disposeBatchHeaderAndAssetList">
+                <td class="align-top">
+                  <a href="javascript:void(0)" class="fw-medium link-primary">{{
+                    asset.assetTagId ? asset.assetTagId : "NA"
+                  }}</a>
+                </td>
+
+                <td
+                  class="title"
+                  [id]="'assetName_' + asset.id"
+                  [title]="asset.assetName"
+                >
+                  {{ asset.assetName }}
+                </td>
+                <td
+                  class="title"
+                  [id]="'salesProceed_' + asset.id"
+                  [title]="asset.salesProceed"
+                >
+                  {{ asset.salesProceed }}
+                </td>
+                <td class="title">
+                  <span
+                    [class]="returnStatusBadgeClassesStatus(asset.disposeID)"
+                    >{{ asset.disposeTypeName }}</span
+                  >
+                </td>
+                <td class="title">
+                  <span
+                    [class]="
+                      returnStatusBadgeClassesStatus(asset.assetStatusId)
+                    "
+                    >{{ asset.assetStatus }}</span
+                  >
+                </td>
+              </tr>
+            </tbody>
+            <tbody *ngIf="disposeBatchHeaderAndAssetList.length == 0">
+              <tr>
+                <td colspan="6" class="text-center">
+                  No Disposable Asset List
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

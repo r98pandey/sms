@@ -1,0 +1,510 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card p-0">
+      <div class="card-header border-0">
+        <div class="row align-items-center">
+          <div class="col-sm-3 col-xxl-3">
+            <h5 class="card-title mb-0">Todo Check List</h5>
+          </div>
+          <div
+            class="col-sm-9 col-xxl-9 d-flex gap-2 flex-wrap justify-content-end"
+          >
+            <div class="ms-1" *ngIf="checkAddButtonVisible(followUpDetailObject?.createdById)">
+              <button
+                *ngIf="
+                  !(
+                    followUpDetailObject?.followUpStatusId == 19 ||
+                    followUpDetailObject?.followUpStatusId == 32
+                  )
+                "
+                type="button"
+                class="btn btn-success add-btn"
+                id="create-btn"
+                (click)="openAddTask(addEditTaskModal)"
+                ngbTooltip="Adding to-do list, typically consists of a list of tasks or activities that need to be completed, along with deadlines or priorities."
+              >
+                <i class="ri-add-line align-bottom me-1"></i> Add Check List 
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th>CheckList </th>
+                        <th>Due Date</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngIf="todoList.length == 0">
+                        <tr>
+                          <td colspan="5" class="text-center">No Records Found</td>
+                        </tr>
+                      </ng-container>
+
+                      <ng-container *ngIf="todoList.length != 0">
+                        <tr *ngFor="let data of todoList">
+                          <td
+                            class="title align-top fw-medium link-primary"
+                            (click)="openAddTaskView(addTaskViewModal, data)"
+                          >
+                            {{ data.title }}
+                          </td>
+                          <td class="title align-top">
+                            {{ data.dueDate | date : "dd-MM-yyyy" }}
+                          </td>
+
+                          <td class="title align-top">
+                            <span
+                              class="badge text-uppercase"
+                              [ngClass]="{
+                                'bg-danger': data.priority === 'High',
+                                'bg-warning': data.priority === 'Medium',
+                                'bg-success': data.priority === 'Low'
+                              }"
+                              >{{ data.priority }}</span
+                            >
+                          </td>
+                          <td class="title align-top">
+                            <span
+                              class="fs-12"
+                              [class]="
+                                returnStatusBadgeClassesStatus(
+                                  data?.projectFollowUpTodoStatusId
+                                )
+                              "
+                              >{{ data?.projectFollowUpTodoStatusName }}</span
+                            >
+                          </td>
+
+                          <td>
+                            <ul class="list-inline hstack gap-2 mb-0">
+                              <li
+                                class="list-inline-item"
+                              
+                                
+                                aria-hidden="true"
+                              >
+                                <a
+                                  href="javascript:void(0);"
+                                  (click)="
+                                    openAddTaskView(addTaskViewModal, data)
+                                  "  ngbTooltip="View"
+                                  class="text-primary d-inline-block"
+                                >
+                                  <i class="ri-eye-fill fs-16"></i>
+                                </a>
+                              </li>
+
+                              <ng-container *ngIf="showDeleteButtonOnCheck(data.createdById)">
+                              <li
+                                class="list-inline-item edit"
+                              
+                                
+                                *ngIf="
+                                  !(
+                                    followUpDetailObject?.followUpStatusId ==
+                                      19 ||
+                                    followUpDetailObject?.followUpStatusId == 32
+                                  ) && data?.projectFollowUpTodoStatusId != 79
+                                "
+                              >
+                                <a   ngbTooltip="Done"
+                                  href="javascript:void(0);"
+                                
+                                  class="text-success d-inline-block edit-item-btn"
+                                  (click)="UpdateStatusConf(data)"
+                                >
+                                  <i class="ri-checkbox-circle-line fs-16"></i>
+                                </a>
+                              </li>
+                              </ng-container>
+                              <ng-container *ngIf="checkAddButtonVisible(data.createdById)">                            
+                              <li
+                                class="list-inline-item me-0"
+                                
+                              
+                                *ngIf="
+                                  !(
+                                    followUpDetailObject?.followUpStatusId ==
+                                      19 ||
+                                    followUpDetailObject?.followUpStatusId == 32
+                                  ) && data?.projectFollowUpTodoStatusId != 79
+                                "
+                              >
+                                <a ngbTooltip="Remove"
+                                href="javascript:void(0);"
+                                  class="text-danger d-inline-block remove-item-btn"
+                                  (click)="
+                                    openModalDeleteTask(
+                                      data.projectFollowUpToDoId
+                                    )
+                                  "
+                                >
+                                  <i class="ri-delete-bin-5-fill fs-16"></i>
+                                </a>
+                              </li>
+                              </ng-container>
+                            </ul>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col-sm-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecords }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col-sm-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="collectionSize"
+                        [(page)]="page"
+                        [pageSize]="pageSize"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="getLocalPagination()"
+                        *ngIf="totalRecords > pageSize"
+                      >
+                        <ng-template
+                          ngbPaginationPrevious
+                          let-page
+                          let-pages="pages"
+                        >
+                          <i class="ci-arrow-left me-2"></i>
+                          Prev
+                        </ng-template>
+                        <ng-template ngbPaginationNext>
+                          Next
+                          <i class="ci-arrow-right ms-2"></i>
+                        </ng-template>
+                      </ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Todo Data -->
+<ng-template #addEditTaskModal let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="createTaskLabel">Add Check List</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      id="createTaskBtn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form autocomplete="off" [formGroup]="todoFormTask">
+      <div class="row me-0 ms-0">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="task-title-input" class="form-label"
+              >Checklist
+              <span class="starRequried">*</span>
+            </label>
+            <input
+              type="text"
+              id="task-title-input"
+              class="form-control"
+              placeholder="Enter Checklist"
+              formControlName="frmTaskTitle"
+            />
+            <div *ngIf="frmTaskTitle.invalid && frmTaskTitle.touched">
+              <small
+                class="text-danger"
+                *ngIf="frmTaskTitle.errors?.['required']"
+              >
+              Checklist is required
+              </small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label"
+              >Due Date <span class="starRequried">*</span></label
+            >
+            <input
+              class="form-control flatpickr-input"
+              type="text"
+              formControlName="frmdueDate"
+              placeholder="Enter Due Date"
+              mwlFlatpickr
+              [altInput]="false"
+              [enableTime]="false"
+              [convertModelValue]="true"
+              [dateFormat]="'d-m-Y'"
+            />
+
+            <div *ngIf="frmdueDate.invalid && frmdueDate.touched">
+              <small
+                class="text-danger"
+                *ngIf="frmdueDate.errors?.['required']"
+              >
+                Title is Required
+              </small>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <!--end col-->
+
+            <label for="priority-field" class="form-label"
+              >Priority <span class="starRequried">*</span></label
+            >
+            <ng-select
+              [items]="arrayListDropDownPriority"
+              [clearable]="true"
+              id="priority-field"
+              formControlName="frmPriority"
+              placeholder="Select Priority"
+              class="custom"
+            ></ng-select>
+            <div *ngIf="frmPriority.invalid && frmPriority.touched">
+              <small
+                class="text-danger"
+                *ngIf="frmPriority.errors?.['required']"
+              >
+                Priority is Required
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <ngx-simplebar style="height: 350px">
+            <div class="mb-3">
+              <label class="form-label" for="des-info-description-input"
+                >Description
+                <span class="starRequried">*</span>
+              </label>
+              <ckeditor
+                [editor]="Editor"
+                class="mb-0"
+                [config]="{
+                  toolbar: [
+                    'heading',
+                    '|',
+                    'bold',
+                    'italic',
+                    '|',
+                    'NumberedList',
+                    'BulletedList'
+                  ]
+                }"
+                placeholder="Enter Remark"
+                formControlName="frmdescription"
+              >
+              </ckeditor>
+              <div *ngIf="frmdescription.invalid && frmdescription.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="frmdescription.errors?.['required']"
+                >
+                  Description is Required
+                </small>
+              </div>
+            </div>
+          </ngx-simplebar>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div class="hstack gap-2 justify-content-end">
+      <button
+        type="button"
+        class="btn btn-danger w-xs"
+        data-bs-dismiss="modal"
+        (click)="modal.dismiss('Close click')"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-success w-xs"
+        [disabled]="todoFormTask.invalid"
+        (click)="modal.close('Ok', $event)"
+      >
+        Submit
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- view Todo Data -->
+<ng-template #addTaskViewModal let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="createTaskLabel">View Todo</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      id="createTaskBtn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="row me-0 ms-0">
+      <div class="col-md-4 mb-2">
+        <label class="tx-11 font-weight-bold mb-0 text-uppercase">Title </label>
+        <p class="text-muted">{{ taskDataObject?.title }}</p>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="tx-11 font-weight-bold mb-0 text-uppercase"
+          >Due Date
+        </label>
+        <p class="text-muted">
+          {{ taskDataObject?.dueDate | date : "dd-MM-yyyy" }}
+        </p>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="tx-11 font-weight-bold mb-0 text-uppercase"
+          >Priority
+        </label>
+        <p class="text-muted">
+          <span
+            class="badge text-uppercase"
+            [ngClass]="{
+              'bg-danger': taskDataObject?.priority === 'High',
+              'bg-warning': taskDataObject?.priority === 'Medium',
+              'bg-success': taskDataObject?.priority === 'Low'
+            }"
+            >{{ taskDataObject?.priority }}</span
+          >
+        </p>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="tx-11 font-weight-bold mb-0 text-uppercase"
+          >Status
+        </label>
+        <p class="text-muted">
+          <span
+            class="fs-12"
+            [class]="
+              returnStatusBadgeClassesStatus(
+                taskDataObject?.projectFollowUpTodoStatusId
+              )
+            "
+            >{{ taskDataObject?.projectFollowUpTodoStatusName }}</span
+          >
+        </p>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="tx-11 font-weight-bold mb-0 text-uppercase"
+          >Created By
+        </label>
+        <p class="text-muted">{{ taskDataObject?.createdBy }}</p>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label class="tx-11 font-weight-bold mb-0 text-uppercase"
+          >Created Date
+        </label>
+        <p class="text-muted">{{ taskDataObject?.createdDate }}</p>
+      </div>
+      <div class="col-md-12 mb-2">
+        <label class="tx-11 font-weight-bold mb-0 text-uppercase"
+          >Description
+        </label>
+        <ngx-simplebar style="height: 350px">
+          <div [innerHTML]="transformInnerHTML(taskDataObject?.remark)"></div
+        ></ngx-simplebar>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #UpdateStatus let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Update Status</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div class="row">
+      <div class="col-md-12">
+        <label class="form-label" for="assetStatus"
+          >Status
+          <span class="starRequried">*</span>
+        </label>
+        <ng-select
+          [items]="statusList"
+          bindLabel="assetStatus"
+          bindValue="assetStatusId"
+          [clearable]="true"
+          id="assetStatus"
+          [(ngModel)]="selectedStatus"
+          placeholder="Select Status"
+          class="custom"
+        ></ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light w-xs"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-success w-xs"
+      [disabled]="!selectedStatus"
+      (click)="submitUpdateStatus()"
+      (click)="modal.close('Close click')"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>

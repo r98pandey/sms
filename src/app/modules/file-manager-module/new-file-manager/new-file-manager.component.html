@@ -1,0 +1,494 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<div class="card">
+  <div class="card-header">
+    <div class="row g-3">
+      <div class="col-lg"><h5 class="card-title mb-0">File Manager</h5></div>
+    </div>
+  </div>
+  <div class="card-body border border-dashed border-end-0 border-start-0">
+    <div class="row g-3">
+      <div class="col-lg">
+        <label for="companyId" class="form-label mb-0">Company</label>
+        <ng-select
+          [items]="arrayListDropDownCompany"
+          bindLabel="companyName"
+          bindValue="companyId"
+          (change)="onDropdownCompanyValueChange($event)"
+          [clearable]="true"
+          id="companyName"
+          [(ngModel)]="selectedDropDownCompanyIdValue"
+          placeholder="Select Company"
+          class="w-100 mr-2"
+          for="companyName"
+        ></ng-select>
+      </div>
+      <div class="col-lg">
+        <label for="clientName" class="form-label mb-0">Client</label>
+        <ng-select
+          [items]="arrayListDropDownClientList"
+          bindLabel="clientName"
+          bindValue="clientId"
+          [disabled]="!selectedDropDownCompanyIdValue"
+          (change)="onDropdownClientValueChange($event)"
+          [clearable]="true"
+          id="clientName"
+          [(ngModel)]="selectedDropDownClientIdValue"
+          placeholder="Select Client"
+          class="w-100 mr-2"
+          for="clientName"
+        ></ng-select>
+      </div>
+      <div class="col-lg">
+        <label for="departmentName" class="form-label mb-0">{{
+          isProject ? "Project" : "Department"
+        }}</label>
+        <ng-select
+          [items]="arrayListDropDownProjectOrDeparmentList"
+          bindLabel="departmentName"
+          bindValue="departmentId"
+          [disabled]="
+            !selectedDropDownCompanyIdValue || !selectedDropDownClientIdValue
+          "
+          (change)="onDropdownDepartmentValueChange($event)"
+          [clearable]="true"
+          id="departmentName"
+          [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+          [placeholder]="isProject ? 'Select Project' : 'Select Department'"
+          class="w-100 mr-2"
+          for="departmentName"
+        ></ng-select>
+      </div>
+    </div>
+  </div>
+  <div
+    class="card-body border border-dashed border-start-0"
+    *ngIf="
+      !selectedDropDownCompanyIdValue ||
+      !selectedDropDownClientIdValue ||
+      !selectedDropDownProjectOrDeparmentIdValue
+    "
+  >
+    <p class="text-muted mt-3">
+      <b
+        >Select Company,Client And {{ isProject ? "Project" : "Department" }}</b
+      >
+    </p>
+    <div class="col text-center">
+      <img src="../../../../assets/images/file.png" width="80%" />
+    </div>
+  </div>
+  <div
+    class="card-body p-0"
+    *ngIf="
+      selectedDropDownCompanyIdValue ||
+      selectedDropDownClientIdValue ||
+      selectedDropDownProjectOrDeparmentIdValue
+    "
+  >
+    <div class="row me-0 ms-0">
+      <div class="col-sm-12 col-md-3 pe-0 ps-0">
+        <div class="card cardBack">
+          <div
+            class="card-header card-headerBack d-lg-flex justify-content-between align-items-baseline"
+          >
+            <h5 class="mb-1 fw-semibold">Folder</h5>
+            <button
+              class="btn btn-primary w-sm"
+              data-bs-toggle="modal"
+              (click)="openModal(createFolderModal)"
+            >
+              <i class="ri-add-line align-bottom me-1"></i> Create Folders
+            </button>
+          </div>
+          <div class="card-body cardHeiht">
+            <div
+              class="row me-0 ms-0"
+              *ngIf="
+                masterPublicFolderList.length != 0 ||
+                masterMyFileFolderList.length !== 0 ||
+                masterSharedFolderList.length !== 0
+              "
+            >
+              <div class="col-md-12">
+                <ul class="list-unstyled file-manager-menu">
+                  <li>
+                    <a
+                    class="d-flex justify-content-between"
+                      data-bs-toggle="collapse"
+                      href="javascript:void(0);"
+                      role="button"
+                      aria-expanded="true"
+                      aria-controls="collapseExample1"
+                      (click)="collapse1.toggle()"
+                      [attr.aria-expanded]="!isCollapsed1"
+                    >
+                      <div>
+                        <i class="ri-folder-2-line align-bottom me-2"></i>
+                        <span class="file-list-link">My File </span>
+                      </div>
+
+                      <div>
+                        <span
+                          class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1"
+                          >{{ masterMyFileFolderList.length }}</span
+                        >
+                      </div>
+                    </a>
+                    <div
+                      class="collapse show"
+                      id="collapseExample1"
+                      #collapse1="ngbCollapse"
+                      [(ngbCollapse)]="isCollapsed1"
+                    >
+                      <ul class="sub-menu list-unstyled">
+                        <li *ngFor="let folder of masterMyFileFolderList">
+                          <a
+                            href="javascript:void(0);"
+                            (click)="openFiledInFolder(folder, 'My File')"
+                            [class.active]="
+                              selectedfolderName == folder.folderName &&
+                              selectTypeFileValue == 'My File'
+                            "
+                            [title]="folder.folderName"
+                            >{{ folder.folderName }}</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                  <hr>
+                  <li>
+                    <a
+                    class="d-flex justify-content-between"
+                      data-bs-toggle="collapse"
+                      href="javascript:void(0);"
+                      role="button"
+                      aria-expanded="true"
+                      aria-controls="collapseExample2"
+                      (click)="collapse2.toggle()"
+                      [attr.aria-expanded]="!isCollapsed2"
+                    >
+                    <div>
+                      <i class="ri-folder-2-line align-bottom me-2"></i>
+                      <span class="file-list-link">Shared </span>
+                    </div>
+
+                    <div>
+                      <span
+                        class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1"
+                        >{{ masterSharedFolderList.length }}</span
+                      >
+                    </div>
+                     </a>
+                    <div
+                      class="collapse show"
+                      id="collapseExample2"
+                      #collapse2="ngbCollapse"
+                      [(ngbCollapse)]="isCollapsed2"
+                    >
+                      <ul class="sub-menu list-unstyled">
+                        <li *ngFor="let folder of masterSharedFolderList">
+                          <a
+
+                            href="javascript:void(0);"
+                            (click)="openFiledInFolder(folder, 'Shared')"
+                            [class.active]="
+                              selectedfolderName == folder.folderName &&
+                              selectTypeFileValue == 'Shared'
+                            "
+                            [title]="folder.folderName"
+                            >{{ folder.folderName }}</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                  <hr>
+                  <li>
+                    <a
+                    class="d-flex justify-content-between"
+                      data-bs-toggle="collapse"
+                      href="javascript:void(0);"
+                      role="button"
+                      aria-expanded="true"
+                      aria-controls="collapseExample3"
+                      (click)="collapse3.toggle()"
+                      [attr.aria-expanded]="!isCollapsed3"
+                    >
+                     
+                    <div>
+                      <i class="ri-folder-2-line align-bottom me-2"></i>
+                      <span class="file-list-link">Public </span>
+                    </div>
+
+                    <div>
+                      <span
+                        class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1"
+                        >{{ masterPublicFolderList.length }}</span
+                      >
+                    </div>
+                    </a>
+                    <div
+                      class="collapse show"
+                      id="collapseExample3"
+                      #collapse3="ngbCollapse"
+                      [(ngbCollapse)]="isCollapsed3"
+                    >
+                      <ul class="sub-menu list-unstyled">
+                        <li *ngFor="let folder of masterPublicFolderList">
+                          <a
+                            href="javascript:void(0);"
+                            (click)="openFiledInFolder(folder, 'Public')"
+                            [class.active]="
+                              selectedfolderName == folder.folderName &&
+                              selectTypeFileValue == 'Public'
+                            "
+                            [title]="folder.folderName"
+                            >{{ folder.folderName }}</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                  <hr>
+                </ul>
+              </div>
+            </div>
+
+            <div
+              class="row me-0 ms-0"
+              *ngIf="
+                masterPublicFolderList.length == 0 &&
+                masterMyFileFolderList.length == 0 &&
+                masterSharedFolderList.length == 0
+              "
+            >
+              <div class="col-xxl-12 folder-card">
+                <div class="tab-pane alltable">
+                  <div class="py-4 text-center">
+                    <div>
+                      <lord-icon
+                        src="https://cdn.lordicon.com/msoeawqm.json"
+                        trigger="loop"
+                        colors="primary:#405189,secondary:#0ab39c"
+                        style="width: 72px; height: 72px"
+                      >
+                      </lord-icon>
+                    </div>
+                    <div class="mt-4">
+                      <h5>
+                        No Records Found    </h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-sm-12 col-md-9 pe-0 ps-0 stretch-card"
+        *ngIf="selectedfolderName"
+      >
+        <div class="card cardBack">
+          <div
+            class="card-headerBack d-lg-flex justify-content-between align-items-baseline"
+          >
+            <h5 class="mb-1 fw-semibold">
+              {{ selectTypeFileValue }}-{{ selectedfolderName }}
+            </h5>
+
+            <button
+              *ngIf="selectedfolderName"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#createFileModal"
+              (click)="openModalFile(FileContent)"
+            >
+              <i class="ri-add-line align-bottom me-1"></i> Create File
+            </button>
+          </div>
+          <div class="card-body cardHeiht">
+            <app-file-list-shown [fileList]="fileList"></app-file-list-shown>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Folder Model -->
+<ng-template #createFolderModal role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title">Create Folder</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      id="addFolderBtn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form
+      autocomplete="off"
+      class="needs-validation createfolder-form"
+      id="createfolder-form"
+      novalidate
+      [formGroup]="folderForm"
+    >
+      <div class="mb-4">
+        <label for="foldername-input" class="form-label">Folder Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="foldername-input"
+          required
+          placeholder="Enter folder name"
+          formControlName="title"
+          [ngClass]="{ 'is-invalid': submitted && form['title'].errors }"
+        />
+        <div class="invalid-feedback">Please enter a folder name.</div>
+        <input
+          type="hidden"
+          class="form-control"
+          id="folderid-input"
+          value=""
+          placeholder="Enter folder name"
+        />
+      </div>
+      <div class="hstack gap-2 justify-content-end">
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+          (click)="modal.dismiss('cancel')"
+        >
+          <i class="ri-close-line align-bottom"></i> Close
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          id="addNewFolder"
+          [disabled]="folderForm.invalid"
+          (click)="modal.close('Ok', $event)"
+        >
+          Add Folder
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<!-- Create Recent Model -->
+<ng-template #FileContent role="document" let-modal>
+  <div class="modal-header p-3 bg-success-subtle">
+    <h5 class="modal-title" id="createFileModalLabel">Create File</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      id="addFileBtn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form
+      autocomplete="off"
+      class="needs-validation createfile-form"
+      id="createfile-form"
+      novalidate
+      [formGroup]="recentForm"
+    >
+      <div class="mb-4">
+        <label for="filename-input" class="form-label">File Name</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Enter file name"
+          formControlName="file_name"
+          [ngClass]="{ 'is-invalid': submitted && form1['file_name'].errors }"
+        />
+        <div class="invalid-feedback">Please enter a file name.</div>
+      </div>
+      <div class="mb-4">
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="file_type"
+            id="inlineRadio1"
+            formControlName="file_type"
+            value="My File"
+          />
+          <label class="form-check-label" for="inlineRadio1"> My File </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="file_type"
+            id="inlineRadio2"
+            value="Shared"
+            formControlName="file_type"
+          />
+          <label class="form-check-label" for="inlineRadio2">Shared</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="file_type"
+            id="inlineRadio3"
+            value="Public"
+            formControlName="file_type"
+          />
+          <label class="form-check-label" for="inlineRadio3">Public </label>
+        </div>
+      </div>
+      <div class="mb-4">
+        <ngx-dropzone
+          (change)="onSelect($event)"
+          [multiple]="false"
+          title="All file will be Uploaded"
+          data-toggle="tooltip"
+          data-placement="top"
+        >
+          <ngx-dropzone-label>Drag and drop/Click here to upload </ngx-dropzone-label> 
+          <ngx-dropzone-preview
+            *ngFor="let f of files"
+            [removable]="true"
+            (removed)="onRemove(f)"
+          >
+            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+          </ngx-dropzone-preview>
+        </ngx-dropzone>
+      </div>
+
+      <div class="hstack gap-2 justify-content-end">
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+          (click)="modal.dismiss('cancel')"
+        >
+          <i class="ri-close-line align-bottom"></i> Close
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          id="addNewFile"
+          [disabled]="recentForm.disabled"
+          (click)="modal.close('Ok', $event)"
+        >
+          Create
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

@@ -1,0 +1,103 @@
+.from {
+   
+    font-weight: 400;
+    margin: 0 0 1px 0;
+   
+  }
+  .msg {
+    margin: 0;
+    color: #71738d;
+    font-size: .7rem;
+  }
+
+  a:link {
+    text-decoration: none;
+  }
+  
+  a:visited {
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: none;
+  }
+  
+  a:active {
+    text-decoration: none;
+  }
+
+
+ 
+  .event1 {
+   
+    &:after {
+      -webkit-box-shadow: 0 0 0 3px theme-color(primary);
+              box-shadow: 0 0 0 3px theme-color(primary);    
+      left: (50px + 3px + (8px * 0.35)) * -1;        
+      background: #727cf5;    
+      border-radius: 50%;  
+      height: 9px;
+      width: 9px;
+      content: "";
+      top: 5px;
+      @media(max-width: 767px) {
+        left: (25px + 4px + (8px * 0.35)) * -1;        
+      }
+    }
+  }
+  .eventRejected {
+   
+    &:after {
+      -webkit-box-shadow: 0 0 0 3px theme-color(primary);
+              box-shadow: 0 0 0 3px theme-color(primary);    
+      left: (50px + 3px + (8px * 0.35)) * -1;        
+      background: #ee3d07;    
+      border-radius: 50%;  
+      height: 9px;
+      width: 9px;
+      content: "";
+      top: 5px;
+      @media(max-width: 767px) {
+        left: (25px + 4px + (8px * 0.35)) * -1;        
+      }
+    }
+  }
+  
+
+  .eventApproved  {
+   
+    &:after {
+      -webkit-box-shadow: 0 0 0 3px theme-color(primary);
+              box-shadow: 0 0 0 3px theme-color(primary);    
+      left: (50px + 3px + (8px * 0.35)) * -1;        
+      background:  #79e201;    
+      border-radius: 50%;  
+      height: 9px;
+      width: 9px;
+      content: "";
+      top: 5px;
+      @media(max-width: 767px) {
+        left: (25px + 4px + (8px * 0.35)) * -1;        
+      }
+    }
+  }
+  .eventReviewed{
+   
+    &:after {
+      -webkit-box-shadow: 0 0 0 3px theme-color(primary);
+              box-shadow: 0 0 0 3px theme-color(primary);    
+      left: (50px + 3px + (8px * 0.35)) * -1;        
+      background:  #79e201;    
+      border-radius: 50%;  
+      height: 9px;
+      width: 9px;
+      content: "";
+      top: 5px;
+      @media(max-width: 767px) {
+        left: (25px + 4px + (8px * 0.35)) * -1;        
+      }
+    }
+  }
+  .myColor{
+    color:red
+   }

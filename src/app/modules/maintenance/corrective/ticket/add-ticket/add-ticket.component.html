@@ -1,0 +1,1345 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<form [formGroup]="addTicketFrom">
+  <div class="row">
+    <div class="col-lg-4 ps-0 pe-0 mt-n2 stretch-card">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Basic Information</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3" *ngIf="!disabledWithAceessGroup">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                formControlName="isGlobal"
+                type="checkbox"
+                id="isGlobal"
+                (change)="onClickisGlobal($event)"
+              />
+              <label class="form-check-label" for="isGlobal" style="opacity: 1">
+                Internal Ticket purpose</label
+              >
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="companyId" class="form-label"
+              >Company<span class="starRequried">*</span></label
+            >
+            <ng-select
+              [readonly]="disabledWithAceessGroup"
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              [clearable]="false"
+              bindValue="companyId"
+              placeholder="Select Company"
+              class="custom"
+              [(ngModel)]="selectedDropDownCompanyIdValue"
+              formControlName="company"
+              (change)="onDropdownCompanyValueChange($event)"
+              [ngClass]="{
+                'is-invalid': company.invalid && company.touched,
+                'is-valid': company.valid && company.touched
+              }"
+            >
+            </ng-select>
+
+            <div *ngIf="company.invalid && company.touched" class="mt-2">
+              <small class="text-danger" *ngIf="company['errors']['required']">
+                Company is Required
+              </small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="companyId" class="form-label"
+                >Client<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [readonly]="disabledWithAceessGroup"
+                [items]="arrayListDropDownClientList"
+                bindLabel="clientName"
+                [clearable]="false"
+                [(ngModel)]="selectedDropDownClientIdValue"
+                bindValue="clientId"
+                placeholder="Select Client"
+                class="custom"
+                formControlName="client"
+                (change)="onDropdownClientValueChange($event)"
+                [ngClass]="{
+                  'is-invalid': client.invalid && client.touched,
+                  'is-valid': client.valid && client.touched
+                }"
+              >
+              </ng-select>
+
+              <div *ngIf="client.invalid && client.touched" class="mt-2">
+                <small class="text-danger" *ngIf="client['errors']['required']">
+                  Client is Required
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label class="form-label"
+                >{{ isProject ? "Project" : "Department"
+                }}<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [readonly]="projectDepartmentFieldDisiabled"
+                [items]="arrayListDropDownProjectOrDeparmentList"
+                bindLabel="departmentName"
+                bindValue="departmentId"
+                [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+                [placeholder]="
+                  isProject ? 'Select Project' : 'Select Department'
+                "
+                [clearable]="false"
+                class="custom"
+                formControlName="project"
+                (change)="onDropdownDepartmentValueChange($event)"
+                [ngClass]="{
+                  'is-invalid': project.invalid && project.touched,
+                  'is-valid': project.valid && project.touched
+                }"
+              >
+              </ng-select>
+              <div *ngIf="project?.invalid && project?.touched" class="mt-2">
+                <small
+                  class="text-danger"
+                  *ngIf="project['errors']['required']"
+                >
+                  {{ isProject ? "Project" : "Department" }} is Required</small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label class="form-label"
+                >Service Type<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [readonly]="disabledWithAceessGroup "
+                [items]="operationList"
+                bindLabel="name"
+                bindValue="name"
+                placeholder="Select Service Type"
+                [clearable]="false"
+                formControlName="operationType"
+                (change)="onChangeServiceType($event)"
+                [ngClass]="{
+                  'is-invalid': operationType.invalid && operationType.touched,
+                  'is-valid': operationType.valid && operationType.touched
+                }"
+              >
+              </ng-select>
+              <div *ngIf="operationType?.invalid && operationType?.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="operationType['errors']['required']"
+                >
+                  Service Type is Required</small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label class="form-label"
+                >Ticket Type<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [items]="ticketTypeList"
+                bindLabel="typeName"
+                bindValue="typeName"
+                placeholder="Select Ticket Type"
+                (change)="ticketTypeHandler($event)"
+                [clearable]="false"
+                formControlName="ticketType"
+                [ngClass]="{
+                  'is-invalid': ticketType.invalid && ticketType.touched,
+                  'is-valid': ticketType.valid && ticketType.touched
+                }"
+              >
+              </ng-select>
+
+              <div *ngIf="ticketType?.invalid && ticketType?.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="ticketType?.errors?.['required']"
+                >
+                  Ticket Type is Required</small
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label"
+              >Ticket Category<span class="starRequried">*</span></label
+            >
+            <ng-select
+              [items]="masterTicketTypeList"
+              bindLabel="ticketTypeName"
+              bindValue="ticketTypeId"
+              placeholder="Select Category"
+              [clearable]="false"
+              formControlName="type"
+              (change)="onChangeTicketType($event)"
+              [ngClass]="{
+                'is-invalid': type.invalid && type.touched,
+                'is-valid': type.valid && type.touched
+              }"
+            >
+            </ng-select>
+
+            <div *ngIf="type?.invalid && type?.touched">
+              <small class="text-danger" *ngIf="type?.errors?.['required']">
+                Ticket Category is Required</small
+              >
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="control-label"
+              >Priority<span class="starRequried">*</span></label
+            >
+            <ng-select
+              [items]="urgentList"
+              bindLabel="urgencyTypeName"
+              bindValue="urgencyTypeName"
+              placeholder="Select Priority"
+              [clearable]="false"
+              formControlName="urgent"
+              [ngClass]="{
+                'is-invalid': urgent.invalid && urgent.touched,
+                'is-valid': urgent.valid && urgent.touched
+              }"
+            >
+            </ng-select>
+
+            <div *ngIf="urgent?.invalid && urgent?.touched">
+              <small class="text-danger" *ngIf="urgent?.errors?.['required']">
+                Priority is Required</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 pe-0 mt-n2 stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <ul
+            ngbNav
+            #defaultNav="ngbNav"
+            [(activeId)]="defaultNavActiveId"
+            class="nav-tabs nav-tabs-custom"
+          >
+            <li [ngbNavItem]="1">
+              <a ngbNavLink>
+                <div
+                  class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                >
+                  <p class="d-none d-sm-block mb-0">Ticket</p>
+                </div>
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="card mb-1">
+                      <div class="card-body">
+                        <div class="mb-3">
+                          <label class="form-label"
+                            >Title<span class="starRequried">*</span></label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter Title"
+                            formControlName="title"
+                            [class.is-invalid]="title.invalid && title.touched"
+                            [class.is-valid]="title.valid && title.touched"
+                            [maxlength]="maxCharsDecisionTitle"
+                          />
+                          <label class="nopadding clrlbl">
+                            Characters Remaining:
+                            {{ title?.value?.length }}/{{
+                              maxCharsDecisionTitle
+                            }}</label
+                          >
+                          <div *ngIf="title.invalid && title.touched">
+                            <small
+                              class="text-danger"
+                              *ngIf="title['errors']['required']"
+                            >
+                              Title is Required
+                            </small>
+                          </div>
+                        </div>
+                        <div>
+                          <label>Description</label>
+                          <!-- <quill-editor
+                            theme="snow"
+                            formControlName="description"
+                            (onEditorChanged)="created($event)"
+                            [styles]="{
+                              'min-height': '400px',
+                              overflow: 'auto',
+                              height: '400px'
+                            }"
+                            class="content-editor"
+                          ></quill-editor> -->
+                          <ckeditor
+                            [editor]="Editor"
+                            [config]="{
+                              toolbar: [
+                                'heading',
+                                '|',
+                                'bold',
+                                'italic',
+                                '|',
+                                'NumberedList',
+                                'BulletedList'
+                              ]
+                            }"
+                            formControlName="description"
+                          >
+                          </ckeditor>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- <ng-container *ngIf="operationType.value == 'Service'">
+                    <div class="col-lg-12">
+                      <div class="card border mb-1">
+                        <div class="card-body">
+                          <div class="d-sm-flex">
+                            <div class="flex-shrink-0">
+                              <div
+                                class="profile-user position-relative d-inline-block mx-auto mb-2"
+                              >
+                                <img
+                                  src="{{ imageOneUrl }}"
+                                  alt=""
+                                  class="rounded-1 img-size-fixed"
+                                />
+
+                                <div
+                                  class="avatar-xs p-0 rounded-circle profile-photo-edit"
+                                >
+                                  <input
+                                    id="profile-img-file-input-img-1"
+                                    type="file"
+                                    (change)="
+                                      onSelectFirstFileTicketFile($event)
+                                    "
+                                    class="profile-img-file-input"
+                                  />
+                                  <label
+                                    *ngIf="!isFirstImageTicketVisible"
+                                    for="profile-img-file-input-img-1"
+                                    class="profile-photo-edit avatar-xs"
+                                  >
+                                    <span
+                                      class="avatar-title rounded-circle bg-light text-body"
+                                    >
+                                      <i class="ri-camera-fill"></i>
+                                    </span>
+                                  </label>
+                                  <label
+                                    *ngIf="isFirstImageTicketVisible"
+                                    class="profile-photo-edit avatar-xs"
+                                    (click)="crossOneTicketImage(imageOneUrl)"
+                                  >
+                                    <span
+                                      class="avatar-title rounded-circle bg-light text-body"
+                                    >
+                                      <i class="ri-close-circle-fill"></i>
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="flex-grow-1 ms-sm-4 mt-3 mt-sm-0">
+                              <label class="form-label">Attach & Remark</label>
+                              <textarea
+                                rows="2"
+                                cols="4"
+                                class="form-control"
+                                placeholder="Remark"
+                                formControlName="Remark_Pic1"
+                                [maxlength]="maxCharsDecision"
+                              ></textarea>
+                              <label class="nopadding clrlbl">
+                                Characters Remaining:
+                                {{ Remark_Pic1?.value?.length }}/{{
+                                  maxCharsDecision
+                                }}</label
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="card border">
+                        <div class="card-body">
+                          <div class="d-sm-flex">
+                            <div class="flex-shrink-0">
+                              <div
+                                class="profile-user position-relative d-inline-block mx-auto mb-2"
+                              >
+                                <img
+                                  src="{{ imageTwoUrl }}"
+                                  alt=""
+                                  class="rounded-1 img-size-fixed"
+                                />
+
+                                <div
+                                  class="avatar-xs p-0 rounded-circle profile-photo-edit"
+                                >
+                                  <input
+                                    id="profile-img-file-input-img-2"
+                                    type="file"
+                                    (change)="onSelectSecondTicketFile($event)"
+                                    class="profile-img-file-input"
+                                  />
+                                  <label
+                                    *ngIf="!isSecondImageTicketVisible"
+                                    for="profile-img-file-input-img-2"
+                                    class="profile-photo-edit avatar-xs"
+                                  >
+                                    <span
+                                      class="avatar-title rounded-circle bg-light text-body"
+                                    >
+                                      <i class="ri-camera-fill"></i>
+                                    </span>
+                                  </label>
+                                  <label
+                                    *ngIf="isSecondImageTicketVisible"
+                                    class="profile-photo-edit avatar-xs"
+                                    (click)="crossTwoTicketImage(imageOneUrl)"
+                                  >
+                                    <span
+                                      class="avatar-title rounded-circle bg-light text-body"
+                                    >
+                                      <i class="ri-close-circle-fill"></i>
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="flex-grow-1 ms-sm-4 mt-3 mt-sm-0">
+                              <label class="form-label">Attach & Remark</label>
+                              <textarea
+                                rows="2"
+                                cols="4"
+                                class="form-control"
+                                placeholder="Remark"
+                                formControlName="Remark_Pic2"
+                                [maxlength]="maxCharsDecision"
+                              ></textarea>
+                              <label class="nopadding clrlbl">
+                                Characters Remaining:
+                                {{ Remark_Pic2?.value?.length }}/{{
+                                  maxCharsDecision
+                                }}</label
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container> -->
+                  <ng-container *ngIf="operationType.value != 'Incident Report'">
+                    <div class="col-lg-12">
+                      <div class="card">
+                        <div class="card-header">
+                          <h4 class="card-title mb-0">
+                            Multiple Image/File/Video Upload
+                          </h4>
+                        </div>
+                        <!-- end card header -->
+
+                        <div class="card-body">
+                          <ul
+                            ngbNav
+                            #defaultNavMultiply="ngbNav"
+                            [(activeId)]="multplyImageFileTab"
+                            class="nav-tabs nav-tabs-custom"
+                          >
+                            <li [ngbNavItem]="1">
+                              <a ngbNavLink>
+                                <div
+                                  class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                                >
+                                  <p class="d-none d-sm-block mb-0">Image</p>
+                                </div>
+                              </a>
+                              <ng-template ngbNavContent>
+                                <div class="mt-3">
+                                  <div class="container-fluid container-view">
+                                    <ngx-dropzone
+                                      [multiple]="true"
+                                      (change)="onSelect($event)"
+                                      accept="image/*"
+                                      title="Only Image file will be Uploaded"
+                                      data-toggle="tooltip"
+                                      data-placement="top"
+                                      [url]="false"
+                                      class="dropzone"
+                                    >
+                                      <ngx-dropzone-label class="dropzoneLabel">
+                                        Drag and drop/Click here to upload 
+                                      </ngx-dropzone-label>
+                                    </ngx-dropzone>
+                                    <div class="preview-section">
+                                      <div
+                                        class="image-container"
+                                        *ngFor="
+                                          let image of file;
+                                          let i = index
+                                        "
+                                      >
+                                        <div
+                                          class="image-wrapper"
+                                          [ngClass]="{
+                                            'new-row': i % 3 === 0 && i !== 0
+                                          }"
+                                        >
+                                          <img
+                                            #imgRenderer
+                                            [src]="base64Strings[i]"
+                                            class="img-size-withd-upload"
+                                          />
+                                          <i
+                                            class="ri-close-circle-line ri-close-circle-line2"
+                                            type="button"
+                                            (click)="
+                                              onRemove(image);
+                                              $event.stopPropagation()
+                                            "
+                                          ></i>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="mt-4 p-0">
+                                    <h4 class="card-title mb-1">
+                                      Multiple Image Paste
+                                    </h4>
+
+                                    <app-catalog-page-upload [oldDataSave]="pasteImageAll"
+                                      (imageData)="getImage($event)"
+                                    ></app-catalog-page-upload>
+                                  </div>
+                                </div>
+                              </ng-template>
+                            </li>
+                            <li [ngbNavItem]="2">
+                              <a ngbNavLink>
+                                <div
+                                  class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                                >
+                                  <p class="d-none d-sm-block mb-0">File</p>
+                                </div>
+                              </a>
+                              <ng-template ngbNavContent>
+                                <div class="mt-3">
+                                  <div class="container-fluid container-view">
+                                    <ngx-dropzone
+                                      [multiple]="true"
+                                      (change)="onSelectFilleMultiply($event)"
+                                      accept=".xlsx, .accdb, .txt , .docx ,.doc ,.pdf"
+                                      (change)="($event)"
+                                      title="Only ..xlsx, .accdb, .txt , .docx ,.doc ,.pdf Extensions file should be upload"
+                                      data-toggle="tooltip"
+                                      data-placement="top"
+                                      [url]="true"
+                                      class="dropzone"
+                                    >
+                                      <ngx-dropzone-label class="dropzoneLabel">
+                                        Drag and Drop File here/Click here to upload files
+                                      </ngx-dropzone-label>
+                                      <p
+                                      class="mb-0 text-danger fs-12 text-center"
+                                      *ngIf="showExistFileLabel"
+                                    >
+                                      Note: The selected file name already exists, Rename the file and
+                                      select.
+                                    </p>
+                                    </ngx-dropzone>
+                                    <div
+                                      class="row me-0 mr-0"
+                                      *ngIf="multiplyFileUpdload.length != 0"
+                                    >
+                                      <div class="col-md-12">
+                                        <table
+                                          class="table"
+                                          style="text-align: justify"
+                                        >
+                                          <thead>
+                                            <tr>
+                                              <th>File Name</th>
+                                              <th></th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr
+                                              *ngFor="
+                                                let item of multiplyFileUpdload;
+                                                let i = index
+                                              "
+                                            >
+                                              <td
+                                                style="white-space: nowrap"
+                                                [title]="item.name"
+                                              >
+                                                {{
+                                                  truncateFileName(
+                                                    item.name,
+                                                    item
+                                                  )
+                                                }}
+                                              </td>
+                                              <td>
+                                                <i
+                                                  class="ri-close-circle-line text-danger"
+                                                  type="button"
+                                                  (click)="
+                                                    onRemoveFilleMultiply(i);
+                                                    $event.stopPropagation()
+                                                  "
+                                                ></i>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </ng-template>
+                            </li>
+                            <li [ngbNavItem]="3" >
+                              <a ngbNavLink>
+                                <div
+                                  class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                                >
+                                  <p class="d-none d-sm-block mb-0">Video</p>
+                                </div>
+                              </a>
+                              <ng-template ngbNavContent>
+                                <div class="mt-3">
+                                  <div class="container-fluid container-view">
+                                    <ngx-dropzone
+                                      [multiple]="true"
+                                      (change)="onSelectVideoMultiply($event)"
+                                      accept="video/*"
+                                      (change)="($event)"
+                                      title="Only video Extensions file should be upload"
+                                      data-toggle="tooltip"
+                                      data-placement="top"
+                                      [url]="true"
+                                      class="dropzone"
+                                    >
+                                      <ngx-dropzone-label class="dropzoneLabel">
+                                        Drag and Drop File here/Click here to upload Video
+                                      </ngx-dropzone-label>
+                                      <p
+                                      class="mb-0 text-danger fs-12 text-center"
+                                      *ngIf="showExistVideoLabel"
+                                    >
+                                      Note: The selected file name already exists, Rename the file and
+                                      select.
+                                    </p>
+                                    </ngx-dropzone>
+                                    <div
+                                      class="row me-0 mr-0"
+                                      *ngIf="multiplyVideoUpdload.length != 0"
+                                    >
+                                      <div class="col-md-12">
+                                        <table
+                                          class="table"
+                                          style="text-align: justify"
+                                        >
+                                          <thead>
+                                            <tr>
+                                              <th>File Name</th>
+                                              <th></th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr
+                                              *ngFor="
+                                                let item of multiplyVideoUpdload;
+                                                let i = index
+                                              "
+                                            >
+                                              <td
+                                                style="white-space: nowrap"
+                                                [title]="item.name"
+                                              >
+                                                {{
+                                                  truncateFileName(
+                                                    item.name,
+                                                    item
+                                                  )
+                                                }}
+                                              </td>
+                                              <td>
+                                                <i
+                                                  class="ri-close-circle-line text-danger"
+                                                  type="button"
+                                                  (click)="
+                                                    onRemoveVideoMultiply(i);
+                                                    $event.stopPropagation()
+                                                  "
+                                                ></i>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </ng-template>
+                            </li>
+                          </ul>
+                          <div class="tab-content text-muted">
+                            <div [ngbNavOutlet]="defaultNavMultiply"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- <div class="col-lg-12">
+                      <div class="card">
+                        <div class="card-header">
+                            </div>
+
+                        <div class="card-body">
+                        
+                        </div>
+                      </div>
+                    </div> -->
+                  </ng-container>
+                </div>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="2">
+              <a ngbNavLink>
+                <div
+                  class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                >
+                  <p class="d-none d-sm-block mb-0">Asset</p>
+                </div>
+              </a>
+              <ng-template ngbNavContent>
+                <div class="card">
+                  <div class="card-header text-end p-2">
+                    <button
+                      class="btn btn-primary"
+                      (click)="getAssetList()"
+                      *ngIf="company.value && client.value && project.value"
+                    >
+                      Add Asset
+                    </button>
+                  </div>
+                  <div class="card-body maxHeightCard">
+                    <div class="table-responsive table-card mb-0">
+                      <table class="table">
+                        <thead>
+                          <tr class="bg-light text-muted text-uppercase">
+                            <th>Asset No</th>
+                            <th>Asset</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody *ngIf="selectedAssetList.length != 0">
+                          <tr *ngFor="let asset of selectedAssetList">
+                            <td>
+                              <a
+                                href="javascript:void(0)"
+                                class="fw-medium link-primary"
+                                >{{
+                                  asset.assetTagId ? asset.assetTagId : "NA"
+                                }}</a
+                              >
+                            </td>
+
+                            <td>
+                              {{ asset.assetName }}
+                            </td>
+                            <td class="status">
+                              <span
+                                [class]="
+                                  returnStatusBadgeClassesStatus(
+                                    asset.assetStatusId
+                                  )
+                                "
+                                >{{ asset.assetStatus }}</span
+                              >
+                            </td>
+
+                            <td class="status">
+                              <a
+                              href="javascript:void(0)"
+                              class="dropdown-item cursor-pointer"
+                              (click)="openModalDeleteAssetObject(asset)"
+                              ><i
+                                class="ri-delete-bin-fill align-bottom me-2 text-danger"
+                              ></i>
+                            </a> 
+                            </td>
+                          </tr>
+                        </tbody>
+                        <tbody *ngIf="selectedAssetList.length == 0">
+                          <tr>
+                            <td colspan="4" class="text-center">
+                              No Asset Selected
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+
+            <ng-container *ngIf="operationType.value == 'Incident Report'">
+              <li [ngbNavItem]="3">
+                <a ngbNavLink>
+                  <div
+                    class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                  >
+                    <p class="d-none d-sm-block mb-0">Incident</p>
+                  </div>
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="card mb-1">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="mb-3">
+                                <label class="form-label"
+                                  >Location<span class="starRequried"
+                                    >*</span
+                                  ></label
+                                >
+                                <ng-select
+                                  [items]="arrayListDropDownLocationList"
+                                  bindLabel="locationName"
+                                  [clearable]="false"
+                                  bindValue="locationId"
+                                  placeholder="Select location"
+                                  class="custom"
+                                  [(ngModel)]="selectedDropDownLocationtIdValue"
+                                  formControlName="locationId"
+                                  [ngClass]="{
+                                    'is-invalid':
+                                      locationId.invalid && locationId.touched,
+                                    'is-valid':
+                                      locationId.valid && locationId.touched
+                                  }"
+                                >
+                                </ng-select>
+                                <div
+                                  *ngIf="
+                                    locationId?.invalid && locationId?.touched
+                                  "
+                                >
+                                  <small
+                                    class="text-danger"
+                                    *ngIf="locationId?.errors?.['required']"
+                                  >
+                                    Location is Required</small
+                                  >
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="mb-3">
+                                <label>Impact of Incident</label>
+                                <ckeditor
+                                  [editor]="Editor"
+                                  [config]="{
+                                    toolbar: [
+                                      'heading',
+                                      '|',
+                                      'bold',
+                                      'italic',
+                                      '|',
+                                      'NumberedList',
+                                      'BulletedList'
+                                    ]
+                                  }"
+                                  formControlName="impactOfIncident"
+                                >
+                                </ckeditor>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="mb-3">
+                                <label class="form-label mb-0"
+                                  >Incident Type<span class="starRequried"
+                                    >*</span
+                                  ></label
+                                >
+                                <ng-select
+                                  [items]="masterIncidentTypeList"
+                                  bindLabel="incidentTypeName"
+                                  [clearable]="false"
+                                  bindValue="incidentTypeId"
+                                  placeholder="Select Incident"
+                                  class="custom"
+                                  (change)="
+                                    onDropdownIncidentTypeValueChange($event)
+                                  "
+                                  formControlName="incidentType"
+                                  [ngClass]="{
+                                    'is-invalid':
+                                      incidentType.invalid &&
+                                      incidentType.touched,
+                                    'is-valid':
+                                      incidentType.valid && incidentType.touched
+                                  }"
+                                >
+                                </ng-select>
+                                <div
+                                  *ngIf="
+                                    incidentType?.invalid &&
+                                    incidentType?.touched
+                                  "
+                                >
+                                  <small
+                                    class="text-danger"
+                                    *ngIf="incidentType?.errors?.['required']"
+                                  >
+                                    Incident Type is Required</small
+                                  >
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <div class="form-group">
+                                <label class="form-label mb-0"
+                                  >Approx Date of Incident<span
+                                    class="starRequried"
+                                    >*</span
+                                  >
+                                  <i
+                                    ngbTooltip="Clear"
+                                    class="ri-close-circle-line text-danger"
+                                    *ngIf="dateOfincident.value"
+                                    (click)="clearChangDate()"
+                                  ></i>
+                                </label>
+
+                                <input
+                                  type="text"
+                                  class="form-control flatpickr-input"
+                                  placeholder="Approx Date of Incident"
+                                  formControlName="dateOfincident"
+                                  (change)="approxTimeOfIncident.reset()"
+                                  mwlFlatpickr
+                                  [altInput]="false"
+                                  [enableTime]="false"
+                                  [convertModelValue]="true"
+                                  [dateFormat]="'d-m-Y'"
+                                  [maxDate]="minDate"
+                                />
+                              </div>
+                              <div
+                                *ngIf="
+                                  dateOfincident?.invalid &&
+                                  dateOfincident?.touched
+                                "
+                              >
+                                <small
+                                  class="text-danger"
+                                  *ngIf="dateOfincident?.errors?.['required']"
+                                >
+                                  Approx Date of Incident is Required</small
+                                >
+                              </div>
+                            </div>
+                            <div
+                              class="col-md-6 mb-3"
+                              *ngIf="dateOfincident.value"
+                            >
+                              <div class="form-group">
+                                <label class="form-label mb-0"
+                                  >Approx Time of Incident
+                                  <span class="starRequried">*</span>
+                                  <i
+                                    ngbTooltip="Clear"
+                                    class="ri-close-circle-line text-danger"
+                                    *ngIf="approxTimeOfIncident.value"
+                                    (click)="clearChangTime()"
+                                  ></i>
+                                </label>
+                                <!-- <input
+                                  type="time"
+                                  class="form-control"
+                                  (blur)="
+                                    formatTime(approxTimeOfIncident.value)
+                                  "
+                                  placeholder="Enter Expected  Work Start Time"
+                                  formControlName="approxTimeOfIncident"
+                                /> -->
+                                <input 
+                                [ngxMatTimepicker]="picker"
+                                 class="form-control" 
+                                 (blur)="formatTime(approxTimeOfIncident.value)"
+                                 placeholder="Enter Expected  Work Start Time"
+                                 formControlName="approxTimeOfIncident">
+                                <ngx-mat-timepicker #picker readonly
+                                dottedMinutesInGap
+                                enableKeyboardInput
+                                ></ngx-mat-timepicker>  
+                              </div>
+                              <div
+                                *ngIf="
+                                  approxTimeOfIncident?.invalid &&
+                                  approxTimeOfIncident?.touched
+                                "
+                              >
+                                <small
+                                  class="text-danger"
+                                  *ngIf="approxTimeOfIncident?.errors?.['required']"
+                                >
+                                  Approx Time of Incident</small
+                                >
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="card">
+                        <div class="card-body">
+                          <div>
+                            <h5 class="fs-15 mb-1">Incident Gallery</h5>
+                            <p class="text-muted">
+                              Add Incident Gallery Images.
+                            </p>
+
+                            <div class="row text-center">
+                              <div class="row justify-content-center">
+                                <div class="col-md-2">
+                                  <div class="mb-0">
+                                    <div
+                                      class="position-relative d-inline-block"
+                                    >
+                                      <div
+                                        class="position-absolute top-100 start-100 translate-middle"
+                                      >
+                                        <label
+                                          class="mb-0"
+                                          placement="left"
+                                          ngbTooltip="Remove Image"
+                                          *ngIf="isFirstImageVisible"
+                                        >
+                                          <div class="avatar-xs">
+                                            <div
+                                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                            >
+                                              <i
+                                                class="ri-close-circle-fill"
+                                                (click)="
+                                                  crossFirstImage(asset_img0)
+                                                "
+                                              ></i>
+                                            </div>
+                                          </div>
+                                        </label>
+                                        <label
+                                          for="asset_id0"
+                                          class="mb-0"
+                                          placement="left"
+                                          ngbTooltip="Select Image"
+                                          *ngIf="!isFirstImageVisible"
+                                        >
+                                          <div class="avatar-xs">
+                                            <div
+                                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                            >
+                                              <i class="ri-image-fill"></i>
+                                            </div>
+                                          </div>
+                                        </label>
+                                        <input
+                                          (change)="onSelectFile($event)"
+                                          class="form-control d-none"
+                                          id="asset_id0"
+                                          type="file"
+                                          accept="image/png, image/gif, image/jpeg"
+                                        />
+                                      </div>
+                                      <div class="avatar-lg">
+                                        <div
+                                          class="avatar-title bg-light rounded"
+                                        >
+                                          <img
+                                            src="{{ asset_img0 }}"
+                                            id="product-img"
+                                            class="avatar-md img-size-fixed"
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-2">
+                                  <div class="mb-3">
+                                    <div
+                                      class="position-relative d-inline-block"
+                                    >
+                                      <div
+                                        class="position-absolute top-100 start-100 translate-middle"
+                                      >
+                                        <label
+                                          class="mb-0"
+                                          placement="left"
+                                          ngbTooltip="Remove Image"
+                                          *ngIf="isSecondImageVisible"
+                                        >
+                                          <div class="avatar-xs">
+                                            <div
+                                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                            >
+                                              <i
+                                                (click)="
+                                                  crossSecondImage(asset_img1)
+                                                "
+                                                class="ri-close-circle-fill"
+                                              ></i>
+                                            </div>
+                                          </div>
+                                        </label>
+                                        <label
+                                          for="asset_id1"
+                                          class="mb-0"
+                                          placement="left"
+                                          ngbTooltip="Select Image"
+                                          *ngIf="!isSecondImageVisible"
+                                        >
+                                          <div class="avatar-xs">
+                                            <div
+                                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                            >
+                                              <i class="ri-image-fill"></i>
+                                            </div>
+                                          </div>
+                                        </label>
+                                        <input
+                                          (change)="onSelectFile1($event)"
+                                          accept="image/*"
+                                          class="form-control d-none"
+                                          id="asset_id1"
+                                          type="file"
+                                          accept="image/png, image/gif, image/jpeg"
+                                        />
+                                      </div>
+                                      <div class="avatar-lg">
+                                        <div
+                                          class="avatar-title bg-light rounded"
+                                        >
+                                          <img
+                                            src="{{ asset_img1 }}"
+                                            id="product-img"
+                                            class="avatar-md img-size-fixed"
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- end col -->
+
+                                <div class="col-md-2">
+                                  <div class="mb-3">
+                                    <div
+                                      class="position-relative d-inline-block"
+                                    >
+                                      <div
+                                        class="position-absolute top-100 start-100 translate-middle"
+                                      >
+                                        <label
+                                          for="asset_id2"
+                                          class="mb-0"
+                                          placement="left"
+                                          ngbTooltip="Select Image"
+                                          *ngIf="!isThirdImageVisible"
+                                        >
+                                          <div class="avatar-xs">
+                                            <div
+                                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                            >
+                                              <i class="ri-image-fill"></i>
+                                            </div>
+                                          </div>
+                                        </label>
+                                        <label
+                                          class="mb-0"
+                                          placement="left"
+                                          ngbTooltip="Remove Image"
+                                          *ngIf="isThirdImageVisible"
+                                        >
+                                          <div class="avatar-xs">
+                                            <div
+                                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                            >
+                                              <i
+                                                (click)="
+                                                  crossThirdImage(asset_img2)
+                                                "
+                                                class="ri-close-circle-fill"
+                                              ></i>
+                                            </div>
+                                          </div>
+                                        </label>
+                                        <input
+                                          (change)="onSelectFile2($event)"
+                                          accept="image/*"
+                                          class="form-control d-none"
+                                          id="asset_id2"
+                                          type="file"
+                                          accept="image/png, image/gif, image/jpeg"
+                                        />
+                                      </div>
+                                      <div class="avatar-lg">
+                                        <div
+                                          class="avatar-title bg-light rounded"
+                                        >
+                                          <img
+                                            src="{{ asset_img2 }}"
+                                            id="product-img"
+                                            class="avatar-md img-size-fixed"
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                  <div class="mb-3">
+                                    <div
+                                      class="position-relative d-inline-block"
+                                    >
+                                      <div
+                                        class="position-absolute top-100 start-100 translate-middle"
+                                      >
+                                        <label
+                                          class="mb-0"
+                                          placement="left"
+                                          ngbTooltip="Remove Image"
+                                          *ngIf="isFourthImageVisible"
+                                        >
+                                          <div class="avatar-xs">
+                                            <div
+                                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                            >
+                                              <i
+                                                (click)="
+                                                  crossFourthImage(asset_img3)
+                                                "
+                                                class="ri-close-circle-fill"
+                                              ></i>
+                                            </div>
+                                          </div>
+                                        </label>
+                                        <label
+                                          for="asset_id3"
+                                          class="mb-0"
+                                          placement="left"
+                                          ngbTooltip="Select Image"
+                                          *ngIf="!isFourthImageVisible"
+                                        >
+                                          <div class="avatar-xs">
+                                            <div
+                                              class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                                            >
+                                              <i class="ri-image-fill"></i>
+                                            </div>
+                                          </div>
+                                        </label>
+                                        <input
+                                          (change)="onSelectFile3($event)"
+                                          accept="image/*"
+                                          class="form-control d-none"
+                                          id="asset_id3"
+                                          type="file"
+                                          accept="image/png, image/gif, image/jpeg"
+                                        />
+                                      </div>
+                                      <div class="avatar-lg">
+                                        <div
+                                          class="avatar-title bg-light rounded"
+                                        >
+                                          <img
+                                            src="{{ asset_img3 }}"
+                                            id="product-img"
+                                            class="avatar-md img-size-fixed"
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- end col -->
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+            </ng-container>
+          </ul>
+
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="defaultNav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="text-end mb-3">
+  <button
+    class="btn btn-soft-primary waves-effect mx-3"
+    type="button"
+    (click)="goback()"
+  >
+    Back
+  </button>
+  <button
+    *ngIf="afterApiCallSubmit"
+    (click)="onSubmit($event)"
+    class="btn btn-success w-sm"
+    type="button"
+    [disabled]="addTicketFrom.invalid"
+  >
+    Submit
+  </button>
+</div>
+<!--   -->

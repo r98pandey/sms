@@ -1,0 +1,80 @@
+<div class="modal-content">
+    <div class="modal-header p-3 bg-info-subtle">
+        <h4 class="modal-title" id="modal-title">Update Status</h4>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="close('Close click')"
+      ></button>
+    </div>
+    <div class="modal-body mt-0">
+        <form [formGroup]="formGroup">
+          <div class="row">
+            <div class="col-md-12 mb-2">
+              <div class="form-group">
+                <label class="control-label"
+                  >Status <span style="color: red">*</span></label
+                >
+                <ng-select
+                  [items]="assetListStatus"
+                  bindLabel="assetStatus"
+                  bindValue="assetStatusId"
+                  placeholder="Select Status"
+                  [clearable]="false"
+                  class="custom"
+                  formControlName="status"
+                  (change)="onChangeStatus($event)"
+                >
+                </ng-select>
+                <div *ngIf="status?.invalid && status?.touched">
+                  <small class="text-danger" *ngIf="status?.errors?.['required']">
+                 Status is Required
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 mb-2">
+              <div class="form-group">
+                <label class="control-label"
+                  >Remark <span style="color: red">*</span></label
+                >
+                <textarea
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter Remark Here..."
+                  maxlength="300"
+                  formControlName="remark"
+                  rows="7"
+                  [maxlength]="maxCharsDecision"
+                ></textarea>
+                <label class="nopadding clrlbl">
+                  Characters Remaining:
+                  {{ remark?.value?.length }}/{{ maxCharsDecision }}</label
+                >
+                <div *ngIf="remark?.invalid && remark?.touched">
+                  <small class="text-danger" *ngIf="remark?.errors?.['required']">
+                    Remark is Required
+                  </small>
+                </div>
+              </div>
+            </div>
+        
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div>
+          <button class="btn btn-success me-2"  (click)="openModalUpdateStatus()" [disabled]="formGroup.invalid">Update</button>
+          <button
+            class="btn btn-outline-danger me-2"
+            (click)="close('Cross click')"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+  </div>
+  

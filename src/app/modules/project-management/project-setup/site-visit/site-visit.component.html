@@ -1,0 +1,486 @@
+<div class="card">
+  <div class="card-body border-bottom-0">
+    <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+     
+        <h5 class="card-title mb-1">
+          {{ selectedTab?.projectProcessName }}
+        </h5>
+      
+      <div class="" *ngIf="selectedTab?.isComplete != true">
+        <div class="d-flex justify-content-end mb-1">
+          <button
+            type="button"
+            class="btn btn-success add-btn me-2"
+            id="create-btn"
+            (click)="goToAddProcess(addProcessModal)"
+          >
+            Add
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary add-btn"
+            id="create-btn"
+            (click)="openModalComplete()"
+          >
+            Completed
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive table-card mb-0">
+        <table class="table">
+          <thead>
+            <tr class="bg-light text-muted text-uppercase">
+              <th>Title</th>
+              <th>Created</th>
+              <th>File</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="projectProcessDocList.length == 0">
+              <tr>
+                <td colspan="6"><p class="text-muted">No Records Found</p></td>
+              </tr>
+            </ng-container>
+            <ng-container *ngIf="projectProcessDocList.length != 0">
+              <tr *ngFor="let item of projectProcessDocList">
+                <td class="title align-top">{{ item.title }}</td>
+                <td class="title align-top">
+                  {{ item.createdDate }}
+                  <p class="fs-12 mb-0">
+                    {{ item.createdById }}
+                  </p>
+                </td>
+                <td class="title align-top cursor">
+                  <i
+                    class="ri-image-line text-info fs-18 cursor"
+                    [ngbTooltip]="item.type"
+                    (click)="open(item.docURL)"
+                    *ngIf="item.type == 'Image'"
+                  ></i>
+                  <!-- <a href="{{url+item.docURL}}" target="_blank" >click</a> -->
+                  <i
+                    class="ri-file-line text-primary fs-18 cursor"
+                    [ngbTooltip]="item.type"
+                    (click)="goToLink(item.docURL)"
+                    *ngIf="item.type == 'Document'"
+                  ></i>
+                  <i
+                    class="ri-video-line text-success fs-18 cursor"
+                    [ngbTooltip]="item.type"
+                    (click)="openModaVideeo(item.docURL, VideoPlayer)"
+                    *ngIf="item.type == 'Video'"
+                  ></i>
+                </td>
+                <td class="title align-top">
+                  <span
+                    [class]="
+                      returnStatusBadgeClassesStatus(
+                        item.projectProcessDocStatusId
+                      )
+                    "
+                    >{{ item.projectProcessDocStatusName }}</span
+                  >
+                </td>
+                <td class="title align-top cursor">
+                  <i
+                    class="ri-eye-line text-primary fs-18 cursor"
+                    (click)="
+                      getMX_ProjectProcessDocDetail(item, viewProcessModal)
+                    "
+                  ></i>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+        <!-- <div class="text-center text-muted">
+            No Found
+          </div> -->
+      </div>
+    </div>
+  </div>
+
+  <!----add project modal-------->
+
+  <ng-template #addProcessModal role="document" let-modal>
+    <div class="modal-header p-3 bg-primary-subtle">
+      <h5 class="modal-title" id="inviteMembersModalLabel">
+        {{ selectedTab?.projectProcessName }}
+      </h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="ProcessModalForm">
+        <div class="col-xl-12">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12 mb-2">
+                <label for="formFile" class="form-label"
+                  >Title
+                  <span class="starRequried">*</span>
+                </label>
+                <input
+                  class="form-control"
+                  bindValue="companyId"
+                  formControlName="frmtitle"
+                  type="text"
+                  placeholder="Title"
+                />
+              </div>
+              <div class="col-md-12 mb-2">
+                <label class="form-label" for="des-info-description-input"
+                  >Remark
+                  <span class="starRequried">*</span>
+                </label>
+                <ckeditor
+                  [editor]="Editor"
+                  [config]="{
+                    toolbar: [
+                      'heading',
+                      '|',
+                      'bold',
+                      'italic',
+                      '|',
+                      'NumberedList',
+                      'BulletedList'
+                    ]
+                  }"
+                  placeholder="Enter Remark"
+                  formControlName="frmdescription"
+                >
+                </ckeditor>
+              </div>
+              <div class="col-md-12 mb-2">
+                <label for="formFile" class="form-label">Type of File 
+                  <span class="starRequried">*</span>
+                </label>
+                <ng-select
+                  [items]="typeArray"
+                  (change)="resetFileValue()"
+                  [clearable]="true"
+                  id="clientName"
+                  formControlName="frmtype"
+                  placeholder="Select File Type"
+                  class="w-100 mr-2"
+                ></ng-select>
+              </div>
+
+              <div class="col-lg-12 mb-2">
+                <div
+                  class="container-fluid container-view"
+                  *ngIf="
+                    frmtype.value == 'Document' || frmtype.value == 'Video'
+                  "
+                >
+                  <!-- accept="video/*" -->
+
+                  <ngx-dropzone
+                    (change)="onSelect($event)"
+                    [accept]="
+                      frmtype.value == 'Document'
+                        ? '.pdf, .doc, .docx, .txt ,.dwg , .ppt , .pptx , .xls , .xlsx , .ods , .csv ,.odt , .rtf ,.odp '
+                        : 'video/*'
+                    "
+                    [multiple]="false"
+                    title="All file will be Uploaded"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    class="dropzone"
+                  >
+                    <ngx-dropzone-label>Drag and drop/Click here to upload </ngx-dropzone-label> 
+                    <!-- <ngx-dropzone-preview
+                          *ngFor="let f of files"
+                          [removable]="true"
+                          (removed)="onRemove(f)"
+                        >
+                          <ngx-dropzone-label
+                            >{{ f.name }} ({{ f.type }})</ngx-dropzone-label
+                          >
+                        </ngx-dropzone-preview> -->
+                  </ngx-dropzone>
+                  <div class="row me-0 mr-0" *ngIf="files.length != 0">
+                    <div class="col-md-12">
+                      <div class="table-responsive">
+                        <table class="table" style="text-align: justify">
+                          <thead>
+                            <tr>
+                              <th colspan="2">File Name</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let f of files">
+                              <td>
+                                <i
+                                  class="ri-close-circle-line text-danger"
+                                  type="button"
+                                  (click)="onRemove(f)"
+                                ></i>
+                              </td>
+                              <td style="white-space: nowrap" [title]="f.name">
+                                {{ f.name }}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="container-fluid container-view"
+                  *ngIf="frmtype.value == 'Image'"
+                >
+                  <div class="mt-3">
+                    <ngx-dropzone
+                      [multiple]="false"
+                      (change)="onSelectFile($event)"
+                      accept="image/*"
+                      title="Only Image file will be Uploaded"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      [url]="false"
+                      class="dropzone"
+                      *ngIf="file.length == 0"
+                    >
+                      <ngx-dropzone-label class="dropzoneLabel">
+                        Drag and drop/Click here to upload 
+                      </ngx-dropzone-label>
+                    </ngx-dropzone>
+                    <div class="preview-section">
+                      <div
+                        class="image-container"
+                        *ngFor="let image of file; let i = index"
+                      >
+                        <div
+                          class="image-wrapper"
+                          [ngClass]="{
+                            'new-row': i % 3 === 0 && i !== 0
+                          }"
+                        >
+                          <img
+                            #imgRenderer
+                            [src]="base64Strings[i]"
+                            class="img-size-withd-upload"
+                          />
+                          <i
+                            class="ri-close-circle-line ri-close-circle-line2"
+                            type="button"
+                            (click)="
+                              onRemoveImage(image); $event.stopPropagation()
+                            "
+                          ></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- <div class="textcenter">
+                        <div class="position-relative d-inline-block">
+                          <div class="position-absolute top-100 start-100 translate-middle">
+                            <label class="mb-0" placement="left" ngbTooltip="Remove Image" *ngIf="isFirstImageVisible">
+                              <div class="avatar-xs">
+                                <div class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
+                                  <i class="ri-close-circle-fill" (click)="crossFirstImage(process_upload_image)"></i>
+                                </div>
+                              </div>
+                            </label>
+                            <label for="asset_id0" class="mb-0" placement="left" ngbTooltip="Select Image"
+                              *ngIf="!isFirstImageVisible">
+                              <div class="avatar-xs">
+                                <div class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
+                                  <i class="ri-image-fill"></i>
+                                </div>
+                              </div>
+                            </label>
+                            <input (change)="onSelectFile($event)" class="form-control d-none" value="" id="asset_id0"
+                              type="file" accept="image/png, image/gif, image/jpeg" />
+                          </div>
+                          <div class="avatar-lg">
+                            <div class="avatar-title bg-light rounded">
+                              <img 
+                              src="{{ process_upload_image }}" id="product-img" class="avatar-md img-size-fixed1" />
+                              
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-danger mr-2 mb-2 mb-md-0"
+                (click)="modal.dismiss('cancel')"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                ngbAutofocus
+                [disabled]="checkButtonDisable()" 
+                class="btn btn-success mr-2 mb-2 mb-md-0"
+                (click)="submitprocessFromDetails()"
+              >
+                Submit
+              </button>
+            </div>
+
+            <!-- end card body -->
+          </div>
+          <!-- end card -->
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #VideoPlayer role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <!-- <h5 class="modal-title" id="inviteMembersModalLabel">
+        {{ storeInfomationVideo.preventiveTypeName }}
+      </h5> -->
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div id="instructions">
+      <video
+        id="my_video_1"
+        class="video-js vjs-default-skin"
+        width="100%"
+        height="267px"
+        controls
+        preload="none"
+        data-setup='{ "aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }'
+      >
+        <source src="{{ linkVideo }}" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #viewProcessModal role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">
+      {{ selectedTab?.projectProcessName }}
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 mb-3">
+        <p class="mb-0 fw-bold">Title</p>
+        <p class="fs-14 mb-0">
+          {{ projectProcessDocDetail.title || "-" }}
+        </p>
+      </div>
+
+      <div class="col-sm-12 col-md-12 col-lg-12 mb-3">
+        <p class="mb-0 fw-bold">Remark</p>
+        <p class="fs-14 mb-0" [innerHTML]="projectProcessDocDetail.remark"></p>
+      </div>
+
+      <div class="col-sm-6 col-md-6 col-lg-6 mb-3">
+        <p class="mb-0 fw-bold">Created Date</p>
+        <p class="fs-14 mb-0">
+          {{ projectProcessDocDetail.createdDate }}
+        </p>
+       
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 mb-3">
+        <p class="mb-0 fw-bold">Created Date</p>
+        <p class="fs-14 mb-0">
+          {{ projectProcessDocDetail.createdById }}
+        </p>
+       
+      </div>
+
+      <div class="col-sm-6 col-md-6 col-lg-6 mb-3">
+        <p class="mb-0 fw-bold">Status</p>
+        <p class="fs-14 mb-0">
+          <span
+            [class]="
+              returnStatusBadgeClassesStatus(
+                projectProcessDocDetail.projectProcessDocStatusId
+              )
+            "
+            >{{ projectProcessDocDetail.projectProcessDocStatusName }}</span
+          >
+        </p>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 mb-3">
+        <p class="mb-0 fw-bold">Document Type</p>
+        <p class="fs-14 mb-0">
+          {{ projectProcessDocDetail.type }} <span>
+            <i
+            class="ri-image-line text-info fs-18 cursor"
+            [ngbTooltip]="projectProcessDocDetail.type"
+            (click)="open(projectProcessDocDetail.docURL)"
+            *ngIf="projectProcessDocDetail.type == 'Image'"
+          ></i>
+          <!-- <a href="{{url+projectProcessDocDetail.docURL}}" target="_blank" >click</a> -->
+          <i
+            class="ri-file-line text-primary fs-18 cursor"
+            [ngbTooltip]="projectProcessDocDetail.type"
+            (click)="goToLink(projectProcessDocDetail.docURL)"
+            *ngIf="projectProcessDocDetail.type == 'Document'"
+          ></i>
+          <i
+            class="ri-video-line text-success fs-18 cursor"
+            [ngbTooltip]="projectProcessDocDetail.type"
+            (click)="openModaVideeo(projectProcessDocDetail.docURL, VideoPlayer)"
+            *ngIf="projectProcessDocDetail.type == 'Video'"
+          ></i>
+          </span>
+          
+        </p>
+       
+      </div>
+    </div>
+  </div>
+  <div class="modal-body text-end">
+    <button
+    type="button"
+    class="btn btn-danger mr-2 mb-2 mb-md-0"
+    (click)="modal.dismiss('cancel')"
+  >
+    Close
+  </button>
+  </div>
+</ng-template>

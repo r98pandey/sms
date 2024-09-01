@@ -1,0 +1,193 @@
+<app-breadcrumbs [title]="label" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm">
+            <h5 class="card-title mb-0">Audit List</h5>
+          </div>
+          <div class="col-lg">
+            <div class="search-box">
+              <ng-select [items]="arrayListDropDownTicketStatus" bindLabel="assetStatus" bindValue="assetStatusId"
+                (change)="onDropdownTicketStatusValueChange($event)" [clearable]="true" id="ticketStatus"
+                [(ngModel)]="selectedDropDownAuditStatusIdValue" placeholder="Select Status" class="w-100 mr-2"
+                for="ticketStatus"></ng-select>
+            </div>
+          </div>
+          <div class="col-lg">
+            <div class="search-box">
+              <input type="search" name="searchTerm" class="form-control" [(ngModel)]="typeAuditNameValue"
+                placeholder="Search for audit name" #inputerTicketNumber />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+          </div>
+          <div class="col-lg">
+            <div class="search-box">
+              <ng-select [items]="yearsList" (change)="onDropdownYearValueChange($event)" [clearable]="true"
+                id="yearStatus" [(ngModel)]="selectedDateValue" placeholder="Select Year" class="w-100 mr-2"
+                for="yearStatus"></ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row g-3">
+          <div class="col-lg">
+            <ng-select [items]="arrayListDropDownCompany" bindLabel="companyName" bindValue="companyId"
+              (change)="onDropdownCompanyValueChange($event)" [clearable]="true" id="companyName"
+              [(ngModel)]="selectedDropDownCompanyIdValue" placeholder="Select Company" class="w-100 mr-2"
+              for="companyName" [readonly]="disabledWithAceessGroup"></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select [items]="arrayListDropDownClientList" bindLabel="clientName"
+              [disabled]="!selectedDropDownCompanyIdValue" bindValue="clientId"
+              (change)="onDropdownClientValueChange($event)" [clearable]="true" id="clientName"
+              [(ngModel)]="selectedDropDownClientIdValue" [readonly]="disabledWithAceessGroup" placeholder="Select Client" class="w-100 mr-2"
+              for="clientName"></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select [items]="arrayListDropDownProjectOrDeparmentList" bindLabel="departmentName"
+              [disabled]="!selectedDropDownCompanyIdValue" bindValue="departmentId"
+              (change)="onDropdownDepartmentValueChange($event)" [clearable]="true" id="departmentName"
+              [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue" 
+              [readonly]="projectDepartmentFieldDisiabled" placeholder="Select Project" class="w-100 mr-2"
+              for="departmentName"></ng-select>
+          </div>
+          <div class="col-lg-auto text-end">
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-danger me-1" (click)="resetSerachVariable()"
+                ngbTooltip="Remove All Search">
+                <i class="ri-refresh-fill me-1 align-bottom"></i>
+                Clear
+              </button>
+              <button class="btn btn-success" (click)="navigateToAdd()">
+              <i class="ri-add-fill me-1 align-bottom"></i> Add Audit
+            </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav nav-tabs nav-tabs-custom nav-success mb-3">
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th>Audit Name</th>
+                        <th>Company</th>
+                        <th>Client</th>
+                        <th>{{ isProject ? "Project" : "Department" }}</th>
+                        <th>Create Date</th>
+                        <th>Created by</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngIf="auditList.length == 0">
+                        <tr>
+                          <td colspan="9" class="text-center">No Audit Data</td>
+                        </tr>
+                      </ng-container>
+                      <ng-container *ngIf="auditList.length != 0">
+                        <tr *ngFor="let audit of auditList">
+                          <td  [title]="audit.assetAuditName" >
+                            <a href="javascript:void(0)" (click)="viewHandler(audit.assetAuditId)"
+                              class="fw-medium link-primary">{{ audit.assetAuditName }}</a>
+                          </td>
+
+                            <td [title]="audit.companyName" class="title" (click)="
+                              expandTitle('companyName_' + audit.assetAuditId)
+                            "
+                            [id]="'companyName_' + audit.assetAuditId">
+                            {{ audit.companyName }}
+                          </td>
+                          <td [title]="audit.clientName" class="title" (click)="
+                              expandTitle('clientName_' + audit.assetAuditId)
+                            "
+                            [id]="'clientName_' + audit.assetAuditId">
+                            {{ audit.clientName }}
+                          </td>
+                          <td [title]="audit.departmentName" class="title" (click)="
+                              expandTitle('departmentName_' + audit.assetAuditId)
+                            "
+                            [id]="'departmentName_' + audit.assetAuditId">
+                            {{ audit.departmentName }}
+                          </td>
+                          <td>
+                            {{ audit.createdDate }}
+                          </td>
+
+                          <td class="status">
+                            {{ audit?.fullName }}
+                          </td>
+
+                          <td class="status">
+                            <span [class]="
+                                returnStatusBadgeClassesStatus(
+                                  audit.auditStatusId
+                                )
+                              ">{{ audit.assetStatus }}</span>
+                          </td>
+
+                          <td>
+                            <span>
+                              <div class="dropdown" ngbDropdown>
+                                <button class="btn btn-soft-secondary btn-sm dropdown arrow-none" type="button"
+                                  data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+                                  <i class="ri-more-fill"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                                  <li>
+                                    <a class="dropdown-item cursor-pointer" (click)="viewHandler(audit.assetAuditId)"><i
+                                        class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                      View
+                                    </a>
+                                  </li>
+
+                                  <!-- <li class="dropdown-divider"></li> -->
+                                </ul>
+                              </div>
+                            </span>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="row justify-content-md-between align-items-md-center gy-2">
+                  <div class="col col-sm-12 col col-md-6">
+                    <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecordsFromApi }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col col-sm-12 col col-md-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination [collectionSize]="totalRecordsFromApi" [pageSize]="pageSize" [(page)]="page"
+                        [maxSize]="2" [rotate]="true" (pageChange)="OnChangesPage($event)"
+                        *ngIf="totalRecordsFromApi > pageSize"></ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

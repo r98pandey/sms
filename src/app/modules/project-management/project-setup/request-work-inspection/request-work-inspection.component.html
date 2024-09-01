@@ -1,0 +1,355 @@
+<div class="card">
+  <div class="card-body border-bottom-0">
+    <div
+      class="d-flex justify-content-between align-items-center border-bottom mb-3"
+    >
+      <h5 class="card-title mb-1">
+        {{ selectedTab?.projectProcessName }}
+      </h5>
+
+      <div class="" *ngIf="selectedTab?.isComplete != true">
+        <div class="d-flex justify-content-end mb-1">
+          <button
+            type="button"
+            class="btn btn-success add-btn me-2"
+            id="create-btn"
+            (click)="goToAddProcess(addProcessModal)"
+          >
+            Add
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary add-btn"
+            id="create-btn"
+            (click)="openModalComplete()"
+          >
+            Completed
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive table-card mb-0">
+        <table class="table">
+          <thead>
+            <tr class="bg-light text-muted text-uppercase a1">
+              
+              <th>Ref-No</th>
+              <th>Title</th> 
+              <th>Created Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="projectProcessDocList.length == 0">
+              <tr>
+                <td colspan="6"><p class="text-muted">No Records Found</p></td>
+              </tr>
+            </ng-container>
+            <ng-container *ngIf="projectProcessDocList.length != 0">
+              <tr *ngFor="let item of projectProcessDocList">
+                <td class="title align-top fw-medium link-primary cursor"
+                  (click)="openModalMember(item.projectProcessHeaderDocId)"
+                >{{ item.refNo||'-' }}</td>
+                <td class="title align-top" [title]="item.title">{{ item.title }}</td>
+               
+                <!-- <td class="title align-top">
+                  {{ item.createdById }}
+                </td> -->
+                <td class="title align-top">
+                  {{ item.createdDate }}
+                </td>
+
+                <td class="title align-top">
+                  <span
+                    [class]="
+                      returnStatusBadgeClassesStatus(
+                        item.projectProcessHeaderDocStatusId
+                      )
+                    "
+                    >{{ item.projectProcessHeaderDocStatusName }}</span
+                  >
+                </td>
+                <td class="title align-top cursor">
+                  <ul class="list-inline hstack gap-2 mb-0" >
+                    <li
+                      class="list-inline-item"
+                      data-bs-toggle="tooltip"
+                      data-bs-trigger="hover"
+                      ngbTooltip="View"
+                      placement="top"
+                    >
+                      <a
+                        href="javascript:void(0);"
+                        (click)="
+                          openModalMember(
+                            item.projectProcessHeaderDocId
+                          )
+                        "
+                        class="text-primary d-inline-block"
+                      >
+                        <i class="ri-eye-fill fs-16"></i>
+                      </a>
+                    </li>
+                    <li
+                      class="list-inline-item edit"
+                      data-bs-toggle="tooltip"
+                      data-bs-trigger="hover"
+                      ngbTooltip="Delete"
+                      placement="top"
+                      *ngIf="selectedTab?.isComplete != true"
+                    >
+                      <a
+                        (click)="
+                          openModalDeleteConf(item.projectProcessHeaderDocId)
+                        "
+                        href="javascript:void(0);"
+                        data-bs-toggle="modal"
+                        class="text-danger d-inline-block edit-item-btn"
+                      >
+                        <i class="ri-delete-bin-line fs-16"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+        <!-- <div class="text-center text-muted">
+              No Found
+            </div> -->
+      </div>
+    </div>
+  </div>
+
+  <!----add project modal-------->
+
+  <ng-template #addProcessModal role="document" let-modal>
+    <div class="modal-header p-3 bg-primary-subtle">
+      <h5 class="modal-title" id="inviteMembersModalLabel">
+        {{ selectedTab?.projectProcessName }}
+      </h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="ProcessModalForm">
+        <div class="col-xl-12">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12 mb-2">
+                <label for="formFile" class="form-label"
+                  >Title
+                  <span class="starRequried">*</span>
+                </label>
+                <input
+                  class="form-control"
+                  bindValue="companyId"
+                  formControlName="frmtitle"
+                  type="text"
+                  placeholder="Title"
+                  [maxlength]="maxCharsDecision"
+                  />
+                  <label class="nopadding clrlbl">
+                    Characters Remaining:
+                    {{ frmtitle?.value?.length }}/{{
+                      maxCharsDecision
+                    }}</label
+                  >
+              </div>
+              <div class="col-md-12 mb-2">
+                <label class="form-label" for="des-info-description-input"
+                  >Remark
+                  <span class="starRequried">*</span>
+                </label>
+                <ckeditor
+                  [editor]="Editor"
+                  [config]="{
+                    toolbar: [
+                      'heading',
+                      '|',
+                      'bold',
+                      'italic',
+                      '|',
+                      'NumberedList',
+                      'BulletedList'
+                    ]
+                  }"
+                  placeholder="Enter Remark"
+                  formControlName="frmdescription"
+                >
+                </ckeditor>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-danger mr-2 mb-2 mb-md-0"
+                (click)="modal.dismiss('cancel')"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                ngbAutofocus
+                [disabled]="ProcessModalForm.invalid"
+                class="btn btn-success mr-2 mb-2 mb-md-0"
+                (click)="submitprocessFromDetails()"
+              >
+                Submit
+              </button>
+            </div>
+
+            <!-- end card body -->
+          </div>
+          <!-- end card -->
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #VideoPlayer role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <!-- <h5 class="modal-title" id="inviteMembersModalLabel">
+          {{ storeInfomationVideo.preventiveTypeName }}
+        </h5> -->
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div id="instructions">
+      <video
+        id="my_video_1"
+        class="video-js vjs-default-skin"
+        width="100%"
+        height="267px"
+        controls
+        preload="none"
+        data-setup='{ "aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }'
+      >
+        <source src="{{ linkVideo }}" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #viewProcessModal role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">
+      {{ selectedTab?.projectProcessName }}
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 mb-3">
+        <p class="mb-0 fw-bold">Title</p>
+        <p class="fs-14 mb-0">
+          {{ projectProcessDocDetail.title || "-" }}
+        </p>
+      </div>
+
+      <div class="col-sm-12 col-md-12 col-lg-12 mb-3">
+        <p class="mb-0 fw-bold">Remark</p>
+        <p class="fs-14 mb-0" [innerHTML]="projectProcessDocDetail.remark"></p>
+      </div>
+
+      <div class="col-sm-6 col-md-6 col-lg-6 mb-3">
+        <p class="mb-0 fw-bold">Created Date</p>
+        <p class="fs-14 mb-0">
+          {{ projectProcessDocDetail.createdDate }}
+        </p>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 mb-3">
+        <p class="mb-0 fw-bold">Created Date</p>
+        <p class="fs-14 mb-0">
+          {{ projectProcessDocDetail.createdById }}
+        </p>
+      </div>
+
+      <div class="col-sm-6 col-md-6 col-lg-6 mb-3">
+        <p class="mb-0 fw-bold">Status</p>
+        <p class="fs-14 mb-0">
+          <span
+            [class]="
+              returnStatusBadgeClassesStatus(
+                projectProcessDocDetail.projectProcessDocStatusId
+              )
+            "
+            >{{ projectProcessDocDetail.projectProcessDocStatusName }}</span
+          >
+        </p>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 mb-3">
+        <p class="mb-0 fw-bold">Document Type</p>
+        <p class="fs-14 mb-0">
+          {{ projectProcessDocDetail.type }}
+          <span>
+            <i
+              class="ri-image-line text-info fs-18 cursor"
+              [ngbTooltip]="projectProcessDocDetail.type"
+              (click)="open(projectProcessDocDetail.docURL)"
+              *ngIf="projectProcessDocDetail.type == 'Image'"
+            ></i>
+            <!-- <a href="{{url+projectProcessDocDetail.docURL}}" target="_blank" >click</a> -->
+            <i
+              class="ri-file-line text-primary fs-18 cursor"
+              [ngbTooltip]="projectProcessDocDetail.type"
+              (click)="goToLink(projectProcessDocDetail.docURL)"
+              *ngIf="projectProcessDocDetail.type == 'Document'"
+            ></i>
+            <i
+              class="ri-video-line text-success fs-18 cursor"
+              [ngbTooltip]="projectProcessDocDetail.type"
+              (click)="
+                openModaVideeo(projectProcessDocDetail.docURL, VideoPlayer)
+              "
+              *ngIf="projectProcessDocDetail.type == 'Video'"
+            ></i>
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body text-end">
+    <button
+      type="button"
+      class="btn btn-danger mr-2 mb-2 mb-md-0"
+      (click)="modal.dismiss('cancel')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,815 @@
+<ng-container *ngIf="!maintenanceProcessComing">
+<div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title">
+    {{ accessRight.projectProcessName }}
+    <small class="text-muted" style="font-size: small"
+      >(Internal/External Member List)</small
+    >
+  </h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close('Close click')"
+  ></button>
+</div>
+<div class="offcanvas-body custom-offcanvas-body">
+  <ul
+    ngbNav
+    #customNav="ngbNav"
+    [activeId]="
+      accessGroup.warrenty_InternalUser_Tab_View 
+        ? 1
+        : accessGroup.warrenty_ExternalUser_Tab_View
+        ? 2
+        : 1
+    "
+    class="nav nav-tabs-custom border-bottom-0"
+    role="tablist"
+  >
+    <ng-container *ngIf="accessGroup.warrenty_InternalUser_Tab_View   ">
+      <li [ngbNavItem]="1" class="nav-item">
+        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+          Internal
+        </a>
+        <ng-template ngbNavContent>
+          <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-8"></div>
+                    <div class="col-md-4">
+                      <div class="input-group mb-3">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Search by name"
+                          [(ngModel)]="internalSearchTerm"
+                        />
+                        <button
+                          class="btn btn-danger ms-3"
+                          type="button"
+                          (click)="internalSearchTerm = ''"
+                        >
+                          <i class="ri-refresh-fill me-1 align-bottom"></i>
+                          Clear
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="filteredTeamMembers('Internal').length === 0"
+                    class="text-center"
+                  >
+                    <div class="py-4 text-center">
+                      <div>
+                        <lord-icon
+                          src="https://cdn.lordicon.com/msoeawqm.json"
+                          trigger="loop"
+                          colors="primary:#405189,secondary:#0ab39c"
+                          style="width: 72px; height: 72px"
+                        >
+                        </lord-icon>
+                      </div>
+                      <div class="mt-4">
+                        <h5>No Records Found</h5>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row row-cols-xxl-8 row-cols-lg-4 row-cols-1">
+                    <ng-container
+                      *ngFor="let team of filteredTeamMembers('Internal')"
+                    >
+                      <div class="col">
+                        <div class="card ribbon-box border right">
+                          <div class="card-body" style="padding: 9px">
+                            <div class="ribbon ribbon-primary round-shape">
+                              {{ team.type }}
+                            </div>
+                            <div class="d-flex mb-2 align-items-center">
+                              <div class="flex-shrink-0">
+                                <img
+                                  [src]="
+                                    team.profileImageUrl
+                                      ? apiUrl + team.profileImageUrl
+                                      : 'assets/images/placeholderimage.png'
+                                  "
+                                  alt=""
+                                  class="avatar-sm rounded-circle"
+                                />
+                              </div>
+                              <div class="flex-grow-1 ms-2">
+                                <h5
+                                  class="card-title mb-1 text-truncate d-block"
+                                  ngbTooltip="{{ team.fullName }}"
+                                >
+                                  {{ transform(team.fullName, 20) }}
+                                </h5>
+                                <p
+                                  class="text-muted mb-0 text-truncate d-block"
+                                >
+                                  {{ team.accessGroupName }}
+                                </p>
+                              </div>
+                            </div>
+                            <p
+                              class="card-text text-muted text-truncate d-block mb-0"
+                            >
+                              <i
+                                class="ri-mail-fill me-1 align-middle text-success"
+                              ></i>
+                              {{ team.email }}
+                            </p>
+                            <p
+                              class="text-muted mb-0 text-truncate d-block mb-0"
+                            >
+                              <i
+                                class="ri-phone-fill me-1 align-middle text-danger"
+                              ></i>
+                              {{ team.phoneNumber }}
+                            </p>
+                          </div>
+                          <div class="card-footer" style="padding: 9px">
+                            <div
+                              class="d-flex flex-wrap align-items-center gap-2"
+                            >
+                              <div class="flex-shrink-0">
+                                <div
+                                  class="form-check form-switch form-switch-left form-switch-md me-2"
+                                >
+                                  <label
+                                    for="verified-{{ team.userId }}"
+                                    class="form-label text-muted"
+                                    >Verified</label
+                                  >
+                                  <input
+                                    class="form-check-input code-switcher"
+                                    [(ngModel)]="team.isVerified"
+                                    (change)="onChangeAccessRightGroup(team)"
+                                    type="checkbox"
+                                    id="verified-{{ team.userId }}"
+                                  />
+                                </div>
+                              </div>
+                              <div class="flex-shrink-1">
+                                <div
+                                  class="form-check form-switch form-switch-left form-switch-md me-2"
+                                >
+                                  <label
+                                    for="acknowledgement-{{ team.userId }}"
+                                    class="form-label text-muted"
+                                    >Acknowledgement</label
+                                  >
+                                  <input
+                                    class="form-check-input code-switcher"
+                                    [(ngModel)]="team.isAcknowledgement"
+                                    (change)="onChangeAccessRightGroup(team)"
+                                    type="checkbox"
+                                    id="acknowledgement-{{ team.userId }}"
+                                  />
+                                </div>
+                              </div>
+                              <div class="flex-shrink-2">
+                                <div
+                                  class="form-check form-switch form-switch-left form-switch-md me-2"
+                                >
+                                  <label
+                                    for="approve-{{ team.userId }}"
+                                    class="form-label text-muted"
+                                    >Approve</label
+                                  >
+                                  <input
+                                    class="form-check-input code-switcher"
+                                    [(ngModel)]="team.isApprove"
+                                    (change)="onChangeAccessRightGroup(team)"
+                                    type="checkbox"
+                                    id="approve-{{ team.userId }}"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- ene col -->
+          </div>
+        </ng-template>
+      </li></ng-container
+    >
+    <ng-container *ngIf="accessGroup.warrenty_ExternalUser_Tab_View ">
+      <li [ngbNavItem]="2" class="nav-item">
+        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+          External
+        </a>
+        <ng-template ngbNavContent>
+          <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-8"></div>
+                    <div class="col-md-4">
+                      <div class="input-group mb-3">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Search by name"
+                          [(ngModel)]="externalSearchTerm"
+                        />
+                        <button
+                          class="btn btn-danger ms-3"
+                          type="button"
+                          (click)="externalSearchTerm = ''"
+                        >
+                          <i class="ri-refresh-fill me-1 align-bottom"></i>
+                          Clear
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="filteredTeamMembers('External').length === 0"
+                    class="text-center"
+                  >
+                    <div class="py-4 text-center">
+                      <div>
+                        <lord-icon
+                          src="https://cdn.lordicon.com/msoeawqm.json"
+                          trigger="loop"
+                          colors="primary:#405189,secondary:#0ab39c"
+                          style="width: 72px; height: 72px"
+                        >
+                        </lord-icon>
+                      </div>
+                      <div class="mt-4">
+                        <h5>No Records Found</h5>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row row-cols-xxl-8 row-cols-lg-4 row-cols-1">
+                    <ng-container
+                      *ngFor="let team of filteredTeamMembers('External')"
+                    >
+                      <div class="col">
+                        <div class="card ribbon-box border right">
+                          <div class="card-body" style="padding: 9px">
+                            <div class="ribbon ribbon-primary round-shape">
+                              {{ team.type }}
+                            </div>
+                            <div class="d-flex mb-2 align-items-center">
+                              <div class="flex-shrink-0">
+                                <img
+                                  [src]="
+                                    team.profileImageUrl
+                                      ? apiUrl + team.profileImageUrl
+                                      : 'assets/images/placeholderimage.png'
+                                  "
+                                  alt=""
+                                  class="avatar-sm rounded-circle"
+                                />
+                              </div>
+                              <div class="flex-grow-1 ms-2">
+                                <h5
+                                  class="card-title mb-1 text-truncate d-block"
+                                  ngbTooltip="{{ team.fullName }}"
+                                >
+                                  {{ transform(team.fullName, 20) }}
+                                </h5>
+                                <p
+                                  class="text-muted mb-0 text-truncate d-block"
+                                >
+                                  {{ team.accessGroupName }}
+                                </p>
+                              </div>
+                            </div>
+                            <p
+                              class="card-text text-muted text-truncate d-block mb-0"
+                            >
+                              <i
+                                class="ri-mail-fill me-1 align-middle text-success"
+                              ></i>
+                              {{ team.email }}
+                            </p>
+                            <p
+                              class="text-muted mb-0 text-truncate d-block mb-0"
+                            >
+                              <i
+                                class="ri-phone-fill me-1 align-middle text-danger"
+                              ></i>
+                              {{ team.phoneNumber }}
+                            </p>
+                          </div>
+                          <div class="card-footer" style="padding: 9px">
+                            <div
+                              class="d-flex flex-wrap align-items-center gap-2"
+                            >
+                              <div class="flex-shrink-0">
+                                <div
+                                  class="form-check form-switch form-switch-left form-switch-md me-2"
+                                >
+                                  <label
+                                    for="verified-{{ team.userId }}"
+                                    class="form-label text-muted"
+                                    >Verified</label
+                                  >
+                                  <input
+                                    class="form-check-input code-switcher"
+                                    [(ngModel)]="team.isVerified"
+                                    (change)="onChangeAccessRightGroup(team)"
+                                    type="checkbox"
+                                    id="verified-{{ team.userId }}"
+                                  />
+                                </div>
+                              </div>
+                              <div class="flex-shrink-1">
+                                <div
+                                  class="form-check form-switch form-switch-left form-switch-md me-2"
+                                >
+                                  <label
+                                    for="acknowledgement-{{ team.userId }}"
+                                    class="form-label text-muted"
+                                    >Acknowledgement</label
+                                  >
+                                  <input
+                                    class="form-check-input code-switcher"
+                                    [(ngModel)]="team.isAcknowledgement"
+                                    (change)="onChangeAccessRightGroup(team)"
+                                    type="checkbox"
+                                    id="acknowledgement-{{ team.userId }}"
+                                  />
+                                </div>
+                              </div>
+                              <div class="flex-shrink-2">
+                                <div
+                                  class="form-check form-switch form-switch-left form-switch-md me-2"
+                                >
+                                  <label
+                                    for="approve-{{ team.userId }}"
+                                    class="form-label text-muted"
+                                    >Approve</label
+                                  >
+                                  <input
+                                    class="form-check-input code-switcher"
+                                    [(ngModel)]="team.isApprove"
+                                    (change)="onChangeAccessRightGroup(team)"
+                                    type="checkbox"
+                                    id="approve-{{ team.userId }}"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- ene col -->
+          </div>
+        </ng-template>
+      </li>
+    </ng-container>
+  </ul>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="tab-content text-muted">
+        <div [ngbNavOutlet]="customNav"></div>
+      </div>
+    </div>
+    <!-- end col -->
+  </div>
+</div>
+<div class="offcanvas-footer text-end mb-4 pb-2">
+  <button
+    type="button"
+    class="btn btn-outline-danger me-2"
+    (click)="close('Close click')"
+  >
+    Close
+  </button>
+  <button
+    type="button"
+    ngbAutofocus
+    class="btn btn-success me-2"
+    (click)="submit('success')"
+  >
+    Submit
+  </button>
+</div>></ng-container>
+
+
+<ng-container *ngIf="maintenanceProcessComing">
+  <div class="offcanvas-header border-bottom">
+    <h5 class="offcanvas-title">
+      {{ accessRight.projectProcessName }}
+      <small class="text-muted" style="font-size: small"
+        >(Internal/External Member List)</small
+      >
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="close('Close click')"
+    ></button>
+  </div>
+  <div class="offcanvas-body custom-offcanvas-body">
+    <ul
+      ngbNav
+      #customNav="ngbNav"
+      [activeId]="
+         accessGroup.maintenanceAgreement_InternalUser_View
+          ? 1
+          :  accessGroup.maintenanceAgreement_ExternalUser_View
+          ? 2
+          : 1
+      "
+      class="nav nav-tabs-custom border-bottom-0"
+      role="tablist"
+    >
+      <ng-container *ngIf="accessGroup.maintenanceAgreement_InternalUser_View  ">
+        <li [ngbNavItem]="1" class="nav-item">
+          <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+            Internal
+          </a>
+          <ng-template ngbNavContent>
+            <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-8"></div>
+                      <div class="col-md-4">
+                        <div class="input-group mb-3">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Search by name"
+                            [(ngModel)]="internalSearchTerm"
+                          />
+                          <button
+                            class="btn btn-danger ms-3"
+                            type="button"
+                            (click)="internalSearchTerm = ''"
+                          >
+                            <i class="ri-refresh-fill me-1 align-bottom"></i>
+                            Clear
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="filteredTeamMembers('Internal').length === 0"
+                      class="text-center"
+                    >
+                      <div class="py-4 text-center">
+                        <div>
+                          <lord-icon
+                            src="https://cdn.lordicon.com/msoeawqm.json"
+                            trigger="loop"
+                            colors="primary:#405189,secondary:#0ab39c"
+                            style="width: 72px; height: 72px"
+                          >
+                          </lord-icon>
+                        </div>
+                        <div class="mt-4">
+                          <h5>No Records Found</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row row-cols-xxl-8 row-cols-lg-4 row-cols-1">
+                      <ng-container
+                        *ngFor="let team of filteredTeamMembers('Internal')"
+                      >
+                        <div class="col">
+                          <div class="card ribbon-box border right">
+                            <div class="card-body" style="padding: 9px">
+                              <div class="ribbon ribbon-primary round-shape">
+                                {{ team.type }}
+                              </div>
+                              <div class="d-flex mb-2 align-items-center">
+                                <div class="flex-shrink-0">
+                                  <img
+                                    [src]="
+                                      team.profileImageUrl
+                                        ? apiUrl + team.profileImageUrl
+                                        : 'assets/images/placeholderimage.png'
+                                    "
+                                    alt=""
+                                    class="avatar-sm rounded-circle"
+                                  />
+                                </div>
+                                <div class="flex-grow-1 ms-2">
+                                  <h5
+                                    class="card-title mb-1 text-truncate d-block"
+                                    ngbTooltip="{{ team.fullName }}"
+                                  >
+                                    {{ transform(team.fullName, 20) }}
+                                  </h5>
+                                  <p
+                                    class="text-muted mb-0 text-truncate d-block"
+                                  >
+                                    {{ team.accessGroupName }}
+                                  </p>
+                                </div>
+                              </div>
+                              <p
+                                class="card-text text-muted text-truncate d-block mb-0"
+                              >
+                                <i
+                                  class="ri-mail-fill me-1 align-middle text-success"
+                                ></i>
+                                {{ team.email }}
+                              </p>
+                              <p
+                                class="text-muted mb-0 text-truncate d-block mb-0"
+                              >
+                                <i
+                                  class="ri-phone-fill me-1 align-middle text-danger"
+                                ></i>
+                                {{ team.phoneNumber }}
+                              </p>
+                            </div>
+                            <div class="card-footer" style="padding: 9px">
+                              <div
+                                class="d-flex flex-wrap align-items-center gap-2"
+                              >
+                                <div class="flex-shrink-0">
+                                  <div
+                                    class="form-check form-switch form-switch-left form-switch-md me-2"
+                                  >
+                                    <label
+                                      for="verified-{{ team.userId }}"
+                                      class="form-label text-muted"
+                                      >Verified</label
+                                    >
+                                    <input
+                                      class="form-check-input code-switcher"
+                                      [(ngModel)]="team.isVerified"
+                                      (change)="onChangeAccessRightGroup(team)"
+                                      type="checkbox"
+                                      id="verified-{{ team.userId }}"
+                                    />
+                                  </div>
+                                </div>
+                                <div class="flex-shrink-1">
+                                  <div
+                                    class="form-check form-switch form-switch-left form-switch-md me-2"
+                                  >
+                                    <label
+                                      for="acknowledgement-{{ team.userId }}"
+                                      class="form-label text-muted"
+                                      >Acknowledgement</label
+                                    >
+                                    <input
+                                      class="form-check-input code-switcher"
+                                      [(ngModel)]="team.isAcknowledgement"
+                                      (change)="onChangeAccessRightGroup(team)"
+                                      type="checkbox"
+                                      id="acknowledgement-{{ team.userId }}"
+                                    />
+                                  </div>
+                                </div>
+                                <div class="flex-shrink-2">
+                                  <div
+                                    class="form-check form-switch form-switch-left form-switch-md me-2"
+                                  >
+                                    <label
+                                      for="approve-{{ team.userId }}"
+                                      class="form-label text-muted"
+                                      >Approve</label
+                                    >
+                                    <input
+                                      class="form-check-input code-switcher"
+                                      [(ngModel)]="team.isApprove"
+                                      (change)="onChangeAccessRightGroup(team)"
+                                      type="checkbox"
+                                      id="approve-{{ team.userId }}"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- ene col -->
+            </div>
+          </ng-template>
+        </li></ng-container
+      >
+      <ng-container *ngIf="accessGroup.maintenanceAgreement_ExternalUser_View">
+        <li [ngbNavItem]="2" class="nav-item">
+          <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+            External
+          </a>
+          <ng-template ngbNavContent>
+            <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-8"></div>
+                      <div class="col-md-4">
+                        <div class="input-group mb-3">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Search by name"
+                            [(ngModel)]="externalSearchTerm"
+                          />
+                          <button
+                            class="btn btn-danger ms-3"
+                            type="button"
+                            (click)="externalSearchTerm = ''"
+                          >
+                            <i class="ri-refresh-fill me-1 align-bottom"></i>
+                            Clear
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="filteredTeamMembers('External').length === 0"
+                      class="text-center"
+                    >
+                      <div class="py-4 text-center">
+                        <div>
+                          <lord-icon
+                            src="https://cdn.lordicon.com/msoeawqm.json"
+                            trigger="loop"
+                            colors="primary:#405189,secondary:#0ab39c"
+                            style="width: 72px; height: 72px"
+                          >
+                          </lord-icon>
+                        </div>
+                        <div class="mt-4">
+                          <h5>No Records Found</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row row-cols-xxl-8 row-cols-lg-4 row-cols-1">
+                      <ng-container
+                        *ngFor="let team of filteredTeamMembers('External')"
+                      >
+                        <div class="col">
+                          <div class="card ribbon-box border right">
+                            <div class="card-body" style="padding: 9px">
+                              <div class="ribbon ribbon-primary round-shape">
+                                {{ team.type }}
+                              </div>
+                              <div class="d-flex mb-2 align-items-center">
+                                <div class="flex-shrink-0">
+                                  <img
+                                    [src]="
+                                      team.profileImageUrl
+                                        ? apiUrl + team.profileImageUrl
+                                        : 'assets/images/placeholderimage.png'
+                                    "
+                                    alt=""
+                                    class="avatar-sm rounded-circle"
+                                  />
+                                </div>
+                                <div class="flex-grow-1 ms-2">
+                                  <h5
+                                    class="card-title mb-1 text-truncate d-block"
+                                    ngbTooltip="{{ team.fullName }}"
+                                  >
+                                    {{ transform(team.fullName, 20) }}
+                                  </h5>
+                                  <p
+                                    class="text-muted mb-0 text-truncate d-block"
+                                  >
+                                    {{ team.accessGroupName }}
+                                  </p>
+                                </div>
+                              </div>
+                              <p
+                                class="card-text text-muted text-truncate d-block mb-0"
+                              >
+                                <i
+                                  class="ri-mail-fill me-1 align-middle text-success"
+                                ></i>
+                                {{ team.email }}
+                              </p>
+                              <p
+                                class="text-muted mb-0 text-truncate d-block mb-0"
+                              >
+                                <i
+                                  class="ri-phone-fill me-1 align-middle text-danger"
+                                ></i>
+                                {{ team.phoneNumber }}
+                              </p>
+                            </div>
+                            <div class="card-footer" style="padding: 9px">
+                              <div
+                                class="d-flex flex-wrap align-items-center gap-2"
+                              >
+                                <div class="flex-shrink-0">
+                                  <div
+                                    class="form-check form-switch form-switch-left form-switch-md me-2"
+                                  >
+                                    <label
+                                      for="verified-{{ team.userId }}"
+                                      class="form-label text-muted"
+                                      >Verified</label
+                                    >
+                                    <input
+                                      class="form-check-input code-switcher"
+                                      [(ngModel)]="team.isVerified"
+                                      (change)="onChangeAccessRightGroup(team)"
+                                      type="checkbox"
+                                      id="verified-{{ team.userId }}"
+                                    />
+                                  </div>
+                                </div>
+                                <div class="flex-shrink-1">
+                                  <div
+                                    class="form-check form-switch form-switch-left form-switch-md me-2"
+                                  >
+                                    <label
+                                      for="acknowledgement-{{ team.userId }}"
+                                      class="form-label text-muted"
+                                      >Acknowledgement</label
+                                    >
+                                    <input
+                                      class="form-check-input code-switcher"
+                                      [(ngModel)]="team.isAcknowledgement"
+                                      (change)="onChangeAccessRightGroup(team)"
+                                      type="checkbox"
+                                      id="acknowledgement-{{ team.userId }}"
+                                    />
+                                  </div>
+                                </div>
+                                <div class="flex-shrink-2">
+                                  <div
+                                    class="form-check form-switch form-switch-left form-switch-md me-2"
+                                  >
+                                    <label
+                                      for="approve-{{ team.userId }}"
+                                      class="form-label text-muted"
+                                      >Approve</label
+                                    >
+                                    <input
+                                      class="form-check-input code-switcher"
+                                      [(ngModel)]="team.isApprove"
+                                      (change)="onChangeAccessRightGroup(team)"
+                                      type="checkbox"
+                                      id="approve-{{ team.userId }}"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- ene col -->
+            </div>
+          </ng-template>
+        </li>
+      </ng-container>
+    </ul>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="tab-content text-muted">
+          <div [ngbNavOutlet]="customNav"></div>
+        </div>
+      </div>
+      <!-- end col -->
+    </div>
+  </div>
+  <div class="offcanvas-footer text-end mb-4 pb-2">
+    <button
+      type="button"
+      class="btn btn-outline-danger me-2"
+      (click)="close('Close click')"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      ngbAutofocus
+      class="btn btn-success me-2"
+      (click)="submit('success')"
+    >
+      Submit
+    </button>
+  </div>
+</ng-container>

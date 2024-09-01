@@ -1,0 +1,529 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm-3 col-xxl-3">
+            <h5 class="card-title mb-0">Sub Category</h5>
+          </div>
+          <div
+            class="col-sm-9 col-xxl-9 d-flex gap-2 flex-wrap justify-content-end"
+          >
+            <div   *ngIf="returnValueMenu.add"
+  >
+              <button
+                type="button"
+                class="btn btn-success add-btn"
+                id="create-btn"
+                (click)="openSubCategoryFormModal(formModel)"
+                #button
+              >
+                <i class="ri-add-line align-bottom me-1"></i> Add Sub Category
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row g-3">
+          <div class="col-lg">
+            <ng-select
+              [items]="companyListArray_add"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onTypeCompanyNameChange($event)"
+              [clearable]="true"
+              id="companyName"
+              [(ngModel)]="selectedCompanyId"
+              placeholder="Select Company"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="categoryList"
+              bindLabel="categoryName"
+              bindValue="categoryId"
+              (change)="onTypeCategory($event)"
+              [disabled]="!selectedCompanyId"
+               [clearable]="true"
+              id="categoryName"
+              [(ngModel)]="selectedCategoryId"
+              placeholder="Select Category"
+              class="w-100 mr-2"
+            ></ng-select>
+          </div>
+
+          <div class="col-lg">
+            <div class="search-box">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                placeholder="Search for Sub Category name"
+                [(ngModel)]="searchSubCategoryName"
+                #inputer
+               
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+
+            <div></div>
+          </div>
+          <div class="col-lg-auto">
+            <div class="d-flex justify-content-end">
+              <button
+                type="button"
+                class="btn btn-danger ms-1"
+                (click)="resetSearchVariable()"
+                ngbTooltip="Remove All Search"
+              >
+                <i class="ri-refresh-fill me-1 align-bottom"></i>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body pt-0">
+        <ul
+          ngbNav
+          #nav="ngbNav"
+          [activeId]="1"
+          class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+        >
+          <li [ngbNavItem]="1">
+            <ng-template ngbNavContent>
+              <div class="table-responsive table-card mb-0">
+                <table class="table">
+                  <thead>
+                    <tr class="bg-light text-muted text-uppercase">
+                      <th class="ps-3">CODE</th>
+                      <th>SUB CATEGORY NAME</th>
+                      <th>CATEGORY NAME</th>
+                      <th>COMPANY NAME</th>
+                      <th>LIFETIME</th>
+                      <th>ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let subCategory of subCategoryList">
+                      <td
+                        class="fw-medium link-primary ps-3"
+                        (click)="viewModal(viewModalRef, subCategory)"
+                      >
+                        {{ subCategory.subCategoryCode }}
+                      </td>
+                      <td>
+                        {{ subCategory.subCategoryName }}
+                      </td>
+                      <td>
+                        {{ subCategory.categoryName }}
+                      </td>
+                      <td>
+                        {{ subCategory.companyName }}
+                      </td>
+                      <td>
+                        {{ subCategory.lifeTime }}
+                      </td>
+                      <td>
+                        <span>
+                          <div class="dropdown ms-2" ngbDropdown>
+                            <button
+                              class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                              type="button"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                              ngbDropdownToggle
+                            >
+                              <i class="ri-more-fill"></i>
+                            </button>
+                            <ul
+                              class="dropdown-menu dropdown-menu-end"
+                              ngbDropdownMenu
+                            >
+                              <li>
+                                <a
+                                  class="dropdown-item cursor-pointer"
+                                  (click)="viewModal(viewModalRef, subCategory)"
+                                  ><i
+                                    class="ri-eye-fill align-bottom me-2 text-muted"
+                                  ></i>
+                                  View</a
+                                >
+                              </li>
+
+                              <li *ngIf="returnValueMenu.edit">
+                                <a
+                                  class="dropdown-item cursor-pointer"
+                                  (click)="
+                                    openSubCategoryFormModal(
+                                      formModel,
+                                      true,
+                                      subCategory
+                                    )
+                                  "
+                                  ><i
+                                    class="ri-pencil-fill align-bottom me-2 text-muted"
+                                  ></i>
+                                  Edit</a
+                                >
+                              </li>
+
+                              <li class="dropdown-divider" *ngIf="returnValueMenu.delete"></li>
+                              <li *ngIf="returnValueMenu.delete">
+                                <a
+                                  class="dropdown-item cursor-pointer"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#removeItemModal"
+                                  (click)="
+                                    confirmDelete(
+                                      deleteModel,
+                                      subCategory.subCategoryId
+                                    )
+                                  "
+                                  ><i
+                                    class="ri-delete-bin-fill align-bottom me-2 text-muted"
+                                  ></i>
+                                  Delete</a
+                                >
+                              </li>
+                            </ul>
+                          </div>
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  
+                </table>
+                 <div class="text-center" *ngIf="subCategoryList.length === 0">
+                    No Sub Category Found
+                  </div>
+              </div>
+              <div
+                class="row justify-content-md-between align-items-md-center gy-2"
+              >
+                <div class="col col-sm-12 col col-md-6">
+                  <div
+                    class="dataTables_info mb-2"
+                    id="tickets-table_info"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    Showing {{ from }} to {{ to }} of
+                    {{ totalRecordsFromApi }} entries
+                  </div>
+                </div>
+                <!-- Pagination -->
+                <div class="col col-sm-12 col col-md-6">
+                  <div class="text-sm-right float-end listjs-pagination">
+                    <ngb-pagination
+                      [collectionSize]="totalRecordsFromApi"
+                      [(page)]="page"
+                      [pageSize]="pageSize"
+                      [maxSize]="2"
+                      [rotate]="true"
+                      (pageChange)="onPageChange($event)"
+                      *ngIf="totalRecordsFromApi > pageSize"
+                    >
+                      <ng-template
+                        ngbPaginationPrevious
+                        let-page
+                        let-pages="pages"
+                      >
+                        <i class="ci-arrow-left me-2"></i> Prev
+                      </ng-template>
+                      <ng-template ngbPaginationNext>
+                        Next
+                        <i class="ci-arrow-right ms-2"></i>
+                      </ng-template>
+                    </ngb-pagination>
+                  </div>
+                </div>
+                <!-- End Pagination -->
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content text-muted">
+          <div [ngbNavOutlet]="nav"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #formModel let-modal>
+  <div class="modal-header bg-info-subtle pb-3">
+    <h4 class="modal-title" id="modal-title">
+      {{ editMode.isEdit ? "Edit" : "Add" }} Sub Category
+    </h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="categoryForm">
+      <div class="mb-2">
+        <div class="card-body">
+          <div class="row">
+            <div class="form-group">
+              <label for="Client" class="form-label"
+                >Company <span class="text-danger">*</span></label
+              >
+              <ng-select
+                [items]="companyListArray_add"
+                bindLabel="companyName"
+                bindValue="companyId"
+                [clearable]="false"
+                id="companyName"
+                formControlName="companyId"
+                placeholder="Select Company"
+                class="w-100 mr-2 mb-1"
+                (change)="onChangeCompany($event)"
+              ></ng-select>
+
+              <div *ngIf="companyId.invalid && companyId.touched">
+                <small class="text-danger"> Company is Required </small>
+              </div>
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="Client" class="form-label"
+                >Category <span class="text-danger">*</span></label
+              >
+              <ng-select
+                [items]="categoryList"
+                bindLabel="categoryName"
+                bindValue="categoryId"
+                [clearable]="false"
+                id="categoryName"
+                formControlName="categoryId"
+                placeholder="Select Category"
+                class="w-100 mr-2 mb-1"
+              ></ng-select>
+
+              <div *ngIf="categoryId.invalid && categoryId.touched">
+                <small class="text-danger"> Category is Required </small>
+              </div>
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="code" class="form-label"
+                >Sub Category Code <span style="color: red">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control mb-1"
+                id="code"
+                name="code"
+                uppercase
+                formControlName="code"
+                placeholder="Sub Category Code"
+                maxlength="6"
+                (keyup)="onCodeChange()"
+                [class.is-invalid]="code.invalid && code.touched"
+              />
+
+              <div *ngIf="code.invalid && code.touched">
+                <small class="text-danger" *ngIf="code.errors['required']"
+                  >Sub Category Code is required</small
+                >
+                <small class="text-danger" *ngIf="code.errors['minlength']"
+                  >Sub Category code must be at least 2 characters
+                  Required</small
+                >
+                <small class="text-danger" *ngIf="code.errors['maxlength']"
+                  >Sub Category code must be less than 5 characters
+                  Required</small
+                >
+              </div>
+            </div>
+            <div class="form-group col-md-12 mt-2">
+              <label for="name" class="form-label"
+                >Sub Category Name <span style="color: red">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control mb-1"
+                id="name"
+                formControlName="name"
+                placeholder="Sub Category Name "
+                [class.is-invalid]="name.invalid && name.touched"
+              />
+
+              <div *ngIf="name.invalid && name.touched">
+                <small class="text-danger" *ngIf="name.errors['required']">
+                  Sub Category Name is Required</small
+                >
+              </div>
+            </div>
+
+            <div class="form-group col-md-12 mt-2">
+              <label for="name" class="form-label"
+                >Life Time <span style="color: red">*</span></label
+              >
+              <input
+                type="number"
+                class="form-control mb-1"
+                id="name"
+                formControlName="lifetime"
+                placeholder="Life Time"
+                [class.is-invalid]="lifetime.invalid && lifetime.touched"
+              />
+
+              <div *ngIf="lifetime.invalid && lifetime.touched">
+                <small class="text-danger" *ngIf="lifetime.errors['required']">
+                  Life Time is Required</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger mr-2 mb-2 mb-md-0"
+      (click)="modal.dismiss('cancel')"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      [disabled]="categoryForm.invalid"
+      ngbAutofocus
+      class="btn btn-success mr-2 mb-2 mb-md-0"
+      (click)="save()"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #deleteModel let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="mt-2 text-center">
+        <img
+        src
+        ="../../../../assets/images/ticketChatpartImage.png"
+        class
+        ="img-fluid rounded chat-image-success">
+        <!-- <lord-icon
+          src="https://cdn.lordicon.com/gsqxdxog.json"
+          trigger="loop"
+          colors="primary:#405189,secondary:#f06548"
+          style="width: 90px; height: 90px"
+        ></lord-icon> -->
+        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+          <h4>You are about to delete a Sub Category ?</h4>
+          <p class="text-muted mx-4 mb-0">
+            Deleting your sub category will remove all of your information from
+            our database.
+          </p>
+        </div>
+      </div>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+         class="btn  btn-danger" data-bs-dismiss="modal"
+          (click)="modal.close('Close click')"
+          id="deleteRecord-close"
+        >
+          <i class="ri-close-line me-1 align-middle"></i> Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="delete-product"
+          (click)="deleteSubCategory(deleteId)"
+          (click)="modal.close('Close click')"
+        >
+          Yes, Delete It!
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+<ng-template #viewModalRef let-modal>
+  <div class="modal-header bg-info-subtle pb-3">
+    <h4 class="modal-title" id="modal-title">View Sub Category</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-6">
+        <p class="mb-2 fw-bold">Company</p>
+        <p class="fs-14 mb-0">
+          {{ selectedSubCategory.companyName }}
+        </p>
+      </div>
+      <div class="col-6">
+        <p class="mb-2 fw-bold">Category</p>
+        <p class="fs-14 mb-0">
+          {{ selectedSubCategory.categoryName }}
+        </p>
+      </div>
+      <div class="col-6 mt-3">
+        <p class="mb-2 fw-bold">Sub Category</p>
+        <p class="fs-14 mb-0">
+          {{ selectedSubCategory.subCategoryName }}
+        </p>
+      </div>
+      <div class="col-6 mt-3">
+        <p class="mb-2 fw-bold">Sub Category Code</p>
+        <p class="fs-14 mb-0">
+          {{ selectedSubCategory.subCategoryCode }}
+        </p>
+      </div>
+      <div class="col-6 mt-3">
+        <p class="mb-2 fw-bold">Lifetime</p>
+        <p class="fs-14 mb-0">
+          {{ selectedSubCategory.lifeTime }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger mr-2 mb-2 mb-md-0"
+      (click)="modal.dismiss('cancel')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

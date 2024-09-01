@@ -1,0 +1,375 @@
+<div class="offcanvas-header p-3 bg-primary-subtle border-bottom">
+  <h5 class="offcanvas-title">Member/Project Manager Signature</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="passBack(false)"
+  ></button>
+</div>
+<div class="offcanvas-body">
+  <form [formGroup]="addTech">
+    <div class="row">
+      <div class="col-lg-12">
+        <label class="form-label"
+          >Cause of Incident<span style="color: red">*</span>
+        </label>
+        <ckeditor
+          [editor]="Editor"
+          data=""
+          [config]="{
+            toolbar: [
+              'heading',
+              '|',
+              'bold',
+              'italic',
+              '|',
+              'NumberedList',
+              'BulletedList'
+            ]
+          }"
+          formControlName="editorText"
+        >
+        </ckeditor>
+      </div>
+      <div class="col-md-12 mt-3 pt-3">
+        <label class="form-label"
+          >Updated Image <span style="color: red">*</span>
+        </label>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="mb-4">
+              <div class="position-relative d-inline-block">
+                <div
+                  class="position-absolute top-100 start-100 translate-middle"
+                >
+                  <label
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Remove Image"
+                    *ngIf="isFirstImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i
+                          class="ri-close-circle-fill"
+                          (click)="crossFirstImage(tech_img0)"
+                        ></i>
+                      </div>
+                    </div>
+                  </label>
+                  <label
+                    for="tech_id0"
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Select Image"
+                    *ngIf="!isFirstImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i class="ri-image-fill"></i>
+                      </div>
+                    </div>
+                  </label>
+                  <input
+                    (change)="onSelectFile($event)"
+                    formControlName="techImageURL"
+                    class="form-control d-none"
+                    value=""
+                    id="tech_id0"
+                    type="file"
+                    accept="image/png, image/gif, image/jpeg"
+                  />
+                </div>
+                <div class="avatar-lg">
+                  <div class="avatar-title bg-light rounded">
+                    <img
+                      src="{{ tech_img0 }}"
+                      id="product-img"
+                      class="avatar-md img-size-fixed"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="mb-3">
+              <div class="position-relative d-inline-block">
+                <div
+                  class="position-absolute top-100 start-100 translate-middle"
+                >
+                  <label
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Remove Image"
+                    *ngIf="isSecondImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i
+                          (click)="crossSecondImage(tech_img1)"
+                          class="ri-close-circle-fill"
+                        ></i>
+                      </div>
+                    </div>
+                  </label>
+                  <label
+                    for="tech_id1"
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Select Image"
+                    *ngIf="!isSecondImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i class="ri-image-fill"></i>
+                      </div>
+                    </div>
+                  </label>
+                  <input
+                    (change)="onSelectFile1($event)"
+                    accept="image/*"
+                    formControlName="techImageURL1"
+                    class="form-control d-none"
+                    value=""
+                    id="tech_id1"
+                    type="file"
+                    accept="image/png, image/gif, image/jpeg"
+                  />
+                </div>
+                <div class="avatar-lg">
+                  <div class="avatar-title bg-light rounded">
+                    <img
+                      src="{{ tech_img1 }}"
+                      id="product-img"
+                      class="avatar-md img-size-fixed"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="mb-3">
+              <div class="position-relative d-inline-block">
+                <div
+                  class="position-absolute top-100 start-100 translate-middle"
+                >
+                  <label
+                    for="tech_id2"
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Select Image"
+                    *ngIf="!isThirdImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i class="ri-image-fill"></i>
+                      </div>
+                    </div>
+                  </label>
+                  <label
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Remove Image"
+                    *ngIf="isThirdImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i
+                          (click)="crossThirdImage(tech_img2)"
+                          class="ri-close-circle-fill"
+                        ></i>
+                      </div>
+                    </div>
+                  </label>
+                  <input
+                    (change)="onSelectFile2($event)"
+                    accept="image/*"
+                    formControlName="techImageURL2"
+                    class="form-control d-none"
+                    value=""
+                    id="tech_id2"
+                    type="file"
+                    accept="image/png, image/gif, image/jpeg"
+                  />
+                </div>
+                <div class="avatar-lg">
+                  <div class="avatar-title bg-light rounded">
+                    <img
+                      src="{{ tech_img2 }}"
+                      id="product-img"
+                      class="avatar-md img-size-fixed"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="mb-3">
+              <div class="position-relative d-inline-block">
+                <div
+                  class="position-absolute top-100 start-100 translate-middle"
+                >
+                  <label
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Remove Image"
+                    *ngIf="isFourthImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i
+                          (click)="crossFourthImage(tech_img3)"
+                          class="ri-close-circle-fill"
+                        ></i>
+                      </div>
+                    </div>
+                  </label>
+                  <label
+                    for="tech_id3"
+                    class="mb-0"
+                    placement="left"
+                    ngbTooltip="Select Image"
+                    *ngIf="!isFourthImageVisible"
+                  >
+                    <div class="avatar-xs">
+                      <div
+                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                      >
+                        <i class="ri-image-fill"></i>
+                      </div>
+                    </div>
+                  </label>
+                  <input
+                    (change)="onSelectFile3($event)"
+                    accept="image/*"
+                    formControlName="techImageURL3"
+                    class="form-control d-none"
+                    value=""
+                    id="tech_id3"
+                    type="file"
+                    accept="image/png, image/gif, image/jpeg"
+                  />
+                </div>
+                <div class="avatar-lg">
+                  <div class="avatar-title bg-light rounded">
+                    <img
+                      src="{{ tech_img3 }}"
+                      id="product-img"
+                      class="avatar-md img-size-fixed"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12 mt-2 pt-2">
+        <label class="form-label"
+          >Signature Tech<span style="color: red">*</span>
+        </label>
+        <app-signature-pad
+          (sendImagedata)="getSignData($event)"
+        ></app-signature-pad>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="offcanvas-footer mx-3 mb-4 pb-3">
+  <button
+    *ngIf="signtaureData"
+    class="btn btn-primary me-2"
+    (click)="openUpdateModal(modalUPSucss)"
+    [disabled]="
+      addTech.invalid ||
+      (tech_img0 === '../../../../../assets/images/placeholderimage.png' &&
+        tech_img1 === '../../../../../assets/images/placeholderimage.png' &&
+        tech_img2 === '../../../../../assets/images/placeholderimage.png' &&
+        tech_img3 === '../../../../../assets/images/placeholderimage.png')"
+  >
+    Submit
+  </button>
+  <button class="btn btn btn-outline-danger me-2" (click)="passBack(false)">
+    Cancel
+  </button>
+</div>
+
+<!-- modalUPSucss -->
+<ng-template #modalUPSucss let-modal>
+  <div class="modal-content">
+    <div class="modal-body p-4">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+
+      <div class="mt-2">
+        <div class="text-center">
+            <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        </div>
+        <h4 class="mb-3 mt-4 text-justify">
+          Are you sure you want to proceed and confirm the document's signature?
+        </h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          The Incident report service order has been successfully completed, and
+          the associated ticket is now in 'Resolve' status.
+        </p>
+        <br />
+        <p class="text-muted fs-15 mb-1 text-justify">
+          The next step is to escalate the issue to the client for their
+          signature on the incident report. Once the member/project manager
+          signs the incident report, please be aware that this action is
+          irreversible.
+        </p>
+        <br /><br />
+
+        <div class="hstack gap-2 justify-content-center">
+          <button class="btn btn-success" (click)="modal.close('Ok', $event)">
+            Yes, Proceed!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.dismiss('Cross click')"
+            id="deleteRecord-close"
+            class="btn btn-soft-danger"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+<!-- end modalUPSucss -->

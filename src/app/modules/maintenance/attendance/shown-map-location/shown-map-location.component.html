@@ -1,0 +1,115 @@
+<div class="card">
+  <div class="card-body p-0">
+    <google-map
+      [latitude]="latitude"
+      [longitude]="longitude"
+      [options]="mapOptions"
+      width="100%"
+      height="700px"
+    >
+      <map-marker
+        #marker="mapMarker"
+        [position]="markers[0]"
+        [icon]="getMarkerIcon()"
+        [label]="typeChecking"
+        (mapClick)="openInfoWindow_newInfo(marker, 'checkIn')"
+      >
+      </map-marker>
+      <map-info-window
+        [options]="infoWindowOptions"
+        [position]="markers[0]"
+        [isOpen]="true"
+        (closeclick)="closeInfoWindow()"
+      >
+        <div class="card mb-0">
+          <div class="card-body mb-0">
+            <ul class="list-unstyled mb-0 vstack gap-1">
+              <li>
+                <div class="d-flex align-items-center">
+                  <div class="flex-shrink-0">
+                    <img
+                      [src]="imgUrl + userData?.techPicUrlStart"
+                      alt=""
+                      class="avatar-sm rounded"
+                    />
+                  </div>
+                  <div class="flex-grow-1 ms-3">
+                    <h6 class="fs-15 mb-1 text-success">
+                      {{ userData?.fullName }}
+                    </h6>
+                    <p class="text-muted mb-0 text-success">
+                      {{ userData?.designationName }}
+                    </p>
+
+                    <p class="text-muted mb-0 text-warning" *ngIf="userData?.companyName">
+                      {{ userData?.companyName }}
+                    </p>
+                    <p class="text-muted mb-0 text-warning"  *ngIf="userData?.clientName">
+                      {{ userData?.clientName }}
+                    </p>
+                    <p class="text-muted mb-0 text-warning" *ngIf="userData?.projectName">
+                      {{ userData?.projectName }}
+                    </p>
+
+                    <p class="text-muted mb-0">
+                      <span
+                        class="badge bg-danger text-uppercase"
+                        *ngIf="userData?.taskType == 'On-Site'"
+                      >
+                        {{ userData?.taskType }}
+                      </span>
+                      <span
+                        class="badge bg-success text-uppercase"
+                        *ngIf="userData?.taskType == 'Remote'"
+                      >
+                        {{ userData?.taskType }}
+                      </span>
+                      <span
+                        class="badge bg-warning text-uppercase"
+                        *ngIf="userData?.taskType == 'Phone Call'"
+                      >
+                        {{ userData?.taskType }}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li class="mb-0" *ngIf="userData?.email">
+            <i
+              class="ri-mail-line me-2 align-middle text-muted fs-16"
+            ></i
+            >{{ userData?.email }}
+          </li>
+          <li class="mt-0 mb-0" *ngIf="userData?.phoneNumber">
+            <i
+              class="ri-phone-line me-2 align-middle text-muted fs-16"
+            ></i
+            >{{ userData?.phoneNumber }}
+          </li>
+
+              <li class="mt-0 mb-0">
+                <i
+                  class="ri-calendar-event-line me-2 align-middle text-muted fs-16"
+                ></i
+                >{{ userData?.startDateTime }}
+              </li>
+
+              <li class="mt-0 mb-0" *ngIf="userData?.endDateTime ">
+                <i
+                  class="ri-calendar-event-line me-2 align-middle text-muted fs-16"
+                ></i
+                >{{ userData?.endDateTime }}
+              </li>
+              <li class="mt-0 mb-0" *ngIf="userData?.address_Start">
+                <b>Checkin Address :- {{ userData?.address_Start }}</b>
+              </li>
+              <li class="mt-0 mb-0" *ngIf="userData?.address_End">
+                <b>Checkout Address :- {{ userData?.address_End }}</b>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </map-info-window>
+    </google-map>
+  </div>
+</div>

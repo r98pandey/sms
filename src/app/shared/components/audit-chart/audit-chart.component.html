@@ -1,0 +1,165 @@
+<div class="card cardBody">
+  <div class="card-body">
+  
+    <div class="profile-timeline order-status">
+      <div ngbAccordion #acc="ngbAccordion" activeIds="static-1">
+        <ng-container *ngFor="let audit of Data; index as i">
+          <div ngbAccordionItem [id]="'static-' + i" [collapsed]="false">
+              <div ngbAccordionHeader>
+                <button ngbAccordionButton class="accordion-button p-2 shadow-none" data-bs-toggle="collapse" href="javascript:void(0);" aria-expanded="true" aria-controls="collapseOne">
+                  <div class="d-flex align-items-start">
+                    <div class="flex-shrink-0 avatar-xs">
+                      <div
+                        class="avatar-title rounded-circle"
+                        [class]="audit.isComplete ? 'bg-success' : 'bg-danger'"
+                      >
+                        <i class="ri-information-line"></i>
+                      </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                      <h6 class="fs-14 mb-0">
+                        <span
+                          class="fs-12"
+                          [class]="
+                            returnStatusBadgeClassesStatus(
+                              audit.wffProcessCreationStatusId
+                            )
+                          "
+                          >{{ audit.wffProcessCreationStatusName }}</span
+                        >- {{ audit.workflowName }}
+                      </h6>
+                      <div class="d-flex align-items-start py-2">
+                        <div class="avatar-xs flex-shrink-0 me-3">
+                          <img
+                            src="{{ imgUrl }}{{ audit.profileImageUrl }}"
+                            alt=""
+                            class="img-fluid rounded-circle"
+                          />
+                        </div>
+                        <div class="flex-grow-1">
+                          <div>
+                            <h5 class="fs-14 mb-0">{{ audit.fullName }}</h5>
+                            <p class="fs-13 text-muted mb-0">
+                              {{ audit.accessGroupName }}
+                            </p>
+                            <p class="fs-13 text-muted mb-0">
+                             <span *ngIf="showRequester">Requester |</span>  ({{ audit.typeOfTransaction }})
+                            </p>
+  
+                            <p class="text-muted mb-0 mt-0 fs-13">
+                              <span class="fw-normal">
+                                Requested Date Time :
+                              </span>
+                              {{ audit.requestedDateTime }}
+                            </p>
+                            <!-- <p
+                              class="text-muted mb-0 mt-0 fs-13"
+                              *ngIf="audit.remark"
+                            >
+                              <span class="fw-normal"> Note: </span>
+                              {{ audit.remark }}
+                            </p> -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div ngbAccordionCollapse>
+                  <div ngbAccordionBody>
+                      <ng-template>
+                        <div
+                        [id]="'collapse' + i"
+                        class="accordion-collapse collapse show"
+                        aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample"
+                      >
+                        <ng-container
+                          *ngFor="let innerAudit of audit.wfAuditDetailsList"
+                        >
+                          <div class="accordion-body ms-2 ps-5 pt-0 mt-0">
+                            <h6 class="mb-1">
+                              {{ innerAudit.approverTypeName }}
+                            </h6>
+                            <div class="d-flex align-items-start py-2">
+                              <div class="avatar-xs flex-shrink-0 me-3">
+                                <img
+                                  src="{{ imgUrl }}{{ innerAudit.profileImageUrl }}"
+                                  alt=""
+                                  class="img-fluid rounded-circle"
+                                />
+                              </div>
+                              <div class="flex-grow-1">
+                                <div>
+                                  <h5 class="fs-14 mb-0">{{ innerAudit.fullName }}</h5>
+                                  <p class="fs-13 text-muted mb-0">
+                                    {{ innerAudit.accessGroupName }}
+                                  </p>
+                                  <p class="fs-13 text-muted mb-0">
+                                    
+                                    <span class="fw-semibold"
+                                      >({{ innerAudit.approverType }})</span
+                                    >
+                                  </p>
+        
+                                  <p
+                                    class="text-muted mb-0 mt-0 fs-13"
+                                    *ngIf="innerAudit.startDateTime"
+                                  >
+                                    <span class="fw-normal"> Start Date Time : </span>
+                                    {{ innerAudit.startDateTime }}
+                                  </p>
+                                  <p
+                                    class="text-muted mb-0 mt-0 fs-13"
+                                    *ngIf="!innerAudit.startDateTime"
+                                  >
+                                    <span class="fw-semibold text-danger">
+                                      Waiting In Queue
+                                    </span>
+                                  </p>
+                                  <p
+                                    class="text-muted mb-0 mt-0 fs-13"
+                                    *ngIf="innerAudit.endDateTime"
+                                  >
+                                    <span class="fw-normal"> End Date Time : </span>
+                                    {{ innerAudit.endDateTime }}
+                                  </p>
+                                  <p class=" mb-0 mt-0 fs-13">
+                                    <span
+                                      class="fs-12"
+                                      [class]="
+                                        returnStatusBadgeClassesStatus(
+                                          innerAudit.wfDetailStatusId
+                                        )
+                                      "
+                                      >{{ innerAudit.wfDetailStatusName }}</span
+                                    >
+                                  </p>
+                                  <p
+                                    class="text-muted mb-0 mt-0 fs-13"
+                                    *ngIf="innerAudit.remark "
+                                  >
+                                  <ng-container *ngIf="innerAudit.endDateTime">
+                                    <span class="fw-normal"> Note: </span>
+                                    <span class="fw-semibold">{{
+                                      innerAudit.remark
+                                    }}</span>
+                                  </ng-container>
+                                    
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </div>
+                      </ng-template>
+                  </div>
+              </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

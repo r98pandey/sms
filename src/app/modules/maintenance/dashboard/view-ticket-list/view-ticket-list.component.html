@@ -1,0 +1,2370 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  title="Ticket View"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+<ng-container *ngIf="ticketData.length != 0">
+  <div class="row mt-1">
+    <div class="col-lg-12">
+      <div class="card mt-n4 mx-n4">
+        <!-- <div class="bg-warning-subtle"> -->
+        <div class="card-body pb-0 px-4">
+          <div class="row mb-4">
+            <div class="col-md">
+              <div class="row align-items-center">
+                <div class="col-md" *ngFor="let ticket of ticketData">
+                  <div>
+                    <h4 class="fw-bold">
+                      {{ ticket?.ticketTitle || "NA" }}
+                    </h4>
+                  </div>
+                </div>
+                <div class="col-md-auto text-end">
+                  <a
+                    href="javascript:void(0);"
+                    class="text-primary text-decoration-underline fw-medium text-end"
+                    (click)="refreshThePage()"
+                  >
+                    <i class="ri-refresh-line text-primary fs-18"></i
+                  ></a>
+                </div>
+                <div
+                  clas="col-md-12"
+                  *ngIf="ticketData.length != 0"
+                  style="overflow: auto"
+                >
+                  <app-flow-chart-with-digram
+                    [isBillingRequired]="
+                      ticketData[0]?.isBillingRequired == null
+                        ? 'null'
+                        : ticketData[0]?.isBillingRequired === true
+                        ? 'true'
+                        : 'false'
+                    "
+                    [isGlobal]="ticketData[0]?.isGlobal ? 'true' : 'false'"
+                    [ticketStatusId]="ticketData[0]?.ticketStatusId"
+                    [SeviceType]="
+                      ticketReportIncident.length != 0 && ticketData
+                        ? 'Incident'
+                        : 'Service'
+                    "
+                    [incindetTechSignImageURL]="
+                      ticketReportIncident[0]?.incindetTechSignImageURL
+                    "
+                    [incindetClientSignImageURL]="
+                      ticketReportIncident[0]?.incindetClientSignImageURL
+                    "
+                    [workFlowRequired]="maintenanceWorkflowAuditList"
+                    (sendToActivingForTab)="openTheActiveTab($event)"
+                  ></app-flow-chart-with-digram>
+                </div>
+                <!-- <div class="col-md" *ngFor="let ticket of ticketData">
+                    <div>
+                      <h4 class="fw-bold">
+                        {{ ticket?.ticketTitle || "NA" }}
+                      </h4>
+                      <div class="hstack gap-3 flex-wrap">
+                        #
+                        {{ ticket?.ticketNo }}
+                        <div class="vr"></div>
+                        <div>
+                          <i class="ri-building-line align-bottom me-1"></i>
+                          {{ ticket?.companyName || "NA" }}
+                        </div>
+                        <div class="vr"></div>
+                        <div>
+                          <i class="ri-building-2-line align-bottom me-1"></i
+                          >{{ ticket?.clientName || "NA" }}
+                        </div>
+
+                        <div class="vr"></div>
+                        <div>
+                          <i class="ri-community-line align-bottom me-1"></i
+                          >{{ ticket?.projectName || "NA" }}
+                        </div>
+
+                        <div class="vr" *ngIf="!ticket?.isGlobal"></div>
+                        <span
+                          class="badge bg-info-subtle text-info badge-border"
+                          *ngIf="!ticket?.isGlobal"
+                          >Internal Ticket</span
+                        >
+                      </div>
+                    </div>
+                  </div> -->
+              </div>
+            </div>
+          </div>
+          <ul
+            ngbNav
+            #customNav="ngbNav"
+            [activeId]="activeId"
+            class="nav nav-tabs-custom border-bottom-0"
+            role="tablist"
+
+          >
+            <!-- View Ticket  -->
+            <li [ngbNavItem]="1" class="nav-item" (click)="callingApi()">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Ticket
+              </a>
+
+              <ng-template ngbNavContent>
+                <div class="row">
+                  <div class="col-xxl-8 stretch-card">
+                    <div class="card">
+                      <ul
+                        ngbNav
+                        #defaultNav="ngbNav"
+                        [activeId]="defaultNavActiveId ? defaultNavActiveId : 1"
+                        class="nav-tabs nav-tabs-custom"
+                      >
+                        <li [ngbNavItem]="1">
+                          <a ngbNavLink>
+                            <div
+                              class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                            >
+                              <p class="d-none1 d-sm-block mb-0">Ticket</p>
+                            </div>
+                          </a>
+                          <ng-template ngbNavContent>
+                            <div
+                              class="card-body"
+                              *ngFor="let ticket of ticketData"
+                            >
+                              <div class="row">
+                                <div class="col-12 mb-3">
+                                  <h6 class="fw-semibold text-uppercase mb-3">
+                                    Ticket Description
+                                  </h6>
+                                  <p
+                                    *ngIf="ticket.issueDescription"
+                                    class="text-muted mb-0"
+                                    [innerHTML]="ticket.issueDescription"
+                                  ></p>
+                                  <p
+                                    *ngIf="!ticket.issueDescription"
+                                    class="text-muted mb-0"
+                                  >
+                                    No Ticket Description
+                                  </p>
+                                </div> 
+                                
+                                <div class="col-12 mb-3"  *ngIf="ticket.ticketVerifiedRemark">
+                                  <h6 class="fw-semibold text-uppercase mb-3">
+                                    Ticket Verified Remark
+                                  </h6>
+                                  <p
+                                   
+                                    class="text-muted mb-0"
+                                    
+                                  >{{ticket.ticketVerifiedRemark}}</p>
+                                  
+                                </div>
+
+                                <div
+                                  class="col-sm-6 stretch-card pt-2 mb-3"
+                                  *ngIf="ticket.ticketAcknoledgeRemark"
+                                >
+                                  <div
+                                    [@blink]="blinkStateInternal"
+                                    class="card border shadow-none mb-lg-0 right"
+                                  >
+                                    <div class="card-body text-muted">
+                                      <h5 class="fs-14 mb-2">
+                                        {{ticket.ticketStatusId==19?'Canceled By':'Acknowledge By'}} 
+                                       
+                                        {{ ticket.companyName }}
+                                      </h5>
+                                      <p class="fs-13 text-dark mb-0">
+                                        <b>
+                                          <i
+                                            class="ri-user-3-line align-bottom"
+                                          ></i>
+                                          {{ ticket.ticketAcknoledgeBy }}
+                                        </b>
+                                      </p>
+                                      <p class="fs-13 text-dark mb-0">
+                                        <i
+                                          class="ri-outlet-2-line align-bottom"
+                                        ></i>
+                                        {{ ticket.ticketAcknoledgeDesig }}
+                                      </p>
+
+                                      <p class="fs-13 text-muted mb-0">
+                                        <i
+                                          class="ri-calendar-2-line align-bottom"
+                                        ></i>
+                                        {{ ticket.ticketAcknoledgeDateTime }}
+                                      </p>
+
+                                      <p class="fs-12 text-muted">
+                                        <i
+                                          class="ri-edit-2-linealign-bottom"
+                                        ></i>
+                                        {{ ticket.ticketAcknoledgeRemark }}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col-sm-6 stretch-card pt-2 mb-3"
+                                  *ngIf="ticket.ticketClosedRemark"
+                                >
+                                  <div
+                                    [@blink2]="blinkStateClient"
+                                    class="card border shadow-none mb-lg-0 right"
+                                  >
+                                    <div class="card-body text-muted">
+                                      <h5
+                                        class="fs-14 mb-2"
+                                        *ngIf="ticket.isGlobal"
+                                      >
+                                        Acknowledge By
+                                        {{ ticket.clientName }}
+                                      </h5>
+                                      <h5
+                                        class="fs-14 mb-2"
+                                        *ngIf="!ticket.isGlobal"
+                                      >
+                                        Acknowledge By
+                                        {{ ticket.companyName }}
+                                      </h5>
+                                      <p class="fs-13 text-dark mb-0">
+                                        <b>
+                                          <i
+                                            class="ri-user-3-line align-bottom"
+                                          ></i>
+                                          {{ ticket.ticketClosedBy }}
+                                        </b>
+                                      </p>
+                                      <p class="fs-13 text-dark mb-0">
+                                        <i
+                                          class="ri-outlet-2-line align-bottom"
+                                        ></i>
+                                        {{ ticket.ticketClosedDesig }}
+                                      </p>
+                                      <p class="fs-13 text-muted mb-0">
+                                        <i
+                                          class="ri-calendar-2-line align-bottom"
+                                        ></i>
+                                        {{ ticket.ticketClosedDateTime }}
+                                      </p>
+
+                                      <p class="fs-12 text-muted">
+                                        <i
+                                          class="ri-edit-2-linealign-bottom"
+                                        ></i>
+                                        {{ ticket.ticketClosedRemark }}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <!--end card-body-->
+                            <div class="border-top border-top-dashed"></div>
+                            <ul
+                              ngbNav
+                              #nav="ngbNav"
+                              [activeId]="mainDiscussion"
+                              class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+                              (navChange)="onNavChange($event)"
+                            >
+                              <ng-container *ngIf="shownOffGlobalChat">
+                                <li
+                                [ngbNavItem]="1"
+                                (click)="ondectionChange()"
+                              >
+                                <a ngbNavLink>
+                                  <i
+                                    class="ri-chat-1-line me-1 align-bottom"
+                                  ></i>
+                                  Discussion
+                                </a>
+                                <ng-template ngbNavContent>
+                                  <div class="card-body">
+                                    <h5 class="card-title mb-4">
+                                      Discussion
+                                    </h5>
+                                    <div
+                                      class="text-center"
+                                      *ngIf="
+                                        ticketDisscusionArrayListGlobal.length ==
+                                        0
+                                      "
+                                    >
+                                      <img
+                                        src="../../../../../assets/images/ticketChatpartImage.png"
+                                        class="img-fluid rounded chat-image"
+                                      />
+                                    </div>
+                                    <div
+                                      *ngIf="
+                                        ticketDisscusionArrayListGlobal.length !=
+                                        0
+                                      "
+                                    >
+                                      <div
+                                        style="
+                                          height: 300px;
+                                          overflow-y: auto;
+                                        "
+                                        class="px-3 mx-n3"
+                                        #scrollframeGlobal
+                                      >
+                                        <ng-container
+                                          *ngFor="
+                                            let chat of ticketDisscusionArrayListGlobal
+                                          "
+                                        >
+                                          <app-chat-meaasge-file
+                                            [chat]="chat"
+                                            [singlerow]="false"
+                                          ></app-chat-meaasge-file>
+                                        </ng-container>
+                                      </div>
+                                    </div>
+
+                                    <div
+                                      class="mt-3"
+                                      *ngIf="
+                                        ticketData[0]?.ticketStatusId !=
+                                          32 &&
+                                        ticketData[0]?.ticketStatusId != 19
+                                      "
+                                    >
+                                      <div class="row g-3">
+                                        <div class="col-lg-12">
+                                          <label
+                                            for="exampleFormControlTextarea1"
+                                            class="form-label"
+                                            >Leave a Comment</label
+                                          >
+                                          <div
+                                          class="vstack gap-2 mb-2"
+                                          *ngIf="globalFileValue"
+                                        >
+                                          <div
+                                            class="border rounded border-dashed p-2"
+                                          >
+                                            <div
+                                              class="d-flex align-items-center"
+                                            >
+                                              <div
+                                                class="flex-shrink-0 me-3"
+                                              >
+                                                <div class="avatar-sm">
+                                                  <div
+                                                    class="avatar-title bg-light text-secondary rounded fs-24"
+                                                  >
+                                                    <i
+                                                      [class]="getFileIcon(globalFileValue.file)"
+                                                    ></i>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div
+                                                class="flex-grow-1 overflow-hidden"
+                                              >
+                                                <h5 class="fs-15 mb-1">
+                                                  <a
+                                                    href="javascript:void(0);"
+                                                    class="text-body text-truncate d-block"
+                                                    >{{
+                                                      globalFileValue.file
+                                                        .name
+                                                    }}</a
+                                                  >
+                                                </h5>
+                                                <div class="text-muted">
+                                                  {{
+                                                    globalFileValue.fileType
+                                                  }}
+                                                </div>
+                                              </div>
+                                              <div
+                                                class="flex-shrink-0 ms-2"
+                                              >
+                                                <div class="d-flex gap-1">
+                                                  <button (click)="deltefileMedia()"
+                                                    type="button"
+                                                    class="btn btn-icon text-muted btn-sm fs-18"
+                                                  >
+                                                    <i
+                                                      class="ri-delete-bin-fill align-bottom me-2 text-muted"
+                                                    ></i>
+                                                  </button>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                          <textarea
+                                            class="form-control bg-light border-light"
+                                            id="exampleFormControlTextarea1"
+                                            [maxlength]="maxCharMessage"
+                                            [(ngModel)]="
+                                              MessageContainGlobal
+                                            "
+                                            rows="3"
+                                            placeholder="Enter comment"
+                                          ></textarea>
+                                          <label class="nopadding clrlbl">
+                                            Characters Remaining:
+                                            {{
+                                              MessageContainGlobal.length
+                                            }}/{{ maxCharMessage }}</label
+                                          >
+                                        </div>
+                                        <div class="col-lg-12 text-end">
+
+                                          
+                                          <!-- File Upload Button -->
+                                          <button
+                                            type="button" (click)="fileInput.click()"
+                                            class="btn btn-ghost-secondary btn-icon waves-effect me-1">
+                                            <i
+                                            class="ri-attachment-line fs-16"></i>
+                                            
+                                            
+                                          </button>
+
+                                          <!-- Hidden File Input -->
+                                          <input
+                                            type="file"
+                                            id="globalFile"
+                                            #fileInput
+                                            (change)="
+                                              onFileSelected(
+                                                $event,
+                                                'global'
+                                              )
+                                            "
+                                            accept=".png,.jpg,.jpeg,.gif,.bmp,.pdf,.dwg,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.mp4,.avi,.mkv,.mov,.zip,.rar,.csv"
+                                            style="display: none"
+                                          />
+
+                                          <button
+                                          [disabled]="!MessageContainGlobal && globalFileValue == null"
+                                            (click)="submitChatGlobal()"
+                                            class="btn btn-success"
+                                          >
+                                            Post Comment
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </ng-template>
+                              </li>
+                              </ng-container>
+                              <ng-container *ngIf="shownOffInternalChat">
+                                <li
+                                [ngbNavItem]="2"
+                                (click)="ondectionChange()"
+                              >
+                                <a ngbNavLink>
+                                  <i
+                                    class="ri-chat-3-line me-1 align-bottom"
+                                  ></i>
+                                  Internal Discussion
+                                </a>
+                                <ng-template ngbNavContent>
+                                  <div class="card-body">
+                                    <h5 class="card-title mb-4">
+                                      Discussion
+                                    </h5>
+                                    <div
+                                      class="text-center"
+                                      *ngIf="
+                                        ticketDisscusionArrayList.length ==
+                                        0
+                                      "
+                                    >
+                                      <img
+                                        src="../../../../../assets/images/ticketChatpartImage.png"
+                                        class="img-fluid rounded chat-image"
+                                      />
+                                    </div>
+                                    <div
+                                      *ngIf="
+                                        ticketDisscusionArrayList.length !=
+                                        0
+                                      "
+                                    >
+                                      <div
+                                        style="
+                                          height: 300px;
+                                          overflow-y: auto;
+                                        "
+                                        class="px-3 mx-n3"
+                                        #scrollframe
+                                      >
+                                        <ng-container
+                                          *ngFor="
+                                            let chat of ticketDisscusionArrayList
+                                          "
+                                          #item
+                                          ><app-chat-meaasge-file
+                                            [chat]="chat"
+                                            [singlerow]="false"
+                                          ></app-chat-meaasge-file>
+                                        </ng-container>
+                                      </div>
+                                    </div>
+
+                                    <div
+                                      class="mt-3"
+                                      *ngIf="
+                                        ticketData[0]?.ticketStatusId !=
+                                          32 &&
+                                        ticketData[0]?.ticketStatusId != 19
+                                      "
+                                    >
+                                      <div class="row g-3">
+                                        <div class="col-lg-12">
+                                          <label
+                                            for="exampleFormControlTextarea1"
+                                            class="form-label"
+                                            >Leave a Comment</label
+                                          >  <div
+                                          class="vstack gap-2 mb-2"
+                                          *ngIf="internalFileValue"
+                                        >
+                                          <div
+                                            class="border rounded border-dashed p-2"
+                                          >
+                                            <div
+                                              class="d-flex align-items-center"
+                                            >
+                                              <div
+                                                class="flex-shrink-0 me-3"
+                                              >
+                                                <div class="avatar-sm">
+                                                  <div
+                                                    class="avatar-title bg-light text-secondary rounded fs-24"
+                                                  >
+                                                    <i
+                                                    [class]="getFileIcon(internalFileValue.file)"
+                                                    
+                                                    ></i>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div
+                                                class="flex-grow-1 overflow-hidden"
+                                              >
+                                                <h5 class="fs-15 mb-1">
+                                                  <a
+                                                    href="javascript:void(0);"
+                                                    class="text-body text-truncate d-block"
+                                                    >{{
+                                                      internalFileValue.file
+                                                        .name
+                                                    }}</a
+                                                  >
+                                                </h5>
+                                                <div class="text-muted">
+                                                  {{
+                                                    internalFileValue.fileType
+                                                  }}
+                                                </div>
+                                              </div>
+                                              <div
+                                                class="flex-shrink-0 ms-2"
+                                              >
+                                                <div class="d-flex gap-1">
+                                                  <button
+                                                    type="button" (click)="deltefileMedia()"
+                                                    class="btn btn-icon text-muted btn-sm fs-18"
+                                                  >
+                                                    <i
+                                                      class="ri-delete-bin-fill align-bottom me-2 text-muted"
+                                                    ></i>
+                                                  </button>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                          <textarea
+                                            class="form-control bg-light border-light"
+                                            id="exampleFormControlTextarea1"
+                                            [maxlength]="maxCharMessage"
+                                            [(ngModel)]="MessageContain"
+                                            rows="3"
+                                            placeholder="Enter comment"
+                                          ></textarea>
+
+                                          <label class="nopadding clrlbl">
+                                            Characters Remaining:
+                                            {{ MessageContain.length }}/{{
+                                              maxCharMessage
+                                            }}</label
+                                          >
+                                        </div>
+                                      
+                                        <div class="col-lg-12 text-end">
+                                          <button
+                                          type="button" (click)="fileInput.click()"
+                                          class="btn btn-ghost-secondary btn-icon waves-effect me-1">
+                                          <i
+                                          class="ri-attachment-line fs-16"></i>
+                                          
+                                          
+                                        </button>
+
+                                          <!-- Hidden File Input -->
+                                          <input   id="internalFile"
+                                            type="file"
+                                            #fileInput
+                                            (change)="
+                                              onFileSelected(
+                                                $event,
+                                                'internal'
+                                              )
+                                            "
+                                            accept=".png,.jpg,.jpeg,.gif,.bmp,.pdf,.dwg,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.mp4,.avi,.mkv,.mov,.zip,.rar,.csv"
+                                            style="display: none"
+                                          />
+
+                                          <button
+                                            [disabled]="!MessageContain   && internalFileValue==null"
+                                            (click)="submitChat()"
+                                            class="btn btn-success"
+                                          >
+                                            Post Comment
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </ng-template>
+                              </li>
+                              </ng-container>
+                            </ul>
+
+                            <div class="tab-content">
+                              <div [ngbNavOutlet]="nav"></div>
+                            </div>
+                          </ng-template>
+                        </li>
+                        <ng-container *ngIf="ticketReportIncident.length != 0">
+                          <li [ngbNavItem]="2">
+                            <a ngbNavLink>
+                              <div
+                                class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                              >
+                                <p class="d-none1 d-sm-block mb-0">Incident</p>
+                              </div>
+                            </a>
+                            <ng-template ngbNavContent>
+                              <div class="row">
+                                <div class="col-lg-12 p-4">
+                                  <app-view-incident-ticket
+                                    [incidentList]="ticketReportIncident[0]"
+                                    [ticketData]="ticketData"
+                                  ></app-view-incident-ticket>
+                                </div>
+                              </div>
+                            </ng-template>
+                          </li>
+                        </ng-container>
+
+                        <ng-container
+                          *ngIf="maintenanceWorkflowAuditList?.length != 0"
+                        >
+                          <li [ngbNavItem]="3">
+                            <a ngbNavLink>
+                              <div
+                                class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                              >
+                                <p class="d-none d-sm-block mb-0">
+                                  WorkFlow Audit
+                                </p>
+                              </div>
+                            </a>
+                            <ng-template ngbNavContent>
+                              <app-audit-chart
+                                [Data]="maintenanceWorkflowAuditList"
+                              ></app-audit-chart>
+                            </ng-template>
+                          </li>
+                        </ng-container>
+
+                        <ng-container
+                          *ngIf="selectePasteUplaodArray?.length != 0"
+                        >
+                          <li
+                            [ngbNavItem]="4"
+                            (click)="getV2_TicketImagesList(this.storeTicketId)"
+                          >
+                            <a ngbNavLink>
+                              <div
+                                class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                              >
+                                <p class="d-none d-sm-block mb-0">Gallery</p>
+                              </div>
+                            </a>
+                            <ng-template ngbNavContent>
+                              <div class="row me-0 ms-0">
+                                <div
+                                  class="col-md-3 paddinBorh pb-2 pt-2 mb-2"
+                                  *ngFor="
+                                    let img of selectePasteUplaodArray;
+                                    index as i
+                                  "
+                                >
+                                  <img
+                                    [src]="imageUrl + img.imageUrl"
+                                    alt="img"
+                                    class="img-fluid img-size-withd-upload"
+                                    (click)="
+                                      openAllCopyPasteImage(
+                                        selectePasteUplaodArray,
+                                        i
+                                      )
+                                    "
+                                  />
+                                </div>
+                              </div>
+                            </ng-template>
+                          </li>
+                        </ng-container>
+
+
+<!--  *ngIf="selectedTicketDocumentArray?.length != 0" -->
+                        <ng-container
+                         
+                        >
+                          <li
+                            [ngbNavItem]="5"
+                            (click)="getV2_TicketDocument(this.storeTicketId)"
+                          >
+                            <a ngbNavLink>
+                              <div
+                                class="d-flex flex-row flex-lg-column flex-xl-row align-items-center a3"
+                              >
+                                <p class="d-none d-sm-block mb-0">Documents</p>
+                              </div>
+                            </a>
+                            <ng-template ngbNavContent>
+                              <div class="row me-0 ms-0">
+                                <div class="col-md-12 pb-2 pt-2 mb-2 text-end">
+                                  <button *ngIf="ticketData[0].ticketStatusId!=32 && ticketData[0].ticketStatusId!=25 &&ticketData[0].ticketStatusId!=19 "
+                                  class="btn btn-success btn-sm"
+                                  type="button"
+
+                                  (click)="openUploaadDocument(selectedTicketDocumentArray,'File')"
+                                 
+                                >
+                                  <i class="ri-add-fill align-bottom me-1"></i>
+                                  Upload File
+                                </button>
+                                </div>
+                                <div class="col-md-12 pb-2 pt-2 mb-2">
+                                  <div class="table-responsive mb-0">
+                                    <table class="table">
+                                      <thead>
+                                        <tr
+                                          class="bg-light text-muted text-uppercase"
+                                        >
+                                          <th>File Name</th>
+                                          <th>Uploaded By</th>
+                                          <th>Uploaded Date</th>
+                                          <th>Download</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <ng-container
+                                          *ngIf="
+                                            selectedTicketDocumentArray.length ==
+                                            0
+                                          "
+                                        >
+                                          <tr>
+                                            <td
+                                              colspan="4"
+                                              class="text-center"
+                                            >
+                                              No File Data
+                                            </td>
+                                          </tr>
+                                        </ng-container>
+                                        <ng-container
+                                          *ngIf="
+                                            selectedTicketDocumentArray.length !=
+                                            0
+                                          "
+                                        >
+                                          <ng-container
+                                            *ngFor="
+                                              let data of selectedTicketDocumentArray;
+                                              let i = index
+                                            "
+                                          >
+                                            <tr >
+                                              <td class="align-top title"  [title]="data.fileName"  
+                                              [class]="data.remark?'border-bottom-width':''">
+                                                <a
+                                                  href="javascript:void(0)"
+                                                  class="fw-medium link-primary"
+                                                  >{{ data.fileName }}</a
+                                                >
+                                              </td>
+                                              <td class="title"  [title]="data.createdByName"   [class]="data.remark?'border-bottom-width':''">
+                                                {{ data.createdByName }}
+                                              </td>
+                                              <td  class="title"  [title]="data.createdDateTime"   [class]="data.remark?'border-bottom-width':''">
+                                                {{ data.createdDateTime }}
+                                              </td>
+
+                                              <td class="title align-top"   [class]="data.remark?'border-bottom-width':''">
+                                                <i
+                                                  class="fs-16 ri-download-line text-danger cursor"
+                                                  (click)="downloadFIle(data)"
+                                                ></i>
+                                              </td>
+                                            </tr>
+                                            <tr  *ngIf="data.remark">
+                                              <td colspan="4" class="white-space-normal fs-12 pt-0">
+                                            <b> Comment </b><br>
+                                             {{ data.remark }}
+                                              </td>
+                                            </tr>
+                                          </ng-container>
+                                        </ng-container>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-template>
+                          </li>
+                        </ng-container>
+
+
+                        <ng-container
+                        
+                        >
+                          <li
+                            [ngbNavItem]="6"
+                            (click)="
+                              getV2_TicketVideo(this.storeTicketId)
+                            "
+                          >
+                            <a ngbNavLink>
+                              <div
+                                class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                              >
+                                <p class="d-none1 d-sm-block mb-0">Video</p>
+                              </div>
+                            </a>
+                            <ng-template ngbNavContent>
+                          
+                                <div class="row me-0 ms-0">
+                                  <div
+                                    class="col-md-12 pb-2 pt-2 mb-2 text-end"
+                                  >
+                                  <button *ngIf="ticketData[0].ticketStatusId!=32 && ticketData[0].ticketStatusId!=25 &&ticketData[0].ticketStatusId!=19 "
+                                  class="btn btn-success btn-sm"
+                                      type="button"
+                                      (click)="
+                                        openUploaadDocument(
+                                          selecteTicketVideoArray,
+                                          'Video'
+                                        )
+                                      "
+                                    >
+                                      <i
+                                        class="ri-add-fill align-bottom me-1"
+                                      ></i>
+                                      Upload video
+                                    </button>
+                                  </div>
+                                  <ng-container *ngIf="selecteTicketVideoArray.length!=0">
+                                  <div
+                                    class="col-md-12 mb-2"
+                                    *ngFor="
+                                      let videoArr of selecteTicketVideoArray;
+                                      index as i
+                                    "
+                                  >
+                                    <div class="card newcard">
+                                      <div class="row g-0">
+                                        <div class="col-md-4">
+                                          <video
+                                            controls
+                                            class="rounded-start img-fluid h-100 object-fit-cover img-size-withd-video "
+                                            preload="none"
+                                            (click)="
+                                              openModaVideeo(
+                                                videoArr,
+                                                VideoPlayer
+                                              )
+                                            "
+                                          >
+                                            <source
+                                              [src]="
+                                                imageUrl + videoArr.fileURL
+                                              "
+                                              type="video/mp4"
+                                            />
+                                          </video>
+                                        </div>
+                                        <div class="col-md-8">
+                                          <div class="card-header">
+                                            <h5 class="card-title mb-0">
+                                              {{ videoArr.fileName }}
+                                            </h5>
+                                          </div>
+                                          <div class="card-body">
+                                            <p class="mb-0">
+                                              <strong
+                                                ><i
+                                                  class="ri-shield-user-line me-1 align-bottom"
+                                                  ngbTooltip="Name"
+                                                ></i
+                                              ></strong>
+                                              {{ videoArr.createdByName }}
+                                            </p>
+                                            <p class="mb-0">
+                                              <strong
+                                                ><i
+                                                  class="ri-calendar-event-line me-1 align-bottom"
+                                                  ngbTooltip="Created Date"
+                                                ></i
+                                              ></strong>
+                                              {{ videoArr.createdDateTime }}
+                                            </p>
+                                            <p class="mb-0"  *ngIf="videoArr.remark">
+                                              <strong
+                                                ><i
+                                                  class=" ri-sticky-note-line me-1 align-bottom"
+                                                  ngbTooltip="Remark"
+                                                ></i
+                                              ></strong>
+                                              {{ videoArr.remark }}
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  </ng-container>
+                                  <ng-container *ngIf="selecteTicketVideoArray.length==0">
+                                  <div
+                                    class="col-md-12 mb-2" >
+                                  <div class="py-4 text-center">
+                                    <div>
+                                      <lord-icon
+                                        src="https://cdn.lordicon.com/msoeawqm.json"
+                                        trigger="loop"
+                                        colors="primary:#405189,secondary:#0ab39c"
+                                        style="width: 72px; height: 72px"
+                                      >
+                                      </lord-icon>
+                                    </div>
+                                    <div class="mt-4">
+                                      <h5>
+                                        No Records Found  
+                                      </h5>
+                                    </div>
+                                  </div>
+                                  </div>
+                                  </ng-container>
+                                </div>
+                          
+                            </ng-template>
+                          </li>
+                        </ng-container>
+
+                      </ul>
+                      <div class="tab-content text-muted">
+                        <div [ngbNavOutlet]="defaultNav"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xxl-4">
+                    <div
+                      class="card ribbon-box right table-responsive"
+                      *ngFor="let ticket of ticketData"
+                    >
+                      <div
+                        class="card-header d-flex justify-content-between align-items-center"
+                      >
+                        <h5 class="card-title mb-0 me-1">Ticket Details</h5>
+
+                        <ng-container
+                          *ngIf="ticketData[0].ticketStatusId == 51"
+                        >
+                          <div
+                            class="d-flex justify-content-between align-items-center"
+                          >
+                            <button
+                              type="button"
+                              class="btn btn-primary btn-label waves-effect waves-light me-2"
+                              (click)="
+                                openModalIsYesBillingEligibilityDecision()
+                              "
+                            >
+                              <i
+                                class="bx bx-dollar label-icon align-middle fs-16 me-2"
+                              ></i>
+                              Yes,Billable
+                            </button>
+
+                            <button
+                              type="button"
+                              class="btn btn-success btn-label waves-effect waves-light"
+                              (click)="
+                                openModalIsNoBillingEligibilityDecision()
+                              "
+                            >
+                              <i
+                                class="bx bx-block label-icon align-middle fs-16 me-2"
+                              ></i>
+                              No,Billable
+                            </button>
+                          </div>
+                        </ng-container>
+                        <ng-container>
+                          <span
+                            *ngIf="
+                              ticket?.ticketStatusId == 48 &&
+                              ticket?.isBillingRequired == null
+                            "
+                          >
+                            <button
+                              *ngIf="ticket.isGlobal"
+                              type="button"
+                              class="btn btn-primary waves-effect waves-light"
+                              (click)="
+                                openRequestBillingEligibilityModalUp(
+                                  RequestBillingEligibilityModalUp
+                                )
+                              "
+                            >
+                              Request Billing Eligibility
+                            </button>
+                          </span>
+                        </ng-container>
+                      </div>
+                      <div class="card-body">
+                        <span
+                          class="ribbon ribbon-info ribbon-shape"
+                          *ngIf="ticket?.isBillingRequired != null"
+                          ><span>
+                            {{
+                              ticket?.isBillingRequired === true
+                                ? "Billable"
+                                : "Not Billable"
+                            }}</span
+                          ></span
+                        >
+                        <div class="table-responsive">
+                          <table class="table table-borderless mb-0">
+                            <tbody>
+                              <tr>
+                                <td class="fw-medium">Ticket No</td>
+                                <td># {{ ticket?.ticketNo || "NA" }}</td>
+                              </tr>
+                              <tr>
+                                <td class="fw-medium">Company</td>
+                                <td>{{ ticket?.companyName || "NA" }}</td>
+                              </tr>
+                              <tr>
+                                <td class="fw-medium">Client</td>
+                                <td>{{ ticket?.clientName || "NA" }}</td>
+                              </tr>
+                              <tr>
+                                <td class="fw-medium">Project</td>
+                                <td>{{ ticket?.projectName || "NA" }}</td>
+                              </tr>
+                              <tr *ngIf="!ticket?.isGlobal">
+                                <td class="fw-medium">Internal/Global</td>
+                                <td>
+                                  <span
+                                    class="badge bg-info-subtle text-info badge-border"
+                                    *ngIf="!ticket?.isGlobal"
+                                    >Internal Ticket</span
+                                  >
+                                </td>
+                              </tr>
+
+                              <tr>
+                                <td class="fw-medium">Service Type</td>
+                                <td>{{ ticket?.operationType || "NA" }}</td>
+                              </tr>
+                              <tr>
+                                <td class="fw-medium">Ticket Type</td>
+                                <td id="t-client">
+                                  {{
+                                    ticket?.isDeviceRelated == true
+                                      ? "Hardware"
+                                      : "Non-Hardware"
+                                  }}
+                                </td>
+                              </tr>
+
+                              <tr>
+                                <td class="fw-medium">Ticket Category</td>
+                                <td>{{ ticket?.ticketTypeName || "NA" }}</td>
+                              </tr>
+                              <tr>
+                                <td class="fw-medium">Created By</td>
+                                <td>
+                                  {{ ticket?.requesterName || "NA" }}
+                                  <p class="mb-0 fs-12">
+                                    <i class="mdi mdi-email me-1"></i>
+                                    {{ ticket?.requesterEmail || "NA" }}
+                                  </p>
+                                </td>
+                              </tr>
+
+                              <tr>
+                                <td class="fw-medium">Created Date</td>
+                                <td>{{ ticket?.createdDate || "NA" }}</td>
+                              </tr>
+
+                              <tr>
+                                <td class="fw-medium">Priority</td>
+                                <td>
+                                  <span
+                                    class="badge bg-danger fs-12"
+                                    *ngIf="ticket?.urgencyTypeName == 'High'"
+                                  >
+                                    {{ ticket?.urgencyTypeName || "-" }}
+                                  </span>
+                                  <span
+                                    class="badge bg-success fs-12"
+                                    *ngIf="ticket?.urgencyTypeName == 'Low'"
+                                  >
+                                    {{ ticket?.urgencyTypeName || "-" }}
+                                  </span>
+                                  <span
+                                    class="badge bg-warning fs-12"
+                                    *ngIf="ticket?.urgencyTypeName == 'Medium'"
+                                  >
+                                    {{ ticket?.urgencyTypeName || "-" }}
+                                  </span>
+                                </td>
+                              </tr>
+
+                              <tr>
+                                <td class="fw-medium">Status</td>
+                                <td>
+                                  <span
+                                    class="fs-12"
+                                    [class]="
+                                      returnStatusBadgeClassesStatus(
+                                        ticket.ticketStatusId
+                                      )
+                                    "
+                                    >{{ ticket.ticketStatusName }}</span
+                                  >
+                                </td>
+                              </tr>
+
+                              <tr *ngIf="ticket.ticketVerifiedBy">
+                                <td class="fw-medium">Verified By</td>
+                                <td>
+                                  {{ ticket.ticketVerifiedBy }}
+                                </td>
+                              </tr>
+                              <tr *ngIf="ticket.ticketVerifiedDateTime">
+                                <td class="fw-medium">
+                                  Ticket Verified Date Time
+                                </td>
+                                <td>
+                                  {{ ticket.ticketVerifiedDateTime }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div
+                        class="card-footer text-end"
+                        *ngIf="updateTicketCloseVisiable"
+                      >
+                        <button
+                          class="btn btn-danger"
+                          (click)="closeTicketModalPopup()"
+                        >
+                          Ticket Close
+                        </button>
+                      </div>
+                      <div
+                        class="card-footer text-end"
+                        *ngIf="updateTicketAcknowledgeVisiable"
+                      >
+                        <button
+                          class="btn btn-danger"
+                          (click)="acknowledgeTicketModalPopup()"
+                        >
+                          Acknowledge
+                        </button>
+                      </div>
+                      <div
+                        class="card-footer text-end"
+                        *ngIf="shownVerifyButton"
+                      >
+                        <button
+                          class="btn btn-danger"
+                          (click)="verifyTicketModalPopup()"
+                        >
+                          Verify
+                        </button>
+                      </div>
+
+                      <!--end card-body-->
+                    </div>
+                    <!-- <div
+                      class="card"
+                      *ngIf="ticketData[0]?.pic1_URL || ticketData[0]?.pic2_URL"
+                    >
+                      <div class="card-header">
+                        <h6 class="card-title fw-semibold mb-0">
+                          Image Attachment
+                        </h6>
+                      </div>
+                      <div class="card-body" *ngFor="let ticket of ticketData">
+                        <div
+                          class="d-flex align-items-center border border-dashed p-2 rounded"
+                          *ngIf="ticket.pic1_URL"
+                        >
+                          <div class="flex-shrink-0 avatar-lg">
+                            <div class="avatar-title bg-light rounded">
+                              <img
+                                (click)="
+                                  open(
+                                    '../../../../../assets/images/placeholderimage.png'
+                                  )
+                                "
+                                src="../../../../../assets/images/placeholderimage.png"
+                                alt=""
+                                class="rounded img-size-fixed"
+                                *ngIf="!ticket.pic1_URL"
+                              />
+                              <img
+                                (click)="open(imageUrl + ticket.pic1_URL)"
+                                src="{{ imageUrl }}{{ ticket.pic1_URL }}"
+                                alt=""
+                                class="rounded img-size-fixed"
+                                *ngIf="ticket.pic1_URL"
+                              />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1 ms-3 text-wrap">
+                            <p class="mb-1 text-muted wordBrrak">
+                              {{ ticket?.remark_Pic1 || "No Remark" }}.
+                            </p>
+                          
+                          </div>
+                        </div>
+                        <div
+                          class="d-flex align-items-center border border-dashed p-2 rounded mt-2"
+                          *ngIf="ticket.pic2_URL"
+                        >
+                          <div class="flex-shrink-0 avatar-lg">
+                            <div class="avatar-title bg-light rounded">
+                              <img
+                                (click)="
+                                  open(
+                                    '../../../../../assets/images/placeholderimage.png'
+                                  )
+                                "
+                                src="../../../../../assets/images/placeholderimage.png"
+                                alt=""
+                                class="rounded img-size-fixed"
+                                *ngIf="!ticket.pic2_URL"
+                              />
+                              <img
+                                (click)="open(imageUrl + ticket.pic2_URL)"
+                                src="{{ imageUrl }}{{ ticket.pic2_URL }}"
+                                alt=""
+                                class="rounded img-size-fixed"
+                                *ngIf="ticket.pic2_URL"
+                              />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1 ms-3 text-wrap">
+                            <p class="mb-1 text-muted wordBrrak">
+                              {{ ticket?.remark_Pic2 || "No Remark" }}
+                            </p>
+          
+                          </div>
+                        </div>
+                      </div>
+                    </div> -->
+                  </div>
+
+                  <div class="col-lg-12 mt-2">
+                    <div class="d-flex justify-content-end mb-3">
+                      <button
+                        class="btn btn-soft-primary waves-effect back-button"
+                        (click)="goBack()"
+                      >
+                        Back
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- end row -->
+              </ng-template>
+            </li>
+            <!-- /View Ticket  -->
+            <!-- View Asset  -->
+            <li
+            (click)="callingApi()"
+              [ngbNavItem]="2"
+              class="nav-item"
+              *ngIf="assetTicketItem.length != 0"
+
+            >
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Assets
+              </a>
+              <ng-template ngbNavContent>
+                <div>
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center mb-0">
+                        <h5 class="card-title flex-grow-1 mb-2">Assets List</h5>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <div class="card">
+                            <div class="card-body">
+                              <app-view-asset-ticket
+                                [ticketData]="ticketData"
+                                [assetList]="assetTicketItem"
+                                [mX_WorkOder]="ticketWorkOder"
+                                (updateStatusAssetList)="
+                                  getupdateStatusAssetList($event)
+                                "
+                              ></app-view-asset-ticket>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+            <!--End View Asset  -->
+
+            <!-- View Service Order -->
+            <ng-container
+              *ngIf="ticketWorkOder?.length != 0 && siteVisitDateTimeValue"
+            >
+              <li [ngbNavItem]="3" class="nav-item" (click)="callingApi()">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Service Order
+                </a>
+                <ng-template ngbNavContent>
+                  <app-view-workorder-ticket
+                    [mX_WOTechAssignment]="ticketWOTechAssignment"
+                    [mX_WorkOder]="ticketWorkOder"
+                    [mx_WOStartEndTask]="ticketWOStartEndTask"
+                    (setUpdateListValue)="getUpdateListValue($event)"
+                    [ticketData]="ticketData"
+                  ></app-view-workorder-ticket>
+                </ng-template>
+              </li>
+            </ng-container>
+            <!-- *ngIf="generateQuotationTabShown" -->
+            <!-- View Generate Quotation  -->
+            <ng-container *ngIf="generateQuotationTabShown">
+              <li [ngbNavItem]="4" class="nav-item" (click)="callingApi()">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Generate Quotation
+                </a>
+                <ng-template ngbNavContent>
+                  <app-add-quotation
+                    [ticketInfo]="ticketData[0]"
+                    (submitAfterQuotation)="
+                      getResponseAfterSubmitQuotation($event)
+                    "
+                  ></app-add-quotation>
+                </ng-template>
+              </li>
+            </ng-container>
+            <!-- End View Generate Quotation  -->
+
+            <!--  Generate Service Order  -->
+
+            <ng-container *ngIf="generateServiceOrderTabShown">
+              <li [ngbNavItem]="5" class="nav-item" (click)="callingApi()">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  <ng-conainter *ngIf="siteVisitDateTimeValue">
+                    Generate Service Order</ng-conainter
+                  >
+                  <ng-conainter *ngIf="!siteVisitDateTimeValue">
+                    Assign Member & Site Visit Date Time</ng-conainter
+                  >
+                </a>
+                <ng-template ngbNavContent>
+                  <app-add-service-order
+                    [ticketInfo]="ticketData[0]"
+                    [serviceOrderDetailOnlyObject]="
+                      serviceOrderDetailOnlyObject
+                    "
+                    (submitAfterGernateServiceOrder)="
+                      getSubmitAfterGernateServiceOrderValue($event)
+                    "
+                  ></app-add-service-order>
+                </ng-template>
+              </li>
+            </ng-container>
+
+            <!-- End Generate Service Order  -->
+
+            <!-- View  Quotation  -->
+            <ng-container
+              *ngIf="
+                viewQuotationTabShown &&
+                shownQuotation &&
+                ticketData[0]?.isBillingRequired
+              "
+            >
+              <li [ngbNavItem]="6" class="nav-item" (click)="callingApi()">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  View Quotation Details
+                </a>
+                <ng-template ngbNavContent>
+                  <app-view-quotation
+                    [ticketInfo]="ticketData[0]"
+                    [quotationObjectWorkFlow]="quotationObjectWorkFlow"
+                    [viewQuationApproveReviewButtons]="
+                      viewQuationApproveReviewButtons
+                    "
+                    [ticketId]="
+                      quotationObjectWorkFlow ? 0 : this.storeTicketId
+                    "
+                    [quotationId]="
+                      quotationObjectWorkFlow
+                        ? quotationObjectWorkFlow.quotId
+                        : 0
+                    "
+                    [quotationObjectFromTheDashbaordWorkFlowTable]="
+                      quotationObjectFromTheDashbaordWorkFlowTable
+                    "
+                  ></app-view-quotation>
+                </ng-template>
+              </li>
+            </ng-container>
+            <!-- View  Quotation  -->
+
+            <!-- Reject  Quotation  -->
+            <ng-container *ngIf="rejectViewQuotation">
+              <li [ngbNavItem]="7" class="nav-item" (click)="callingApi()">
+                <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                  Reject View Quotation Details
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="row" *ngIf="totalQuotationCount != 1">
+                    <div class="col-12 d-flex justify-content-between">
+                      <button
+                        class="btn btn-outline-primary"
+                        (click)="nextQuotation()"
+                        [disabled]="quotationCount == 1"
+                      >
+                        Pervious
+                      </button>
+                      <h6 class="mb-1">
+                        {{ quotationCount }}/{{ totalQuotationCount }}
+                      </h6>
+                      <button
+                        class="btn btn-outline-primary"
+                        (click)="previousQuotation()"
+                        [disabled]="quotationCount == totalQuotationCount"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                  <app-view-quotation-ticket
+                    [ticketInfo]="ticketData"
+                    [quotationObject]="ticketQuotation"
+                    [mX_quotationItem]="ticketQuotationItem"
+                  ></app-view-quotation-ticket>
+                </ng-template>
+              </li>
+            </ng-container>
+
+            <!-- View  Quotation  -->
+          </ul>
+        </div>
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="tab-content text-muted">
+        <div [ngbNavOutlet]="customNav"></div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<!-- Success Modal -->
+<ng-template #RequestBillingEligibilityModalUp let-modal>
+  <div class="modal-content">
+    <div class="modal-body p-5">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="mt-2">
+        <div class="text-center">
+            <!--  <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+  
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        </div>
+
+        <h4 class="mb-3 mt-4">Are you sure you would like to proceed?</h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          You are requesting billing eligibility review for this ticket by an
+          Account Manager.
+        </p>
+        <br />
+        <p class="text-muted fs-15 mb-4 text-justify">
+          If the Billing eligibility workflow is available, the request will be
+          escalated to the respective Project Account Manager for verification.
+          <br /><br />Once the Account Manager verifies it, you will receive a
+          notification.
+        </p>
+        <div class="hstack gap-2 justify-content-center">
+          <button
+            class="btn btn-success"
+            (click)="successAfterRequstedBilling(storeTicketId)"
+            (click)="modal.close('Close click')"
+          >
+            Yes,Processed It!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.close('Close click')"
+            id="deleteRecord-close"
+            class="btn btn-soft-danger"
+          >
+            <i class="ri-close-line me-1 align-middle"></i> Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+<ng-template #isQuotationGenerateFalse let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="text-center">
+      <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+      <div class="mt-3">
+       
+
+        <div class="mt-4 pt-2 fs-15">
+          <h4 class="fs-20 fw-semibold">
+            Thank you for submitting a billing processed for verification.
+          </h4>
+          <p class="text-muted mb-0 mt-3 fs-13">
+            Our Account/Project department will review your request to determine
+            whether it requires billing or can be processed without billing.
+            <br />
+            Once the verification is complete, you will receive a notification.
+            Please wait for further instructions.
+          </p>
+        </div>
+      </div>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+          type="button"
+          class="swal2-confirm btn btn-soft-danger mb-1"
+          aria-label=""
+          (click)="modal.dismiss('Cross click')"
+          (click)="goback()"
+        >
+          Yes,Close It!
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+<ng-template #isQuotationGenerateTrue let-modal>
+  <div class="modal-content">
+    <div class="modal-body p-5">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="mt-2">
+        <div class="text-center">
+          
+  <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+            
+        </div>
+        <h4 class="mb-3 mt-4 text-justify">
+          If you want proceed Quotation please click Generate Quotation?
+        </h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          Pleased to inform you that your support ticket is ready for quotation
+          generation, and it does not require a billing verification workflow.
+        </p>
+        <br />
+        <p class="text-muted fs-15 mb-4 text-justify">
+          Management not set Billing Eligibility verification workflow process.
+          <br /><br />You have to manually make decision whether this Ticket
+          need to be bill to client or not.
+        </p>
+        <div class="hstack gap-2 justify-content-center">
+          <button
+            class="btn btn-success"
+            (click)="startQuotationGenerateInCaseTrue(storeTicketId)"
+            (click)="modal.close('Close click')"
+          >
+            Yes, Generate Quotation!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.close('Close click')"
+            id="deleteRecord-close"
+            class="btn btn-soft-danger"
+          >
+            Later
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+<ng-template #isQuotationGenerateTrue let-modal>
+  <div class="modal-content">
+    <div class="modal-body p-5">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="mt-2">
+        <div class="text-center">
+            <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        </div>
+
+        <h4 class="mb-3 mt-4 text-justify">
+          If you want proceed Quotation please click Generate Quotation?
+        </h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          Pleased to inform you that your support ticket is ready for quotation
+          generation, and it does not require a billing verification workflow.
+        </p>
+        <br />
+        <p class="text-muted fs-15 mb-4 text-justify">
+          Management not set Billing Eligibility verification workflow process.
+          <br /><br />You have to manually make decision whether this Ticket
+          need to be bill to client or not.
+        </p>
+        <div class="hstack gap-2 justify-content-center">
+          <button
+            class="btn btn-success"
+            (click)="startQuotationGenerateInCaseTrue(storeTicketId)"
+            (click)="modal.close('Close click')"
+          >
+            Yes, Generate Quotation!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.close('Close click')"
+            id="deleteRecord-close"
+            class="btn btn-soft-danger"
+          >
+            Later
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+<!-- isQuotationGenerateMessageForApprove -->
+
+<ng-template #isQuotationGenerateMessageForApprove let-modal>
+  <div class="modal-content">
+    <div class="modal-body p-5">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="mt-2">
+        <div class="text-center">
+            <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        </div>
+
+        <h4 class="mb-3 mt-4 text-justify">
+          Quotation has been generated successfully
+        </h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          Quotation Auto-Approved by Management and Client, Ready for Service
+          Order Generation.
+        </p>
+        <br />
+        <p class="text-muted fs-15 mb-4 text-justify">
+          Do you want to generate a Service Order?
+        </p>
+        <div class="hstack gap-2 justify-content-center">
+          <button class="btn btn-success" (click)="modal.close('Ok', $event)">
+            Yes, Generate Service Order!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.dismiss('Close click')"
+            class="btn btn-soft-danger"
+          >
+            Later
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+<!-- end isQuotationGenerateMessageForApprove -->
+
+<!-- isQuotationGenerateMessageForQuotationPending -->
+<ng-template #isQuotationGenerateMessageForQuotationPending let-modal>
+  <div class="modal-content">
+    <div class="modal-body p-5">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="mt-2">
+        <div class="text-center">
+            <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        </div>
+
+        <h4 class="mb-3 mt-4 text-justify">
+          If you want proceed Quotation please click Generate Quotation?
+        </h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          Pleased to inform you that your support ticket is ready for quotation
+          generation, and it does not require a billing verification workflow.
+        </p>
+        <br />
+        <p class="text-muted fs-15 mb-4 text-justify">
+          Management not set Billing Eligibility verification workflow process.
+          <br /><br />You have to manually make decision whether this Ticket
+          need to be bill to client or not.
+        </p>
+        <div class="hstack gap-2 justify-content-center">
+          <button
+            class="btn btn-success"
+            (click)="startQuotationGenerateInCaseTrue(storeTicketId)"
+            (click)="modal.close('Close click')"
+          >
+            Yes, Generate Quotation!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.close('Close click')"
+            id="deleteRecord-close"
+            class="btn btn-soft-danger"
+          >
+            Later
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+<!-- end isQuotationGenerateMessageForQuotationPending -->
+
+<!-- isQuotationGenerateMessageForQuotationInReview -->
+<ng-template #isQuotationGenerateMessageForQuotationInReview let-modal>
+  <div class="modal-content">
+    <div class="modal-body p-5">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="mt-2">
+        <div class="text-center">
+            <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        </div>
+
+        <h4 class="mb-3 mt-4 text-justify">Quotation Generated Successfully</h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          Awaiting Review by Internal Vertification .Before Proceeding
+          to Client Vertification.
+        </p>
+        <br />
+
+        <div class="hstack gap-2 justify-content-center">
+          <div class="hstack gap-2 justify-content-center">
+            <button class="btn btn-primary" (click)="modal.dismiss($event)">
+              Ok,Done It!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+<!-- end isQuotationGenerateMessageForQuotationInReview -->
+
+<!-- isNoBillingEligibilityDecision -->
+<ng-template #isNoBillingEligibilityDecision let-modal>
+  <div class="modal-content">
+    <div class="modal-body p-5 text-center">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="mt-2">
+        <div class="">
+            <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        </div>
+
+        <h4 class="mb-3 mt-4 text-justify">Billing Eligibility Review/Approval Process</h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          Are you sure you want to make this ticket non-billable and allow
+          HelpDesk/NCP to generate a Service Order?
+        </p>
+        <br />
+        <div class="row">
+          <div class="col-lg">
+            <label class="form-label" for="remark"
+              >Remark
+              <span class="starRequried">*</span>
+            </label>
+            <textarea
+              class="form-control bg-light border-light"
+              id="exampleFormControlTextarea1"
+              rows="4"
+              placeholder="Enter your remark..."
+              [(ngModel)]="billingEligibilityDecisionRemarkValue"
+              [maxlength]="maxCharsBillingEligibilityDecision"
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ billingEligibilityDecisionRemarkValue?.length }}/{{
+                maxCharsBillingEligibilityDecision
+              }}</label
+            >
+          </div>
+        </div>
+        <br /><br />
+        <div class="hstack gap-2 justify-content-center">
+          <button
+            class="btn btn-success"
+            [disabled]="!billingEligibilityDecisionRemarkValue"
+            (click)="modal.close('Ok', $event)"
+          >
+            Yes, Proceed!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.dismiss('Cross click')"
+            id="deleteRecord-close"
+            class="btn btn-soft-danger"
+          >
+            Later
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+<!-- end isNoBillingEligibilityDecision -->
+
+<!-- isYesBillingEligibilityDecision -->
+<ng-template #isYesBillingEligibilityDecision let-modal>
+  <div class="modal-content">
+    <div class="modal-body text-center p-5">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="mt-2">
+        <div class="text-center">
+            <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        </div>
+        <h4 class="mb-3 mt-4 text-justify">Billing Eligibility Review/Approval Process</h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          Are you sure you want to make this ticket billable and escalate it for
+          quotation preparation?
+        </p>
+        <br />
+        <div class="row">
+          <div class="col-lg">
+            <label class="form-label" for="remark"
+              >Remark
+              <span class="starRequried">*</span>
+            </label>
+            <textarea
+              class="form-control bg-light border-light"
+              id="exampleFormControlTextarea1"
+              rows="4"
+              placeholder="Enter your remark..."
+              [(ngModel)]="billingEligibilityDecisionRemarkValue"
+              [maxlength]="maxCharsBillingEligibilityDecision"
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ billingEligibilityDecisionRemarkValue?.length }}/{{
+                maxCharsBillingEligibilityDecision
+              }}</label
+            >
+          </div>
+        </div>
+        <br /><br />
+        <div class="hstack gap-2 justify-content-center">
+          <button
+            class="btn btn-success"
+            [disabled]="!billingEligibilityDecisionRemarkValue"
+            (click)="modal.close('Ok', $event)"
+          >
+            Yes, Proceed!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.dismiss('Cross click')"
+            id="deleteRecord-close"
+            class="btn btn-soft-danger"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+<!-- end isYesBillingEligibilityDecision -->
+
+<ng-template #successDataModalIsBilling let-modal>
+  <div class="modal-content">
+    <div class="modal-body text-center p-5">
+      <div class="mt-2">
+        <div class="text-center">
+      
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success"
+          
+          >
+        </div>
+        <h4 class="mb-3 mt-4">
+          {{ successDataModalIsBillingMessageObject.name }}
+        </h4>
+        <p class="text-muted fs-15 mb-4">
+          {{ successDataModalIsBillingMessageObject.remark }}
+        </p>
+        <div class="hstack gap-2 justify-content-center">
+          <button class="btn btn-primary" (click)="modal.close('Ok', $event)">
+            Ok,Done It!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- iscloseTicketModalPopup -->
+
+<ng-template #iscloseTicketModalPopup let-modal>
+  <div class="modal-content">
+    <div class="modal-body p-5 text-center">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="mt-2">
+        <div class="">
+            <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        </div>
+
+        <h4 class="mb-3 mt-4 text-justify">Ticket Close</h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          Are you sure you want to close this ticket?
+          <br />
+          Once submitted, it cannot be reverted. Please enter your remark or
+          note.
+        </p>
+        <br />
+        <div class="row">
+          <div class="col-lg">
+            <textarea
+              class="form-control bg-light border-light"
+              id="exampleFormControlTextarea1"
+              rows="4"
+              placeholder="Enter your remark..."
+              [(ngModel)]="updateTicKetCloseRemarkValue"
+              [maxlength]="maxCharsDecision"
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ updateTicKetCloseRemarkValue?.length }}/{{
+                maxCharsDecision
+              }}</label
+            >
+          </div>
+        </div>
+        <br /><br />
+        <div class="hstack gap-2 justify-content-center">
+          <button
+            class="btn btn-success"
+            [disabled]="!updateTicKetCloseRemarkValue"
+            (click)="AfterSubmit('Close')"
+          >
+            Yes, Proceed!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.dismiss('Cross click')"
+            id="deleteRecord-close"
+            class="btn btn-soft-danger"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+<!-- iscloseTicketModalPopup -->
+
+<!-- isAcknowledgeTicketModalPopup -->
+
+<ng-template #isAcknowledgeTicketModalPopup let-modal>
+  <div class="modal-content">
+    <div class="modal-body p-5 text-center">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="mt-2">
+        <div class="">
+            <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        </div>
+
+        <h4 class="mb-3 mt-4 text-justify">Ticket Acknowledged</h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          Are you sure to confirm the resolution of the recent ticket by
+          acknowledging its status as 'Close.?
+          <br />
+          It cannot be reverted. Please enter your remark or note.
+        </p>
+        <br />
+        <div class="row">
+          <div class="col-lg">
+            <textarea
+              class="form-control bg-light border-light"
+              id="exampleFormControlTextarea1"
+              rows="4"
+              placeholder="Enter your remark..."
+              [(ngModel)]="updateTicKetAcknowledgeRemarkValue"
+              [maxlength]="maxCharsDecision"
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ updateTicKetAcknowledgeRemarkValue?.length }}/{{
+                maxCharsDecision
+              }}</label
+            >
+          </div>
+        </div>
+        <br /><br />
+        <div class="hstack gap-2 justify-content-center">
+          <button
+            class="btn btn-success"
+            [disabled]="!updateTicKetAcknowledgeRemarkValue"
+            (click)="AfterSubmit('Acknowledged')"
+          >
+            Yes, Proceed!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.dismiss('Cross click')"
+            id="deleteRecord-close"
+            class="btn btn-soft-danger"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+<!-- isAcknowledgeTicketModalPopup -->
+
+<!-- isVerifyTicketModalPopup -->
+
+<ng-template #isVerifyTicketModalPopup let-modal>
+  <div class="modal-content">
+    <div class="modal-body p-5 text-center">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="mt-2">
+        <div class="">
+            <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        </div>
+
+        <h4 class="mb-3 mt-4 text-justify">Ticket Verify</h4>
+        <p class="text-muted fs-15 mb-1 text-justify">
+          Are you sure to confirm the resolution of the recent ticket by verify
+          its status as 'Acknowledgement Required'?
+          <br />
+          Once verify, The ticket proceed to escalate to the Acknowledgement Procced.
+          <br />
+          It cannot be reverted. Please enter your remark or note.
+        </p>
+        <br />
+        <div class="row">
+          <div class="col-lg">
+            <textarea
+              class="form-control bg-light border-light"
+              id="exampleFormControlTextarea1"
+              rows="4"
+              placeholder="Enter your remark..."
+              [(ngModel)]="verifyTicketRemarkValue"
+              [maxlength]="maxCharsDecision"
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ verifyTicketRemarkValue?.length }}/{{
+                maxCharsDecision
+              }}</label
+            >
+          </div>
+        </div>
+        <br /><br />
+        <div class="hstack gap-2 justify-content-center">
+          <button
+            class="btn btn-success"
+            [disabled]="!verifyTicketRemarkValue"
+            (click)="AfterSubmit('Verify')"
+          >
+            Yes, Proceed!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.dismiss('Cross click')"
+            id="deleteRecord-close"
+            class="btn btn-soft-danger"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+<!-- isVerifyTicketModalPopup -->
+
+
+
+<ng-template #VideoPlayer role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">
+      {{ storeInfomationVideo.preventiveTypeName }}
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div id="instructions">
+      <video
+        id="my_video_1"
+        class="video-js vjs-default-skin"
+        width="100%"
+        height="267px"
+        controls
+        preload="none" autoplay
+        data-setup='{ "aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }'
+      >
+      <source src="{{ linkVideo }}" type="video/mp4" />
+      </video>
+     
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+
+

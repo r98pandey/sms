@@ -1,0 +1,6 @@
+<ng-container *ngIf="gridView">
+  <app-calender-schedule (getCurrentValue)="getValueCurrent($event)" ></app-calender-schedule>
+</ng-container>
+<ng-container *ngIf="listView">
+  <app-list-schedule (getCurrentValue)="getValueCurrent($event)" ></app-list-schedule>
+</ng-container>

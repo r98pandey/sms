@@ -1,0 +1,335 @@
+<div class="offcanvas-header h-color h-head a3">
+  <div class="row mb-3">
+    <div class="col-md">
+      <div class="row align-items-center g-3">
+      
+        <div class="col-md a22">
+          <div>
+            <h4 class="fw-bold">{{ followUpDetailObject?.title }}</h4>
+            <div class="hstack gap-3 flex-wrap">
+              <div>
+                <b class="me-1">Created By:</b>
+                {{ followUpDetailObject?.createdBy }}
+              </div>
+              <div class="vr"></div>
+              <div>
+                <b class="me-1">Created Date:</b
+                >{{ followUpDetailObject?.createdDate || "-" }}
+              </div>
+              <div class="vr"></div>
+              <div>
+                <b class="me-1">Status:</b
+                ><span
+                  [class]="
+                    returnStatusBadgeClassesStatus(
+                      followUpDetailObject?.projectProcessHeaderDocStatusId
+                    )
+                  "
+                  >{{
+                    followUpDetailObject?.projectProcessHeaderDocStatusName
+                  }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close('Cross click')"
+  ></button>
+</div>
+
+<div class="offcanvas-body pt-0 bg-color">
+  <div class="row mt-3">
+    <div class="col-xl-9 col-lg-8 stretch-card">
+      <div class="card">
+        <ul
+          ngbNav
+          #nav="ngbNav"
+          [activeId]="1"
+          class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+        >
+          <li [ngbNavItem]="1">
+            <a ngbNavLink> Document </a>
+            <ng-template ngbNavContent>
+              <app-upload-document-with-document
+                [isCompleted]="isCompleted"
+                [projectProcessHeaderDocId]="projectProcessHeaderDocId"
+                [dDetail]="dDetail"
+                (getUodate)="getUodateHeader($event)"
+              ></app-upload-document-with-document>
+            </ng-template>
+          </li>
+        </ul>
+
+        <div class="card-body">
+          <div [ngbNavOutlet]="nav"></div>
+        </div>
+      </div>
+
+      <!-- Nav tabs -->
+      <!-- <div class="card"  *ngIf="projectProcessId == 8">
+        <ul
+          ngbNav
+          #nav="ngbNav"
+          [activeId]="1"
+          class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+        >
+         
+          <li [ngbNavItem]="1">
+            <a ngbNavLink> RWIF </a>
+            <ng-template ngbNavContent>
+
+              <app-generate-rfwiform  [isCompleted]="isCompleted"
+              [projectProcessHeaderDocId]="projectProcessHeaderDocId" 
+              [followUpDetailObject]="followUpDetailObject"
+              [dDetail]="dDetail"
+              (getUodate)="getUodateHeader($event)"
+              ></app-generate-rfwiform>
+              
+               </ng-template>
+          
+            </li>
+          <li [ngbNavItem]="2">
+            <a ngbNavLink> Document </a>
+            <ng-template ngbNavContent> 
+              <app-upload-document-with-document [isCompleted]="isCompleted" (getUodate)="getUodateHeader($event)"
+              [projectProcessHeaderDocId]="projectProcessHeaderDocId"
+            ></app-upload-document-with-document>
+            </ng-template>
+          </li>
+        
+        </ul>
+
+        <div class="card-body">
+          <div [ngbNavOutlet]="nav"></div>
+        </div>
+      </div> -->
+    </div>
+
+    <div class="col-xl-3 col-lg-4">
+      <div class="card">
+        <div
+          class="card-header align-items-center d-flex border-bottom-dashed p-2"
+        >
+          <h4 class="card-title mb-0 flex-grow-1 fs-14">Description</h4>
+          <div class="flex-shrink-0" *ngIf="followUpDetailObject?.projectProcessHeaderDocStatusId!=56">
+            <button
+              (click)="openModalPopup(UpdateDesc)"
+              type="button"
+              class="btn btn-soft-success btn-sm mb-0"
+              data-bs-toggle="modal"
+              ngbTooltip="The Edit Description feature allows those with the appropriate permissions to modify the description of the item."
+            >
+              <i class="ri-add-fill me-1 align-bottom"></i> Edit Description
+            </button>
+          </div>
+        </div>
+
+        <div class="card-body p-2">
+          <ngx-simplebar style="height: 235px" class="">
+            <div
+              [innerHTML]="transformInnerHTML(followUpDetailObject?.remark)"
+            ></div>
+          </ngx-simplebar>
+        </div>
+      </div>
+      <div class="card" *ngIf="followUpDetailObject?.verifiedById">
+        <div
+          class="card-header align-items-center d-flex border-bottom-dashed p-2"
+        >
+          <h5 class="card-title mb-0 flex-grow-1 fs-14">Verified by</h5>
+        </div>
+
+        <div class="card-body text-muted p-2">
+          <p class="fs-13 text-dark mb-0">
+            <b>
+              <i class="ri-user-3-line align-bottom"></i>
+              {{ followUpDetailObject?.verifiedBy }}
+            </b>
+          </p>
+          <p class="fs-13 text-dark mb-0">
+            <i class="ri-outlet-2-line align-bottom"></i>
+            {{ followUpDetailObject?.verifiedDesig }}
+          </p>
+          <p class="fs-13 text-muted mb-0">
+            <i class="ri-calendar-2-line align-bottom"></i>
+            {{ followUpDetailObject?.verifiedDateTime }}
+          </p>
+
+          <p class="fs-12 text-muted">
+            <i class="ri-edit-2-linealign-bottom"></i>
+            {{ followUpDetailObject?.verifiedRemark }}
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="followUpDetailObject?.acknowledgeById">
+        <div
+          class="card-header align-items-center d-flex border-bottom-dashed p-2"
+        >
+          <h5 class="card-title mb-0 flex-grow-1 fs-14">
+            Acknowledge By 
+          </h5>
+        </div>
+
+        <div class="card-body text-muted p-2">
+          <p class="fs-13 text-dark mb-0">
+            <b>
+              <i class="ri-user-3-line align-bottom"></i>
+              {{ followUpDetailObject?.acknowledgeBy || "-" }}
+            </b>
+          </p>
+          <p class="fs-13 text-dark mb-0">
+            <i class="ri-outlet-2-line align-bottom"></i>
+            {{ followUpDetailObject?.acknowledgeDesig || "- " }}
+          </p>
+
+          <p class="fs-13 text-muted mb-0">
+            <i class="ri-calendar-2-line align-bottom"></i>
+            {{ followUpDetailObject?.acknowledgeDateTime }}
+          </p>
+
+          <p class="fs-12 text-muted">
+            <i class="ri-edit-2-linealign-bottom"></i>
+            {{
+              followUpDetailObject?.acknowledgeRemark
+            }}
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="followUpDetailObject?.closedById">
+        <div
+          class="card-header align-items-center d-flex border-bottom-dashed p-2"
+        >
+          <h5 class="card-title mb-0 flex-grow-1 fs-14">Close By</h5>
+        </div>
+
+        <div class="card-body text-muted p-2">
+          <p class="fs-13 text-dark mb-0">
+            <b>
+              <i class="ri-user-3-line align-bottom"></i>
+              {{ followUpDetailObject?.closedBy }}
+            </b>
+          </p>
+          <p class="fs-13 text-dark mb-0">
+            <i class="ri-outlet-2-line align-bottom"></i>
+            {{ followUpDetailObject?.closedDesig }}
+          </p>
+          <p class="fs-13 text-muted mb-0">
+            <i class="ri-calendar-2-line align-bottom"></i>
+            {{ followUpDetailObject?.closedDateTime }}
+          </p>
+
+          <p class="fs-12 text-muted">
+            <i class="ri-edit-2-linealign-bottom"></i>
+            {{ followUpDetailObject?.closedRemark }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #VideoPlayer role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div id="instructions">
+      <video
+        id="my_video_1"
+        class="video-js vjs-default-skin"
+        width="100%"
+        height="267px"
+        controls
+        preload="none"
+        data-setup='{ "aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }'
+      >
+        <source src="{{ linkVideo }}" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #UpdateDesc let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Update Description</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div class="row">
+      <div class="col-md-12">
+        <label class="form-label" for="formFile"
+          >Description
+          <span class="starRequried">*</span>
+        </label>
+        <ngx-simplebar style="height: 335px" class="">
+          <ckeditor
+            [editor]="Editor"
+            [config]="{
+              toolbar: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                '|',
+                'NumberedList',
+                'BulletedList'
+              ]
+            }"
+            [(ngModel)]="editiorDescription"
+          >
+          </ckeditor
+        ></ngx-simplebar>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light w-xs"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-success w-xs"
+      [disabled]="!editiorDescription"
+      (click)="modal.close('Close click')"
+      (click)="submitDescription()"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>

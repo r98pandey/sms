@@ -1,0 +1,192 @@
+<div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <div
+            class="row  d-flex align-items-center justify-content-sm-end"
+          >
+            <div class="col-lg">
+              <h5 class="card-title mb-0">Latest Task Progress</h5>
+            </div>
+        
+          
+          </div>
+        </div>
+        <div class="card-body " style="height: 540px; overflow-y:auto;">
+          <ng-container *ngIf="projectScheduleListTask.length != 0">
+            <div class="table-responsive  mb-0">
+              <table class="table">
+                <thead>
+                  <tr class="bg-light text-muted text-uppercase">
+                    <th>Task</th>
+                    <th>Planed Date</th>
+                    <th>Sub Task</th>
+                  
+                      </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let data of projectScheduleListTask;
+                      index as index
+                    "
+                  >
+                    <td class="align-top">
+                      <a
+                        href="javascript:void(0)"
+                        
+                    
+                        class="fw-medium text-reset"
+                      >
+                        <p class="mb-0" ngbTooltip="{{ data.taskTitle }}">
+                          {{ showinString(data.taskTitle) }}
+                        </p>
+                        <p class="mb-0 text-primary">#{{ data.taskNo }}</p></a
+                      >  
+                      <p class="mb-0"><span
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            data.projectTaskStatusId
+                          )
+                        "
+                        >{{ data.projectTaskStatusName }}</span
+                      ></p>
+                      
+                    </td>
+
+                    <!-- <td class="title align-top">
+                      <div class="d-flex align-items-center">
+                        <div
+                          class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0"
+                        >
+                          <img
+                            [src]="imgUrl + data.profileImageUrl"
+                            class="rounded-circle avatar-xs"
+                            alt=""
+                          />
+                        </div>
+                        <div class="flex-grow-1 overflow-hidden">
+                          <h6 class="text-truncate mb-0 fs-14">
+                            <a class="text-reset username">{{
+                              data.projectOwnerName
+                            }}</a>
+                          </h6>
+                          <p
+                            class="text-truncate text-muted fs-13 mb-0 userStatus"
+                          >
+                            <small>{{ data.projectOwnerDesig }}</small>
+                          </p>
+                        </div>
+                      </div>
+                    </td> -->
+                    <td class="title align-top">
+                      <p class="mb-0 fs-12">
+                        <b> Start</b>: {{ data.startDate || "-" }}
+                      </p>
+
+                      <p class="mb-0 fs-12">
+                        <b>End</b> &nbsp;: {{ data.endDate || "-" }}
+                      </p>
+                    </td>
+                    <td class="title align-top">
+                      <div
+                        class="progress-circle"
+                        [ngStyle]="
+                          getProgressStyle(
+                            data.totalSubTask,
+                            data.totalSubTaskCompleted
+                          )
+                        "
+                      >
+                        <div class="progress-circle-inner">
+                          <div class="progress-circle-inner-content">
+                            <p class="progress-value mb-0">
+                              {{
+                                calculateProgress(
+                                  data.totalSubTask,
+                                  data.totalSubTaskCompleted
+                                )
+                              }}%
+                            </p>
+                            <p class="progress-text mb-0">
+                              {{ data.totalSubTaskCompleted }}/{{
+                                data.totalSubTask
+                              }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+
+                    
+                
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div
+              class="row justify-content-md-between align-items-md-center gy-2"
+            >
+              <div class="col col-sm-12 col col-md-6">
+                <div
+                  class="dataTables_info mb-2"
+                  id="tickets-table_info"
+                  role="status"
+                  aria-live="polite"
+                >
+                  Showing {{ from }} to {{ to }} of
+                  {{ totalRecordsFromApi }} entries
+                </div>
+              </div>
+
+              <div class="col col-sm-12 col col-md-6">
+                <div class="text-sm-right float-end listjs-pagination">
+                  <ngb-pagination
+                    [collectionSize]="totalRecordsFromApi"
+                    [(page)]="page"
+                    [pageSize]="pageSize"
+                    [maxSize]="2"
+                    [rotate]="true"
+                    (pageChange)="OnChangesPage($event)"
+                    *ngIf="totalRecordsFromApi > pageSize"
+                  >
+                    <ng-template
+                      ngbPaginationPrevious
+                      let-page
+                      let-pages="pages"
+                    >
+                      <i class="ci-arrow-left me-2"></i>
+                      Prev
+                    </ng-template>
+                    <ng-template ngbPaginationNext>
+                      Next
+                      <i class="ci-arrow-right ms-2"></i>
+                    </ng-template>
+                  </ngb-pagination>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="projectScheduleListTask.length == 0">
+            <div class="py-4 text-center">
+              <div>
+                <lord-icon
+                  src="https://cdn.lordicon.com/msoeawqm.json"
+                  trigger="loop"
+                  colors="primary:#405189,secondary:#0ab39c"
+                  style="width: 72px; height: 72px"
+                >
+                </lord-icon>
+              </div>
+              <div class="mt-4">
+                <h5>
+                  No Records Found
+                </h5>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>

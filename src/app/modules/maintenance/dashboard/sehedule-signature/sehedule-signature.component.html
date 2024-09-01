@@ -1,0 +1,139 @@
+<div class="offcanvas-header p-3 bg-primary-subtle border-bottom">
+  <h5 class="offcanvas-title">Digital Signature</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="passBack(false)"
+  ></button>
+</div>
+<div class="offcanvas-body">
+  <form [formGroup]="addTech">
+    <div class="row">
+      <div class="col-lg-12 mb-3">
+        <label class="form-label"
+          >Remark <span style="color: red">*</span></label
+        >
+        <textarea
+          class="form-control"
+          formControlName="editorText"
+          rows="4"
+          cols="6"
+          placeholder="Remark"
+          [class.is-invalid]="editorText.invalid && editorText.touched"
+          [class.is-valid]="editorText.valid && editorText.touched"
+          [maxlength]="maxCharsDecision"
+        ></textarea>
+        <label class="nopadding clrlbl">
+          Characters Remaining:
+          {{ editorText?.value?.length }}/{{ maxCharsDecision }}</label
+        >
+
+        <div *ngIf="editorText.invalid && editorText.touched">
+          <small class="text-danger" *ngIf="editorText.errors?.['required']">
+            Remark is Required
+          </small>
+        </div>
+      </div>
+
+      <div class="col-lg-12 pt-2">
+        <label class="form-label"
+          >Signature <span style="color: red">*</span></label
+        >
+        <app-signature-pad
+          (sendImagedata)="getSignData($event)"
+        ></app-signature-pad>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="offcanvas-footer mx-3 mb-4 pb-3">
+  <button
+    *ngIf="signtaureData"
+    class="btn btn-primary me-2"
+    (click)="openUpdateModal(modalUPSucss)"
+    [disabled]="addTech.invalid"
+  >
+    Submit
+  </button>
+  <button class="btn btn btn-outline-danger me-2" (click)="passBack(false)">
+    Cancel
+  </button>
+</div>
+
+<!-- modalUPSucss -->
+<ng-template #modalUPSucss let-modal>
+  <div class="modal-content">
+    <div class="modal-body p-4">
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn-close text-end"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+
+      <div class="mt-2">
+        <div class="text-center">
+          <!-- <lord-icon
+            src="https://cdn.lordicon.com/tqywkdcz.json"
+            trigger="hover"
+            style="width: 150px; height: 150px"
+          >
+          </lord-icon> -->
+          <img
+            src="../../../../assets/images/ticketChatpartImage.png"
+            class="img-fluid rounded chat-image-success"
+          />
+        </div>
+        <h4
+          class="mb-3 mt-4 text-justify"
+          *ngIf="scheduleTypeAdminAndClient == 'Admin'"
+        >
+          Are you sure you want to Acknowledge the schedule ?
+        </h4>
+        <h4
+          class="mb-3 mt-4 text-justify"
+          *ngIf="scheduleTypeAdminAndClient == 'Client'"
+        >
+          Are you sure you want to Close the schedule ?
+        </h4>
+
+        <p
+          class="text-muted fs-15 mb-1 text-justify"
+          *ngIf="scheduleTypeAdminAndClient == 'Admin'"
+        >
+          The tech team has completed the schedule. Now, you are to acknowledge
+          this schedule, escalate it to the client for verification, and
+          subsequently close the schedule.
+        </p>
+        <p
+          class="text-muted fs-15 mb-1 text-justify"
+          *ngIf="scheduleTypeAdminAndClient == 'Client'"
+        >
+          Yes, this schedule checklist activity completed and closing.
+        </p>
+
+        <br /><br />
+
+        <div class="hstack gap-2 justify-content-center">
+          <button class="btn btn-success" (click)="modal.close('Ok', $event)">
+            Yes, Proceed!
+          </button>
+          <button
+            data-bs-dismiss="modal"
+            (click)="modal.dismiss('Cross click')"
+            id="deleteRecord-close"
+            class="btn btn-soft-danger"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+<!-- end modalUPSucss -->

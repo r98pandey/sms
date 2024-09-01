@@ -1,0 +1,414 @@
+<form [formGroup]="addEditSpareForm">
+  <div class="row g-3">
+    <div class="col-lg-12" *ngIf="editSparepartObject">
+      <div class="text-center">
+        <div class="position-relative d-inline-block">
+          <div class="position-absolute bottom-0 end-0">
+            <label
+              for="company-logo-input"
+              class="mb-0"
+              data-bs-toggle="tooltip"
+              *ngIf="!isSecondImageVisible"
+              data-bs-placement="right"
+              title="Select Image"
+            >
+              <div class="avatar-xs cursor-pointer">
+                <div
+                  class="avatar-title bg-light border rounded-circle text-muted"
+                >
+                  <i class="ri-image-fill"></i>
+                </div>
+              </div>
+            </label>
+            <label
+              class="mb-0"
+              data-bs-toggle="tooltip"
+              *ngIf="isSecondImageVisible"
+              data-bs-placement="right"
+              title="Remove Image"
+              (click)="crossSecondImage(backgroud_img)"
+            >
+              <div class="avatar-xs cursor-pointer">
+                <div
+                  class="avatar-title bg-light border rounded-circle text-muted"
+                >
+                  <i class="ri-close-circle-fill"></i>
+                </div>
+              </div>
+            </label>
+            <input
+              class="form-control d-none"
+              id="company-logo-input"
+              type="file"
+              accept="image/png, image/gif, image/jpeg"
+              (change)="onSelectFileEdit($event)"
+              formControlName="SparePartImageBase64"
+            />
+          </div>
+          <div class="avatar-lg p-1">
+            <div class="avatar-title bg-light rounded-circle">
+              <img
+                src="{{ backgroud_img1 }}"
+                id="companylogo-img"
+                class="avatar-md rounded-circle object-fit-cover"
+              />
+            </div>
+          </div>
+        </div>
+        <h5 class="fs-13 mt-3">SparePart Image</h5>
+      </div>
+      <label for="owner-field" class="form-label"
+        >Spare Part Name <span class="starRequried">*</span></label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="SparePartName"
+        name="SparePartName"
+        formControlName="SparePartName"
+        placeholder="Spare Part Name"
+        [class.is-invalid]="SparePartName.invalid && SparePartName.touched"
+        [class.is-valid]="SparePartName.valid && SparePartName.touched"
+      />
+
+      <div *ngIf="SparePartName.invalid && SparePartName.touched">
+        <small class="text-danger" *ngIf="SparePartName['errors']['required']">
+          Spare Part Name is required</small
+        >
+      </div>
+    </div>
+    <div class="col-lg-12" *ngIf="!editSparepartObject">
+      <div class="text-center">
+        <div class="position-relative d-inline-block">
+          <div class="position-absolute bottom-0 end-0">
+            <label
+              for="company-logo-input"
+              class="mb-0"
+              data-bs-toggle="tooltip"
+              *ngIf="!isFirstImageVisible"
+              data-bs-placement="right"
+              title="Select Image"
+            >
+              <div class="avatar-xs cursor-pointer">
+                <div
+                  class="avatar-title bg-light border rounded-circle text-muted"
+                >
+                  <i class="ri-image-fill"></i>
+                </div>
+              </div>
+            </label>
+            <label
+              class="mb-0"
+              data-bs-toggle="tooltip"
+              *ngIf="isFirstImageVisible"
+              data-bs-placement="right"
+              title="Remove Image"
+              (click)="crossFirstImage(backgroud_img)"
+            >
+              <div class="avatar-xs cursor-pointer">
+                <div
+                  class="avatar-title bg-light border rounded-circle text-muted"
+                >
+                  <i class="ri-close-circle-fill"></i>
+                </div>
+              </div>
+            </label>
+            <input
+              class="form-control d-none"
+              id="company-logo-input"
+              type="file"
+              accept="image/png, image/gif, image/jpeg"
+              (change)="onSelectFile($event)"
+              formControlName="SparePartImageBase64"
+            />
+          </div>
+          <div class="avatar-lg p-1">
+            <div class="avatar-title bg-light rounded-circle">
+              <img
+                src="{{ backgroud_img }}"
+                id="companylogo-img"
+                class="avatar-md rounded-circle object-fit-cover"
+              />
+            </div>
+          </div>
+        </div>
+        <h5 class="fs-13 mt-3">SparePart Image</h5>
+      </div>
+      <label for="owner-field" class="form-label"
+        >Spare Part Name <span class="starRequried">*</span></label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="SparePartName"
+        name="SparePartName"
+        formControlName="SparePartName"
+        placeholder="Spare Part Name"
+        [class.is-invalid]="SparePartName.invalid && SparePartName.touched"
+        [class.is-valid]="SparePartName.valid && SparePartName.touched"
+      />
+
+      <div *ngIf="SparePartName.invalid && SparePartName.touched">
+        <small class="text-danger" *ngIf="SparePartName['errors']['required']">
+          Spare Part Name is required</small
+        >
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <label for="companyName" class="form-label"
+        >Company <span class="starRequried">*</span></label
+      >
+      <ng-select
+        [items]="arrayListDropDownCompany"
+        bindLabel="companyName"
+        bindValue="companyId"
+        (change)="onDropdownCompanyValueChange($event)"
+        [clearable]="false"
+        id="companyName"
+        [(ngModel)]="selectedDropDownCompanyIdValue"
+        placeholder="Select Company"
+        class="w-100 mr-2"
+        for="companyName"
+        formControlName="companyId"
+      ></ng-select>
+
+      <div *ngIf="companyId.invalid && companyId.touched">
+        <small class="text-danger" *ngIf="companyId['errors']['required']">
+          Company is Required</small
+        >
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <label for="PartNumber" class="form-label"
+        >Part Number <span class="starRequried">*</span></label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="PartNumber"
+        formControlName="PartNumber"
+        placeholder="Part Number "
+        [class.is-invalid]="PartNumber.invalid && PartNumber.touched"
+        [class.is-valid]="PartNumber.valid && PartNumber.touched"
+      />
+
+      <div *ngIf="PartNumber.invalid && PartNumber.touched">
+        <small class="text-danger" *ngIf="PartNumber['errors']['required']">
+          Part Number is Required</small
+        >
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <label for="category" class="form-label"
+        >Category<span class="starRequried">*</span></label
+      >
+
+      <ng-select
+        [items]="arrayListDropDownCategoryList"
+        bindLabel="categoryName"
+        bindValue="categoryId"
+        (change)="onDropdownCategoryValueChange($event)"
+        [clearable]="false"
+        id="categoryName"
+        [(ngModel)]="selectedDropDownCategoryIdValue"
+        placeholder="Select Category"
+        formControlName="Category"
+        class="w-100 mr-2"
+        for="categoryName"
+      ></ng-select>
+
+      <div *ngIf="Category?.invalid && Category?.touched">
+        <small class="text-danger" *ngIf="Category['errors']['required']">
+          Category is Required
+        </small>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <label for="sub-category" class="form-label"
+        >Sub-Category<span class="starRequried">*</span></label
+      >
+
+      <ng-select
+        [items]="arrayListDropDownSubCategoryList"
+        bindLabel="subCategoryName"
+        bindValue="subCategoryId"
+        (change)="onDropdownSubCategoryValueChange($event)"
+        [clearable]="false"
+        id="subCategoryName"
+        [(ngModel)]="selectedDropDownSubCategoryIdValue"
+        placeholder="Select SubCategory "
+        class="w-100 mr-2"
+        for="subCategoryName"
+        formControlName="subCategory"
+      ></ng-select>
+
+      <div *ngIf="subCategory?.invalid && subCategory?.touched">
+        <small class="text-danger" *ngIf="subCategory['errors']['required']">
+          Sub-Category is Required
+        </small>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <label for="Modal" class="form-label"
+        >Modal <span class="starRequried">*</span></label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="Modal"
+        formControlName="Modal"
+        placeholder="Modal "
+        [class.is-invalid]="Modal.invalid && Modal.touched"
+        [class.is-valid]="Modal.valid && Modal.touched"
+      />
+
+      <div *ngIf="Modal.invalid && Modal.touched">
+        <small class="text-danger" *ngIf="Modal['errors']['required']">
+          Modal is Required</small
+        >
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <label for="Specification" class="form-label"
+        >Specification <span class="starRequried">*</span></label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="Specification"
+        formControlName="Specification"
+        placeholder="Specification "
+        [class.is-invalid]="Specification.invalid && Specification.touched"
+        [class.is-valid]="Specification.valid && Specification.touched"
+      />
+
+      <div *ngIf="Specification.invalid && Specification.touched">
+        <small class="text-danger" *ngIf="Specification['errors']['required']">
+          Specification is Required</small
+        >
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <label for="WarrentyDuration" class="form-label"
+        >Warranty Duration <span class="starRequried">*</span></label
+      >
+      <div class="input-group">
+        <input
+          type="number"
+          class="form-control"
+          id="WarrentyDuration"
+          formControlName="WarrentyDuration"
+          placeholder="Warranty Duration "
+          [class.is-invalid]="
+            WarrentyDuration.invalid && WarrentyDuration.touched
+          "
+          [class.is-valid]="WarrentyDuration.valid && WarrentyDuration.touched"
+        />
+        <span class="input-group-text">Month</span>
+      </div>
+
+      <div *ngIf="WarrentyDuration.invalid && WarrentyDuration.touched">
+        <small
+          class="text-danger"
+          *ngIf="WarrentyDuration['errors']['required']"
+        >
+          Warranty Duration is Required</small
+        >
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <label for="WarrentyExpDate" class="form-label"
+        >Warranty Exp Date <span class="starRequried">*</span></label
+      >
+      <input
+        class="form-control flatpickr-input"
+        type="text"
+        formControlName="WarrentyExpDate"
+        placeholder="Warranty Exp Date"
+        mwlFlatpickr
+        [altInput]="false"
+        [enableTime]="false"
+        [convertModelValue]="true"
+        [dateFormat]="'d-m-Y'"
+        [class.is-invalid]="WarrentyExpDate.invalid && WarrentyExpDate.touched"
+        [class.is-valid]="WarrentyExpDate.valid && WarrentyExpDate.touched"
+      />
+
+      <!-- <input
+        type="date"
+        class="form-control"
+        id="WarrentyExpDate"
+        formControlName="WarrentyExpDate"
+        placeholder="Warranty Exp Date "
+        
+      /> -->
+
+      <div *ngIf="WarrentyExpDate.invalid && WarrentyExpDate.touched">
+        <small
+          class="text-danger"
+          *ngIf="WarrentyExpDate['errors']['required']"
+        >
+          Warranty Exp Date is Required</small
+        >
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12 my-4">
+    <div class="hstack gap-2 justify-content-end">
+      <button
+        *ngIf="!editSparepartObject"
+        type="button"
+        class="btn btn-danger"
+        data-bs-dismiss="modal"
+        (click)="close()"
+      >
+        Close
+      </button>
+      <button
+        *ngIf="editSparepartObject"
+        type="button"
+        class="btn btn-danger"
+        data-bs-dismiss="modal"
+        (click)="closeEdit()"
+      >
+        Close
+      </button>
+      <button
+        *ngIf="!editSparepartObject"
+        type="submit"
+        class="btn btn-success"
+        [disabled]="addEditSpareForm.invalid || addSpareLoading"
+        id="add-btn"
+        (click)="addSparePart()"
+      >
+        <span
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+          *ngIf="addSpareLoading"
+        ></span>
+        Submit
+      </button>
+      <button
+        *ngIf="editSparepartObject"
+        type="submit"
+        class="btn btn-success"
+        [disabled]="addEditSpareForm.invalid || editSpareLoading"
+        id="add-btn"
+        (click)="editSparePart()"
+      >
+        <span
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+          *ngIf="editSpareLoading"
+        ></span>
+        Update
+      </button>
+    </div>
+  </div>
+</form>

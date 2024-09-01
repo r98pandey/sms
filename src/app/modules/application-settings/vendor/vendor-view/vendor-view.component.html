@@ -1,0 +1,141 @@
+<app-breadcrumbs [title]="label" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="col-xl-12 client-view">
+  <div class="card vendor-detail">
+    <div class="card-body">
+      <div class="row gy-4">
+        <div class="col-lg-12">
+          <div class="d-flex flex-wrap">
+            <div class="flex-grow-1 fw-bold">
+              <h6 _ngcontent-shg-c69="" class="mb-3 fw-semibold text-uppercase">
+                {{ vendorDetail.vendorName }}
+              </h6>
+              <div class="mt-sm-2 mt-4">
+                <div class="flex-shrink-0">
+                  <div
+                    class="avatar-lg"
+                    *ngIf="
+                      vendorDetail.vendorName && vendorDetail.vendorName.length
+                    "
+                  >
+                    <span class="rounded">
+                      <app-avatar-photo
+                        [name]="toUpperCaseword(vendorDetail.vendorName)"
+                      ></app-avatar-photo>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="align-self-center mt-sm-0 mt-5">
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="row border-top border-top-dashed py-3">
+            <div class="col-12">
+                <p class="text-muted fw-bold text-uppercase">Basic Details</p>
+            </div>
+            <div class="col-lg-3 col-4">
+              <p class="mb-2 fw-bold">Company Name</p>
+              <p class="fs-14 mb-0">
+                {{ vendorDetail.companyName }}
+              </p>
+            </div>
+            <div class="col-lg-3 col-4">
+              <p class="mb-2 fw-bold">Contact Person Name</p>
+              <p class="fs-14 mb-0">
+                {{ vendorDetail.contactPersonName }}
+              </p>
+            </div>
+            <div class="col-lg-3 col-4">
+              <p class="mb-2 fw-bold">Remark</p>
+              <p class="fs-14 mb-0">
+                {{ vendorDetail.remark || "Not Available" }}
+              </p>
+            </div>
+          </div>
+
+        <div class="col-12">
+          <div class="row border-top border-top-dashed py-3">
+            <div class="col-12">
+                <p class="text-muted fw-bold text-uppercase">Contact Details</p>
+            </div>
+            <div class="col-lg-3 col-4">
+              <p class="mb-2 fw-bold">Mobile No</p>
+              <p class="fs-14 mb-0">
+                {{ vendorDetail.contactMobileNo || "Not Available" }}
+              </p>
+            </div>
+            <div class="col-lg-3 col-4">
+              <p class="mb-2 fw-bold">Email</p>
+              <p class="fs-14 mb-0">
+                {{ vendorDetail.contactEmailId || "Not Available" }}
+              </p>
+            </div>
+            <div class="col-lg-3 col-4">
+              <p class="mb-2 fw-bold">Office Phone No.</p>
+              <p class="fs-14 mb-0">
+                {{ vendorDetail.officePhoneNo || "Not Available" }}
+              </p>
+            </div>
+            <div class="col-lg-3 col-4">
+              <p class="mb-2 fw-bold">Office Fax No.</p>
+              <p class="fs-14 mb-0">
+                {{ vendorDetail.officeFaxNo || "Not Available" }}
+              </p>
+            </div>
+          </div>
+
+          <div class="col-lg-12 px-0 mb-2">
+        
+            <div class="card-body pt-0 px-0 pb-0">
+              <div class="row">
+                <div class="col-12 border-top border-top-dashed">
+                  <h6 class="mb-2 fw-bold mt-3">Address</h6>
+                  <p class="fs-14 mb-0" id="address-details">
+                    {{ vendorDetail.address1 }}
+                    {{ vendorDetail.address2 }}
+                    {{ vendorDetail.address3 }}
+                    {{ vendorDetail.country }}
+                    {{ vendorDetail.postalCode }}
+                  </p>
+                </div>
+              </div>
+              <!--end row-->
+            </div>
+
+          </div> 
+          <div class="col-lg-12 px-0">
+        
+            <div class="card-body pt-0 px-0 pb-0">
+              <div class="row">
+                <div class="col-12 border-top border-top-dashed">
+                  <h6 class="mb-2 fw-bold mt-3">Remark</h6>
+                  <p class="fs-14 mb-0">
+                    {{ vendorDetail.remark ||'-'  }}
+                    
+                  </p>
+                </div>
+              </div>
+              <!--end row-->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--end card-->
+  </div>
+
+</div>
+
+<div class="hstack justify-content-end gap-2 mb-3">
+  <button
+    (click)="goBack()"
+    type="button"
+    class="btn btn-soft-primary waves-effect"
+  >
+    <i class="align-bottom"></i>Back
+  </button>
+</div>

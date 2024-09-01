@@ -1,0 +1,801 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm-3 col-xxl-3">
+            <h5 class="card-title mb-0">File Manager</h5>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-start-0">
+        <div class="row mt-1">
+          <div
+            class="col-lg-9"
+            [class.col-lg-12]="
+              !selectedDropDownCompanyIdValue ||
+              !selectedDropDownClientIdValue ||
+              !selectedDropDownProjectOrDeparmentIdValue
+            "
+          >
+            <div class="card">
+              <div class="card-header">
+                <div class="row g-3">
+                  <div class="col-lg">
+                    <label for="companyId" class="form-label mb-0"
+                      >Company</label
+                    >
+                    <ng-select
+                      [items]="arrayListDropDownCompany"
+                      bindLabel="companyName"
+                      bindValue="companyId"
+                      (change)="onDropdownCompanyValueChange($event)"
+                      [clearable]="true"
+                      id="companyName"
+                      [(ngModel)]="selectedDropDownCompanyIdValue"
+                      placeholder="Select Company"
+                      class="w-100 mr-2"
+                      for="companyName"
+                    ></ng-select>
+                  </div>
+                  <div class="col-lg">
+                    <label for="clientName" class="form-label mb-0"
+                      >Client</label
+                    >
+                    <ng-select
+                      [items]="arrayListDropDownClientList"
+                      bindLabel="clientName"
+                      bindValue="clientId"
+                      [disabled]="!selectedDropDownCompanyIdValue"
+                      (change)="onDropdownClientValueChange($event)"
+                      [clearable]="true"
+                      id="clientName"
+                      [(ngModel)]="selectedDropDownClientIdValue"
+                      placeholder="Select Client"
+                      class="w-100 mr-2"
+                      for="clientName"
+                    ></ng-select>
+                  </div>
+                  <div class="col-lg">
+                    <label for="departmentName" class="form-label mb-0">{{
+                      isProject ? "Project" : "Department"
+                    }}</label>
+                    <ng-select
+                      [items]="arrayListDropDownProjectOrDeparmentList"
+                      bindLabel="departmentName"
+                      bindValue="departmentId"
+                      [disabled]="
+                        !selectedDropDownCompanyIdValue ||
+                        !selectedDropDownClientIdValue
+                      "
+                      (change)="onDropdownDepartmentValueChange($event)"
+                      [clearable]="true"
+                      id="departmentName"
+                      [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+                      [placeholder]="
+                        isProject ? 'Select Project' : 'Select Department'
+                      "
+                      class="w-100 mr-2"
+                      for="departmentName"
+                    ></ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-body pt-0">
+                <ng-container
+                  *ngIf="
+                    selectedDropDownCompanyIdValue &&
+                    selectedDropDownClientIdValue &&
+                    selectedDropDownProjectOrDeparmentIdValue
+                  "
+                >
+                  <div class="row mt-3">
+                    <div class="col-md-12 text-end">
+                      <button
+                        *ngIf="
+                          selectedDropDownCompanyIdValue &&
+                          selectedDropDownClientIdValue &&
+                          selectedDropDownProjectOrDeparmentIdValue
+                        "
+                        class="btn btn-primary w-sm create-folder-modal flex-shrink-0"
+                        data-bs-toggle="modal"
+                        data-bs-target="#createFolderModal"
+                        (click)="openModal(content)"
+                      >
+                        <i class="ri-add-line align-bottom me-1"></i> Create
+                        Folders
+                      </button>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    !selectedDropDownCompanyIdValue ||
+                    !selectedDropDownClientIdValue ||
+                    !selectedDropDownProjectOrDeparmentIdValue
+                  "
+                >
+                  <p class="text-muted mt-3">
+                    <b
+                      >Select Company,Client And
+                      {{ isProject ? "Project" : "Department" }}</b
+                    >
+                  </p>
+                  <div class="col text-center">
+                    <img src="../../../../assets/images/file.png" width="80%" />
+                  </div>
+                </ng-container>
+
+                <ng-container
+                  *ngIf="
+                    selectedDropDownCompanyIdValue &&
+                    selectedDropDownClientIdValue &&
+                    selectedDropDownProjectOrDeparmentIdValue
+                  "
+                >
+                  <div
+                    class="row mt-3"
+                    id="folderlist-data"
+                    *ngIf="masterFolderList.length != 0"
+                  >
+                    <div
+                      class="col-lg-3 folder-card"
+                      *ngFor="let data of masterFolderList"
+                      id="f-{{ data.folderId }}"
+                    >
+                      <div class="card bg-light shadow-none" id="folder-1">
+                        <div class="card-header"></div>
+                        <div class="card-body">
+                          <div class="d-flex mb-1">
+                            <div
+                              class="form-check form-check-danger fs-15 flex-grow-1"
+                            ></div>
+                            <div class="dropdown" ngbDropdown>
+                              <button
+                                class="btn btn-ghost-primary btn-icon btn-sm dropdown arrow-none"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                ngbDropdownToggle
+                              >
+                                <i
+                                  class="ri-more-2-fill fs-16 align-bottom"
+                                ></i>
+                              </button>
+                              <ul
+                                class="dropdown-menu dropdown-menu-end"
+                                ngbDropdownMenu
+                              >
+                                <li>
+                                  <a
+                                    class="dropdown-item edit-folder-list"
+                                    href="javascript:void(0);"
+                                    role="button"
+                                    >Rename</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div
+                            class="text-center cursor"
+                            (click)="openFiledInFolder(data)"
+                          >
+                            <div class="mb-2">
+                              <i
+                                class="ri-folder-2-fill align-bottom text-warning display-5"
+                              ></i>
+                            </div>
+                            <h6
+                              class="fs-15 folder-name folderName mb-0"
+                              [title]="data.folderName"
+                            >
+                              {{ data.folderName }}
+                            </h6>
+                          </div>
+                          <div
+                            class="hstack mt-2 text-muted cursor"
+                            (click)="openFiledInFolder(data)"
+                          >
+                            <span class="me-auto"
+                              ><b>{{ data.totalFilesCount }}</b> Files</span
+                            >
+                            <span
+                              ><b>{{ data.formattedTotalFileSize }} </b>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--end col-->
+                  </div>
+
+                  <div
+                    class="row"
+                    id="folderlist-data"
+                    *ngIf="masterFolderList.length == 0"
+                  >
+                    <div class="col-xxl-12 folder-card">
+                      <div class="tab-pane alltable">
+                        <div class="py-4 text-center">
+                          <div>
+                            <lord-icon
+                              src="https://cdn.lordicon.com/msoeawqm.json"
+                              trigger="loop"
+                              colors="primary:#405189,secondary:#0ab39c"
+                              style="width: 72px; height: 72px"
+                            >
+                            </lord-icon>
+                          </div>
+                          <div class="mt-4">
+                            <h5>No Records Found</h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container
+                  *ngIf="
+                    selectedDropDownCompanyIdValue &&
+                    selectedDropDownClientIdValue &&
+                    selectedDropDownProjectOrDeparmentIdValue
+                  "
+                >
+                  <div
+                    class="row border border-dashed border-start-0"
+                    *ngIf="selectedfolderName"
+                  >
+                    <div class="col-md-12 d-flex align-items-center mb-3 mt-2">
+                      <h5 class="flex-grow-1 fs-16 mb-0" id="filetype-title">
+                        {{ selectedfolderName }}
+                      </h5>
+                      <div class="flex-shrink-0">
+                        <button
+                          class="btn btn-primary createFile-modal"
+                          data-bs-toggle="modal"
+                          data-bs-target="#createFileModal"
+                          (click)="openModalFile(FileContent)"
+                        >
+                          <i class="ri-add-line align-bottom me-1"></i> Create
+                          File
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <!-- Nav tabs -->
+                      <ul
+                        ngbNav
+                        #nav="ngbNav"
+                        [activeId]="1"
+                        class="nav nav-tabs nav-border-top nav-border-top-primary mb-3"
+                      >
+                        <li [ngbNavItem]="1" (click)="onNavChange('My File')">
+                          <a ngbNavLink> My File </a>
+                          <ng-template ngbNavContent>
+                            <app-file-list-shown
+                              [fileList]="fileList"
+                            ></app-file-list-shown>
+                          </ng-template>
+                        </li>
+                        <li [ngbNavItem]="2" (click)="onNavChange('Public')">
+                          <a ngbNavLink> Public </a>
+                          <ng-template ngbNavContent>
+                            <app-file-list-shown
+                              [fileList]="fileList"
+                            ></app-file-list-shown>
+                          </ng-template>
+                        </li>
+                        <li [ngbNavItem]="3" (click)="onNavChange('Shared')">
+                          <a ngbNavLink> Shared </a>
+                          <ng-template ngbNavContent>
+                            <app-file-list-shown
+                              [fileList]="fileList"
+                            ></app-file-list-shown>
+                          </ng-template>
+                        </li>
+                      </ul>
+
+                      <!-- Tab panes -->
+                      <div class="tab-content text-muted mt-3">
+                        <div [ngbNavOutlet]="nav"></div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-lg-3 card"
+            *ngIf="
+              selectedDropDownCompanyIdValue &&
+              selectedDropDownClientIdValue &&
+              selectedDropDownProjectOrDeparmentIdValue
+            "
+          >
+            <div class="card-header">
+              <h5 class="mb-0">Overview</h5>
+            </div>
+            <ng-container *ngIf="folderFileTotalCountByProjectlist.length == 0">
+              <div class="tab-pane alltable">
+                <div class="py-4 text-center">
+                  <div>
+                    <lord-icon
+                      src="https://cdn.lordicon.com/msoeawqm.json"
+                      trigger="loop"
+                      colors="primary:#405189,secondary:#0ab39c"
+                      style="width: 72px; height: 72px"
+                    >
+                    </lord-icon>
+                  </div>
+                  <div class="mt-4">
+                    <h5>
+                      No Records Found  
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="folderFileTotalCountByProjectlist.length != 0">
+              <!-- <ngx-simplebar class="mx-n3 pt-3 px-3 file-detail-content-scroll"> -->
+              <div id="folder-overview">
+                <div id="simple_dount_chart" class="apex-charts mt-3" dir="ltr">
+                  <apx-chart
+                    [series]="simpleDonutChart.series"
+                    [labels]="simpleDonutChart.labels"
+                    [chart]="simpleDonutChart.chart"
+                    [plotOptions]="simpleDonutChart.plotOptions"
+                    [dataLabels]="simpleDonutChart.dataLabels"
+                    [legend]="simpleDonutChart.legend"
+                    [stroke]="simpleDonutChart.stroke"
+                    [yaxis]="simpleDonutChart.yaxis"
+                    [colors]="simpleDonutChart.colors"
+                    dir="ltr"
+                  ></apx-chart>
+                </div>
+
+                <div class="mt-4">
+                  <ul
+                    class="list-unstyled vstack gap-4"
+                    *ngFor="let folder of folderFileTotalCountByProjectlist"
+                  >
+                    <li>
+                      <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                          <div class="avatar-xs">
+                            <div
+                              class="avatar-title rounded bg-secondary-subtle text-secondary"
+                            >
+                              <i class="ri-file-text-line fs-17"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                          <h5 class="mb-1 fs-15">{{ folder.folderName }}</h5>
+                          <p class="mb-0 fs-12 text-muted">
+                            {{ folder.totalFiles }} files |
+                            {{ folder.totalFileSizeType }}
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div id="file-overview" class="">
+                <div class="d-flex flex-column">
+                  <div
+                    class="d-flex align-items-center pb-3 border-bottom border-bottom-dashed mb-3 gap-2"
+                  >
+                    <h5 class="flex-grow-1 fw-semibold mb-0">File Preview</h5>
+                    <div>
+                      <button
+                        type="button"
+                        class="btn btn-ghost-primary btn-icon btn-sm fs-16 Favorite-btn"
+                      >
+                        <i class="ri-star-fill align-bottom"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-soft-danger btn-icon btn-sm fs-16 close-btn-overview"
+                      >
+                        <i class="ri-close-fill align-bottom"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="pb-3 border-bottom border-bottom-dashed mb-3">
+                    <div
+                      class="file-details-box bg-light p-3 text-center rounded-3 border border-light mb-3"
+                    >
+                      <div class="display-4 file-icon">
+                        <i class="ri-file-text-fill text-secondary"></i>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn btn-icon btn-sm btn-ghost-success float-end fs-16"
+                    >
+                      <i class="ri-share-forward-line"></i>
+                    </button>
+                    <h5 class="fs-16 mb-1 file-name">html.docx</h5>
+                    <p class="text-muted mb-0 fs-12">
+                      <span class="file-size">0.3 KB</span>,
+                      <span class="create-date">19 Apr, 2022</span>
+                    </p>
+                  </div>
+                  <div>
+                    <h5 class="fs-12 text-uppercase text-muted mb-3">
+                      File Description :
+                    </h5>
+
+                    <div class="table-responsive">
+                      <table
+                        class="table table-borderless table-nowrap table-sm"
+                      >
+                        <tbody>
+                          <tr>
+                            <th scope="row" style="width: 35%">File Name :</th>
+                            <td class="file-name">html.docx</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">File Type :</th>
+                            <td class="file-type">Documents</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Size :</th>
+                            <td class="file-size">0.3 KB</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Created :</th>
+                            <td class="create-date">19 Apr, 2022</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Path :</th>
+                            <td class="file-path">
+                              <div class="user-select-all text-truncate">
+                                *:\projects\src\assets\images
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div>
+                      <h5 class="fs-12 text-uppercase text-muted mb-3">
+                        Share Information:
+                      </h5>
+                      <div class="table-responsive">
+                        <table
+                          class="table table-borderless table-nowrap table-sm"
+                        >
+                          <tbody>
+                            <tr>
+                              <th scope="row" style="width: 35%">
+                                Share Name :
+                              </th>
+                              <td class="share-name">\\*\Projects</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Share Path :</th>
+                              <td class="share-path">sms:\Documents\</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-auto border-top border-top-dashed py-3">
+                    <div class="hstack gap-2">
+                      <button type="button" class="btn btn-soft-primary w-100">
+                        <i class="ri-download-2-line align-bottom me-1"></i>
+                        Download
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-soft-danger w-100 remove-file-overview"
+                        data-remove-id=""
+                        data-bs-toggle="modal"
+                        data-bs-target="#removeFileItemModal"
+                      >
+                        <i class="ri-close-fill align-bottom me-1"></i> Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- </ngx-simplebar> -->
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Folder Model -->
+<ng-template #content role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title" id="createFolderModalLabel">Create Folder</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      id="addFolderBtn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form
+      autocomplete="off"
+      class="needs-validation createfolder-form"
+      id="createfolder-form"
+      novalidate
+      (ngSubmit)="saveFolder()"
+      [formGroup]="folderForm"
+    >
+      <div class="mb-4">
+        <label for="foldername-input" class="form-label">Folder Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="foldername-input"
+          required
+          placeholder="Enter folder name"
+          formControlName="title"
+          [ngClass]="{ 'is-invalid': submitted && form['title'].errors }"
+        />
+        <div class="invalid-feedback">Please enter a folder name.</div>
+        <input
+          type="hidden"
+          class="form-control"
+          id="folderid-input"
+          value=""
+          placeholder="Enter folder name"
+        />
+      </div>
+      <div class="hstack gap-2 justify-content-end">
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+          (click)="modal.dismiss('cancel')"
+        >
+          <i class="ri-close-line align-bottom"></i> Close
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          id="addNewFolder"
+          [disabled]="folderForm.invalid"
+          (click)="modal.close('Ok', $event)"
+        >
+          Add Folder
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<!-- Delete Folder Model -->
+<ng-template #deleteModel let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="mt-2 text-center">
+        <lord-icon
+          src="https://cdn.lordicon.com/gsqxdxog.json"
+          trigger="loop"
+          colors="primary:#f7b84b,secondary:#f06548"
+          style="width: 90px; height: 90px"
+        ></lord-icon>
+        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+          <h4>Are you sure ?</h4>
+          <p class="text-muted mx-4 mb-0">
+            Are you sure you want to remove this folder ?
+          </p>
+        </div>
+      </div>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+          class="btn btn-link link-success fw-medium text-decoration-none"
+          data-bs-dismiss="modal"
+          (click)="modal.close('Close click')"
+        >
+          <i class="ri-close-line me-1 align-middle"></i> Close
+        </button>
+        <button
+          type="button"
+          class="btn w-sm btn-danger"
+          id="remove-folderList"
+          (click)="modal.close('Close click')"
+        >
+          Yes, Delete It!
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+<!--== Recent File ==-->
+<!-- Create Recent Model -->
+<ng-template #FileContent role="document" let-modal>
+  <div class="modal-header p-3 bg-success-subtle">
+    <h5 class="modal-title" id="createFileModalLabel">Create File</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      id="addFileBtn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form
+      autocomplete="off"
+      class="needs-validation createfile-form"
+      id="createfile-form"
+      novalidate
+      [formGroup]="recentForm"
+    >
+      <div class="mb-4">
+        <label for="filename-input" class="form-label">File Name</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Enter file name"
+          formControlName="file_name"
+          [ngClass]="{ 'is-invalid': submitted && form1['file_name'].errors }"
+        />
+        <div class="invalid-feedback">Please enter a file name.</div>
+      </div>
+      <div class="mb-4">
+        
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="file_type"
+            id="inlineRadio1"
+            formControlName="file_type"
+            value="My File"
+          />
+          <label class="form-check-label" for="inlineRadio1"> My File </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="file_type"
+            id="inlineRadio2"
+            value="Shared"
+            formControlName="file_type"
+          />
+          <label class="form-check-label" for="inlineRadio2">Shared</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="file_type"
+            id="inlineRadio3"
+            value="Public"
+            formControlName="file_type"
+          />
+          <label class="form-check-label" for="inlineRadio3">Public </label>
+        </div>
+      </div>
+      <div class="mb-4">
+        <ngx-dropzone
+          (change)="onSelect($event)"
+          [multiple]="false"
+          title="All file will be Uploaded"
+          data-toggle="tooltip"
+          data-placement="top"
+        >
+          <ngx-dropzone-label>Drag and drop/Click here to upload </ngx-dropzone-label> 
+          <ngx-dropzone-preview
+            *ngFor="let f of files"
+            [removable]="true"
+            (removed)="onRemove(f)"
+          >
+            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+          </ngx-dropzone-preview>
+        </ngx-dropzone>
+      </div>
+
+      <div class="hstack gap-2 justify-content-end">
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+          (click)="modal.dismiss('cancel')"
+        >
+          <i class="ri-close-line align-bottom"></i> Close
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          id="addNewFile"
+          [disabled]="recentForm.disabled"
+          (click)="modal.close('Ok', $event)"
+        >
+          Create
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<!-- Delete Recent Model -->
+<ng-template #deleteRecentModel let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="mt-2 text-center">
+        <lord-icon
+          src="https://cdn.lordicon.com/gsqxdxog.json"
+          trigger="loop"
+          colors="primary:#f7b84b,secondary:#f06548"
+          style="width: 90px; height: 90px"
+        ></lord-icon>
+        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+          <h4>Are you sure ?</h4>
+          <p class="text-muted mx-4 mb-0">
+            Are you sure you want to remove this folder ?
+          </p>
+        </div>
+      </div>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+          class="btn btn-link link-success fw-medium text-decoration-none"
+          data-bs-dismiss="modal"
+          (click)="modal.close('Close click')"
+        >
+          <i class="ri-close-line me-1 align-middle"></i> Close
+        </button>
+        <button
+          type="button"
+          class="btn w-sm btn-danger"
+          id="remove-folderList"
+          (click)="modal.close('Close click')"
+        >
+          Yes, Delete It!
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>

@@ -1,0 +1,546 @@
+<div class="row justify-content-center">
+    <div class="col-xxl-12">
+      <div class="card">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <div class="p-4">
+              <div class="text-center mb-2">
+                <img
+                  [src]="
+                    companyDetailsObject.companyLogoURL
+                      ? imgUrl + companyDetailsObject.companyLogoURL
+                      : '../../../../../../assets/images/placeholderimage.png'
+                  "
+                  class="card-logo"
+                  alt="logo light"
+                  height="47"
+                />
+              </div>
+              <div class="mt-sm-0 mt-0">
+                <h6 class="text-muted text-uppercase fw-semibold mb-0">
+                  {{ companyDetailsObject.companyName }}
+                </h6>
+                <p class="text-muted mb-1">
+                  {{ companyDetailsObject.address1 }}
+                </p>
+                <p class="text-muted mb-1">
+                  {{
+                    companyDetailsObject.address2
+                      ? companyDetailsObject.address2
+                      : ""
+                  }}
+                  {{
+                    companyDetailsObject.address3
+                      ? companyDetailsObject.address3
+                      : ""
+                  }}
+                  {{
+                    companyDetailsObject.country
+                      ? companyDetailsObject.country
+                      : ""
+                  }}
+                </p>
+                <p class="text-muted mb-0" id="zip-code">
+                  <span>Zip-code:</span> {{ companyDetailsObject.postalCode }}
+                </p>
+              </div>
+            </div>
+            <!--end card-header-->
+          </div>
+          <div class="col-lg-12" style="display: none;">
+            <div class="card-header border-bottom-dashed border-top-dashed p-4">
+              <div class="d-flex flex-wrap">
+                <div class="flex-grow-1">
+                  <h6 class="text-muted text-uppercase fw-semibold">
+                    {{ clientDetailsObject.clientName }}
+                  </h6>
+                  <p class="text-muted mb-1" id="address-details">
+                    {{ clientDetailsObject.address1 }}
+                  </p>
+                  <p class="text-muted mb-1">
+                    {{
+                      clientDetailsObject.address2
+                        ? clientDetailsObject.address2
+                        : ""
+                    }}
+                    {{
+                      clientDetailsObject.address3
+                        ? clientDetailsObject.address3
+                        : ""
+                    }}
+                    {{
+                      clientDetailsObject.country
+                        ? clientDetailsObject.country
+                        : ""
+                    }}
+                  </p>
+                  <p class="text-muted mb-0" id="zip-code">
+                    <span>Zip-code:</span> {{ clientDetailsObject.postalCode }}
+                  </p>
+                </div>
+                <div class="flex-shrink-0 mt-sm-0 mt-3">
+                  <!-- <table>
+                    <tbody>
+                      <tr>
+                        <td class="department-text">
+                          <h6>
+                            <span class="text-muted fw-normal">{{
+                              isProject ? "Project" : "Department"
+                            }}</span>
+                          </h6>
+                        </td>
+                        <td>
+                          <h6>
+                            <span id="legal-register-no" class="department-text">
+                              &nbsp;: &nbsp;{{ dDetail.projectName }}</span
+                            >
+                          </h6>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="width: 30px">
+                          <h6>
+                            <span class="text-muted fw-normal">TicketNo</span>
+                          </h6>
+                        </td>
+                        <td>
+                          <h6>
+                            <span id="legal-register-no"
+                              >&nbsp;: &nbsp; {{ dDetail.ticketNo }}</span
+                            >
+                          </h6>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table> -->
+                </div>
+              </div>
+            </div>
+            <!-- <div class="mt-1 p-2 ps-2">
+              <label
+                class="form-label text-muted text-uppercase fw-semibold ps-2"
+              >
+                Thank you for your inquiry. We are pleased to submit our quote as
+                follows:
+              </label>
+            </div> -->
+            <!--end card-header-->
+          </div>
+          <!--end col-->
+          <!--end col-->
+        </div>
+  
+        <div class="row m-3 border-top-dashed p-4">
+          <div class="col-lg-7 ">
+              <b><a href="" class="a-hrf">REQUEST FOR WORK INSPECTION FORM (RFWI)</a></b> <br><br>
+              <p><b> Ref No : SST-SSG/RFWI/23-01</b></p>
+          </div>
+          <div class="col-lg-5">
+            <div class="flex-grow-1">
+              <h6 class="text-muted text-uppercase fw-semibold">
+                {{ clientDetailsObject.clientName }}
+              </h6>
+              <p class="text-muted mb-1" id="address-details">
+                {{ clientDetailsObject.address1 }}
+              </p>
+              <p class="text-muted mb-1">
+                {{
+                  clientDetailsObject.address2
+                    ? clientDetailsObject.address2
+                    : ""
+                }}
+                {{
+                  clientDetailsObject.address3
+                    ? clientDetailsObject.address3
+                    : ""
+                }}
+                {{
+                  clientDetailsObject.country
+                    ? clientDetailsObject.country
+                    : ""
+                }}
+              </p>
+             
+            </div>
+          </div>
+      </div>
+      <div class="col-lg-12 d-flex">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+                           
+                                   
+          <form>
+          <div class="card-body">
+            <div class="row">
+              <div class="table-responsive mb-0">
+              
+  
+                  <table class="table table-bordered">
+                    <tbody>
+                      <tr class="no-border"><td colspan="3"></td>
+                      <td><b>DATE : </b>27/06/2023</td></tr>
+                      <tr>
+                        <td>
+                         <b> Client Name :</b>
+                        </td>
+                        <td colspan="3">
+                          McConnell Dowell South East Asia Pte Ltd 
+                        </td>
+                      </tr>
+                      <tr>
+                          <td>
+                            <b> Site  : </b>
+                          </td>
+                          <td colspan="3">
+                              SSG 
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b>  Inspection by :</b>
+                          </td>
+                          <td>
+                              Mr.Sathish
+                          </td>
+                          <td> <b>Contact number :</b></td><td> +65 9711 8737</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b> SS Tech Supervisor : </b>
+                          </td>
+                          <td>
+                              Mr.Shanmuganathan
+                          </td>
+                          <td> <b>Contact number :</b></td><td> + +65 8296 9296</td>
+                        </tr>
+                        <tr>
+                          <td><b>Inspection Block/Level/Zone/Location :</b></td>
+                          <td colspan="3"> SSG</td>
+                        </tr>
+                        <tr>
+                              <td><b>Comment :</b></td> <td colspan="3"> </td>
+                        </tr>
+  
+                       
+                    </tbody>
+                  </table>
+              </div>
+  
+  
+            </div>
+          </div>
+          </form>
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+  
+        <form [formGroup]="InvoicesForm">
+          <div class="card-body p-4" style="display: none;">
+            <div class="row g-3">
+              <div class="col-lg-6 col-sm-6">
+                <label for="invoicenoInput">RWIF No</label>
+                <h5 class="fs-14 mb-0">
+                  #RWIF-YYMM-0000
+                  <i
+                    class="ri-information-line align-middle text-info"
+                    ngbTooltip="It will be generated automatically by the system"
+                  ></i>
+                </h5>
+              </div>
+              <!--end col-->
+              <div class="col-lg-6 col-sm-6 text-end">
+                              <label for="date-field">Date</label>
+                <h5 class="fs-14 mb-0">
+                  <span id="invoice-date">{{ todayDate | date }}</span>
+                </h5>
+              </div>
+              <!--end col-->
+  
+              <!--end col-->
+            </div>
+            <!--end row-->
+          </div>
+  
+          <!-- <div class="card-body border-bottom border-bottom-dashed p-4">
+            <div class="row">
+              <div class="col-lg-5">
+                <label for="quotTitle"
+                  >RWIF Title
+                  <span class="starRequried">*</span>
+                </label>
+                <div class="mb-2">
+                  <textarea
+                    class="form-control bg-light border-0"
+                    id="quotTitle"
+                    rows="2"
+                    placeholder="RWIF Title"
+                    formControlName="quotTitle"
+                    [ngClass]="{
+                      'is-invalid': submitted && form['quotTitle'].errors
+                    }"
+                    [maxlength]="maxCharsDecisionTitle"
+                  ></textarea>
+                  <label class="nopadding clrlbl">
+                    Characters Remaining:
+                    {{ quotTitle?.value?.length }}/{{
+                      maxCharsDecisionTitle
+                    }}</label
+                  >
+  
+                  <div class="invalid-feedback">
+                    Please Enter RWIF Title Value
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-2"></div>
+               <div class="col-lg-5">
+                <label for="attenTo"
+                  >Atten To<span class="starRequried">*</span></label
+                >
+                <div class="mb-2">
+                  <textarea
+                    class="form-control bg-light border-0"
+                    id="attenTo"
+                    rows="2"
+                    placeholder="Atten To"
+                    formControlName="attenTo"
+                    [ngClass]="{
+                      'is-invalid': submitted && form['attenTo'].errors
+                    }"
+                  ></textarea>
+                  <div class="invalid-feedback">Please Enter Atten To Value</div>
+                </div>
+              </div> 
+            </div>
+          
+          </div> -->
+       
+  
+          <div class="card-body p-4">
+            <div class="table-responsive">
+              <table
+                class="invoice-table table table-borderless table-nowrap mb-0"
+              >
+                <thead class="align-middle">
+                  <tr class="table-active">
+                    <th scope="col" style="width: 50px">#</th>
+                    <th scope="col">Details</th>
+                    <th scope="col" style="width: 100px">Yes</th>
+                    <th scope="col" style="width: 100px">No</th>
+                    <!-- <th scope="col" style="width: 140px">Remark</th> -->
+                    <th scope="col" style="width: 100px">Upload</th>
+                    <th scope="col" class="text-end" style="width: 105px"></th>
+                  </tr>
+                </thead>
+                <tbody id="newlink" formArrayName="items">
+                  <tr
+                    id="1"
+                    class="product"
+                    *ngFor="let phone of InvoicesForm.controls?.['items']?.['controls']; let i = index"
+                    [formGroupName]="i"
+                  >
+                    <th scope="row" class="product-id">{{ i + 1 }}</th>
+                    <td class="text-start">
+                      <div class="mb-2 text-desc">
+                        <input
+                          type="text"
+                          class="form-control bg-light border-0"
+                          id="productName"
+                          placeholder="Item Name"
+                          formControlName="itemName"
+                        />
+                        <div class="invalid-feedback">
+                          Please enter a product name
+                        </div>
+                      </div>
+                      <div class=" mb-2 d-flex">
+                        <div class="preview-section">
+                          <div
+                            class="image-container"
+                            *ngFor="
+                              let image of file;
+                              let i = index
+                            "
+                          >
+                            <div
+                              class="image-wrapper"
+                              [ngClass]="{
+                                'new-row': i % 3 === 0 && i !== 0
+                              }"
+                            >
+                              <img
+                                #imgRenderer
+                                [src]="base64Strings[i]"
+                                class="img-size-withd-upload"
+                              />
+                              <i
+                                class="ri-close-circle-line ri-close-circle-line2"
+                                type="button"
+                                (click)="
+                                  onRemove(image);
+                                  $event.stopPropagation()
+                                "
+                              ></i>
+                            </div>
+                          </div>
+                        </div>
+                        <textarea
+                        class="form-control bg-light border-0"
+                        [id]="'productDetails' + i"
+                        rows="2"
+                        placeholder="Remark"
+                        formControlName="remark"
+                      ></textarea>
+  
+                      </div>
+                     
+                      
+                    </td>
+  
+                    <td>
+                      <div>
+                        <input class="form-check-input check-HW" 
+                        type="checkbox" 
+                        id="myCheckbox" 
+                        formControlName="Yesremark" 
+                        value="checkboxValue">
+                        
+                        <!-- <input
+                          type="text"
+                          class="form-control bg-light border-0"
+                          formControlName="Yesremark"
+                        /> -->
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        <input class="form-check-input check-HW" 
+                        type="checkbox" 
+                        id="myCheckbox" 
+                        formControlName="Yesremark" 
+                        value="checkboxValue">
+                      </div>
+                    </td>
+                   
+                    <!-- <td >
+                      <div>
+                        <input
+                          type="text"
+                          class="form-control bg-light border-0"
+                          formControlName="remark"
+                        />
+                      </div>
+                    </td> -->
+                   
+                    <td>
+                      <ngx-dropzone
+                      (change)="onSelect($event)"
+                      [multiple]="false"
+                      title="All file will be Uploaded"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                    >
+                      <ngx-dropzone-label>Click here to upload </ngx-dropzone-label> 
+                      
+  
+                      <!-- <div class="preview-section">
+                        <div
+                          class="image-container"
+                          *ngFor="
+                            let image of file;
+                            let i = index
+                          "
+                        >
+                          <div
+                            class="image-wrapper"
+                            [ngClass]="{
+                              'new-row': i % 3 === 0 && i !== 0
+                            }"
+                          >
+                            <img
+                              #imgRenderer
+                              [src]="base64Strings[i]"
+                              class="img-size-withd-upload"
+                            />
+                            <i
+                              class="ri-close-circle-line ri-close-circle-line2"
+                              type="button"
+                              (click)="
+                                onRemove(image);
+                                $event.stopPropagation()
+                              "
+                            ></i>
+                          </div>
+                        </div>
+                      </div> -->
+                    </ngx-dropzone>
+                  
+                    
+              
+                    </td>
+                    <td class="text-end">
+                      <i
+                        class="ri-delete-bin-6-line text-danger fs-15"
+                        (click)="removeItem(i)"
+                      ></i>
+                    </td>
+                  </tr>
+  
+                
+  
+  
+                </tbody>
+                <tbody>
+                  <tr id="newForm" style="display: none">
+                    <td class="d-none" colspan="5">
+                      <p>Add New Form</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="5">
+                      <a
+                        href="javascript:void(0);"
+                        class="btn btn-soft-secondary fw-medium me-3"
+                        id="add-item"
+                        (click)="addItem(InvoicesForm.get('items').value.length)"
+                        ><i class="ri-add-fill me-1 align-bottom"></i> Add Item</a
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!--end table-->
+            </div>
+           
+            <div
+              class="hstack gap-2 justify-content-end d-print-none mt-4 flex-wrap"
+            >
+              <!-- <button class="btn btn-soft-primary ms-2 me-2" (click)="goBack()">
+                Back
+              </button> -->
+              <button
+                type="button"
+                class="btn btn-success btn-load"
+                (click)="submitQuotation()"
+                [disabled]="InvoicesForm.invalid || loadingForSubmitBtn"
+              >
+                <span class="d-flex align-items-center">
+                  <span
+                    class="spinner-border flex-shrink-0 me-2"
+                    role="status"
+                    *ngIf="loadingForSubmitBtn"
+                  >
+                    <span class="visually-hidden">Loading...</span>
+                  </span>
+                  <span class="flex-grow-1">Submit </span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!--end col-->
+  </div>
+  <!--end row-->
+  

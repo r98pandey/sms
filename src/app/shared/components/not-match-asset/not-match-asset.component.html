@@ -1,0 +1,118 @@
+
+<div class="row mt-3">
+  <ng-container *ngIf="assetList.length == 0">
+    <h6 class="card-title fs-17">No Asset Found</h6>
+  </ng-container>
+  <ng-container *ngIf="assetList.length != 0">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="table-responsive table-card mb-0">
+          <table class="table">
+            <thead>
+              <tr class="bg-light text-muted text-uppercase">
+                <th>Asset No</th>
+                <th>Asset</th>
+                <th>
+                  {{ isProject ? "Project" : "Department" }}
+                </th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let asset of assetList">
+                <td class="align-top">
+                  <a href="javascript:void(0)" class="fw-medium link-primary">{{
+                    asset.assetTagId ? asset.assetTagId : "NA"
+                  }}</a>
+                </td>
+
+                <td>
+                  <ng-container *ngIf="asset?.qrCodeImgPath">
+                    <i
+                      class="ri-qr-code-line fs-17 align-middle pe-auto"
+                      (click)="viewQrCodeImage(qrView, asset)"
+                    ></i>
+                  </ng-container>
+
+                  {{ asset.assetName }}
+                </td>
+
+                <td class="align-top">
+                  {{ asset.departmentName }}
+                </td>
+
+                <td class="align-top">
+                  <span
+                    [class]="
+                      returnStatusBadgeClassesStatus(asset.assetStatusNotMatchId)
+                    "
+                    >{{ asset.assetStatus }}</span
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="text-center" *ngIf="assetList.length === 0">
+            No Asset Found
+          </div>
+        </div>
+        <div class="row justify-content-md-between align-items-md-center gy-2">
+          <div class="col col-sm-12 col col-md-6">
+            <div
+              class="dataTables_info mb-2"
+              id="tickets-table_info"
+              role="status"
+              aria-live="polite"
+            >
+              Showing {{ from }} to {{ to }} of {{ totalRecords }} entries
+            </div>
+          </div>
+          <!-- Pagination -->
+          <div class="col col-sm-12 col col-md-6">
+            <div class="text-sm-right float-end listjs-pagination">
+              <ngb-pagination
+                [collectionSize]="collectionSize"
+                [(page)]="page"
+                [pageSize]="pageSize"
+                (pageChange)="getLocalPagination()"
+                *ngIf="totalRecords > pageSize"
+              >
+                <ng-template ngbPaginationPrevious let-page let-pages="pages">
+                  <i class="ci-arrow-left me-2"></i>
+                  Prev
+                </ng-template>
+                <ng-template ngbPaginationNext>
+                  Next
+                  <i class="ci-arrow-right ms-2"></i>
+                </ng-template>
+              </ngb-pagination>
+            </div>
+          </div>
+          <!-- End Pagination -->
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #qrView let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Qr-Code</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <img
+      [src]="imageUrl + assetQrData?.qrCodeImgPath"
+      alt="qr"
+      class="qrCode-img"
+    />
+  </div>
+</ng-template>

@@ -1,0 +1,329 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<form [formGroup]="addDisposableFrom">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Basic Information</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="mb-3">
+                <label for="companyId" class="form-label"
+                  >Company<span class="starRequried">*</span></label
+                >
+                <ng-select
+                  [items]="arrayListDropDownCompany"
+                  bindLabel="companyName"
+                  [clearable]="false"
+                  bindValue="companyId"
+                  placeholder="Select Company"
+                  class="custom"
+                  [(ngModel)]="selectedDropDownCompanyIdValue"
+                  formControlName="company"
+                  (change)="onDropdownCompanyValueChange($event)"
+                  [ngClass]="{
+                    'is-invalid': company.invalid && company.touched,
+                    'is-valid': company.valid && company.touched
+                  }"
+                >
+                </ng-select>
+
+                <div *ngIf="company.invalid && company.touched" class="mt-2">
+                  <small
+                    class="text-danger"
+                    *ngIf="company['errors']['required']"
+                  >
+                    Company is Required
+                  </small>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="form-group">
+                  <label for="companyId" class="form-label"
+                    >Client<span class="starRequried">*</span></label
+                  >
+                  <ng-select
+                    [items]="arrayListDropDownClientList"
+                    bindLabel="clientName"
+                    [clearable]="false"
+                    [(ngModel)]="selectedDropDownClientIdValue"
+                    bindValue="clientId"
+                    placeholder="Select Client"
+                    class="custom"
+                    formControlName="client"
+                    (change)="onDropdownClientValueChange($event)"
+                    [ngClass]="{
+                      'is-invalid': client.invalid && client.touched,
+                      'is-valid': client.valid && client.touched
+                    }"
+                  >
+                  </ng-select>
+
+                  <div *ngIf="client.invalid && client.touched" class="mt-2">
+                    <small
+                      class="text-danger"
+                      *ngIf="client['errors']['required']"
+                    >
+                      Client is Required
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="form-group">
+                  <label class="form-label"
+                    >{{ isProject ? "Project" : "Project"
+                    }}<span class="starRequried">*</span></label
+                  >
+                  <ng-select
+                    [items]="arrayListDropDownProjectOrDeparmentList"
+                    bindLabel="departmentName"
+                    bindValue="departmentId"
+                    [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+                    [placeholder]="
+                      isProject ? 'Select Project' : 'Select Project'
+                    "
+                    [clearable]="false"
+                    class="custom"
+                    formControlName="project"
+                    (change)="onDropdownDepartmentValueChange($event)"
+                    [ngClass]="{
+                      'is-invalid': project.invalid && project.touched,
+                      'is-valid': project.valid && project.touched
+                    }"
+                  >
+                  </ng-select>
+                  <div
+                    *ngIf="project?.invalid && project?.touched"
+                    class="mt-2"
+                  >
+                    <small
+                      class="text-danger"
+                      *ngIf="project['errors']['required']"
+                    >
+                      {{ isProject ? "Project" : "Project" }} is Required</small
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="form-group">
+                  <label class="form-label"
+                    >Disposable Name<span class="starRequried">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter Disposable Name"
+                    formControlName="disposableName"
+                    [class.is-invalid]="
+                      disposableName.invalid && disposableName.touched
+                    "
+                    [class.is-valid]="
+                      disposableName.valid && disposableName.touched
+                    "
+                  />
+
+                  <div *ngIf="disposableName.invalid && disposableName.touched">
+                    <small
+                      class="text-danger"
+                      *ngIf="disposableName['errors']['required']"
+                    >
+                      Disposable Name is Required
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-8">
+              <div class="mb-3">
+                <div class="form-group">
+                  <label class="form-label"
+                    >Specification<span class="starRequried">*</span></label
+                  >
+                  <div class="mt-2">
+                    <ckeditor
+                      [editor]="Editor"
+                      data=""
+                      [config]="{
+                        toolbar: [
+                          'heading',
+                          '|',
+                          'bold',
+                          'italic',
+                          '|',
+                          'NumberedList',
+                          'BulletedList'
+                        ]
+                      }"
+                      formControlName="disposableDescription"
+                    >
+                    </ckeditor>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+  </div>
+  <div class="row">
+    <div class="col-xl-12 col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="text-end ">
+            <button
+              class="btn btn-primary"
+              (click)="getDisposableAssetList()"
+              *ngIf="company.value && client.value && project.value"
+            >
+              Add Asset
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+        
+            <div class="table-responsive table-card">
+              <table class="table">
+                <thead>
+                  <tr class="bg-light text-muted text-uppercase">
+                    <th>Asset</th>
+                    <th>Location</th>
+                    <th>Dispoal Type</th>
+                    <th>Selling Price</th>
+                    <th>Remark</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="selectedAssetList?.length != 0">
+                  <tr *ngFor="let asset of selectedAssetList; index as index">
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar-sm bg-light rounded p-1">
+                            <!-- <img
+                                                      [src]="
+                                                        asset.assetImagePath
+                                                          ? imageUrl + asset.assetImagePath
+                                                          : '../../../../../assets/images/placeholderimage.png'
+                                                      "
+                                                      alt=""
+                                                      class="img-fluid-with-HW d-block"
+                                                    /> -->
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <h5 class="fs-14 mb-0">
+                            <a href="javascript:void(0)" class="text-body">{{
+                              asset.assetName
+                            }}</a>
+                          </h5>
+                          <p class="text-muted mb-0">
+                            <a
+                              href="javascript:void(0)"
+                              class="fw-sm link-primary"
+                              >{{ asset.assetTagId }}
+                            </a>
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>
+                      {{ asset.locationName }}
+                    </td>
+                    <td>
+                      <ng-select
+                        [items]="assetStatusListDisposeType"
+                        placeholder="Select Type"
+                        bindLabel="assetStatus"
+                        bindValue="assetStatusId"
+                        [searchable]="false"
+                        class="custom"
+                        style="width: 180px"
+                        (change)="setDisposeTypeName($event, index)"
+                        [(ngModel)]="disposeTypeArray[index]"
+                        [clearable]="false"
+                      >
+                      </ng-select>
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        value="0.00"
+                        placeholder="0.00"
+                        id="sales"
+                        class="form-control"
+                        style="width: 100px"
+                        [(ngModel)]="salesValue[index]"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Remark"
+                        [(ngModel)]="remarkValue[index]"
+                        [ngModelOptions]="{ standalone: true }"
+                        style="width: 250px"
+                      />
+                    </td>
+                    <td class="status">
+                      <span
+                        [class]="
+                          returnStatusBadgeClassesStatus(asset.assetStatusId)
+                        "
+                        >{{ asset.assetStatus }}</span
+                      >
+                    </td>
+                    <td>
+                      <i
+                        class="ri-delete-bin-fill align-bottom me-2 text-muted"
+                        (click)="confirmDelete(index)"
+                      ></i>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="selectedAssetList?.length == 0">
+                  <tr>
+                    <td colspan="7" class="text-center">No Asset Selected</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</form>
+
+
+<div class="text-end mb-3">
+  <button
+    class="btn btn-soft-primary waves-effect mx-3"
+    type="button"
+    (click)="goback()"
+  >
+    Back
+  </button>
+  <button
+    (click)="onSubmit()"
+    [disabled]="addDisposableFrom.invalid || selectedAssetList.length == 0"
+    class="btn btn-success w-sm"
+    type="button"
+  >
+    Submit
+  </button>
+</div>

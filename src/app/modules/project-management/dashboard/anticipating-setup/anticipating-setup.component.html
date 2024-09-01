@@ -1,0 +1,504 @@
+<div class="card card-height-100">
+  <ul
+    ngbNav
+    #Border="ngbNav"
+    [(activeId)]="onTicketAgingId"
+    class="nav nav-tabs nav-border-top nav-border-top-primary"
+  >
+    <li [ngbNavItem]="1">
+      <a ngbNavLink>
+        Team composition
+        <span class="badge bg-success align-middle ms-1">6</span></a
+      >
+      <ng-template ngbNavContent> 
+          <div class="table-responsive table-card mb-0 mt-2">
+        <table class="table">
+          <thead>
+            <tr class="bg-light text-muted text-uppercase">
+              <th>Project Code</th>
+              <th>Project</th>
+              <th>Company</th>
+              <th>Client</th>
+              <th>Person</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let project of ProjectList" class="text-muted">
+              <td
+                class="fw-medium link-primary"
+                
+              >
+                {{ project.departmentCode }}
+              </td>
+              <td>
+                {{ project.departmentName }}
+              </td>
+              <td>
+                {{ project.companyName }}
+              </td>
+
+              <td>
+                {{ project.clientName }}
+              </td>
+
+              <td>
+                {{ project.contactPerson1 || "NA" }}
+              </td>  
+              <td>
+                <span
+                      class="fs-12"
+                      [class]="
+                        returnStatusBadgeClassesStatus(
+                          project.departmentStatusId
+                        )
+                      "
+                      >{{ project.departmentStatusName }}</span
+                    >
+
+                
+              </td>
+
+              <td>
+                <span>
+                  <div class="dropdown" ngbDropdown>
+                    <button
+                      class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      ngbDropdownToggle
+                    >
+                      <i class="ri-more-fill"></i>
+                    </button>
+                    <ul
+                      class="dropdown-menu dropdown-menu-end"
+                      ngbDropdownMenu
+                    >
+                      <li>
+                        <a
+                          class="dropdown-item cursor-pointer"
+                        
+                          ><i
+                            class="ri-eye-fill align-bottom me-2 text-muted"
+                          ></i>
+                          View
+                        </a>
+                      </li>
+
+                      
+
+                    
+                    </ul>
+                  </div>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="text-center text-muted" *ngIf="ProjectList.length === 0">
+          No Project  Found
+        </div>
+      </div>
+    </ng-template>
+    </li>
+    <li [ngbNavItem]="2">
+      <a ngbNavLink>
+        Unfinished Documentation
+        <span class="badge align-middle ms-1 bg-danger">4</span></a
+      >
+      <ng-template ngbNavContent>  <div class="table-responsive table-card mb-0 mt-2">
+        <table class="table">
+          <thead>
+            <tr class="bg-light text-muted text-uppercase">
+              <th>Project Code</th>
+              <th>Project</th>
+              <th>Company</th>
+              <th>Client</th>
+              <th>Person</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let project of ProjectList" class="text-muted">
+              <td
+                class="fw-medium link-primary"
+                
+              >
+                {{ project.departmentCode }}
+              </td>
+              <td>
+                {{ project.departmentName }}
+              </td>
+              <td>
+                {{ project.companyName }}
+              </td>
+
+              <td>
+                {{ project.clientName }}
+              </td>
+
+              <td>
+                {{ project.contactPerson1 || "NA" }}
+              </td>  
+              <td>
+                <span
+                      class="fs-12"
+                      [class]="
+                        returnStatusBadgeClassesStatus(
+                          project.departmentStatusId
+                        )
+                      "
+                      >{{ project.departmentStatusName }}</span
+                    >
+
+                
+              </td>
+
+              <td>
+                <span>
+                  <div class="dropdown" ngbDropdown>
+                    <button
+                      class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      ngbDropdownToggle
+                    >
+                      <i class="ri-more-fill"></i>
+                    </button>
+                    <ul
+                      class="dropdown-menu dropdown-menu-end"
+                      ngbDropdownMenu
+                    >
+                      <li>
+                        <a
+                          class="dropdown-item cursor-pointer"
+                        
+                          ><i
+                            class="ri-eye-fill align-bottom me-2 text-muted"
+                          ></i>
+                          View
+                        </a>
+                      </li>
+
+                      
+
+                    
+                    </ul>
+                  </div>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="text-center text-muted" *ngIf="ProjectList.length === 0">
+          No Project  Found
+        </div>
+      </div> </ng-template>
+    </li>
+    <li [ngbNavItem]="3">
+      <a ngbNavLink>
+        Pending Todo
+        <span class="badge align-middle ms-1 bg-success">4</span></a
+      >
+      <ng-template ngbNavContent>   <div class="table-responsive table-card mb-0 mt-2">
+        <table class="table">
+          <thead>
+            <tr class="bg-light text-muted text-uppercase">
+              <th>Project Code</th>
+              <th>Project</th>
+              <th>Company</th>
+              <th>Client</th>
+              <th>Person</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let project of ProjectList" class="text-muted">
+              <td
+                class="fw-medium link-primary"
+                
+              >
+                {{ project.departmentCode }}
+              </td>
+              <td>
+                {{ project.departmentName }}
+              </td>
+              <td>
+                {{ project.companyName }}
+              </td>
+
+              <td>
+                {{ project.clientName }}
+              </td>
+
+              <td>
+                {{ project.contactPerson1 || "NA" }}
+              </td>  
+              <td>
+                <span
+                      class="fs-12"
+                      [class]="
+                        returnStatusBadgeClassesStatus(
+                          project.departmentStatusId
+                        )
+                      "
+                      >{{ project.departmentStatusName }}</span
+                    >
+
+                
+              </td>
+
+              <td>
+                <span>
+                  <div class="dropdown" ngbDropdown>
+                    <button
+                      class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      ngbDropdownToggle
+                    >
+                      <i class="ri-more-fill"></i>
+                    </button>
+                    <ul
+                      class="dropdown-menu dropdown-menu-end"
+                      ngbDropdownMenu
+                    >
+                      <li>
+                        <a
+                          class="dropdown-item cursor-pointer"
+                        
+                          ><i
+                            class="ri-eye-fill align-bottom me-2 text-muted"
+                          ></i>
+                          View
+                        </a>
+                      </li>
+
+                      
+
+                    
+                    </ul>
+                  </div>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="text-center text-muted" *ngIf="ProjectList.length === 0">
+          No Project  Found
+        </div>
+      </div></ng-template>
+    </li>
+    <li [ngbNavItem]="4">
+        <a ngbNavLink>
+          Unsettled Awarded
+          <span class="badge align-middle ms-1 bg-success">4</span></a
+        >
+        <ng-template ngbNavContent>   <div class="table-responsive table-card mb-0 mt-2">
+            <table class="table">
+              <thead>
+                <tr class="bg-light text-muted text-uppercase">
+                  <th>Project Code</th>
+                  <th>Project</th>
+                  <th>Company</th>
+                  <th>Client</th>
+                  <th>Person</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let project of ProjectList" class="text-muted">
+                  <td
+                    class="fw-medium link-primary"
+                    
+                  >
+                    {{ project.departmentCode }}
+                  </td>
+                  <td>
+                    {{ project.departmentName }}
+                  </td>
+                  <td>
+                    {{ project.companyName }}
+                  </td>
+    
+                  <td>
+                    {{ project.clientName }}
+                  </td>
+    
+                  <td>
+                    {{ project.contactPerson1 || "NA" }}
+                  </td>  
+                  <td>
+                    <span
+                          class="fs-12"
+                          [class]="
+                            returnStatusBadgeClassesStatus(
+                              project.departmentStatusId
+                            )
+                          "
+                          >{{ project.departmentStatusName }}</span
+                        >
+    
+                    
+                  </td>
+    
+                  <td>
+                    <span>
+                      <div class="dropdown" ngbDropdown>
+                        <button
+                          class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                          type="button"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                          ngbDropdownToggle
+                        >
+                          <i class="ri-more-fill"></i>
+                        </button>
+                        <ul
+                          class="dropdown-menu dropdown-menu-end"
+                          ngbDropdownMenu
+                        >
+                          <li>
+                            <a
+                              class="dropdown-item cursor-pointer"
+                            
+                              ><i
+                                class="ri-eye-fill align-bottom me-2 text-muted"
+                              ></i>
+                              View
+                            </a>
+                          </li>
+    
+                          
+    
+                        
+                        </ul>
+                      </div>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="text-center text-muted" *ngIf="ProjectList.length === 0">
+              No Project  Found
+            </div>
+          </div></ng-template>
+      </li>
+    <li [ngbNavItem]="5">
+      <a ngbNavLink>
+        Project Start Awaited
+        <span class="badge align-middle ms-1 bg-success">4</span></a
+      >
+      <ng-template ngbNavContent>  <div class="table-responsive table-card mb-0 mt-2">
+        <table class="table">
+          <thead>
+            <tr class="bg-light text-muted text-uppercase">
+              <th>Project Code</th>
+              <th>Project</th>
+              <th>Company</th>
+              <th>Client</th>
+              <th>Person</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let project of ProjectList" class="text-muted">
+              <td
+                class="fw-medium link-primary"
+                
+              >
+                {{ project.departmentCode }}
+              </td>
+              <td>
+                {{ project.departmentName }}
+              </td>
+              <td>
+                {{ project.companyName }}
+              </td>
+
+              <td>
+                {{ project.clientName }}
+              </td>
+
+              <td>
+                {{ project.contactPerson1 || "NA" }}
+              </td>  
+              <td>
+                <span
+                      class="fs-12"
+                      [class]="
+                        returnStatusBadgeClassesStatus(
+                          project.departmentStatusId
+                        )
+                      "
+                      >{{ project.departmentStatusName }}</span
+                    >
+
+                
+              </td>
+
+              <td>
+                <span>
+                  <div class="dropdown" ngbDropdown>
+                    <button
+                      class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      ngbDropdownToggle
+                    >
+                      <i class="ri-more-fill"></i>
+                    </button>
+                    <ul
+                      class="dropdown-menu dropdown-menu-end"
+                      ngbDropdownMenu
+                    >
+                      <li>
+                        <a
+                          class="dropdown-item cursor-pointer"
+                        
+                          ><i
+                            class="ri-eye-fill align-bottom me-2 text-muted"
+                          ></i>
+                          View
+                        </a>
+                      </li>
+
+                      
+
+                    
+                    </ul>
+                  </div>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="text-center text-muted" *ngIf="ProjectList.length === 0">
+          No Project  Found
+        </div>
+      </div> </ng-template>
+    </li>
+    
+
+ 
+
+
+ 
+ 
+
+  </ul>
+  <div class="card-body">
+    <div class="tab-content text-muted">
+      <div [ngbNavOutlet]="Border"></div>
+    </div>
+  </div>
+</div>

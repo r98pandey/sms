@@ -1,0 +1,502 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm-3 col-xxl-3">
+            <h5 class="card-title mb-0">Ticket List</h5>
+          </div>
+          <div
+            class="col-sm-9 col-xxl-9 d-flex gap-2 flex-wrap justify-content-end"
+          >
+            <div class="search-box w-50">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                [(ngModel)]="typeTicketNameValue"
+                placeholder="Ticket name"
+                #inputerTicketNumber
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row g-3">
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onDropdownCompanyValueChange($event)"
+              [clearable]="true"
+              id="companyName"
+              [(ngModel)]="selectedDropDownCompanyIdValue"
+              placeholder="Select Company"
+              class="w-100 mr-2"
+              for="companyName"
+              [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownClientList"
+              bindLabel="clientName"
+              bindValue="clientId"
+              [disabled]="!selectedDropDownCompanyIdValue"
+              (change)="onDropdownClientValueChange($event)"
+              [clearable]="true"
+              id="clientName"
+              [(ngModel)]="selectedDropDownClientIdValue"
+              placeholder="Select Client"
+              class="w-100 mr-2"
+              for="clientName"
+              [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [readonly]="projectDepartmentFieldDisiabled"
+              [items]="arrayListDropDownProjectOrDeparmentList"
+              bindLabel="departmentName"
+              bindValue="departmentId"
+              [disabled]="
+                !selectedDropDownCompanyIdValue ||
+                !selectedDropDownClientIdValue
+              "
+              (change)="onDropdownDepartmentValueChange($event)"
+              [clearable]="true"
+              id="departmentName"
+              [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+              [placeholder]="isProject ? 'Select Project' : 'Select Department'"
+              class="w-100 mr-2"
+              for="departmentName"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownTicketStatus"
+              bindLabel="assetStatus"
+              bindValue="assetStatusId"
+              (change)="onDropdownTicketStatusValueChange($event)"
+              [clearable]="true"
+              id="ticketStatus"
+              [(ngModel)]="selectedDropDownTicketStatusIdValue"
+              placeholder="Select Ticket Status"
+              class="w-100 mr-2"
+              for="ticketStatus"
+            ></ng-select>
+          </div>
+          <div class="col-lg-auto">
+            <div class="d-flex justify-content-end">
+              <button
+                type="button"
+                class="btn"
+                [class]="
+                  selectedRequesterName ||
+                  selectedRequesterEmail ||
+                  selectedTicketTagId ||
+                  selectedCreatedDate ||
+                  selectedOperationType
+                    ? 'btn-success'
+                    : 'btn-primary'
+                "
+                (click)="openFilter(filtetcontent)"
+              >
+                <i class="ri-equalizer-fill align-bottom me-1"></i>
+                Filters
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger ms-1"
+                (click)="resetSerachVariable()"
+                ngbTooltip="Remove All Search"
+              >
+                <i class="ri-refresh-fill me-1 align-bottom"></i>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th>TICKET NO</th>
+                        <th>Title</th>
+                        <th>Company</th>
+                        <th>Client</th>
+                        <th>
+                          {{ isProject ? "Project" : "Department" }}
+                        </th>
+                        <th>Create Date</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngIf="ticketList.length == 0">
+                        <tr>
+                          <td colspan="9" class="text-center">
+                            No Ticket Data
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <ng-container *ngIf="ticketList.length != 0">
+                        <tr *ngFor="let ticket of ticketList; let i = index">
+                          <td>
+                            <a
+                              href="javascript:void(0)"
+                              (click)="viewHandler(ticket.ticketId)"
+                              class="fw-medium link-primary"
+                              >{{ ticket.ticketNo }}</a
+                            >
+                            <i
+                              class="ri-eye-fill align-bottom ms-2 text-success fs-15"
+                              (click)="
+                                getV2_MaintenanceWorkflowAudit(
+                                  ticket.ticketId,
+
+                                  openAduitOffSet,
+                                  ticket.ticketStatusId
+                                )
+                              "
+                            ></i>
+                            <i
+                              *ngIf="!ticket.isGlobal"
+                              ngbTooltip="Internal"
+                              class="ri-home-gear-line align-bottom ms-2 text-info fs-15"
+                            ></i>
+
+                            <i
+                              *ngIf="ticket.isBillingRequired"
+                              ngbTooltip="Billable"
+                              class="ri-money-dollar-circle-line align-bottom ms-2 text-success fs-15"
+                            ></i>
+                          </td>
+
+                          <td
+                            [title]="ticket.ticketTitle"
+                            class="title"
+                            (click)="
+                              expandTitle(
+                                'ticketTitle_' + ticket.ticketId + '_' + i
+                              )
+                            "
+                            [id]="'ticketTitle_' + ticket.ticketId + '_' + i"
+                          >
+                            {{ ticket.ticketTitle }}
+                          </td>
+                          <td
+                            [title]="ticket.companyName"
+                            class="title"
+                            (click)="
+                              expandTitle(
+                                'companyName_' + ticket.ticketId + '_' + i
+                              )
+                            "
+                            [id]="'companyName_' + ticket.ticketId + '_' + i"
+                          >
+                            {{ ticket.companyName }}
+                          </td>
+                          <td
+                            [title]="ticket.clientName"
+                            class="title"
+                            (click)="
+                              expandTitle(
+                                'clientName_' + ticket.ticketId + '_' + i
+                              )
+                            "
+                            [id]="'clientName_' + ticket.ticketId + '_' + i"
+                          >
+                            {{ ticket.clientName }}
+                          </td>
+                          <td
+                            [title]="ticket.projectName"
+                            class="title"
+                            (click)="
+                              expandTitle(
+                                'projectName_' + ticket.ticketId + '_' + i
+                              )
+                            "
+                            [id]="'projectName_' + ticket.ticketId + '_' + i"
+                          >
+                            {{ ticket.projectName }}
+                          </td>
+                          <td
+                            [title]="ticket.createdDate"
+                            class="title"
+                            (click)="
+                              expandTitle('createdDate_' + ticket.ticketId)
+                            "
+                            [id]="'createdDate_' + ticket.ticketId"
+                          >
+                            {{ ticket.createdDate }}
+                            <br />
+                            <span class="badge bg-info">{{
+                              ticket.ticketTypeName
+                            }}</span>
+                          </td>
+
+                          <td class="status">
+                            <span
+                              class="badge bg-danger text-uppercase"
+                              *ngIf="ticket?.urgencyTypeName == 'High'"
+                            >
+                              {{ ticket?.urgencyTypeName }}
+                            </span>
+                            <span
+                              class="badge bg-success text-uppercase"
+                              *ngIf="ticket?.urgencyTypeName == 'Low'"
+                            >
+                              {{ ticket?.urgencyTypeName }}
+                            </span>
+                            <span
+                              class="badge bg-warning text-uppercase"
+                              *ngIf="ticket?.urgencyTypeName == 'Medium'"
+                            >
+                              {{ ticket?.urgencyTypeName }}
+                            </span>
+                          </td>
+
+                          <td class="status">
+                            <span
+                              [class]="
+                                returnStatusBadgeClassesStatus(
+                                  ticket.ticketStatusId
+                                )
+                              "
+                              >{{ ticket.ticketStatusName }}</span
+                            >
+                          </td>
+
+                          <td>
+                            <span>
+                              <div class="dropdown" ngbDropdown>
+                                <button
+                                  class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                                  type="button"
+                                  data-bs-toggle="dropdown"
+                                  aria-expanded="false"
+                                  ngbDropdownToggle
+                                >
+                                  <i class="ri-more-fill"></i>
+                                </button>
+                                <ul
+                                  class="dropdown-menu dropdown-menu-end"
+                                  ngbDropdownMenu
+                                >
+                                  <li>
+                                    <a
+                                      class="dropdown-item cursor-pointer"
+                                      (click)="viewHandler(ticket.ticketId)"
+                                      ><i
+                                        class="ri-eye-fill align-bottom me-2 text-muted"
+                                      ></i>
+                                      View
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </span>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col col-sm-12 col col-md-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecordsFromApi }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col col-sm-12 col col-md-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="totalRecordsFromApi"
+                        [pageSize]="pageSize"
+                        [(page)]="page"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="OnChangesPage($event)"
+                        *ngIf="totalRecordsFromApi > pageSize"
+                      ></ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #filtetcontent let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="exampleModalLabel">Filters</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-6 mb-3">
+        <label for="selectedRequesterName" class="form-label fw-semibold"
+          >Requester Name</label
+        >
+        <input
+          type="text"
+          name="selectedRequesterName"
+          id="selectedRequesterName"
+          class="form-control"
+          [(ngModel)]="selectedRequesterName"
+          placeholder="Requester Name "
+        />
+      </div>
+      <div class="col-lg-6 mb-3">
+        <label for="selectedRequesterEmail" class="form-label fw-semibold"
+          >Requester Email</label
+        >
+        <input
+          type="email"
+          name="selectedRequesterEmail"
+          id="selectedRequesterEmail"
+          class="form-control"
+          [(ngModel)]="selectedRequesterEmail"
+          placeholder="Search Requester Email"
+        />
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <label for="selectedTicketTagId" class="form-label fw-semibold"
+          >Ticket Tag Id</label
+        >
+        <input
+          type="text"
+          name="selectedTicketTagId"
+          id="selectedTicketTagId"
+          class="form-control"
+          [(ngModel)]="selectedTicketTagId"
+          placeholder="Ticket Tag Id"
+        />
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <label for="selectedCreatedDate" class="form-label fw-semibold"
+          >Created Date</label
+        >
+        <input
+          type="text"
+          name="selectedCreatedDate"
+          id="selectedCreatedDate"
+          class="form-control"
+          [(ngModel)]="selectedCreatedDate"
+          placeholder="Created Date"
+          mwlFlatpickr
+          [altInput]="false"
+          [enableTime]="false"
+          [convertModelValue]="true"
+          [dateFormat]="'d-m-Y'"
+        />
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <label for="selectedTicketTypeId" class="form-label fw-semibold"
+          >Service Type</label
+        >
+        <ng-select
+          [items]="operationList"
+          bindLabel="name"
+          bindValue="name"
+          placeholder="Select Operation Type"
+          [clearable]="false"
+          [(ngModel)]="selectedOperationType"
+          placeholder="Service Type"
+        >
+        </ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      class="btn btn-light"
+      (click)="resetSerachVariableWithModal()"
+      (click)="modal.dismiss('Close click')"
+    >
+      Clear
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      (click)="modal.close('Ok', $event)"
+    >
+      Search
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #openAduitOffSet let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title">WorkFlow Audit</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="text-danger m-auto" *ngIf="currentStatus == 19">
+    <p class="fs-17 mb-0"><b>Ticket has been canceled</b></p>
+  </div>
+  <div class="offcanvas-body pt-0">
+    <app-audit-chart [Data]="maintenanceWorkflowAuditList"></app-audit-chart>
+    <div class="text-end">
+      <button
+        type="button"
+        class="btn btn-outline-danger"
+        (click)="offcanvas.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>

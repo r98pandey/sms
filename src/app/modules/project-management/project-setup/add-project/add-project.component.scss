@@ -1,0 +1,23 @@
+
+::ng-deep.ng-dropdown-panel .ng-dropdown-panel-items {
+  display: block;
+  height: auto;
+  box-sizing: border-box;
+  max-height: 150px!important;
+  overflow-y: auto;
+
+}
+
+
+
+.mt-6{
+  margin-top: 6rem !important;
+}
+
+
+
+
+.topDisplay {
+  display: flex;
+  align-items: self-start;
+}

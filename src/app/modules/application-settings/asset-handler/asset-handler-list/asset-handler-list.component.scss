@@ -1,0 +1,43 @@
+#edit-submit-form {
+    .department-name {
+        position: absolute;
+        left: 25px;
+        top: 35px;
+        z-index: 1;
+    }
+}
+
+// .asset-list {
+//     img {
+//         width: 50px;
+//         height: 50px;
+//     }
+//     .search {
+//         input {
+//             padding-left: 30px;
+//             // margin-right: 15px;
+//             // width: 565px;
+//         }
+//     }
+// }
+
+.asset-list {
+    img {
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+    }
+
+    .company-logo {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .align-middle {
+        vertical-align: middle;
+    }
+
+        .table-responsive {
+        min-height: 600px;
+    }
+}

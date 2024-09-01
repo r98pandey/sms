@@ -1,0 +1,112 @@
+<ng-container>
+  <!-- <div class="d-flex align-items-center mb-3">
+    <h5 class="flex-grow-1 fs-16 mb-0" id="filetype-title">RWFI List</h5>
+    <div class="flex-shrink-0">
+      <button class="btn btn-primary" (click)="uploadFile()">
+        <i class="ri-add-line align-bottom me-1"></i> Add RWFI 
+      </button>
+    </div>
+  </div> -->
+
+  <app-add-rwif-form [dDetail]="dDetail"></app-add-rwif-form>
+
+  <div class="table-responsive" style="display: none;">
+    <table class="table align-middle table-nowrap mb-0">
+      <thead class="table-active">
+        <tr>
+          <th scope="col">RWFI No.</th>
+
+          <th scope="col">Title</th>
+          <th scope="col">Created Date</th>
+          <th scope="col">Status</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="file-list">
+        <ng-container *ngIf="storeRWIFUpload.length == 0">
+          <tr>
+            <td colspan="5"><p class="text-muted">No Records Found</p></td>
+          </tr>
+        </ng-container>
+        <ng-container *ngIf="storeRWIFUpload.length != 0">
+          @for(data of storeRWIFUpload; track $index){
+          <tr>
+            <td class="title">
+              {{ data.rwfiNo }}
+            </td>
+            <td class="title">
+              {{ data.title }}
+            </td>
+            <td class="title">{{ data.createdDate }}</td>
+            <td class="title">
+              <span
+                [class]="
+                  returnStatusBadgeClassesStatus(
+                    data?.projectProcessDocStatusId
+                  )
+                "
+                >{{ data?.projectProcessDocStatusName }}</span
+              >
+            </td>
+
+            <td class="title">
+              <div class="flex-shrink-0 ms-2">
+                <div class="d-flex gap-1">
+                  <ul class="list-inline hstack gap-2 mb-0">
+                    <li
+                      class="list-inline-item edit"
+                      data-bs-toggle="tooltip"
+                      data-bs-trigger="hover"
+                      ngbTooltip="Edit Remark"
+                      *ngIf="data?.projectProcessDocStatusId != 79"
+                    >
+                      <a
+                        href="javascript:void(0);"
+                        class="text-success d-inline-block edit-item-btn"
+                      >
+                        <i class="ri-edit-2-line fs-16"></i>
+                      </a>
+                    </li>
+                    <li
+                      class="list-inline-item me-0"
+                      ngbTooltip="Remove"
+                      placement="top"
+                      data-bs-toggle="tooltip"
+                      data-bs-trigger="hover"
+                      *ngIf="data?.projectProcessDocStatusId != 79"
+                    >
+                      <a
+                        class="text-danger d-inline-block remove-item-btn"
+                        href="javascript:void(0);"
+                      >
+                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </td>
+          </tr>
+          }
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</ng-container>
+
+<!-- <ng-container *ngIf="!showlistpostion">
+  <div class="d-flex align-items-center mb-3">
+    <h5 class="flex-grow-1 fs-16 mb-0" id="filetype-title">Add RWFI</h5>
+    <div class="flex-shrink-0">
+      <button class="btn btn-info" (click)="openList()">
+        <i class="ri-arrow-go-back-line align-bottom me-1"></i> Go to RWFI list
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <app-add-rwif-form [dDetail]="dDetail"></app-add-rwif-form>
+    </div>
+  </div>
+</ng-container> -->

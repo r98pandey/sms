@@ -1,0 +1,120 @@
+<div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title" id="inviteMembersModalLabel">Add {{ nameTitle }}</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="close('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div
+      class="search-box mb-3 d-flex justify-content-between align-items-center"
+    >
+      <input
+        type="text"
+        class="form-control bg-light border-light"
+        (keyup)="filterTechnician($event)"
+        [(ngModel)]="technicianSearchText"
+        placeholder="Search member here..."
+      />
+      <i class="ri-search-line search-icon"></i>
+  
+      <button
+        type="button"
+        class="btn btn-danger ms-1"
+        (click)="clearTeach($event)"
+        ngbTooltip="Clear"
+      >
+        Clear
+      </button>
+    </div>
+    <ngx-simplebar class="mx-n4 px-4" style="height: 400px">
+      <div class="vstack gap-3">
+        <div *ngFor="let tech of filteredTechnicianList; let i = index">
+          <div
+            class="d-flex align-items-center"
+            (click)="selectTechnician(filteredTechnicianList, i, tech)"
+          >
+            <div class="flex-shrink-0 me-3">
+              <div class="d-flex align-items-center gap-1">
+                <div class="form-check form-check-flat form-check-primary">
+                  <label class="form-check-label">
+                    <input
+                      type="checkbox"
+                      value="{{ tech }}"
+                      [(ngModel)]="filteredTechnicianList[i].checked"
+                      class="form-check-input"
+                    />
+                    <i class="input-frame"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+  
+            <div class="avatar-xs flex-shrink-0 me-3">
+              <img
+                src="{{
+                  tech.profileImageUrl
+                    ? apiUrl + tech.profileImageUrl
+                    : '../../../../../assets/images/placeholderimage.png'
+                }}"
+                alt=""
+                class="img-fluid rounded-circle"
+                style="width: 40px; height: 35px"
+              />
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="fs-14 mb-0">
+                <a href="javascript:void(0);" class="text-body d-block">
+                  {{ tech?.fullName }}
+                </a>
+                <p class="mt-0 mb-0">{{ tech.accessGroupName }}</p>
+              </h5>
+            </div>
+            <div class="flex-shrink-0 me-3 mb-0">
+              <p class="mb-0">
+                <span
+                  ><i class="ri-phone-fill me-1"></i>{{ tech.phoneNumber }}</span
+                >
+              </p>
+              <!-- <p class="mb-0"><span><i class=" ri-mail-check-fill me-1"></i>{{ tech.email }}</span></p> -->
+            </div>
+          </div>
+        </div>
+        <div
+          class="text-center mt-3 text-muted"
+          *ngIf="
+            technicianList &&
+            filteredTechnicianList &&
+            technicianSearchText.length > 0
+              ? !filteredTechnicianList.length
+              : !technicianList.length
+          "
+        >
+          <p>No Member Found</p>
+        </div>
+      </div>
+    </ngx-simplebar>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger w-xs me-2"
+      data-bs-dismiss="modal"
+      (click)="close('Close click')"
+    >
+      Close
+    </button>
+    <button
+      *ngIf="filteredTechnicianList.length != 0"
+      type="button"
+      [disabled]="selectedTech.length == 0"
+      class="btn w-sm btn-primary"
+      (click)="sweetAlertUpdateTechinionDetails('submit')"
+    >
+      Submit
+    </button>
+  </div>
+  

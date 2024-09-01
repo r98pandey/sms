@@ -1,0 +1,18 @@
+td {
+    vertical-align: top !important;
+}
+.department-text{
+    width: 30px;
+}
+
+@media only screen and (max-width: 600px) {
+   
+    .text-desc{
+        width: 150px;
+    }
+    .department-text{
+        width: 30px !important;
+        word-wrap: break-word;
+        word-break: break-word;
+    }
+}

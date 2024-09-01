@@ -1,0 +1,80 @@
+<div class="modal-content">
+    <div class="modal-header p-3 bg-info-subtle">
+      <h6 class="card-title mb-0">{{ type }} Task</h6>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="close('Close click')"
+      ></button>
+    </div>
+    
+    <div #modalBody class="modal-body" *ngIf="showingTerm">
+      <div class="text-center">
+        <div class="profile-user position-relative d-inline-block mx-auto mb-2">
+          <img
+            [src]="imageUrl?imageUrl:'assets/images/users/user-dummy-img.jpg'"
+            id="user-img"
+            class="rounded-circle avatar-xl img-thumbnail user-profile-image"
+            alt="user-profile-image"
+          />
+          <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+            
+            <label
+              for="profile-img-file-input"
+              class="profile-photo-edit avatar-xs"
+            >
+              <span class="avatar-title rounded-circle bg-light text-body" (click)="openWebCamer()">
+                <i class="ri-camera-fill"></i>
+              </span>
+            </label>
+          </div>
+        </div>
+        <h5 class="fs-md">Add Image</h5>
+      </div>
+      <div>
+        <label class="form-label" for="gen-info-description-input"
+          >Remark<span class="starRequried">*</span></label
+        >
+        <textarea
+          class="form-control bg-light border-0"
+          id="Remark"
+          rows="4"
+          placeholder="Remark"
+          [(ngModel)]="remarkValue"
+          [maxlength]="maxCharsDecision"
+        ></textarea>
+        <label class="nopadding clrlbl">
+          Characters Remaining:
+          {{ remarkValue?.length }}/{{ maxCharsDecision }}</label
+        >
+      </div>
+    </div>
+    <div class="modal-footer" *ngIf="showingTerm">
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+          class="btn w-sm btn-danger fw-medium text-decoration-none"
+          (click)="close('close')"
+          id="deleteRecord-close"
+        >
+          <i class="ri-close-line me-1 align-middle"></i> Close
+        </button>
+        <button
+          type="button"
+          class="btn w-sm btn-primary"
+          id="delete-product"
+          (click)="close('success')"
+          [disabled]="remarkValue.length == 0"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+    <div class="modal-body" #modalBody *ngIf="!showingTerm">
+      <app-webcam [modalWidth]="modalWidth" [modalHeight]="modalHeight"   (sentImage)="getBase64Image($event)" (sentcloseImage)="closefterImage($event)"></app-webcam>
+    </div>
+  </div>
+
+ 

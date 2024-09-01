@@ -1,0 +1,38 @@
+
+.cardHeiht{
+    height: 600px;
+    max-height: 650px;
+    overflow-y: auto;
+   
+}
+.foldr{
+        font-size: 15px;
+        padding: 7px 12px 12px 0px;
+        cursor: pointer;
+        white-space: nowrap; /* Prevent text from wrapping */
+        overflow: hidden; /* Hide overflowing text */
+        text-overflow: ellipsis; /* Display ellipsis for overflow */
+        width: 100%; /* Ensure the h6 takes full width of its container */
+}
+
+.foldr:hover{
+    color: rgb(92, 174, 92);
+}
+
+.folder{
+    .active{
+        color: rgb(3, 90, 3);  
+    }
+}
+
+.cardBack{
+    background-color: transparent!important;
+    margin-bottom: 5px!important;
+
+}
+
+.card-headerBack{
+    background-color: transparent!important;
+    background: transparent!important;
+    padding: 9px 10px 13px 19px!important;
+}

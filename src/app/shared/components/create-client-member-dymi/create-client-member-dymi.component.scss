@@ -1,0 +1,16 @@
+.text-small {
+    font-size: 0.7rem;
+    font-weight: 400;
+}
+.form-label{
+    margin-bottom: 0px!important;
+}
+.textcenter {
+    text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+    .textcenter {
+        text-align: left !important;
+    }
+}

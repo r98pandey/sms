@@ -1,0 +1,80 @@
+
+<div class="card card-animate">
+  <div class="card-body">
+    <div class="d-flex align-items-center">
+      <div class="avatar-sm flex-shrink-0">
+        <span
+          class="avatar-title text-primary rounded-2 fs-2"
+          [ngClass]="{
+            'bg-primary-subtle': icon === 'briefcase',
+            'bg-warning-subtle': icon === 'award',
+            'bg-danger-subtle': icon === 'alert-circle',
+            'bg-info-subtle': icon === 'dollar-sign'
+            
+          }"
+        >
+          <i-feather
+            name="{{ icon }}"
+            class="feather-icon-align"
+            [ngClass]="{
+              'text-primary': icon === 'briefcase',
+              'text-warning': icon === 'award',
+              'text-danger': icon === 'alert-circle',
+              'text-info': icon === 'dollar-sign'
+            }"
+          ></i-feather>
+        </span>
+      </div>
+      <div class="flex-grow-1 overflow-hidden ms-3">
+        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+          {{ title }}
+        </p>
+        <div class="d-flex align-items-center mb-3">
+          <h4 class="fs-4 flex-grow-1 mb-0">
+            <span *ngIf="value!= 0" [countUp]="value" class="counter-value" [options]="option"></span>
+            
+            <span *ngIf="value== 0" class="counter-value">0</span>
+          </h4>
+          <!-- <span class="badge fs-12" [ngClass]=" {'bg-success-subtle text-success': profit === 'up', 'bg-danger-subtle text-danger': profit === 'down'}"><i class="fs-13 align-middle me-1" [ngClass]=" {'ri-arrow-up-s-line': profit === 'up', 'ri-arrow-down-s-line': profit === 'down'}"></i>{{persantage}} %</span> -->
+        </div>
+
+        <!-- <p class="text-muted text-truncate mb-0">{{month}} this month</p> -->
+      </div>
+    </div>
+    <div class="d-flex flex-wrap justify-content-start mt-1">
+      <div class="row text-muted mb-0" *ngFor="let item of subItem">
+        <span   class="text-muted col-sm-auto pe-3">
+          <span class="badge {{ item.bgColor }} text-white cursor" (click)="goToPageList( title,item.statusId)">{{
+            item.Value
+          }}</span>
+          {{ item.label }}
+        </span>
+      </div>
+    </div>
+    <!-- <div class="d-flex flex-wrap justify-content-evenly mt-1">
+            
+        </div> -->
+  </div>
+  <div
+    class="progress animated-progess rounded-bottom rounded-0"
+    style="height: 6px"
+  >
+    <div
+      class="progress-bar {{ progress.bgColor }} rounded-0"
+      role="progressbar"
+      [style.width]="progress.width"
+      aria-valuenow="30"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      *ngFor="let progress of progressBar"
+    ></div>
+  </div>
+  <!-- <div class="progress animated-progess rounded-bottom rounded-0" style="height: 6px;">
+        <div *ngFor="let item of progressBar">
+            <div class="progress-bar {{item?.bgColor}} rounded-0" role="progress" style="width: 30%"
+            aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" >
+         </div>
+       </div>
+        
+    </div> -->
+</div>

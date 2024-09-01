@@ -1,0 +1,15 @@
+.topsera {
+    display: flex !important;
+    flex-direction: rows
+}
+
+@media only screen and (max-width: 600px) {
+    .w-50 {
+        width: 100% !important;
+    }
+
+    .topsera {
+        display: flex !important;
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,61 @@
+<div class="offcanvas-header bg-light">
+  <h5 class="offcanvas-title" id="offcanvasExampleLabel">Fliters</h5>
+  <button
+    type="button"
+    class="btn-close text-reset"
+    data-bs-dismiss="offcanvas"
+    aria-label="Close"
+    (click)="close()"
+  ></button>
+</div>
+<!--end offcanvas-header-->
+<div class="d-flex flex-column justify-content-end h-100">
+  <div class="offcanvas-body">
+    <div class="row mt-2">
+      <div class="col-md-12 mb-3" *ngFor="let obj of searchFieldArray">
+        <label class="form-label mb-0"> {{ obj.label }}</label>
+        <ng-container *ngIf="obj.type === 'select'">
+          <ng-select
+            [items]="obj.options"
+            #mySelect
+            bindValue="id"
+            bindLabel="name"
+            (change)="onselectObject($event, obj)"
+            [(ngModel)]="obj.value"
+            [clearable]="false"
+            [placeholder]="obj.label"
+            class="custom"
+          ></ng-select>
+        </ng-container>
+        <ng-container *ngIf="obj.type === 'input'">
+          <input
+            *ngIf="obj.input_type; else elseblock"
+            [type]="obj.input_type"
+            [id]="obj.label"
+            [name]="obj.label"
+            [value]="obj.value"
+            (change)="onselectObject($event, obj)"
+            [placeholder]="obj.label"
+            class="form-control form-control-sm"
+          />
+          <ng-template #elseblock>
+            <input
+              type="text"
+              [id]="obj.label"
+              [name]="obj.label"
+              (change)="onselectObject($event, obj)"
+              [value]="obj.value"
+              [placeholder]="obj.label"
+              class="form-control form-control-sm"
+            />
+          </ng-template>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="offcanvas-footer border-top p-3 text-center hstack gap-2">
+    <button class="btn btn-light w-100" (click)="clear_search()">Clear Filter</button>
+    <!-- <button type="submit" class="btn btn-primary w-100" (click)="SearchData();">Filters</button> -->
+  </div>
+ 
+</div>

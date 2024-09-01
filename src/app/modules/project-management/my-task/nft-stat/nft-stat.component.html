@@ -1,0 +1,22 @@
+<div class="card card-height-100">
+    <div class="card-body">
+    
+        <div class="d-flex align-items-center">
+            <div class="avatar-sm flex-shrink-0">
+                <span class="avatar-title bg-info-subtle rounded fs-3">
+                    <i class="{{icon}} text-info"></i>
+                </span>
+            </div>
+            <div class="flex-grow-1 ps-3">
+                <h5 class="text-muted text-uppercase fs-13 mb-0">{{title}}</h5>
+            </div>
+        </div>
+        <div class="mt-2 pt-1">
+            <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span  class="counter-value" >{{currentMonthHoursMinutes}}</span></h4>
+            <p class="mt-4 mb-0 text-muted">
+                <span class="badge mb-0 me-1" [ngClass]=" { 'bg-success-subtle text-success': changeIndicator === 'Increase','bg-danger-subtle text-danger': changeIndicator === 'Decrease','bg-light-subtle text-dark': changeIndicator === 'No Change'}" > 
+                    <i class="align-middle" [ngClass]=" { 'ri-arrow-up-line': changeIndicator === 'Increase','ri-arrow-down-line': changeIndicator === 'Decrease',' ri-alarm-line': changeIndicator === 'No Change'}"></i>
+                    {{percentageDifference}} % </span> <span [ngbTooltip]="previousMonthHoursMinutes">vs. previous month</span></p>
+        </div>
+    </div>
+</div>

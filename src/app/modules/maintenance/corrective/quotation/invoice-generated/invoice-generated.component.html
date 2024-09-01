@@ -1,0 +1,442 @@
+
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm-3 col-xxl-3">
+            <h5 class="card-title mb-0">Invoice Generated List</h5>
+          </div>
+          <div class="col-sm-auto col-xxl-9 gap-2 topsera justify-content-end">
+            <!-- <div class=""> -->
+            <div class="search-box w-50">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                #inputerQuotationName
+                [(ngModel)]="typeQuotationNameValue"
+                placeholder="Search for quotation name"
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+
+            <div class="search-box w-50">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                #inputerQuotationUmber
+                [(ngModel)]="typeQuotationNumberValue"
+                placeholder="Search for quotation number"
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+
+            <div class="search-box w-50">
+              <input
+                type="search"
+                name="searchTerm"
+                #inputerTicketNumber
+                class="form-control"
+                [(ngModel)]="typeTicketNameValue"
+                placeholder="Search for ticket number"
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+            <!--  *ngIf="returnValueMenu?.add" -->
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row g-3">
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onDropdownCompanyValueChange($event)"
+              [clearable]="true"
+              id="companyName"
+              [(ngModel)]="selectedDropDownCompanyIdValue"
+              placeholder="Select Company"
+              class="w-100 mr-2"
+              for="companyName"
+              [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownClientList"
+              bindLabel="clientName"
+              [disabled]="!selectedDropDownCompanyIdValue"
+              bindValue="clientId"
+              (change)="onDropdownClientValueChange($event)"
+              [clearable]="true"
+              id="clientName"
+              [(ngModel)]="selectedDropDownClientIdValue"
+              placeholder="Select Client"
+              class="w-100 mr-2"
+              for="clientName"
+              [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [readonly]="projectDepartmentFieldDisiabled"
+              [items]="arrayListDropDownProjectOrDeparmentList"
+              bindLabel="departmentName"
+              [disabled]="
+                !selectedDropDownCompanyIdValue ||
+                !selectedDropDownClientIdValue
+              "
+              bindValue="departmentId"
+              (change)="onDropdownDepartmentValueChange($event)"
+              [clearable]="true"
+              id="departmentName"
+              [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+              placeholder="Select Project"
+              class="w-100 mr-2"
+              for="departmentName"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="invoiceProcessList"
+              bindLabel="name"
+              bindValue="name"
+              (change)="onDropdownInvoiceProcessChange($event)"
+              [clearable]="true"
+              id="invoiceProcess"
+              [(ngModel)]="selectedInvoiceProcessValue"
+              placeholder="Select Invoice Process"
+              class="w-100 mr-2"
+              for="invoiceProcess"
+            ></ng-select>
+          </div>
+          <div class="col-lg-auto text-end">
+            <div class="d-flex justify-content-end">
+              <!-- <button
+                type="button"
+                class="btn btn-primary"
+                (click)="openFilter(filtetcontent)"
+              >
+                <i class="ri-equalizer-fill align-bottom me-1"></i> Filters
+              </button> -->
+              <button
+                type="button"
+                class="btn btn-danger ms-1"
+                (click)="resetSerachVariable()"
+                ngbTooltip="Remove All Search"
+              >
+                <i class="ri-refresh-fill me-1 align-bottom"></i>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th>Quotation NO</th>
+                        <th>TICKET NO</th>
+                        <th>Title</th>
+                        <th>Company</th>
+                        <th>Client</th>
+                        <th>{{ isProject ? "Project" : "Department" }}</th>
+                        <th>Create Date</th>
+                        <th>Ticket Status</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngIf="ticketList.length == 0">
+                        <tr>
+                          <td colspan="10" class="text-center">
+                            No Quotation Data
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <ng-container *ngIf="ticketList.length != 0">
+                        <tr *ngFor="let quotation of ticketList">
+                          <td>
+                            <a
+                              href="javascript:void(0)"
+                              (click)="viewHandler(quotation)"
+                              class="fw-medium"
+                              [class]="getReturnQuotationNoColor(quotation)"
+                              >{{ quotation.quotNo }}</a
+                            ><p class="d-flex mb-0">
+                              <i
+                              class="ri-eye-fill align-bottom ms-2 text-success fs-15"
+                              (click)="
+                                getV2_MaintenanceWorkflowAudit(
+                                  quotation.ticketId,
+                                  openAduitOffSet,
+                                  quotation.ticketStatusId
+                                )
+                              "
+                            ></i>
+                            </p>
+                           
+                          </td>
+                          <td class="align-top">
+                            {{ quotation.ticketNo }}
+                          </td>
+
+                          <td [title]="quotation.quotTitle"
+                            class="title align-top"
+                            (click)="
+                              expandTitle('quotTitle_' + quotation.quotNo)
+                            "
+                            [id]="'quotTitle_' + quotation.quotNo"
+                          >
+                            {{ quotation.quotTitle }}
+                          </td>
+                          <td [title]="quotation.companyName "
+                            class="title align-top"
+                            (click)="
+                              expandTitle('companyName_' + quotation.quotNo)
+                            "
+                            [id]="'companyName_' + quotation.quotNo"
+                          >
+                            {{ quotation.companyName }}
+                          </td>
+                          <td [title]="quotation.clientName "
+                            class="title align-top"
+                            (click)="
+                              expandTitle('clientName_' + quotation.quotNo)
+                            "
+                            [id]="'clientName_' + quotation.quotNo"
+                          >
+                            {{ quotation.clientName }}
+                          </td>
+                          <td [title]="quotation.projectName "
+                            class="title align-top"
+                            (click)="
+                              expandTitle('projectName_' + quotation.quotNo)
+                            "
+                            [id]="'projectName_' + quotation.quotNo"
+                          >
+                            {{ quotation.projectName }}
+                          </td>
+                          <td [title]="quotation.createdDate "
+                            class="title align-top"
+                            (click)="
+                              expandTitle('createdDate_' + quotation.quotNo)
+                            "
+                            [id]="'createdDate_' + quotation.quotNo"
+                          >
+                            {{ quotation.createdDate }}
+                          </td>
+                          <td class="status align-top">
+                            <span
+                              [class]="
+                                returnStatusBadgeClassesStatus(
+                                  quotation.ticketStatusId
+                                )
+                              "
+                              >{{ quotation.ticketStatusName }}</span
+                            >
+                          </td>
+
+                          <td class="status align-top">
+                            <span
+                              [class]="
+                                returnStatusBadgeClassesStatus(
+                                  quotation.quotStatusId
+                                )
+                              "
+                              >{{ quotation.quotStatusName }}</span
+                            >
+                          </td>
+
+                          <td class="align-top">
+                            <span>
+                              <div class="dropdown" ngbDropdown>
+                                <button
+                                  class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                                  type="button"
+                                  data-bs-toggle="dropdown"
+                                  aria-expanded="false"
+                                  ngbDropdownToggle
+                                >
+                                  <i class="ri-more-fill"></i>
+                                </button>
+                                <ul
+                                  class="dropdown-menu dropdown-menu-end"
+                                  ngbDropdownMenu
+                                >
+                                  <li>
+                                    <a
+                                      class="dropdown-item cursor-pointer"
+                                      (click)="viewHandler(quotation)"
+                                      ><i
+                                        class="ri-eye-fill align-bottom me-2 text-muted"
+                                      ></i>
+                                      View
+                                    </a>
+                                  </li>
+
+                                  <!-- <li class="dropdown-divider"></li> -->
+                                </ul>
+                              </div>
+                            </span>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col-sm-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecordsFromApi }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col-sm-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="totalRecordsFromApi"
+                        [pageSize]="pageSize"
+                        [(page)]="page"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="OnChangesPage($event)"
+                        *ngIf="totalRecordsFromApi > pageSize"
+                      ></ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #filtetcontent let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="exampleModalLabel">Filters</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-6 mb-3">
+        <label for="selectedTicketTypeId" class="form-label fw-semibold"
+          >Ticket Status
+        </label>
+        <ng-select
+          [items]="arrayListDropDownTicketStatus"
+          bindLabel="assetStatus"
+          bindValue="assetStatusId"
+          [clearable]="false"
+          id="ticketStatus"
+          [(ngModel)]="selectedTicketStatusIdValue"
+          placeholder="Select Ticket Status"
+          class="w-100 mr-2"
+          for="ticketStatus"
+        ></ng-select>
+      </div>
+      <div class="col-lg-6 mb-3">
+        <label for="selectedTicketTypeId" class="form-label fw-semibold"
+          >Quotation Status
+        </label>
+        <ng-select
+          [items]="arrayListDropDownQuotationStatus"
+          bindLabel="assetStatus"
+          bindValue="assetStatusId"
+          [clearable]="false"
+          id="QuotationStatus"
+          [(ngModel)]="selectedQuotStatusIdValue"
+          placeholder="Select Quotation Status"
+          class="w-100 mr-2"
+          for="QuotationStatus"
+        ></ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      class="btn btn-light"
+      (click)="resetSerachVariableWithModal()"
+      (click)="modal.dismiss('Close click')"
+    >
+      Clear
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      (click)="modal.close('Ok', $event)"
+    >
+      Search
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #openAduitOffSet let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title">WorkFlow Audit</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="text-danger m-auto" *ngIf="currentStatus == 19">
+    <p class="fs-17 mb-0"><b>Ticket has been canceled</b></p>
+  </div>
+  <div class="offcanvas-body pt-0">
+    <app-audit-chart [Data]="maintenanceWorkflowAuditList"></app-audit-chart>
+    <div class="text-end">
+      <button
+        type="button"
+        class="btn btn-outline-danger"
+        (click)="offcanvas.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>

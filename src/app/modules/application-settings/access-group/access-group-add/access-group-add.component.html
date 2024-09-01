@@ -1,0 +1,48 @@
+<app-breadcrumbs [title]="label" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="row">
+    <div class="col-lg-12">
+        <form [formGroup]="addAccessGroupForm" (ngSubmit)="submitAccessGroupAddHandler()">
+            <div class="card" id="orderList">
+                <div class="card-header">
+                    <div class="row align-items-center gy-3">
+                        <div class="col-6">
+                            <h5 class="card-title">Access Group Add</h5>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="card-body pt-2">
+                    <div class="row">
+                        <div class="form-group col-md-4 mt-2 mb-2">
+                            <label for="roleId" class="form-label">Role<span>*</span></label>
+                            <ng-select [items]="roleList" bindLabel="name" bindValue="id" placeholder="Select Role" formControlName="roleId" [class.is-invalid]="roleId.invalid && roleId.touched" [class.is-valid]="roleId.valid && roleId.touched" class="custom">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 mt-2 mb-2">
+                            <label for="name" class="form-label">Access Group Name
+                                <span>*</span></label>
+                            <input type="text" class="form-control" id="name" formControlName="name" placeholder=" Access Group Name" [class.is-invalid]="name.invalid && name.touched" [class.is-valid]="name.valid && name.touched">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 mt-2 mb-2">
+                            <label for="remark" class="form-label"> Remark</label>
+                            <textarea name="" id="" cols="30" rows="10" class="form-control" formControlName="remark" placeholder="Remark " [class.is-invalid]="remark.invalid && remark.touched" [class.is-valid]="remark.valid && remark.touched"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary me-2" [disabled]="addAccessGroupForm.invalid">
+                        Update
+                    </button>
+                    <button class="btn btn btn-outline-primary" type="button" (click)="goBack()">
+                        Back
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

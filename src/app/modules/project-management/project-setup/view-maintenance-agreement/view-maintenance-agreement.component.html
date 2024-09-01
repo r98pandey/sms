@@ -1,0 +1,249 @@
+
+<div class="row me-0 ms-0">
+  <div class="col-lg-12">
+    <div class="card mb-1">
+      <div class="card-body pb-0">
+        <div class="row mb-3">
+          <div class="col-md">
+            <div class="row align-items-center">
+              <div class="col-md">
+                <div>
+                  <div class="d-flex justify-content-between">
+                    <h5 class="fw-bold">
+                      {{ maintenanceAgreement?.title }}
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      aria-label="Close"
+                      (click)="close('Cross click')"
+                    ></button>
+                  </div>
+                  <div class="hstack gap-3 flex-wrap">
+                    <div>
+                      <b>Number</b><br />
+                      #{{ maintenanceAgreement?.maintenanceNo }}
+                    </div>
+
+                    <div class="vr"></div>
+                    <div>
+                      <b>Start Date</b><br />
+                      {{ maintenanceAgreement?.startDate }}
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <b>End Date</b><br />
+                      {{ maintenanceAgreement?.endDate }}
+                    </div>
+
+                    <div class="vr"></div>
+                    <div>
+                      <b>Type</b><br />
+                      {{ maintenanceAgreement?.maintenanceType }}
+                    </div>
+                    <div class="vr"></div>
+                    <!-- <div>
+                        <i class="ri-honour-line align-bottom me-1"></i
+                        ><b>Task No.</b><br /><span class="text-primary">
+                          #{{ maintenanceAgreement?.taskNo }}</span
+                        >
+                      </div>
+                      <div class="vr"></div> -->
+
+                    <div *ngIf="maintenanceAgreement?.maintenanceStatusId">
+                      <i class="ri-stack-overflow-line align-bottom me-1"></i
+                      ><b>Status</b><br /><span
+                        class="fs-14"
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            maintenanceAgreement?.maintenanceStatusId
+                          )
+                        "
+                        >{{ maintenanceAgreement?.maintenanceStatusName }}</span
+                      >
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <b>Created Date</b><br />
+                      {{ maintenanceAgreement?.createdDate }}
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <b>Created Name</b><br />
+                      {{ maintenanceAgreement?.createdBy }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 ">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-12 mb-2">
+            <div class="text-muted">
+              <h6 class="mb-1 fw-semibold text-uppercase">Description</h6>
+              <ngx-simplebar style="height: 10%" class="">
+                <div [innerHTML]="maintenanceAgreement?.description"></div>
+              </ngx-simplebar>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card"  *ngIf="maintenanceAgreement?.verifiedById">
+      <div
+        class="card-header align-items-center d-flex border-bottom-dashed p-2"
+      >
+        <h5 class="card-title mb-0 flex-grow-1 fs-14">Verified by</h5>
+      </div>
+
+
+      <div class="card-body text-muted p-2">
+        <p class="fs-13 text-dark mb-0">
+          <b>
+            <i class="ri-user-3-line align-bottom"></i>
+            {{ maintenanceAgreement?.verifiedBy  }}
+          </b>
+        </p>
+        <p class="fs-13 text-dark mb-0">
+          <i class="ri-outlet-2-line align-bottom"></i>
+          {{ maintenanceAgreement?.verifiedDesig  }}
+        </p>
+        <p class="fs-13 text-muted mb-0">
+          <i class="ri-calendar-2-line align-bottom"></i>
+          {{
+            maintenanceAgreement?.verifiedDateTime }}
+        </p>
+
+        <p class="fs-12 text-muted">
+          <i class="ri-edit-2-linealign-bottom"></i>
+          {{
+            maintenanceAgreement?.verifiedRemark 
+          }}
+        </p>
+      </div>
+    </div>
+    <div class="card"  *ngIf="maintenanceAgreement?.acknowledgeById">
+      <div
+        class="card-header align-items-center d-flex border-bottom-dashed p-2"
+      >
+        <h5 class="card-title mb-0 flex-grow-1 fs-14">
+          Acknowledge By 
+        </h5>
+      </div>
+
+      <div class="card-body text-muted p-2">
+        <p class="fs-13 text-dark mb-0">
+          <b>
+            <i class="ri-user-3-line align-bottom"></i>
+            {{ maintenanceAgreement?.acknowledgeBy || "-" }}
+          </b>
+        </p>
+        <p class="fs-13 text-dark mb-0">
+          <i class="ri-outlet-2-line align-bottom"></i>
+          {{ maintenanceAgreement?.acknowledgeDesig || "- " }}
+        </p>
+
+        <p class="fs-13 text-muted mb-0">
+          <i class="ri-calendar-2-line align-bottom"></i>
+          {{
+            maintenanceAgreement?.acknowledgeDateTime ||
+            
+                      "-"
+          }}
+        </p>
+
+        <p class="fs-12 text-muted">
+          <i class="ri-edit-2-linealign-bottom"></i>
+          {{
+            maintenanceAgreement?.acknowledgeRemark || '-'           }}
+        </p>
+      </div>
+    
+    </div>
+    <div class="card"  *ngIf="maintenanceAgreement?.approvedById">
+      <div
+        class="card-header align-items-center d-flex border-bottom-dashed p-2"
+      >
+        <h5 class="card-title mb-0 flex-grow-1 fs-14">Approved By</h5>
+      </div>
+
+      <div class="card-body text-muted p-2">
+        <p class="fs-13 text-dark mb-0">
+          <b>
+            <i class="ri-user-3-line align-bottom"></i>
+            {{ maintenanceAgreement?.approvedBy  }}
+          </b>
+        </p>
+        <p class="fs-13 text-dark mb-0">
+          <i class="ri-outlet-2-line align-bottom"></i>
+          {{ maintenanceAgreement?.approvedDesig  }}
+        </p>
+        <p class="fs-13 text-muted mb-0">
+          <i class="ri-calendar-2-line align-bottom"></i>
+          {{
+            maintenanceAgreement?.approvedDateTime 
+          }}
+        </p>
+
+        <p class="fs-12 text-muted">
+          <i class="ri-edit-2-linealign-bottom"></i>
+          {{
+            maintenanceAgreement?.approvedRemark 
+          }}
+        </p>
+      </div>
+    </div>
+    
+  </div>
+
+  <div class="col-lg-8 stretch-card">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <ul
+            ngbNav
+            #customNav="ngbNav"
+            [(activeId)]="activeTaskTab"
+            class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0"
+            role="tablist"
+          >
+            <li [ngbNavItem]="1" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Document
+              </a>
+              <ng-template ngbNavContent>
+                
+                <app-attmachment-agreement
+                (completeProcess)="getUpdateResults()"
+                [maintenanceStatusId]="maintenanceAgreement?.maintenanceStatusId"
+                [maintenanceStatusName]="maintenanceAgreement?.maintenanceStatusName"
+                [dDetail]="dDetail"
+                [projectId]="ProjectId"
+                [maintenanceId]="MaintenanceId"
+                  [projectAttachment]="agreementDocList"
+                ></app-attmachment-agreement>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-body p-2">
+        <div class="row me-0 ms-0">
+          <div class="col-lg-12 pe-0 ps-0">
+            <div class="tab-content">
+              <div [ngbNavOutlet]="customNav"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,524 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body pb-0">
+        <div class="row mb-3">
+          <div class="col-md">
+            <div class="row align-items-center">
+              <div class="col-md">
+                <div>
+                  <div class="d-flex justify-content-between">
+                    <h5 class="fw-bold">
+                      {{ storeProjectScheduleObject?.projectScheduleName }}
+                    </h5>
+                    <h5 class="text-primary fw-bold">
+                      #{{ storeProjectScheduleObject?.scheduleNo }}
+
+                      <i
+                        class="ri-refresh-line align-bottom me-2 ms-3 cursor"
+                        style="color: black"
+                        (click)="apiCall()"
+                      ></i>
+                    </h5>
+                  </div>
+                  <div class="hstack  gap-3_new  flex-wrap">
+                    <div>
+                      <i class="ri-building-line align-bottom me-1"></i
+                      ><b>Company</b><br />
+                      {{ storeProjectScheduleObject?.companyName }}
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <i class="ri-building-2-line align-bottom me-1"></i
+                      ><b>Client</b><br />
+                      {{ storeProjectScheduleObject?.clientName }}
+                    </div>
+
+                    <div class="vr"></div>
+                    <div>
+                      <i class="ri-community-line align-bottom me-1"></i
+                      ><b>Project</b><br />
+                      {{ storeProjectScheduleObject?.projectName }}
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <i
+                        class="ri-calendar-todo-line align-bottom me-1"
+                        ngbTooltip="Planned Completion Date"
+                      ></i
+                      ><b>Planned Completion Date</b><br />
+                      {{ storeProjectScheduleObject?.plannedCompletionDate }}
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <i
+                        class="ri-user-line align-bottom me-1"
+                        ngbTooltip="Created By"
+                      ></i
+                      ><b>Created By </b><br />
+                      {{ storeProjectScheduleObject?.createdBy }}
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <i
+                        class="ri-calendar-todo-line align-bottom me-1"
+                        ngbTooltip="Planned Completion Date"
+                      ></i
+                      ><b>Planned Completion Date</b><br />
+                      {{ storeProjectScheduleObject?.plannedCompletionDate }}
+                    </div>
+                    <div
+                      class="vr"
+                      *ngIf="
+                        storeProjectScheduleObject?.projectScheduleStatusId
+                      "
+                    ></div>
+                    <div
+                      *ngIf="
+                        storeProjectScheduleObject?.projectScheduleStatusId
+                      "
+                    >
+                      <i class="ri-stack-overflow-line align-bottom me-1"></i
+                      ><b>Status</b><br /><span
+                        class="fs-14"
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            storeProjectScheduleObject?.projectScheduleStatusId
+                          )
+                        "
+                        >{{
+                          storeProjectScheduleObject?.projectScheduleStatusName
+                        }}</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <div
+              class="row mt-2 d-flex align-items-center justify-content-sm-end"
+            >
+              <div class="col-lg">
+                <h5 class="card-title mb-2">Main-Task List</h5>
+              </div>
+              <div class="col-lg mb-2">
+                <ng-select
+                  [items]="projectManagementStatusList"
+                  [clearable]="true"
+                  bindLabel="assetStatus"
+                  bindValue="assetStatusId"
+                  [(ngModel)]="selectedDropDownTaskStatusIdValue"
+                  (change)="onDropdownTaskStatusValueChange($event)"
+                  id="Status"
+                  placeholder="Select Status"
+                  class="w-100 mr-2"
+                  for="Status"
+                ></ng-select>
+              </div>
+              <div class="col-lg mb-2">
+                <div class="search-box">
+                  <input
+                    type="search"
+                    name="searchTerm"
+                    class="form-control"
+                    placeholder="Search Main-Task "
+                    #inputerProjectScheduleeName
+                    [(ngModel)]="projectScheduleeName"
+                  />
+                  <i class="ri-search-line search-icon"></i>
+                </div>
+              </div>
+              <div class="col-lg-auto mb-2 text-end">
+                <button
+                  type="button"
+                  class="btn btn-danger me-2"
+                  (click)="clearData()"
+                >
+                  Clear
+                </button>
+                <ng-container
+                  *ngIf="
+                    currentUserRole == 'System Administrator' ||
+                    currentUserRole == 'Super Admin' ||
+                    storeProjectScheduleObject?.createdById == this.currentUserId
+                  "
+                >
+                  <button
+                    *ngIf="
+                      ![25, 28, 72, 61, 106].includes(
+                        storeProjectScheduleObject?.projectScheduleStatusId
+                      )
+                    "
+                    ngbTooltip="By clicking this, you can add the task."
+                    type="button"
+                    class="btn btn-success"
+                    (click)="createTask()"
+                  >
+                    <i class="ri-add-line align-middle me-1"></i> Create
+                    Main-Task
+                  </button>
+
+                  <button
+                    *ngIf="
+                      [25, 28, 72, 61, 106].includes(
+                        storeProjectScheduleObject?.projectScheduleStatusId
+                      )
+                    "
+                    ngbTooltip="By clicking this, you can add the task."
+                    type="button"
+                    class="btn btn-success"
+                    (click)="
+                      openModalCantAddTask(
+                        storeProjectScheduleObject?.projectScheduleStatusName
+                      )
+                    "
+                  >
+                    <i class="ri-add-line align-middle me-1"></i> Create
+                    Main-Task
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <ng-container *ngIf="projectScheduleListTask.length != 0">
+              <div class="table-responsive table-card mb-0">
+                <table class="table">
+                  <thead>
+                    <tr class="bg-light text-muted text-uppercase">
+                      <th>Main-Task</th>
+                      <th>Owner Name</th>
+                      <th>Planed Date</th>
+                      <th>Sub Task</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let data of projectScheduleListTask;
+                        index as index
+                      "
+                    >
+                      <td class="align-top">
+                        <a
+                          href="javascript:void(0)"
+                          (click)="
+                            openViewHandleTask(
+                              data.projectTaskId,
+                              storeProjectScheduleObject
+                            )
+                          "
+                          class="fw-medium text-reset"
+                        >
+                          <p class="mb-0" ngbTooltip="{{ data.taskTitle }}">
+                            {{ showinString(data.taskTitle) }}
+                          </p>
+                          <p class="mb-0 text-primary">#{{ data.taskNo }}</p></a
+                        >
+                      </td>
+
+                      <td class="title align-top">
+                        <div class="d-flex align-items-center">
+                          <div
+                            class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0"
+                          >
+                            <img
+                              [src]="imgUrl + data.profileImageUrl"
+                              class="rounded-circle avatar-xs"
+                              alt=""
+                            />
+                          </div>
+                          <div class="flex-grow-1 overflow-hidden">
+                            <h6 class="text-truncate mb-0 fs-14">
+                              <a class="text-reset username">{{
+                                data.projectOwnerName
+                              }}</a>
+                            </h6>
+                            <p
+                              class="text-truncate text-muted fs-13 mb-0 userStatus"
+                            >
+                              <small>{{ data.projectOwnerDesig }}</small>
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="title align-top">
+                        <p class="mb-0 fs-12">
+                          <b> Start</b>: {{ data.startDate || "-" }}
+                        </p>
+
+                        <p class="mb-0 fs-12">
+                          <b>End</b> &nbsp;: {{ data.endDate || "-" }}
+                        </p>
+                      </td>
+                      <td class="title align-top">
+                        <ng-container *ngIf="data.totalSubTask == 0">
+                          <span class="ms-3 fs-14">--</span>
+                        </ng-container>
+                        <ng-container *ngIf="data.totalSubTask != 0">
+                          <div
+                            class="progress-circle"
+                            [ngStyle]="
+                              getProgressStyle(
+                                data.totalSubTask,
+                                data.totalSubTaskCompleted
+                              )
+                            "
+                          >
+                            <div class="progress-circle-inner">
+                              <div class="progress-circle-inner-content">
+                                <p class="progress-value mb-0">
+                                  {{
+                                    calculateProgress(
+                                      data.totalSubTask,
+                                      data.totalSubTaskCompleted
+                                    )
+                                  }}%
+                                </p>
+                                <p class="progress-text mb-0">
+                                  {{ data.totalSubTaskCompleted }}/{{
+                                    data.totalSubTask
+                                  }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </td>
+
+                      <td class="status align-top">
+                        <span
+                          [class]="
+                            returnStatusBadgeClassesStatus(
+                              data.projectTaskStatusId
+                            )
+                          "
+                          >{{ data.projectTaskStatusName }}</span
+                        >
+                      </td>
+
+                      <td class="align-top">
+                        <span>
+                          <div class="dropdown" ngbDropdown>
+                            <button
+                              class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                              type="button"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                              ngbDropdownToggle
+                            >
+                              <i class="ri-more-fill"></i>
+                            </button>
+                            <ul
+                              class="dropdown-menu dropdown-menu-end"
+                              ngbDropdownMenu
+                            >
+                              <li>
+                                <a
+                                  class="dropdown-item cursor-pointer"
+                                  (click)="
+                                    openViewHandleTask(
+                                      data.projectTaskId,
+                                      storeProjectScheduleObject
+                                    )
+                                  "
+                                  ><i
+                                    class="ri-eye-fill align-bottom me-2 text-muted"
+                                  ></i>
+                                  {{
+                                    data.projectTaskStatusId != 25
+                                      ? "View/Update"
+                                      : "View"
+                                  }}
+                                  Main-Task
+                                </a>
+                              </li>
+                              <ng-container
+                                *ngIf="
+                                  checkDeleteButtonVisible(
+                                    data.createdById,
+                                    data.projectTaskStatusId
+                                  )
+                                "
+                              >
+                                <li *ngIf="data.projectTaskStatusId != 25">
+                                  <a
+                                    class="dropdown-item cursor-pointer"
+                                    (click)="
+                                      openModalDeleteProjectSchedule(data)
+                                    "
+                                    ><i
+                                      class="ri-delete-bin-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    Remove</a
+                                  >
+                                </li>
+                              </ng-container>
+                              <!-- <li *ngIf="data.projectTaskStatusId!=25">
+                                <a
+                                  class="dropdown-item cursor-pointer"
+                                  (click)="openStatusModal(data)"
+                                  ><i
+                                    class="ri-edit-2-line align-bottom me-2 text-muted"
+                                  ></i>Update Status
+                                </a
+                                >
+                              </li> -->
+
+                              <li
+                                *ngIf="
+                                  data.totalSubTask != 0 &&
+                                  ![25, 28, 72, 61, 106].includes(
+                                    data.projectTaskStatusId
+                                  )
+                                "
+                              >
+                                <hr class="dropdown-divider" />
+                              </li>
+                              <ng-container
+                                *ngIf="
+                                  currentUserRole == 'System Administrator' ||
+                                  currentUserRole == 'Super Admin' ||
+                                  storeProjectScheduleObject?.createdById ==
+                                    this.currentUserId ||
+                                  storeProjectScheduleObject?.projectOwnerId ==
+                                    this.currentUserId
+                                "
+                              >
+                                <li
+                                  *ngIf="
+                                    ![25, 28, 72, 61, 106].includes(
+                                      data.projectTaskStatusId
+                                    )
+                                  "
+                                >
+                                  <a
+                                    class="dropdown-item cursor-pointer"
+                                    (click)="createSubTask(data)"
+                                    ><i
+                                      class="ri-add-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    Add Sub Task</a
+                                  >
+                                </li>
+                              </ng-container>
+
+                              <li *ngIf="data.totalSubTask != 0">
+                                <a
+                                  class="dropdown-item cursor-pointer"
+                                  (click)="
+                                    openEventFullDetailsSubTaskModalPopup(
+                                      data.projectTaskId,
+                                      0
+                                    )
+                                  "
+                                  ><i
+                                    class="ri-eye-fill align-bottom me-2 text-muted"
+                                  ></i>
+                                  View Sub Task</a
+                                >
+                              </li>
+                            </ul>
+                          </div>
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div
+                class="row justify-content-md-between align-items-md-center gy-2"
+              >
+                <div class="col col-sm-12 col col-md-6">
+                  <div
+                    class="dataTables_info mb-2"
+                    id="tickets-table_info"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    Showing {{ from }} to {{ to }} of
+                    {{ totalRecordsFromApi }} entries
+                  </div>
+                </div>
+
+                <div class="col col-sm-12 col col-md-6">
+                  <div class="text-sm-right float-end listjs-pagination">
+                    <ngb-pagination
+                      [collectionSize]="totalRecordsFromApi"
+                      [(page)]="page"
+                      [pageSize]="pageSize"
+                      [maxSize]="2"
+                      [rotate]="true"
+                      (pageChange)="OnChangesPage($event)"
+                      *ngIf="totalRecordsFromApi > pageSize"
+                    >
+                      <ng-template
+                        ngbPaginationPrevious
+                        let-page
+                        let-pages="pages"
+                      >
+                        <i class="ci-arrow-left me-2"></i>
+                        Prev
+                      </ng-template>
+                      <ng-template ngbPaginationNext>
+                        Next
+                        <i class="ci-arrow-right ms-2"></i>
+                      </ng-template>
+                    </ngb-pagination>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="projectScheduleListTask.length == 0">
+              <div class="py-4 text-center">
+                <div>
+                  <lord-icon
+                    src="https://cdn.lordicon.com/msoeawqm.json"
+                    trigger="loop"
+                    colors="primary:#405189,secondary:#0ab39c"
+                    style="width: 72px; height: 72px"
+                  >
+                  </lord-icon>
+                </div>
+                <div class="mt-4">
+                  <h5>No Records Found</h5>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="text-end mb-3">
+  <button
+    class="btn btn-soft-primary waves-effect mx-3"
+    type="button"
+    (click)="back()"
+  >
+    Back
+  </button>
+</div>
+
+<!---------Add Task Modal-------->

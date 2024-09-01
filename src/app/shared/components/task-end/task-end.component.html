@@ -1,0 +1,567 @@
+<ngx-simplebar style="height: 675px" class="px-3 mx-n3 mb-2">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h6 class="card-title mb-0">TASK START-END</h6>
+    </div>
+    <ng-container
+      *ngIf="checkStartStarus(this.masterScheduleList?.scheduleStatusId)"
+    >
+      <div *ngIf="shownStartbutton">
+        <button
+          *ngIf="expectedComplitionDateTime"
+          class="btn btn-success btn-sm"
+          (click)="
+            getcreadingTaskConfirmation(workorderId, modalUpdateStartStatus)
+          "
+        >
+          <i class="ri-add-fill align-bottom me-1"></i> Start Task
+        </button>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="row" *ngIf="ticketWOStartEndTask.length != 0">
+    <div
+      class="col-md-4 stretch-card"
+      *ngFor="let task of ticketWOStartEndTask; let i = index"
+    >
+      <div class="card border border-dashed">
+        <div
+          class="card-header d-flex justify-content-between align-items-center p-2"
+        >
+          <h6 class="mb-0">Task-{{ ticketWOStartEndTask.length - i }}</h6>
+          <div>
+            <span
+              class="fs-12"
+              [class]="
+                commonFunctionService.returnStatusBadgeClasses(task.soStatusId)
+              "
+              >{{ task.soStatusName || "-" }}</span
+            >
+          </div>
+          <div
+            class="d-flex justify-content-end align-items-center"
+            *ngIf="task.soStatusId != 25"
+          >
+            <span class="me-2">
+              <span
+                class="badge bg-primary fs-12"
+                *ngIf="
+                  task?.supportType == 'On-Site' ||
+                  task?.supportType == 'On Site'
+                "
+                >{{ task?.supportType || "-" }}</span
+              >
+              <span
+                class="badge bg-warning fs-12"
+                *ngIf="task?.supportType == 'Remote'"
+                >{{ task?.supportType || "-" }}</span
+              >
+              <span
+                class="badge bg-info fs-12"
+                *ngIf="task?.supportType == 'Phone Call'"
+                >{{ task?.supportType || "-" }}</span
+              >
+            </span>
+            <ng-container *ngIf="dontShowTheEndTaskButtonForClient">
+              <ng-container
+                *ngIf="shownEndbutton && currentTechAttendacenId == 0"
+              >
+                <ng-container
+                  *ngIf="
+                    checkStartStarus(this.masterScheduleList?.scheduleStatusId)
+                  "
+                >
+                  <i
+                    class="bx bx-task text-danger fs-17 cursor"
+                    *ngIf="!task.endDateTime"
+                    ngbTooltip="End Task"
+                    (click)="getEndTaskConfirmation(task, modalUpdateEndStatus)"
+                  >
+                  </i> </ng-container
+              ></ng-container>
+            </ng-container>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="d-flex mb-0">
+            <div class="flex-shrink-0">
+              <img
+                (click)="open(imageUrl + task.sitePicUrlStart)"
+                src="{{ imageUrl }}{{ task.sitePicUrlStart }}"
+                class="avatar-md rounded"
+                *ngIf="task.sitePicUrlStart"
+              />
+              <img
+                (click)="
+                  open('../../../../../../assets/images/placeholderimage.png')
+                "
+                src="../../../../../../assets/images/placeholderimage.png"
+                class="avatar-md rounded"
+                *ngIf="!task.sitePicUrlStart"
+              />
+            </div>
+            <div class="flex-grow-1 ms-2">
+              <h5 class="card-title fs-13 mb-0">Started By | Date & Time</h5>
+              <p class="text-muted mb-0 fs-14 d-flex justify-content-start">
+                <i class="ri-user-fill me-2"></i
+                >{{ task.startDateTimeByName || "-" }}
+              </p>
+              <p class="text-muted fs-14 d-flex justify-content-start mb-0">
+                <i class="ri-calendar-2-fill me-2"></i
+                >{{ task.startDateTime || "-" }}
+              </p>
+              <p
+                class="text-muted cursor fs-14 d-flex justify-content-start"
+                *ngIf="task.siteVideoUrlStart"
+                (click)="openModaVideeo(task.siteVideoUrlStart, VideoPlayer)"
+              >
+                <i class="ri-video-line me-2"></i>
+                <span
+                  class="text-primary cursor text-decoration-underline fs-14"
+                >
+                  Play Video</span
+                >
+              </p>
+            </div>
+          </div>
+          <hr class="mb-2 mt-2" />
+          <div class="d-flex mb-0">
+            <div class="flex-shrink-0">
+              <img
+                (click)="open(imageUrl + task.sitePicUrlEnd)"
+                src="{{ imageUrl }}{{ task.sitePicUrlEnd }}"
+                class="avatar-md rounded"
+                *ngIf="task.sitePicUrlEnd"
+              />
+              <img
+                (click)="
+                  open('../../../../../../assets/images/placeholderimage.png')
+                "
+                src="../../../../../../assets/images/placeholderimage.png"
+                class="avatar-md rounded"
+                *ngIf="!task.sitePicUrlEnd"
+              />
+            </div>
+            <div class="flex-grow-1 ms-2">
+              <h5 class="card-title fs-13 mb-0">Ended By | Date & Time</h5>
+              <p class="text-muted mb-0 fs-14 d-flex justify-content-start">
+                <i class="ri-user-fill me-2"></i
+                >{{ task.endDateTimeByName || "-" }}
+              </p>
+              <p class="text-muted fs-14 d-flex justify-content-start mb-0">
+                <i class="ri-calendar-2-fill me-2"></i
+                >{{ task.endDateTime || "-" }}
+              </p>
+
+              <p
+                class="text-muted cursor fs-14 d-flex justify-content-start"
+                *ngIf="task.siteVideoUrlEnd"
+                (click)="openModaVideeo(task.siteVideoUrlEnd, VideoPlayer)"
+              >
+                <i class="ri-video-line me-2"></i
+                ><span
+                  class="text-primary cursor text-decoration-underline fs-14"
+                >
+                  Play Video</span
+                >
+              </p>
+            </div>
+          </div>
+          <hr class="mb-2 mt-2" />
+          <h6 class="mb-0" *ngIf="task.remark">Remark</h6>
+          <p
+            class="card-text text-muted"
+            *ngIf="task.remark"
+            ngbTooltip="{{ task.remark }}"
+          >
+            {{ task.remark || "-" }}
+          </p>
+
+          <div class="text-end mb-0 d-flex justify-content-between">
+            <div class="hstack gap-2 justify-content-center">
+              <ng-container
+                *ngIf="
+                  checkStartStarus(this.masterScheduleList?.scheduleStatusId)
+                "
+              >
+                <button
+                  *ngIf="
+                    currentTechAttendacenId != 0 &&
+                    currentWoTaskId == task.woTaskId
+                  "
+                  ngbTooltip="If your task activity is done, you can stop the task by clicking this stop button."
+                  class="btn btn-danger btn-sm"
+                  (click)="startStopModal(task, 'Stop')"
+                >
+                  <i class="ri-stop-circle-line align-bottom me-1"></i>
+                  Check-Out
+                </button>
+                <button
+                  class="btn btn-success btn-sm"
+                  (click)="startStopModal(task, 'Start')"
+                  ngbTooltip="By clicking this, your task will start, and you can proceed with the further process."
+                  *ngIf="
+                    !task.endDateTime &&
+                    (shownIsCheckinButton == null || shownIsCheckinButton == true )&&
+                    currentTechAttendacenId === 0
+                  "
+                >
+                  <i class="ri-play-circle-line align-bottom me-1"></i>
+                  Check-In
+                </button>
+              </ng-container>
+            </div>
+            <a
+              href="javascript:void(0)"
+              (click)="
+                getTechnitionAttendanceListByTaskForPreventive(task?.woTaskId)
+              "
+              class="link-info link-offset-2 text-decoration-underline link-underline-opacity-25 link-underline-opacity-100-hover"
+            >
+              View Attendance</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="ticketWOStartEndTask.length == 0">
+    <div class="col-md-12">
+      <p class="text-center text-muted">No Task Created</p>
+    </div>
+  </div>
+</ngx-simplebar>
+
+<!-- Add Form -->
+<ng-template #modalUpdateEndStatus let-modal>
+  <div class="modal-header bg-info-subtle pb-3">
+    <h6 class="card-title mb-0">End Task</h6>
+    <button
+      type="button"
+      class="close mt-1"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="updateStatusFrom">
+      <div class="row">
+        <div class="col-md-8 pe-0 me-0">
+          <div class="form-group">
+            <label for="actionRemark" class="form-label"
+              >Remark<span style="color: red">*</span></label
+            >
+            <div class="input-group">
+              <textarea
+                class="form-control form-control-sm"
+                rows="5"
+                cols="6"
+                placeholder="Select Remark"
+                formControlName="actionRemark"
+                [class.is-invalid]="
+                  actionRemark.invalid && actionRemark.touched
+                "
+                [class.is-valid]="actionRemark.valid && actionRemark.touched"
+                [(ngModel)]="actionRemarkValue"
+                [maxlength]="maxChars"
+              ></textarea>
+
+              <div class="d-flex col-12">
+                <label class="nopadding clrlbl">
+                  Characters Remaining: {{ actionRemarkValue?.length }}/{{
+                    maxChars
+                  }}</label
+                >
+                <div *ngIf="actionRemark.invalid && actionRemark.touched">
+                  <small
+                    class="text-danger"
+                    *ngIf="actionRemark.errors?.['required']"
+                  >
+                    Remark is Required</small
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 text-center">
+          <br /><br />
+          <div class="text-center">
+            <div class="position-relative d-inline-block">
+              <div class="position-absolute top-100 start-100 translate-middle">
+                <label
+                  class="mb-0"
+                  placement="left"
+                  ngbTooltip="Remove Image"
+                  *ngIf="shownCrossbutton"
+                >
+                  <div class="avatar-xs">
+                    <div
+                      class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                    >
+                      <i
+                        class="ri-close-circle-fill"
+                        (click)="crossOneImage(imageOneUrl)"
+                      ></i>
+                    </div>
+                  </div>
+                </label>
+                <label
+                  for="asset_id0"
+                  class="mb-0"
+                  placement="left"
+                  ngbTooltip="Select Image"
+                  *ngIf="!shownCrossbutton"
+                >
+                  <div class="avatar-xs">
+                    <div
+                      class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                    >
+                      <i class="ri-image-fill"></i>
+                    </div>
+                  </div>
+                </label>
+                <input
+                  (change)="onSelectOneFile($event)"
+                  formControlName="imageurlend"
+                  class="form-control d-none"
+                  value=""
+                  id="asset_id0"
+                  type="file"
+                  accept="image/png, image/gif, image/jpeg"
+                />
+              </div>
+              <div class="avatar-lg">
+                <div class="avatar-title bg-light rounded">
+                  <img
+                    src="{{ imageOneUrl }}"
+                    id="product-img"
+                    class="avatar-md img-size-fixed"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-md-12">
+          <div class="form-check form-check-flat form-check-primary">
+            <label class="form-check-label">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                formControlName="checkboxRemark"
+              />
+              <i class="input-frame"></i>
+              <div >
+                <p><b>Are you sure you want to end this task? </b></p>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      ngbAutofocus
+      class="btn btn-primary mr-2 mb-2 mb-md-0"
+      [disabled]="updateStatusFrom.invalid || !checkboxRemark.value"
+      (click)="openModalUpdateStatus()"
+    >
+      Confirm
+    </button>
+    <button
+      type="button"
+      class="btn btn btn-outline-danger mr-2 mb-2 mb-md-0"
+      (click)="modal.dismiss('cancel')"
+    >
+      Cancel
+    </button>
+  </div>
+</ng-template>
+<!--/ Add Form -->
+
+<ng-template #modalUpdateStartStatus let-modal>
+  <div class="modal-header bg-info-subtle pb-3">
+    <h6 class="card-title mb-0">Task Start Confirmation</h6>
+    <button
+      type="button"
+      class="close mt-1"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="updateCreatedTaskFrom">
+      <div class="row">
+        <div class="col-md-12 mb-2">
+          <p class="text-center" style="font-size: 16px">
+            <b
+              >Are you sure you want to start a new task for the selected
+              Schedule?</b
+            >
+          </p>
+          <p class="text-muted text-justify" style="font-size: 12px">
+            By clicking "Confirm," a new task will be created and assigned to
+            you, and the Schedule status will be changed to In-Progress.
+          </p>
+          <p class="text-muted text-justify" style="font-size: 12px">
+            This indicates that you are ready to begin working on the task.
+          </p>
+          <p class="text-muted text-justify" style="font-size: 12px">
+            If you are ready to proceed and start the new task, click "Confirm."
+            If you need more time or have any concerns, click "Cancel" to return
+            to the previous screen.
+          </p>
+        </div>
+        <div class="form-group col-md-8">
+          <br />
+          <label for="supportType" class="form-label"
+            >Support Type<span style="color: red">*</span></label
+          >
+          <ng-select
+            [items]="supportTypeAarry"
+            placeholder="Support Type"
+            formControlName="supportType"
+            [clearable]="false"
+            [class.is-invalid]="supportType.invalid && supportType.touched"
+            [class.is-valid]="supportType.valid && supportType.touched"
+            class="custom"
+          ></ng-select>
+          <div *ngIf="supportType.invalid && supportType.touched">
+            <small class="text-danger" *ngIf="supportType.errors?.['required']">
+              Support Type is Required</small
+            >
+          </div>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="text-center">
+            <div class="position-relative d-inline-block">
+              <div class="position-absolute top-100 start-100 translate-middle">
+                <label
+                  class="mb-0"
+                  placement="left"
+                  ngbTooltip="Remove Image"
+                  *ngIf="shownCrossbutton"
+                >
+                  <div class="avatar-xs">
+                    <div
+                      class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                    >
+                      <i
+                        class="ri-close-circle-fill"
+                        (click)="crossTwoImage(imageTwoUrl)"
+                      ></i>
+                    </div>
+                  </div>
+                </label>
+                <label
+                  for="asset_id0"
+                  class="mb-0"
+                  placement="left"
+                  ngbTooltip="Select Image"
+                  *ngIf="!shownCrossbutton"
+                >
+                  <div class="avatar-xs">
+                    <div
+                      class="avatar-title bg-light border rounded-circle text-muted cursor-pointer"
+                    >
+                      <i class="ri-image-fill"></i>
+                    </div>
+                  </div>
+                </label>
+                <input
+                  (change)="onSelectSecondFile($event)"
+                  formControlName="imageurY"
+                  class="form-control d-none"
+                  value=""
+                  id="asset_id0"
+                  type="file"
+                  accept="image/png, image/gif, image/jpeg"
+                />
+              </div>
+              <div class="avatar-lg">
+                <div class="avatar-title bg-light rounded">
+                  <img
+                    src="{{ imageTwoUrl }}"
+                    id="product-img"
+                    class="avatar-md img-size-fixed"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      ngbAutofocus
+      class="btn btn-primary mr-2 mb-2 mb-md-0"
+      [disabled]="updateCreatedTaskFrom.invalid"
+      (click)="modal.close('Ok', $event)"
+    >
+      Confirm
+    </button>
+    <button
+      type="button"
+      class="btn btn btn-outline-danger mr-2 mb-2 mb-md-0"
+      (click)="modal.dismiss('cancel')"
+    >
+      Cancel
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #VideoPlayer role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <!-- <h5 class="modal-title" id="inviteMembersModalLabel">
+      {{ storeInfomationVideo.preventiveTypeName }}
+    </h5> -->
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div id="instructions">
+      <video
+        id="my_video_1"
+        class="video-js vjs-default-skin"
+        width="100%"
+        height="267px"
+        controls
+        preload="none"
+        data-setup='{ "aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }'
+      >
+        <source src="{{ linkVideo }}" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

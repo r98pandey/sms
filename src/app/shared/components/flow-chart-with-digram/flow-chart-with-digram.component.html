@@ -1,0 +1,16 @@
+<div class="d-flex align-items-center mt-2">
+  <ng-container *ngFor="let a of valueObject">
+    <div [class]="a.background" *ngIf="a.boxRequired" [ngbTooltip]="a.subTitle">   
+    <div class="boxNoborder">
+       {{ a.title }}  
+    </div>
+    </div> 
+    <div [class]="a.background" *ngIf="!a.boxRequired"  (click)="sendObject(a)" [ngbTooltip]="a.subTitle">   
+    <div class="arrow-box">
+      <div class="padd-left" >
+        {{ a.title }}
+      </div>
+    </div>
+    </div>
+  </ng-container>
+</div>

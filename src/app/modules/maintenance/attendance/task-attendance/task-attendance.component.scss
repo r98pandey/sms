@@ -1,0 +1,17 @@
+.clear-box{
+    position: relative;
+}
+
+.clear-box .search-icon {
+    font-size: 14px;
+    position: absolute;
+    left:94%;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: #767474;
+}
+::ng-deep.clear-box .search-icon :hover{
+    font-size: 16px!important
+}

@@ -1,0 +1,126 @@
+<div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title">Member Task Attendance List</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="modal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="offcanvas-body row">
+  <div
+    class="col-md-6 col-lg-12 mb-2"
+    *ngFor="let list of pm_ScheduleAndAssetCheckList; let i = index"
+  >
+    <div class="card mb-1 border border-dashed">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="d-flex position-relative">
+              <img
+                (click)="open(baseUrl + list?.pic_url)"
+                src="{{ baseUrl }}{{ list?.pic_url }}"
+                class="flex-shrink-0 me-1 avatar-sm rounded"
+                alt="..."
+                *ngIf="list?.pic_url"
+              />
+              <img
+                (click)="
+                  open('../../../../../assets/images/placeholderimage.png')
+                "
+                src="../../../../../../assets/images/placeholderimage.png"
+                class="flex-shrink-0 me-1 avatar-sm rounded"
+                alt="..."
+                *ngIf="!list?.pic_url"
+              />
+
+              <img
+                (click)="open(baseUrl + list?.pic_url1)"
+                src="{{ baseUrl }}{{ list?.pic_url1 }}"
+                class="flex-shrink-0 me-1 avatar-sm rounded"
+                alt="..."
+                *ngIf="list?.pic_url1"
+              />
+              <img
+                (click)="
+                  open('../../../../../assets/images/placeholderimage.png')
+                "
+                src="../../../../../../assets/images/placeholderimage.png"
+                class="flex-shrink-0 me-1 avatar-sm rounded"
+                alt="..."
+                *ngIf="!list?.pic_url1"
+              />
+
+              <img
+                (click)="open(baseUrl + list?.pic_url2)"
+                src="{{ baseUrl }}{{ list?.pic_url2 }}"
+                class="flex-shrink-0 me-1 avatar-sm rounded"
+                alt="..."
+                *ngIf="list?.pic_url2"
+              />
+              <img
+                (click)="
+                  open('../../../../../assets/images/placeholderimage.png')
+                "
+                src="../../../../../../assets/images/placeholderimage.png"
+                class="flex-shrink-0 me-1 avatar-sm rounded"
+                alt="..."
+                *ngIf="!list?.pic_url2"
+              />
+
+              <div class="ms-lg-3 my-3 my-lg-0">
+                <h5 class="fs-16 mb-0">Status</h5>
+                <p class="text-muted mb-0">
+                  <span
+                    class="fs-12"
+                    [class]="
+                      returnStatusBadgeClassesStatus(
+                        list.scheduleItemCheckStatusId
+                      )
+                    "
+                    >{{ list.scheduleItemCheckStatusName }}</span
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="d-flex position-relative">
+              <div class="ms-lg-3 my-lg-0">
+                <h5 class="fs-16 mb-0">Preventive Category</h5>
+                <div>
+                  <span class="badge bg-primary-subtle text-primary">{{
+                    list.preventiveCategoryName || "NA"
+                  }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="d-flex position-relative">
+              <div class="ms-lg-3 my-lg-0">
+                <h5 class="fs-16 mb-0">Preventive Type</h5>
+                <div>
+                  <span class="badge bg-success-subtle text-success">{{
+                    list.preventiveTypeName || "NA"
+                  }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 mt-2" *ngIf="list.note">
+            <div class="d-flex position-relative">
+              <div class="ms-lg-3 my-3 my-lg-0">
+                <h5 class="fs-16 mb-0">Remark</h5>
+                <div>
+                  <p class="text-muted mb-0">{{ list.note }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

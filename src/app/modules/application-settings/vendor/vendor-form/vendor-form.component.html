@@ -1,0 +1,184 @@
+<app-breadcrumbs [title]="label" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">{{ editMode.isEdit ? "Edit" : "Add" }} Vendor</h4>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="vendorForm">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="companyId" class="form-label">Company <span class="text-danger">*</span></label>
+                    <ng-select [items]="companyData" bindLabel="companyName" bindValue="companyId"
+                        [clearable]="false" id="companyId" formControlName="companyId"
+                        placeholder="Select Company" class="w-100 mr-2 my-1"></ng-select>
+
+                    <div *ngIf="form['companyId']?.invalid && form['companyId']?.touched">
+                        <small class="text-danger" *ngIf="form['companyId']?.errors['required']">
+                            Company is Required</small>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="Project-Name" class="form-label">Vendor Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control my-1" [placeholder]="'Vendor Name'"
+                        formControlName="vendorName" id="vendor-name" name="vendor-name"
+                        [ngClass]="{ 'is-invalid':  form['vendorName'].invalid && form['vendorName'].touched }">
+
+                    <div *ngIf="form['vendorName'].invalid && form['vendorName'].touched">
+                        <small class="text-danger" *ngIf="form['vendorName'].errors['required']">
+                            Vendor Name is Required</small>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="officeFaxNo" class="form-label">Office Fax No</label>
+                    <input type="text" class="form-control my-1" placeholder="Office Fax No"
+                        formControlName="officeFaxNo" id="officeFaxNo" name="officeFaxNo">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mt-3">
+                    <label for="address1" class="form-label">Address <span class="text-danger">*</span></label>
+                    <textarea class="form-control height-textarea" formControlName="address1" rows="5" placeholder="Address">
+                    </textarea>
+                    <div *ngIf="form['address1'].invalid && form['address1'].touched">
+                        <small class="text-danger" *ngIf="form['address1'].errors['required']">
+                            Address is Required</small>
+                    </div>
+                </div>
+
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col-md-6 mt-3">
+                            <label for="address2" class="form-label">City <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control my-1" placeholder="City" formControlName="address2"
+                                id="address2" name="City"
+                                [ngClass]="{ 'is-invalid':  form['address2'].invalid && form['address2'].touched }">
+
+                            <div *ngIf="form['address2'].invalid && form['address2'].touched">
+                                <small class="text-danger" *ngIf="form['address2'].errors['required']">
+                                    City is Required</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+                            <label for="Address3" class="form-label">State <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control my-1" placeholder="State" formControlName="address3"
+                                id="address3" name="address3"
+                                [ngClass]="{ 'is-invalid':  form['address3'].invalid && form['address3'].touched }">
+
+                            <div *ngIf="form['address3'].invalid && form['address3'].touched">
+                                <small class="text-danger" *ngIf="form['address3'].errors['required']">
+                                    State is Required</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+                            <label for="postalCode" class="form-label">Postal Code <span
+                                    class="text-danger">*</span></label>
+                            <input type="number" class="form-control my-1" placeholder="Postal Code"
+                                formControlName="postalCode" id="postalCode" name="postalCode"
+                                [ngClass]="{ 'is-invalid':  form['postalCode'].invalid && form['postalCode'].touched }">
+
+                            <div *ngIf="form['postalCode'].invalid && form['postalCode'].touched">
+                                <small class="text-danger" *ngIf="form['postalCode'].errors['required']">
+                                    Postal Code is Required</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+                            <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
+                            <ng-select [items]="countryData" bindLabel="countryName" bindValue="countryName"
+                                [clearable]="false" id="companyName" formControlName="country"
+                                placeholder="Select country" class="w-100 mr-2 my-1"></ng-select>
+
+                            <div *ngIf="form['country'].invalid && form['country'].touched">
+                                <small class="text-danger" *ngIf="form['country'].errors['required']">
+                                    Country is Required</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <label for="remark" class="form-label">Remark</label>
+                    <textarea class="form-control my-1 height-textarea-2" placeholder="Remark" rows="3" formControlName="remark"
+                       id="remark" name="remark"
+                        
+                        [maxlength]="maxCharsDecision"
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ form['remark']?.value?.length }}/{{
+                maxCharsDecision
+              }}</label
+            >
+                </div>
+
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="Project-Name" class="form-label">Contact Person Name 
+                              </label>
+                            <input type="text" class="form-control my-1" placeholder="Contact Person Name"
+                                formControlName="contactPersonName" id="vendor-name" name="contact-person-name"
+                                >
+        
+                            <!-- <div *ngIf="form['contactPersonName'].invalid && form['contactPersonName'].touched">
+                                <small class="text-danger" *ngIf="form['contactPersonName'].errors['required']">
+                                    Contact Person Name is Required</small>
+                            </div> -->
+                        </div>
+        
+                        <div class="col-md-6">
+                            <label for="Project-Name" class="form-label">Contact Person Mobile No </label>
+                            <input type="number" class="form-control my-1" placeholder="Contact Person Mobile No"
+                                formControlName="contactMobileNo" id="contact-person-mobile-no" name="contact-person-name"
+                               >
+        
+                            <!-- <div *ngIf="form['contactMobileNo'].invalid && form['contactMobileNo'].touched">
+                                <small class="text-danger" *ngIf="form['contactMobileNo'].errors['required']">
+                                    Contact Person Mobile No is Required</small>
+                            </div> -->
+                        </div>
+        
+                        <div class="col-md-6 mt-3">
+                            <label for="Project-Name" class="form-label">Contact Person Email </label>
+                            <input type="email" class="form-control my-1" placeholder="Contact Person Email"
+                                formControlName="contactEmailId" id="contact-person-email" name="contact-person-email"
+                               >
+        
+                            <!-- <div *ngIf="form['contactEmailId'].invalid && form['contactEmailId'].touched">
+                                <small class="text-danger" *ngIf="form['contactEmailId'].errors['required']">
+                                    Contact Person Email is Required</small>
+                            </div> -->
+                        </div>
+                        
+                        <div class="col-md-6 mt-3">
+                            <label for="Project-Name" class="form-label">Office Phone No </label>
+                            <input type="number" class="form-control my-1" placeholder="Office Phone No"
+                                formControlName="officePhoneNo" id="officePhoneNo" name="officePhoneNo"
+                                >
+        
+                            <!-- <div *ngIf="form['officePhoneNo'].invalid && form['officePhoneNo'].touched">
+                                <small class="text-danger" *ngIf="form['officePhoneNo'].errors['required']">
+                                    Office Phone No is Required</small>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+        <div class="pt-4 mt-4 mb-0">
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-soft-primary me-2"  (click)="goBack()">Back</button>
+                <button class="btn btn-success" [disabled]="vendorForm.invalid" (click)="openModalCreateVendor()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

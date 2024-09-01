@@ -1,0 +1,369 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm-3 col-xxl-3">
+            <h5 class="card-title mb-0">Latest Update Ticket List</h5>
+          </div>
+          <div
+            class="col-sm-9 col-xxl-9 d-flex gap-2 flex-wrap justify-content-end"
+          >
+            <!-- <div class=""> -->
+            <div class="search-box w-50">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                [(ngModel)]="typeTicketNameValue"
+                placeholder="Search for ticket name"
+                #inputerTicketNumber
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+            <!--  *ngIf="returnValueMenu?.add" -->
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row g-3">
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onDropdownCompanyValueChange($event)"
+              [clearable]="true"
+              id="companyName"
+              [(ngModel)]="selectedDropDownCompanyIdValue"
+              placeholder="Select Company"
+              class="w-100 mr-2"
+              for="companyName"
+              [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownClientList"
+              bindLabel="clientName"
+              [disabled]="!selectedDropDownCompanyIdValue"
+              bindValue="clientId"
+              (change)="onDropdownClientValueChange($event)"
+              [clearable]="true"
+              id="clientName"
+              [(ngModel)]="selectedDropDownClientIdValue"
+              placeholder="Select Client"
+              class="w-100 mr-2"
+              for="clientName"
+              [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownProjectOrDeparmentList"
+              bindLabel="departmentName"
+              [disabled]="!selectedDropDownCompanyIdValue"
+              bindValue="departmentId"
+              (change)="onDropdownDepartmentValueChange($event)"
+              [clearable]="true"
+              id="departmentName"
+              [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+              placeholder="Select Project"
+              class="w-100 mr-2"
+              for="departmentName"
+              [readonly]="projectDepartmentFieldDisiabled"
+            ></ng-select>
+          </div>
+          <div class="col-lg-auto text-end">
+            <div class="d-flex justify-content-end">
+              <button
+                type="button"
+                class="btn btn-danger ms-1"
+                (click)="resetSerachVariable()"
+                ngbTooltip="Remove All Search"
+              >
+                <i class="ri-refresh-fill me-1 align-bottom"></i>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <ng-container *ngIf="ticketList.length == 0">
+                  <div class="col-md-12 mb-2">
+                    <div class="py-4 text-center">
+                      <div>
+                        <lord-icon
+                          src="https://cdn.lordicon.com/msoeawqm.json"
+                          trigger="loop"
+                          colors="primary:#405189,secondary:#0ab39c"
+                          style="width: 72px; height: 72px"
+                        >
+                        </lord-icon>
+                      </div>
+                      <div class="mt-4">
+                        <h5>
+                          No Records Found    </h5>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="ticketList.length != 0">
+                  <div class="row">
+                    <div
+                      class="col-md-4 col-sm-4 stretch-card"
+                      *ngFor="let data of ticketList; index as index"
+                    >
+                      <div class="card">
+                        <div class="card-header " [class]="data.woTaskStatusId==35?'bg-primary-subtle':'bg-success-subtle'">
+                          <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                              <h6 class="mb-0 fs-15 d-block text-truncate" >
+                                <a (click)="viewHandler(data.ticketId)"
+                                  [title]="data.ticketTitle"
+                                  href="javascript:void(0)"
+                                  [class]="data.woTaskStatusId==35?'text-primary':'text-success'"
+                                  >{{ showinString(data.ticketTitle) }}</a
+                                >
+                              </h6>
+                            </div>
+                            <div class="flex-shrink-0">
+                              <div
+                                class="d-flex gap-1 align-items-center my-n2"
+                              >
+                                <div class="dropdown" ngbDropdown>
+                                  <button
+                                    class="btn btn-link text-muted p-1 mt-n2 py-0 text-decoration-none fs-15 arrow-none"
+                                    data-bs-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="true"
+                                    ngbDropdownToggle
+                                  >
+                                    <i-feather
+                                      name="more-horizontal"
+                                      class="icon-sm"
+                                    ></i-feather>
+                                  </button>
+
+                                  <div
+                                    class="dropdown-menu dropdown-menu-end"
+                                    ngbDropdownMenu
+                                  >
+                                    <a (click)="viewHandler(data.ticketId)"
+                                      class="dropdown-item"
+                                      href="javascript:void(0)"
+                                      ><i
+                                        class="ri-eye-fill align-bottom me-2 text-muted"
+                                      ></i>
+                                      View</a
+                                    >
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-body pt-1 pb-1">
+                          <!-- <div class="d-flex justify-content-end">
+                              
+                            </div> -->
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="d-flex">
+                                <p
+                                  class="fs-16 mb-0 text-truncate d-block flex-grow-1"
+                                >
+                                  <b
+                                    ><i
+                                      class="ri-building-line align-bottom me-1"
+                                    ></i
+                                    >{{ data.companyName }}</b
+                                  >
+                                </p>
+                              </div>
+
+                              <p class="fs-12 mb-0 text-truncate d-block">
+                                <i
+                                  class="ri-building-2-line align-bottom me-1"
+                                ></i
+                                >{{ data.clientName }}
+                              </p>
+                              <p class="fs-12 mb-0 text-truncate d-block">
+                                <i
+                                  class="ri-community-line align-bottom me-1"
+                                ></i
+                                >{{ data.projectName }}
+                              </p>
+                            </div>
+
+                            <div class="col-lg-12 mb-2">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div>
+                                    <p class="text-muted mb-0">
+                                      <b>Ticket No</b>
+                                    </p>
+                                    <div class="text-primary">
+                                      <b> {{ data.ticketNo }}</b>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div>
+                                    <p class="text-muted mb-0">Task Type</p>
+                                    <h5 class="fs-14">
+                                      <span
+                                        class="badge bg-danger text-uppercase"
+                                        *ngIf="data?.taskType == 'On-Site'"
+                                      >
+                                        {{ data?.taskType }}
+                                      </span>
+                                      <span
+                                        class="badge bg-success text-uppercase"
+                                        *ngIf="data?.taskType == 'Remote'"
+                                      >
+                                        {{ data?.taskType }}
+                                      </span>
+                                      <span
+                                        class="badge bg-warning text-uppercase"
+                                        *ngIf="data?.taskType == 'Phone Call'"
+                                      >
+                                        {{ data?.taskType }}
+                                      </span>
+                                      <span
+                                        class="badge bg-success me-2"
+                                        *ngIf="data.taskType === 'Corrective'"
+                                        >{{ data.taskType }}</span
+                                      >
+
+                                      <span
+                                        class="badge bg-primary me-2"
+                                        *ngIf="data.taskType === 'Preventive'"
+                                        >{{ data.taskType }}</span
+                                      >
+
+                                      <span
+                                        class="badge bg-info me-2"
+                                        *ngIf="
+                                          data.taskType !== 'Preventive' &&
+                                          data.taskType !== 'Corrective'
+                                        "
+                                        >{{ data.taskType }}</span
+                                      >
+                                    </h5>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-lg-12 mb-2">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div>
+                                    <p class="text-muted mb-0">
+                                      <b>Start Date</b>
+                                    </p>
+                                    <div>{{ data.startDateTime }}</div>
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div>
+                                    <p class="text-muted mb-0">  <b>End Date</b></p>
+                                    <div class="fs-14">
+                                      {{ data.endDateTime || "-" }}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-lg-12 mb-2">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div>
+                                    <p class="text-muted mb-0">
+                                      <b>Started By </b>
+                                    </p>
+                                    <div>
+                                      {{ data.startDateTimeByName }}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div>
+                                    <p class="text-muted mb-0">
+                                      <b>Status </b>
+                                    </p>
+                                    <div>
+                                      <span
+                                        [class]="
+                                          returnStatusBadgeClassesStatus(
+                                            data.soStatusId
+                                          )
+                                        "
+                                        >{{ data.soStatusName }}</span
+                                      >
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col col-sm-12 col col-md-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecordsFromApi }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col col-sm-12 col col-md-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="totalRecordsFromApi"
+                        [pageSize]="pageSize"
+                        [(page)]="page"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="OnChangesPage($event)"
+                        *ngIf="totalRecordsFromApi > pageSize"
+                      ></ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

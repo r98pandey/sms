@@ -1,0 +1,52 @@
+::ng-deep ngx-dropzone {
+    border: 0px dashed #ccc !important;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    height: 50px !important;
+    display: block !important;
+    ;
+  }
+  
+  ::ng-deep ngx-dropzone:hover {
+    border: 4px dashed #5477e1;
+  }
+  .dropzoneLabel {
+    display: grid;
+  }
+  
+  
+  .dropzone {
+    min-height: 19px !important;
+  }
+  
+  
+  .container-view {
+    border: 2px dashed #717386;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .container-view:hover{
+    border: 4px dashed #5477e1;
+  }
+  
+  .form-label {
+    margin-bottom: 0px;
+}
+
+
+.box-date {
+    border-right: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.box-time {
+    border-left: 0px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+

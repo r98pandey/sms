@@ -1,0 +1,225 @@
+<div class="offcanvas-header h-color h-head a3">
+  <div class="row mb-3">
+    <div class="col-md">
+      <div class="row align-items-center g-3">
+        <div class="col-md a22" *ngFor="let header of listHeaderDoc">
+          <div>
+            <h4 class="fw-bold">{{ header?.title }}</h4>
+            <div class="hstack gap-3 flex-wrap">
+              <div>
+                <b class="me-1">Created By:</b>
+                {{ header?.createdBy }}
+              </div>
+              <div class="vr"></div>
+              <div>
+                <b class="me-1">Created Date:</b
+                >{{ header?.createdDate || "-" }}
+              </div>
+              <div class="vr"></div>
+              <div>
+                <b class="me-1">Status:</b
+                ><span
+                  [class]="
+                    returnStatusBadgeClassesStatus(
+                      header?.projectProcessHeaderDocStatusId
+                    )
+                  "
+                  >{{ header?.projectProcessHeaderDocStatusName }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close('Cross click')"
+  ></button>
+</div>
+<div class="offcanvas-body pt-0 bg-color">
+  <div class="row mt-3">
+    <div class="col-xl-9 col-lg-8 stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table align-middle table-nowrap mb-0">
+              <thead class="table-active">
+                <tr>
+                  <th scope="col">Name</th>
+
+                  <th scope="col">Type</th>
+                  <th scope="col">Created Date</th>
+
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="file-list">
+                <ng-container *ngIf="listDoc.length == 0">
+                  <tr>
+                    <td colspan="5">
+                      <p class="text-muted">Document not Uploaded </p></td>
+                  </tr>
+                </ng-container>
+                <ng-container *ngIf="listDoc.length != 0">
+                  @for(data of listDoc; track $index){
+                  <tr>
+                    <td class="title">
+                      <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0 fs-17 me-2 filelist-icon">
+                          <i
+                            class="ri-video-line text-info"
+                            *ngIf="data.type == 'Video'"
+                          ></i>
+
+                          <i
+                            class="ri-image-line text-success"
+                            *ngIf="data.type == 'Image'"
+                          ></i>
+
+                          <i
+                            class="ri-file-line text-warning"
+                            *ngIf="data.type !== 'Image' && data.type !== 'Video'"
+                          ></i>
+                        </div>
+                        <div class="flex-grow-1 filelist-name">
+                          {{ data.title }}
+                        </div>
+                      </div>
+                    </td>
+                    <td class="title">
+                      {{ data.type }}
+                    </td>
+                    <td class="title">{{ data.createdDate }}</td>
+
+                    <td class="title">
+                      <div class="flex-shrink-0 ms-2">
+                        <div class="d-flex gap-1">
+                          <ul class="list-inline hstack gap-2 mb-0">
+                            <ng-container *ngIf="data?.docURL">
+                              <li class="list-inline-item">
+                                <a
+                                  href="javascript:void(0);"
+                                  [ngbTooltip]="'View ' + data.type"
+                                  (click)="
+                                    openModaVideeo(data.docURL, VideoPlayer)
+                                  "
+                                  *ngIf="data.type == 'Video'"
+                                  class="text-primary d-inline-block"
+                                >
+                                  <i class="ri-video-line fs-16"></i>
+                                </a>
+
+                                <a
+                                  href="javascript:void(0);"
+                                  [ngbTooltip]="'View ' + data.type"
+                                  (click)="open(data.docURL)"
+                                  *ngIf="data.type == 'Image'"
+                                  class="text-primary d-inline-block"
+                                >
+                                  <i class="ri-image-line fs-16"></i>
+                                </a>
+
+                                <a
+                                  href="javascript:void(0);"
+                                  [ngbTooltip]="'View ' + data.type"
+                                  (click)="downloadFileDocument(data.docURL)"
+                                  *ngIf="data.type == 'Document'"
+                                  class="text-primary d-inline-block"
+                                >
+                                  <i class="ri-file-line fs-16"></i>
+                                </a>
+                              </li>
+                            </ng-container>
+                          </ul>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  }
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-lg-4" *ngIf="listHeaderDoc.length">
+      <div class="card">
+        <div
+          class="card-header align-items-center d-flex border-bottom-dashed p-2"
+        >
+          <h4 class="card-title mb-0 flex-grow-1 fs-14">Description</h4>
+        </div>
+
+        <div class="card-body p-2">
+          <ngx-simplebar style="height: 235px" class="">
+            <div
+              [innerHTML]="transformInnerHTML(listHeaderDoc[0]?.remark)"
+            ></div>
+          </ngx-simplebar>
+        </div>
+        <!-- end card body -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="offcanvas-footer text-end mb-4 pb-2">
+  <button
+    type="button"
+    class="btn btn-outline-danger me-2"
+    (click)="close('Close click')"
+  >
+    Close
+  </button>
+  <button
+    type="button"
+    ngbAutofocus
+    class="btn btn-primary  me-2"
+    (click)="openModalUpdateHandler()"
+  >
+    {{returnNameType()}}
+  </button>
+</div>
+<ng-template #VideoPlayer role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div id="instructions">
+      <video
+        id="my_video_1"
+        class="video-js vjs-default-skin"
+        width="100%"
+        height="267px"
+        controls
+        preload="none"
+        data-setup='{ "aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }'
+      >
+        <source src="{{ linkVideo }}" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

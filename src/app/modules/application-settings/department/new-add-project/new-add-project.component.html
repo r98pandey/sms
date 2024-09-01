@@ -1,0 +1,614 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<form [formGroup]="projectDetailFrom">
+  <div class="row">
+    <div class="col-lg-4 ">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Basic Information</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="Client" class="form-label"
+              >Company <span class="text-danger">*</span></label
+            >
+            <ng-select
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onDropdownCompanyValueChange()"
+              [clearable]="false"
+              id="companyName"
+              formControlName="companyId"
+              placeholder="Select Company"
+              class="w-100 mr-2 my-1"
+            ></ng-select>
+
+            <div *ngIf="form['companyId'].invalid && form['companyId'].touched">
+              <small class="text-danger"> Company is Required </small>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="Client" class="form-label"
+              >Client <span class="text-danger">*</span></label
+            >
+            <ng-select
+              [items]="arrayListDropDownClientList"
+              bindLabel="clientName"
+              formControlName="clientId"
+              bindValue="clientId"
+              [clearable]="false"
+              id="clientName"
+              [readonly]="!companyId.value"
+              placeholder="Select Client"
+              class="w-100 mr-2 my-1"
+            ></ng-select>
+            <div *ngIf="form['clientId'].invalid && form['clientId'].touched">
+              <small class="text-danger"> Client is Required </small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="departmentCode" class="form-label">
+              {{ departmentProjectLabel }} Code
+              <span class="text-danger">*</span>
+            </label>
+            <input
+              (input)="onUpperCase($event)"
+              type="text"
+              class="form-control my-1"
+              [placeholder]="departmentProjectLabel + ' Code'"
+              formControlName="departmentCode"
+              id="departmentCode"
+              name="departmentCode"
+              [ngClass]="{
+                'is-invalid': form['departmentCode'].invalid && form['departmentCode'].touched,
+                'is-valid': form['departmentCode']?.valid && form['departmentCode']?.touched
+              }"
+            />
+            
+            <div
+              *ngIf="
+                form['departmentCode'].invalid && form['departmentCode'].touched
+              "
+            >
+              <small
+                class="text-danger"
+                *ngIf="form['departmentCode']?.errors['required']"
+                >{{ departmentProjectLabel }} Code is required</small
+              >
+              <small
+                class="text-danger"
+                *ngIf="form['departmentCode']?.errors['minlength']"
+              >
+                {{ departmentProjectLabel }} Code must be at least 2 characters
+                Required</small
+              >
+              <small
+                class="text-danger"
+                *ngIf="form['departmentCode']?.errors['maxlength']"
+              >
+                {{ departmentProjectLabel }} Code max 5 characters
+                Required</small
+              >
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="Project-Name" class="form-label"
+              >{{ departmentProjectLabel }} Name
+              <span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              class="form-control my-1"
+              [placeholder]="departmentProjectLabel + ' Name'"
+              formControlName="departmentName"
+              id="departmentName"
+              name="Project-Name"
+              [ngClass]="{
+                'is-invalid':
+                  form['departmentName'].invalid &&
+                  form['departmentName'].touched,
+                'is-valid':
+                  form['departmentName']?.valid &&
+                  form['departmentName']?.touched
+              }"
+            />
+
+            <div
+              *ngIf="
+                form['departmentName'].invalid && form['departmentName'].touched
+              "
+            >
+              <small
+                class="text-danger"
+                *ngIf="form['departmentName'].errors['required']"
+              >
+                {{ departmentProjectLabel }} Name is Required</small
+              >
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="HOD" class="form-label">HOD </label>
+            <input
+              type="text"
+              class="form-control my-1"
+              placeholder="HOD"
+              formControlName="departHeadName"
+              id="HOD"
+              name="HOD"
+            />
+
+            <div
+              *ngIf="
+                form['departHeadName'].invalid && form['departHeadName'].touched
+              "
+            >
+              <small
+                class="text-danger"
+                *ngIf="form['departHeadName'].errors['required']"
+              >
+                Head of {{ departmentProjectLabel }} is Required</small
+              >
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="currencyCode" class="form-label"
+              >Currency Code <span class="text-danger">*</span></label
+            >
+            <ng-select
+              [items]="countryAndCurrencyList"
+              [(ngModel)]="selectedCurrency"
+              bindLabel="currencyCode"
+              bindValue="currencyCode"
+              placeholder="Currency Code"
+              formControlName="currencyCode"
+              name="currencyCode"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <div class="custom-option">
+                  <h6>{{ item.countryName }}({{ item.countryCode }})</h6>
+                  <p>Currency Code :{{ item.currencyCode }}</p>
+                </div>
+              </ng-template>
+            </ng-select>
+
+            <div
+              *ngIf="
+                form['currencyCode'].invalid && form['currencyCode'].touched
+              "
+            >
+              <small
+                class="text-danger"
+                *ngIf="form['currencyCode'].errors['required']"
+              >
+                Currency Code is Required</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8  stretch-card">
+      <div class="card">
+          <ul
+            ngbNav
+            #defaultNav="ngbNav"
+            [(activeId)]="defaultNavActiveId"
+            class="nav-tabs nav-tabs-custom"
+          >
+        
+            <li [ngbNavItem]="1">
+              <a ngbNavLink>
+                <div
+                  class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                >
+                  <p class="d-none1 d-sm-block mb-0">Contact details</p>
+                
+                </div>
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row ">
+                
+                    <div class="col-md-6 mb-3">
+                      <label for="Contact-Person-Name" class="form-label"
+                        >Contact Person Name
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control my-1"
+                        placeholder="Contact Person Name"
+                        name="Contact-Person-Name"
+                        id="Contact-Person-Name"
+                        formControlName="contactPerson1"
+                      />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                      <label for="Designation" class="form-label"
+                        >Designation
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control mt-1 mb-1"
+                        placeholder="Designation"
+                        name="Designation"
+                        id="Designation"
+                        formControlName="contactDesignation1"
+                      />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                      <label for="Mobile-No" class="form-label"
+                        >Mobile No
+                      </label>
+                      <input
+                        type="number"
+                        class="form-control mt-1 mb-1"
+                        placeholder="Mobile No"
+                        name="Mobile-No"
+                        id="Mobile-No"
+                        formControlName="contactMobileNo1"
+                      />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                      <label for="Phone-No" class="form-label">Phone No</label>
+                      <input
+                        type="number"
+                        class="form-control mt-1 mb-1"
+                        placeholder="Phone No"
+                        name="Phone-No"
+                        id="Phone-No"
+                        formControlName="contactPhoneNo1"
+                      />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                      <label for="Fax-No" class="form-label">Fax No</label>
+                      <input
+                        type="text"
+                        class="form-control mt-1 mb-1"
+                        placeholder="Fax No"
+                        name="Fax-No"
+                        id="Fax-No"
+                        formControlName="contactFaxNo1"
+                      />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="Email" class="form-label">Email </label>
+                      <input
+                        type="email"
+                        class="form-control mt-1 mb-1"
+                        placeholder="Email"
+                        name="Email"
+                        id="email"
+                        formControlName="contactEMail1"
+                      />
+                    </div>
+                  
+                  <div class="col-lg-12">
+                    <label for="Email" class="form-label">Description </label>
+                    <ckeditor
+                      [editor]="Editor"
+                      [config]="{
+                        toolbar: [
+                          'heading',
+                          '|',
+                          'bold',
+                          'italic',
+                          '|',
+                          'NumberedList',
+                          'BulletedList'
+                        ]
+                      }"
+                      placeholder="Enter Remark"
+                      formControlName="frmdescription"
+                    >
+                    </ckeditor>
+                  </div>
+                </div>
+              </ng-template>
+            </li>  
+            <li [ngbNavItem]="2">
+              <a ngbNavLink>
+                <div
+                  class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+                >
+                  <p class="d-none1 d-sm-block mb-0">SLA Information</p>
+                </div>
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row">
+                  <div class="col-lg-12">
+                
+                        <div class="row">
+                          <div class="col-lg-6 mb-1">
+                            <label for="Respond-SLA" class="form-label"
+                              >Respond SLA</label
+                            >
+                            <input
+                              type="number"
+                              class="form-control"
+                              (input)="onRespondSLAValue($event)"
+                              placeholder="Respond SLA"
+                              name="Respond-SLA"
+                              id="Respond-SLA"
+                              formControlName="RespondSLA"
+                            />
+                          </div>
+
+                          <div class="col-lg-6 mb-1">
+                            <label for="Respond-SLA-Duration" class="form-label"
+                              >Respond SLA Duration
+                              <span class="text-danger" *ngIf="RespondSLA.value"
+                                >*</span
+                              ></label
+                            >
+                            <ng-select
+                              [items]="OnSiteDescList"
+                              [readonly]="!RespondSLA.value"
+                              placeholder="Select Respond SLA Duration"
+                              formControlName="RespondSLADurationDesc"
+                              [class.is-invalid]="
+                                RespondSLADurationDesc.invalid &&
+                                RespondSLADurationDesc.touched
+                              "
+                              class="custom"
+                              [class.is-valid]="
+                                RespondSLADurationDesc.valid &&
+                                RespondSLADurationDesc.touched
+                              "
+                            >
+                              <div
+                                *ngIf="
+                                  RespondSLADurationDesc.invalid &&
+                                  RespondSLADurationDesc.touched
+                                "
+                              >
+                                <small class="text-danger">
+                                  Respond SLA Duration is Required
+                                </small>
+                              </div>
+                            </ng-select>
+                          </div>
+                        </div>
+
+                        <div class="row mt-2">
+                          <div class="col-lg-6 mb-1">
+                            <label for="On-Site-SLA" class="form-label"
+                              >On Site SLA</label
+                            >
+
+                            <input
+                              type="number"
+                              class="form-control mb-1"
+                              (input)="onSiteSLAValue($event)"
+                              placeholder="On Site SLA"
+                              name="On-Site-SLA"
+                              id="On-Site-SLA"
+                              formControlName="OnSiteSLA"
+                            />
+                          </div>
+
+                          <div class="col-lg-6 mb-1">
+                            <label for="On-Site-SLA-Duration" class="form-label"
+                              >On Site SLA Duration
+                              <span class="text-danger" *ngIf="OnSiteSLA.value"
+                                >*</span
+                              ></label
+                            >
+                            <ng-select
+                              [items]="OnSiteDescList"
+                              [readonly]="!OnSiteSLA.value"
+                              placeholder="Select On Site SLA Duration"
+                              formControlName="OnSiteSLADurationDesc"
+                              [class.is-invalid]="
+                                OnSiteSLADurationDesc.invalid &&
+                                OnSiteSLADurationDesc.touched
+                              "
+                              class="custom"
+                              [class.is-valid]="
+                                OnSiteSLADurationDesc.valid &&
+                                OnSiteSLADurationDesc.touched
+                              "
+                            >
+                              <div
+                                *ngIf="
+                                  OnSiteSLADurationDesc.invalid &&
+                                  OnSiteSLADurationDesc.touched
+                                "
+                              >
+                                <small class="text-danger"
+                                  >On Site SLA Duration is Required
+                                </small>
+                              </div>
+                            </ng-select>
+                          </div>
+                        </div>
+                        <!-- row end -->
+
+                        <div class="row mt-2">
+                          <div class="col-lg-6 mb-1">
+                            <label
+                              for="Expected-Completion-SLA"
+                              class="form-label"
+                              >Expected Completion SLA
+                            </label>
+                            <input
+                              type="number"
+                              class="form-control mb-1"
+                              placeholder="Expected Completion SLA"
+                              name="Expected-Completion-SLA"
+                              id="Expected-Completion-SLA"
+                              (input)="
+                                exepectedComplitionSLADurationDescValue($event)
+                              "
+                              formControlName="exepectedComplitionSLA"
+                            />
+                          </div>
+
+                          <div class="col-lg-6 mb-1">
+                            <label
+                              for="Expected-Completion-SLA-Duration"
+                              class="form-label"
+                              >Expected Completion SLA Duration
+                              <span
+                                class="text-danger"
+                                *ngIf="exepectedComplitionSLA.value"
+                                >*</span
+                              ></label
+                            >
+                            <ng-select
+                              [items]="OnSiteDescList"
+                              [readonly]="!exepectedComplitionSLA.value"
+                              placeholder="Select Expected Completion SLA Duration"
+                              formControlName="exepectedComplitionSLADurationDesc"
+                              [class.is-invalid]="
+                                exepectedComplitionSLADurationDesc.invalid &&
+                                exepectedComplitionSLADurationDesc.touched
+                              "
+                              class="custom"
+                              [class.is-valid]="
+                                exepectedComplitionSLADurationDesc.valid &&
+                                exepectedComplitionSLADurationDesc.touched
+                              "
+                            >
+                              <div
+                                *ngIf="
+                                  exepectedComplitionSLADurationDesc.invalid &&
+                                  exepectedComplitionSLADurationDesc.touched
+                                "
+                              >
+                                <small class="text-danger"
+                                  >Expected Completion SLA Duration is Required
+                                </small>
+                              </div>
+                            </ng-select>
+                          </div>
+                        </div>
+                      </div>
+                    
+                  
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="card-body">
+            <div [ngbNavOutlet]="defaultNav"></div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="text-end mb-3">
+  <button
+    class="btn btn-soft-primary waves-effect mx-3"
+    type="button"
+    (click)="goBack()"
+  >
+    Back
+  </button>
+  <button
+    class="btn btn-success w-sm"
+    type="button"
+    (click)="submitprojectDetailFromDetails()"
+    [disabled]="
+      projectDetailFrom.invalid 
+    "
+  >
+    Submit
+  </button>
+</div>
+<!--   -->
+
+<ng-template #TaskContent let-task="task">
+  <div class="card tasks-box">
+    <div class="card-body">
+      <p class="text-muted">{{ task.projectProcessName }}</p>
+    </div>
+  </div>
+  <!--end card-->
+</ng-template>
+
+<div
+  *ngIf="successMessageVisible"
+  class="swal2-container swal2-center swal2-backdrop-show"
+  style="overflow-y: auto"
+>
+  <div
+    aria-labelledby="swal2-title"
+    aria-describedby="swal2-html-container"
+    class="swal2-popup swal2-modal swal2-show"
+    tabindex="-1"
+    role="dialog"
+    aria-live="assertive"
+    aria-modal="true"
+    style="display: grid"
+  >
+    <ul class="swal2-progress-steps" style="display: none"></ul>
+    <div class="swal2-icon" style="display: none"></div>
+    <img class="swal2-image" style="display: none" />
+    <h2 class="swal2-title" id="swal2-title" style="display: none"></h2>
+    <div
+      class="swal2-html-container"
+      id="swal2-html-container"
+      style="display: block"
+    >
+      <div class="mt-3">
+        <img src="../../../../assets/images/ticketChatpartImage.png" class="img-fluid rounded chat-image-success">
+    
+        <div class="mt-4 pt-2 fs-15">
+          <h4>Project Added Successfully!</h4>
+          <p class="text-muted mx-4 mb-0">Do you want to add more project?</p>
+        </div>
+      </div>
+    </div>
+    <input class="swal2-input" style="display: none" /><input
+      type="file"
+      class="swal2-file"
+      style="display: none"
+    />
+    <div class="swal2-range" style="display: none">
+      <input type="range" /><output></output>
+    </div>
+    <select class="swal2-select" style="display: none"></select>
+    <div class="swal2-radio" style="display: none"></div>
+    <label for="swal2-checkbox" class="swal2-checkbox" style="display: none"
+      ><input type="checkbox" /><span class="swal2-label"></span></label
+    ><textarea class="swal2-textarea" style="display: none"></textarea>
+    <div
+      class="swal2-validation-message"
+      id="swal2-validation-message"
+      style="display: none"
+    ></div>
+    <div class="swal2-actions" style="display: flex">
+      <div class="swal2-loader"></div>
+      <button
+        type="button"
+        class="swal2-confirm btn btn-warning me-2"
+        aria-label=""
+        (click)="goBack()"
+      >
+        No
+      </button>
+      <button
+        type="button"
+        class="swal2-confirm btn btn-success me-2"
+        aria-label=""
+        (click)="getFormRest()"
+      >
+        Yes
+      </button>
+    </div>
+  </div>
+</div>

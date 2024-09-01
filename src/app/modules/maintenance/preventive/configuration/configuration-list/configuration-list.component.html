@@ -1,0 +1,421 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-lg-auto">
+            <h5 class="card-title mb-0">Configuration List</h5>
+          </div>
+          <div class="col-lg"></div>
+          <div class="col-lg">
+            <ng-select
+              [items]="frequencyList"
+              (change)="onChangeFrequencyValueChange()"
+              [clearable]="true"
+              [(ngModel)]="typeFrequencyValue"
+              placeholder="Select Frequency"
+              class="w-100 me-2"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="preventiveStatusList"
+              bindLabel="assetStatus"
+              bindValue="assetStatusId"
+              (change)="onChangePMScheduleStatusIValueChange()"
+              [clearable]="true"
+              id="ticketStatus"
+              [(ngModel)]="scheduleStatusIdValue"
+              placeholder="Select Schedule Status"
+              class="w-100 mr-2"
+              for="ticketStatus"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <div class="search-box">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                [(ngModel)]="typeRequesterNameValue"
+                placeholder="Schedule Title"
+                #inputerRequesterName
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+          </div>
+          <div class="col-lg-auto text-end" *ngIf="returnValueMenu.add">
+            <div>
+              <button
+                type="button"
+                class="btn btn-success add-btn"
+                id="create-btn"
+                (click)="navigateToAdd()"
+              >
+                <i class="ri-add-line align-bottom me-1"></i> Add Configuration
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0 m-0 ">
+        <div class="row align-items-center gy-3 ">
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onDropdownCompanyValueChange($event)"
+              [clearable]="true"
+              id="companyName"
+              [(ngModel)]="selectedDropDownCompanyIdValue"
+              placeholder="Select Company"
+              class=""
+              for="companyName"
+              [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownClientList"
+              bindLabel="clientName"
+              bindValue="clientId"
+              [disabled]="!selectedDropDownCompanyIdValue"
+              (change)="onDropdownClientValueChange($event)"
+              [clearable]="true"
+              id="clientName"
+              [(ngModel)]="selectedDropDownClientIdValue"
+              placeholder="Select Client"
+              class=""
+              for="clientName"
+              [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [readonly]="projectDepartmentFieldDisiabled"
+              [items]="arrayListDropDownProjectOrDeparmentList"
+              bindLabel="departmentName"
+              bindValue="departmentId"
+              [disabled]="
+                !selectedDropDownCompanyIdValue ||
+                !selectedDropDownClientIdValue
+              "
+              (change)="onDropdownDepartmentValueChange($event)"
+              [clearable]="true"
+              [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+              [placeholder]="isProject ? 'Select Project' : 'Select Department'"
+              class=""
+            ></ng-select>
+          </div>
+          <div class="col-lg-auto text-end">
+            <button
+              type="button"
+              class="btn btn-danger ms-1"
+              (click)="resetSerachVariable()"
+              ngbTooltip="Remove All Search"
+            >
+              <i class="ri-refresh-fill me-1 align-bottom"></i>
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th>Schedule Title</th>
+                        <th>Company</th>
+                        <th *ngIf="isProject">Client</th>
+                        <th>{{ isProject ? "Project" : "Department" }}</th>
+
+                        <th>Next Schedule Start on</th>
+
+                        <th>Frequency</th>
+                        <th>Action Type</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngIf="preventiveConfigList.length == 0">
+                        <tr>
+                          <td colspan="10" class="text-center">
+                            No Configuration Data
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <ng-container *ngIf="preventiveConfigList.length != 0">
+                        <tr *ngFor="let config of preventiveConfigList; let i = index">
+                          <td  class="title" [title]="config.configPreventivePDescription"
+                            (click)="
+                              expandTitle(
+                                'configPreventivePDescription_' + config.configPreventivePDescription + '_' + i
+                              )
+                            "
+                            [id]="'configPreventivePDescription_' + config.configPreventivePDescription + '_' + i"
+                      >
+                            <a
+                              href="javascript:void(0)"
+                              (click)="
+                                viewHandler(
+                                  config.configPreventiveId,
+                                  config?.preventiveCategoryId
+                                )
+                              "
+                              class="fw-medium link-primary"
+                              >{{ config.configPreventivePDescription }}</a
+                            >
+                          </td>
+
+                            
+                          <td [title]="config.companyName"
+                            class="title"
+                            (click)="
+                              expandTitle(
+                                'companyName_' + config.configPreventivePDescription + '_' + i
+                              )
+                            "
+                            [id]="'companyName_' + config.configPreventivePDescription + '_' + i"
+                          >
+                            {{ config.companyName }}
+                          </td>
+                          <td [title]="config.companyName"
+                            class="title"
+                            (click)="
+                              expandTitle(
+                                'clientName_' + config.configPreventivePDescription + '_' + i
+                              )
+                            "
+                            [id]="'clientName_' + config.configPreventivePDescription + '_' + i"
+                          >
+                            {{ config.clientName }}
+                          </td>
+                          <td [title]="config.projectName"
+                            class="title"
+                            (click)="
+                              expandTitle(
+                                'projectName_' + config.configPreventivePDescription + '_' + i
+                              )
+                            "
+                            [id]="'projectName_' + config.configPreventivePDescription + '_' + i"
+                          >
+                            {{ config.projectName }}
+                          </td>
+
+                          <td [title]="config.nextSchduleStart">
+                            {{ config.nextSchduleStart }}
+                          </td>
+
+                          <td [title]="config.frequency">
+                            {{ config.frequency }}
+                          </td>
+
+                          <td class="status">
+                            <span
+                              class="badge bg-danger text-uppercase"
+                              *ngIf="config?.supportType == 'On-Site'"
+                            >
+                              {{ config?.supportType }}
+                            </span>
+                            <span
+                              class="badge bg-success text-uppercase"
+                              *ngIf="config?.supportType == 'Remote'"
+                            >
+                              {{ config?.supportType }}
+                            </span>
+                            <span
+                              class="badge bg-warning text-uppercase"
+                              *ngIf="config?.supportType == 'Phone Call'"
+                            >
+                              {{ config?.supportType }}
+                            </span>
+                          </td>
+
+                          <td class="status">
+                            <span
+                              [class]="
+                                returnStatusBadgeClassesStatus(
+                                  config.pmScheduleStatusId
+                                )
+                              "
+                              >{{ config.pmScheduleStatusName }}</span
+                            >
+                          </td>
+
+                          <td>
+                            <span>
+                              <div class="dropdown" ngbDropdown>
+                                <button
+                                  class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                                  type="button"
+                                  data-bs-toggle="dropdown"
+                                  aria-expanded="false"
+                                  ngbDropdownToggle
+                                >
+                                  <i class="ri-more-fill"></i>
+                                </button>
+                                <ul
+                                  class="dropdown-menu dropdown-menu-end"
+                                  ngbDropdownMenu
+                                >
+                                  <li>
+                                    <a
+                                      class="dropdown-item cursor-pointer"
+                                      (click)="
+                                        viewHandler(
+                                          config.configPreventiveId,
+                                          config?.preventiveCategoryId
+                                        )
+                                      "
+                                      ><i
+                                        class="ri-eye-fill align-bottom me-2 text-muted"
+                                      ></i>
+                                      View
+                                    </a>
+                                  </li>
+                                     <li *ngIf=" config.pmScheduleStatusId==28">
+                                    <a
+                                      class="dropdown-item cursor-pointer"
+                                      (click)="
+                                        openModalActiveDeactive(
+                                          config.configPreventiveId,
+                                          'Inactive'
+                                        )
+                                      "
+                                      ><i
+                                        class=" ri-close-circle-line  align-bottom me-2 text-muted"
+                                      ></i>
+                                      Inactive
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </span>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col col-sm-12 col col-md-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecordsFromApi }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col col-sm-12 col col-md-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="totalRecordsFromApi"
+                        [pageSize]="pageSize"
+                        [(page)]="page"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="OnChangesPage($event)"
+                        *ngIf="totalRecordsFromApi > pageSize"
+                      ></ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #filtetcontent let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="exampleModalLabel">Filters</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-6 mb-3">
+        <label for="selectedRequesterName" class="form-label fw-semibold"
+          >Requester Name</label
+        >
+        <input
+          type="text"
+          name="selectedRequesterName"
+          id="selectedRequesterName"
+          class="form-control"
+          [(ngModel)]="selectedRequesterName"
+          placeholder="Requester Name "
+        />
+      </div>
+      <div class="col-lg-6 mb-3">
+        <label for="selectedRequesterEmail" class="form-label fw-semibold"
+          >Requester Email</label
+        >
+        <input
+          type="email"
+          name="selectedRequesterEmail"
+          id="selectedRequesterEmail"
+          class="form-control"
+          [(ngModel)]="selectedRequesterEmail"
+          placeholder="Search Requester Email"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      class="btn btn-light"
+      (click)="resetSerachVariable()"
+      (click)="modal.dismiss('Close click')"
+    >
+      Clear
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      (click)="modal.close('Ok', $event)"
+    >
+      Search
+    </button>
+  </div>
+</ng-template>

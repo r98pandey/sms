@@ -1,0 +1,319 @@
+<!-- Start Breadcrumbs -->
+
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm-3 col-xxl-3">
+            <h5 class="card-title mb-0">Access Group List</h5>
+          </div>
+          <div
+            class="col-sm-9 col-xxl-9 d-flex gap-2 flex-wrap justify-content-end"
+          >
+            <div class="ms-1" *ngIf="returnValueMenu.add">
+              <button
+                type="button"
+                class="btn btn-success add-btn"
+                id="create-btn"
+                (click)="openAccessGroupFormModal(formModel)"
+              >
+                <i class="ri-add-line align-bottom me-1"></i> Add Access Group
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row">
+          <div class="col-lg mb-2"></div>
+          <div class="col-lg mb-2">
+            <ng-select
+              [items]="roleList"
+              bindLabel="name"
+              [clearable]="true"
+              bindValue="id"
+              placeholder="Select Role Name"
+              [(ngModel)]="selectedroleId"
+              (change)="getRoledetails()"
+            ></ng-select>
+          </div>
+          <div class="col-lg mb-2">
+            <div class="search-box">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control me-2"
+                type="search"
+                #inputer
+                [(ngModel)]="searchTerm"
+                placeholder="Search By Name"
+                ngbTooltip="Search By  Name..."
+                (input)="searchFilter()"
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+          </div>
+          <div class="col-lg-auto mb-2 text-end">
+            <button
+              type="button"
+              class="btn btn-danger ms-1"
+              (click)="clearAllPayload()"
+              ngbTooltip="Remove All Search"
+            >
+              <i class="ri-refresh-fill me-1 align-bottom"></i>
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th>Role</th>
+                        <th>Access Group/Designation</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let access of accessGroupData">
+                        <td>
+                          {{ access.rolename }}
+                        </td>
+
+                        <td>
+                          {{ access.name }}
+                        </td>
+                        <td class="cursor">
+                          <span>
+                            <div class="dropdown ms-2" ngbDropdown>
+                              <a (click)="goToNavigation(access)">
+                                <i class="ri-settings-2-fill"></i>
+                              </a>
+                              <ul
+                                class="dropdown-menu dropdown-menu-end"
+                                ngbDropdownMenu
+                              >
+                                <li *ngIf="returnValueMenu.edit">
+                                  <a class="dropdown-item cursor-pointer">
+                                    <i
+                                      class="ri-settings-2-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    Access Rights</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div
+                    class="text-center muted"
+                    *ngIf="accessGroupData.length === 0"
+                  >
+                    No Access Right Found
+                  </div>
+                </div>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col col-sm-12 col col-md-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecords }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col col-sm-12 col col-md-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="collectionSize"
+                        [(page)]="page"
+                        [pageSize]="pageSize"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="getAccessGroupData()"
+                        *ngIf="totalRecords > pageSize"
+                      >
+                        <ng-template
+                          ngbPaginationPrevious
+                          let-page
+                          let-pages="pages"
+                        >
+                          <i class="ci-arrow-left me-2"></i>
+                          Prev
+                        </ng-template>
+                        <ng-template ngbPaginationNext>
+                          Next
+                          <i class="ci-arrow-right ms-2"></i>
+                        </ng-template>
+                      </ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #formModel let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h4 class="modal-title" id="modal-title">Add Access Group</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="accessGroupForm">
+      <div class="mb-2">
+        <div class="card-body">
+          <div class="row mb-2">
+            <div class="form-group col-md-6">
+              <label for="companyId" class="form-label"
+                >Role <span class="text-danger">*</span></label
+              >
+              <ng-select
+                [items]="roleList"
+                bindLabel="name"
+                bindValue="id"
+                [clearable]="false"
+                id="role"
+                formControlName="roleId"
+                placeholder="Select Role"
+                class="w-100 mr-2 mb-1"
+              ></ng-select>
+
+              <div *ngIf="roleId.invalid && roleId.touched">
+                <small class="text-danger">Role is required</small>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="name" class="form-label"
+                >Access Group Name <span style="color: red">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control mb-1"
+                id="name"
+                formControlName="name"
+                placeholder="Access Group Name"
+                [class.is-invalid]="name.invalid && name.touched"
+              />
+
+              <div *ngIf="name.invalid && name.touched">
+                <small class="text-danger" *ngIf="name.errors['required']">
+                  Access Group Name is required</small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div
+              class="col-md-12"
+              *ngFor="let group of groupOrder"
+            >
+              <div class="card mb-2">
+                <div class="card-header" style="padding-bottom: 5px">
+                  <h6 class="mb-0 card-title fs-14">{{ group }}</h6>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div
+                      class="col-sm-4 mb-2"
+                      *ngFor="let task of objectMakerToViewAccessRight[group] index as i"
+                    >
+                      <div class="form-check topDisplay"[ngbTooltip]="task.remark ? task.remark : null">
+                        <input
+                          class="form-check-input me-2 p-2"
+                          type="checkbox"
+                          [ngModelOptions]="{ standalone: true }"
+                          (change)="
+                            changesMyTaskRulesActive($event, group, i)
+                          "
+                          [(ngModel)]="task.value"
+                          value="{{ task.sendtokeys }}"
+                          id="{{ task.sendtokeys }}"
+                        />
+                        <label
+                          class="form-check-label labelforCheckbox fs-12"
+                          for="{{ task.sendtokeys }}"
+                        >
+                          {{ task.name }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-4">
+            <div
+              class="col-md-12 d-flex align-items-center justify-content-end"
+            >
+              <button
+                type="button"
+                class="btn btn btn-outline-danger me-2 mb-2 mb-md-0"
+                (click)="modal.dismiss('cancel')"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                [disabled]="accessGroupForm.invalid || shownUnDisable"
+
+                ngbAutofocus
+                class="btn btn-success me-2 mb-2 mb-md-0"
+                (click)="openModalCreateAccess(modal, $event)"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

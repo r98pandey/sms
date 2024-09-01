@@ -1,0 +1,621 @@
+<div class="row me-0 ms-0">
+  <div class="col-lg-12">
+    <div class="card mb-1">
+      <div class="card-body pb-0">
+        <div class="row mb-3">
+          <div class="col-md">
+            <div class="row align-items-center">
+              <div class="col-md">
+                <div>
+                  <div class="d-flex justify-content-between">
+                    <h5 class="fw-bold">
+                      {{ taskList?.taskTitle }}
+                    </h5>
+                    <div>
+                      <i
+                        class="ri-refresh-line align-bottom me-2 ms-3 cursor"
+                        (click)="apiCall()"
+                        style="font-size: large"
+                      ></i>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        aria-label="Close"
+                        (click)="close('Cross click')"
+                      ></button>
+                    </div>
+                  </div>
+                  <div class="hstack gap-3 flex-wrap">
+                    <div>
+                      <i class="ri-building-line align-bottom me-1"></i
+                      ><b>Task Schedule</b><br />
+                      {{ projectScheduleObject.projectScheduleName }}
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <i class="ri-building-line align-bottom me-1"></i
+                      ><b>Company</b><br />
+                      {{ taskList?.companyName }}
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <i class="ri-building-2-line align-bottom me-1"></i
+                      ><b>Client</b><br />
+                      {{ taskList?.clientName }}
+                    </div>
+
+                    <div class="vr"></div>
+                    <div>
+                      <i class="ri-community-line align-bottom me-1"></i
+                      ><b>Project</b><br />
+                      {{ taskList?.projectName }}
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <i class="ri-honour-line align-bottom me-1"></i
+                      ><b>Task No.</b><br /><span class="text-primary">
+                        #{{ taskList?.taskNo }}</span
+                      >
+                    </div>
+                    <div class="vr"></div>
+                    <div>
+                      <i class="ri-user-line align-bottom me-1"></i
+                      ><b>Project Owner</b><br /><span class="text-bold">
+                        {{ taskList?.projectOwnerName }}</span
+                      >
+                    </div>
+                    <div class="vr"></div>
+
+                    <div *ngIf="taskList?.projectTaskStatusId">
+                      <i class="ri-stack-overflow-line align-bottom me-1"></i
+                      ><b>Status</b><br /><span
+                        class="fs-14"
+                        [class]="
+                          returnStatusBadgeClassesStatus(
+                            taskList?.projectTaskStatusId
+                          )
+                        "
+                        >{{ taskList?.projectTaskStatusName }}</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12 getV2_MX_ProjectScheduleSubTaskDetail mt-1">
+    <div class="card">
+      <div
+        class="card-header d-flex justify-content-between align-items-center"
+      >
+        <div>
+          <h6 class="fw-bold m-0">
+            {{ subTaskListDetails?.subTaskTitle }}
+          </h6>
+          <div class="hstack gap-3 flex-wrap">
+            <div class="text-primary fs-14 mb-0">
+              #{{ subTaskListDetails?.subTaskNo }}
+            </div>
+            <div class="vr" style="border: 1px solid #050000 !important"></div>
+            <div>
+              <span
+                [class]="
+                  returnStatusBadgeClassesStatus(
+                    subTaskListDetails?.projectSubTaskStatusId
+                  )
+                "
+                >{{ subTaskListDetails?.projectSubTaskStatusName }}</span
+              >
+            </div>
+            <div class="vr" style="border: 1px solid #050000 !important"></div>
+            <div>
+              <i
+                class="ri-information-line align-bottom cursor align-bottom"
+              ></i
+              ><a
+                class="fs-14 text-secondary"
+                href="javascript:void(0);"
+                (click)="openInfo(modalViewInfo)"
+              >
+                View Info</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <button
+            *ngIf="subTaskCompleteUpdateButtonCheckConditionShownHide"
+            class="btn btn-success me-2 mb-0"
+            ngbTooltip="By clicking this, you can update your task status to 'in progress' or 'completed' accordingly."
+            (click)="
+              getProjectManagementStatus(
+                'ProjectTaskStatusUpdatePortal',
+                subTaskListDetails
+              )
+            "
+          >
+            Update Status
+          </button>
+
+      
+        </div>
+
+      </div>
+      <div class="card-header">
+    
+        <div>
+          <ul
+            ngbNav
+            #customNav="ngbNav"
+            [(activeId)]="subTaskactiveId"
+            class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0"
+            role="tablist"
+          >
+            <li [ngbNavItem]="1" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab" >
+                Details
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row me-0 ms-0 mt-1">
+                  <ng-container *ngIf="startTaskAccessRight">
+                    <ng-container
+                      *ngIf="
+                        ![25, 28, 72, 61, 106].includes(
+                          subTaskListDetails?.projectSubTaskStatusId
+                        )
+                      "
+                      ><div class="col-lg-3">
+                        <div class="text-center">
+                          <div class="mb-0">
+                            <lord-icon
+                              src="https://cdn.lordicon.com/kbtmbyzy.json"
+                              trigger="loop"
+                              colors="primary:#405189,secondary:#02a8b5"
+                              style="width: 90px; height: 68px"
+                            >
+                            </lord-icon>
+                          </div>
+                          <h5
+                            class="mb-1"
+                            *ngIf="askStartEndCondition.startDateTime == null"
+                          >
+                            0 hrs 00 min
+                          </h5>
+                          <h5
+                            class="mb-1"
+                            *ngIf="askStartEndCondition.startDateTime"
+                          >
+                            {{ timeDifference }}
+                          </h5>
+                          <div
+                            class="hstack gap-2 justify-content-center"
+                            *ngIf="
+                              subTaskListDetails?.projectSubTaskStatusId != 25
+                            "
+                          >
+                            <button
+                              ngbTooltip="If your task activity is done, you can stop the task by clicking this stop button."
+                              *ngIf="
+                                askStartEndCondition.startTask == 'False' &&
+                                askStartEndCondition.techAttendacenId > 0
+                              "
+                              class="btn btn-danger btn-sm"
+                              (click)="startStopModal('Stop')"
+                            >
+                              <i
+                                class="ri-stop-circle-line align-bottom me-1"
+                              ></i>
+                              Stop
+                            </button>
+                            <button
+                              class="btn btn-success btn-sm"
+                              (click)="startStopModal('Start')"
+                              ngbTooltip="By clicking this, your task will start, and you can proceed with the further process"
+                              *ngIf="
+                                askStartEndCondition.startTask == 'True' &&
+                                askStartEndCondition.techAttendacenId == 0
+                              "
+                            >
+                              <i
+                                class="ri-play-circle-line align-bottom me-1"
+                              ></i>
+                              Start
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+
+                  <div class="col-lg-9">
+                    <div class="row me-0 ms-0 mt-3">
+                      <div class="col-md-6 mb-2">
+                        <i class="ri-calendar-line align-bottom me-1"></i
+                        ><b>Plan Start Date</b><br />
+                        <span class="me-3"></span>
+                        {{ subTaskListDetails?.startDate }}
+                      </div>
+                      <div class="col-md-6 mb-2">
+                        <i class="ri-calendar-2-line align-bottom me-1"></i
+                        ><b>Plan End Date</b><br />
+                        <span class="me-3"></span>
+                        {{ subTaskListDetails?.endDate }}
+                      </div>
+                    </div>
+                    <div class="row me-0 ms-0 mt-3">
+                      <div class="col-md-6 mb-2">
+                        <i class="ri-calendar-todo-line align-bottom me-1"></i
+                        ><b>Actual Start Date</b><br />
+                        <span class="me-3"></span>
+                        {{ subTaskListDetails?.actualStartDate || "-" }}
+                      </div>
+                      <div class="col-md-6 mb-2">
+                        <i class="ri-calendar-event-line align-bottom me-1"></i
+                        ><b>Actual End Date</b><br />
+                        <span class="me-3"></span
+                        >{{ subTaskListDetails?.actualEndDate || "-" }}
+                      </div>
+                    </div>
+                    <div class="row me-0 ms-0 mt-3">
+                      <div class="col-md-6 mb-2" >
+                        <i class="ri-calendar-todo-line align-bottom me-1"></i
+                        ><b> Start By</b><br />
+                        <span class="me-3"></span>
+                        {{ subTaskListDetails?.startedByName || "-" }}
+                        <p class="ms-3 fs-12 mb-0">
+                          {{ subTaskListDetails?.startedByDesignation }}
+                        </p>
+                      </div>
+                      <div class="col-md-6 mb-2" >
+                        <i class="ri-calendar-event-line align-bottom me-1"></i
+                        ><b>End by</b><br />
+                        <span class="me-3"></span
+                        >{{ subTaskListDetails?.endedByName || "-" }}
+                      
+                          <p class="ms-3 fs-12 mb-0">
+                          {{ subTaskListDetails?.endedByDesignation }}
+                        </p>
+                      </div>
+                    
+                    </div>
+                    <div class="row me-0 ms-0 mt-3">
+                      <div class="col-md-6 mb-2">
+                        <i class="ri-user-3-line align-bottom me-1"></i
+                        ><b>Created By</b><br />
+                        <span class="me-3"></span>
+                        {{ subTaskListDetails?.createdBy }}
+                      </div>
+                      <div class="col-md-6 mb-2">
+                        <i class="ri-calendar-check-line align-bottom me-1"></i
+                        ><b>Created Date</b><br />
+                        <span class="me-3"></span>
+                        {{ subTaskListDetails?.createdDate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-12">
+                    <div class="pt-3 border-top border-top-dashed mt-4"></div>
+                  </div>
+                  <div class="col-lg-12">
+                    <div class="text-muted">
+                      <h6 class="mb-1 fw-semibold text-uppercase">
+                        Description
+                      </h6>
+                      <div style="height: 300px; overflow-y: auto" class="">
+                        <div
+                          [innerHTML]="subTaskListDetails?.description"
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+            <li
+              [ngbNavItem]="2"
+              class="nav-item"
+              (click)="getV2_subTaskProgressupdatelist()"
+            >
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Progress Update
+              </a>
+              <ng-template ngbNavContent>
+                <div
+                  class="mt-1"
+                  *ngIf="subTaskListDetails?.projectSubTaskStatusId != 25"
+                >
+                  <div class="row me-0 ms-0">
+                    <div class="col-lg-12">
+                      <label
+                        for="exampleFormControlTextarea1"
+                        class="form-label"
+                        >Leave Update</label
+                      >
+                      <div class="vstack gap-2 mb-2" *ngIf="subTaskFileValue">
+                        <div class="border rounded border-dashed p-2">
+                          <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0 me-3">
+                              <div class="avatar-sm">
+                                <div
+                                  class="avatar-title bg-light text-secondary rounded fs-24"
+                                >
+                                  <i
+                                    [class]="getFileIcon(subTaskFileValue.file)"
+                                  ></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="flex-grow-1 overflow-hidden">
+                              <h5 class="fs-15 mb-1">
+                                <a
+                                  href="javascript:void(0);"
+                                  class="text-body text-truncate d-block"
+                                  >{{ subTaskFileValue.file.name }}</a
+                                >
+                              </h5>
+                              <div class="text-muted">
+                                {{ subTaskFileValue.fileType }}
+                              </div>
+                            </div>
+                            <div class="flex-shrink-0 ms-2">
+                              <div class="d-flex gap-1">
+                                <button
+                                  (click)="deltefileMedia()"
+                                  type="button"
+                                  class="btn btn-icon text-muted btn-sm fs-18"
+                                >
+                                  <i
+                                    class="ri-delete-bin-fill align-bottom me-2 text-muted"
+                                  ></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <textarea
+                        class="form-control bg-light border-light"
+                        id="exampleFormControlTextarea1"
+                        [maxlength]="maxCharMessage"
+                        [(ngModel)]="MessageContainsubTask"
+                        rows="3"
+                        placeholder="Enter Update"
+                      ></textarea>
+                      <label class="nopadding clrlbl">
+                        Characters Remaining:
+                        {{ MessageContainsubTask.length }}/{{
+                          maxCharMessage
+                        }}</label
+                      >
+                    </div>
+                    <div class="col-lg-12 text-end">
+                      <!-- File Upload Button -->
+                      <button
+                        type="button"
+                        (click)="fileInput.click()"
+                        class="btn btn-ghost-secondary btn-icon waves-effect me-1"
+                      >
+                        <i class="ri-attachment-line fs-16"></i>
+                      </button>
+
+                      <!-- Hidden File Input -->
+                      <input
+                        type="file"
+                        id="subTaskFile"
+                        #fileInput
+                        (change)="onFileSelected($event, 'subTask')"
+                        accept=".png,.jpg,.jpeg,.gif,.bmp,.pdf,.dwg,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.mp4,.avi,.mkv,.mov,.zip,.rar,.csv"
+                        style="display: none"
+                      />
+
+                      <button
+                        [disabled]="
+                          !MessageContainsubTask && subTaskFileValue == null
+                        "
+                        (click)="submitChatsubTask()"
+                        class="btn btn-success"
+                      >
+                        Post Comment
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="text-center"
+                  *ngIf="subTaskProgressUpdateList.length == 0"
+                >
+                  <img
+                    src="../../../../../assets/images/ticketChatpartImage.png"
+                    class="img-fluid rounded chat-image"
+                  />
+                </div>
+                <div *ngIf="subTaskProgressUpdateList.length != 0">
+                  <div
+                    style="overflow-y: auto; overflow-x: hidden"
+                    [ngStyle]="{
+                      height:
+                        subTaskListDetails.projectTaskStatusId != 25
+                          ? '600px'
+                          : '350px'
+                    }"
+                    #scrollframesubTask
+                  >
+                    <ng-container
+                      *ngFor="let chat of subTaskProgressUpdateList"
+                    >
+                    <app-chat-meaasge-file
+                    [chat]="chat"
+                    [singlerow]="false"
+                    [payloadName]="'subTaskProgressUpdateId'"
+                    [deleteUrl]="
+                      'api/ProjectManagement/DeleteV2_SubTaskProgressupdate'
+                    "
+                    (AfterDeleteCall)="AfterDeleteCall($event)"
+                    [viewDeleteButton]="
+                      subTaskListDetails?.projectSubTaskStatusId == 25
+                        ? false
+                        : true
+                    "
+                  ></app-chat-meaasge-file>
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="3" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Attachments File {{ this.projectScheduleObject.scheduleNo }}
+              </a>
+              <ng-template ngbNavContent>
+                <app-project-task-sub-task-document-upload
+                  [typeView]="'subTask'"
+                  [startTaskAccessRight]="startTaskAccessRight"
+                  [ScheduleNo]="this.projectScheduleObject.scheduleNo"
+                  [SubTaskId]="projectSubTaskId"
+                  [projectOwnerId]="taskList?.projectOwnerId"
+                  [createdBy]="taskList?.createdById"
+                  [statusValue]="subTaskListDetails?.projectSubTaskStatusId"
+                ></app-project-task-sub-task-document-upload>
+              </ng-template>
+            </li>
+
+            <li [ngbNavItem]="4" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Time Entries
+              </a>
+              <ng-template ngbNavContent>
+                <app-time-entries-list
+                  [ProjectTaskId]="projectSubTaskId"
+                  [TaskType]="'Sub-Task'"
+                ></app-time-entries-list>
+              </ng-template>
+            </li>
+            <li
+              [ngbNavItem]="5"
+              class="nav-item"
+              (click)="GetV2_MX_ProjectSubTaskMembersList()"
+            >
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Member
+                <small class="badge bg-danger align-bottom ms-1">{{
+                  projectTaskMembersList.length
+                }}</small>
+              </a>
+              <ng-template ngbNavContent>
+                <div class="card-body">
+                  <div class="d-flex mb-3">
+                    <h6 class="card-title mb-0 flex-grow-1">Assigned To</h6>
+                  </div>
+                  <ng-container *ngIf="projectTaskMembersList.length != 0">
+                    <ul class="list-unstyled vstack gap-3 mb-0">
+                      <li *ngFor="let member of projectTaskMembersList">
+                        <div class="d-flex align-items-center">
+                          <div class="flex-shrink-0">
+                            <img
+                              src="{{ imageUrl }}{{ member.profileImageUrl }}"
+                              alt=""
+                              class="avatar-xs rounded-circle"
+                            />
+                          </div>
+                          <div class="flex-grow-1 ms-2">
+                            <h6 class="mb-1 fs-15">
+                              <a href="javascript:void(0)">{{
+                                member.fullName
+                              }}</a>
+                            </h6>
+                            <p class="text-muted mb-0">
+                              {{ member.accessGroupName }}
+                            </p>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </ng-container>
+                  <ng-container *ngIf="projectTaskMembersList.length == 0">
+                    <div class="py-4 text-center">
+                      <div>
+                        <lord-icon
+                          src="https://cdn.lordicon.com/msoeawqm.json"
+                          trigger="loop"
+                          colors="primary:#405189,secondary:#0ab39c"
+                          style="width: 72px; height: 72px"
+                        >
+                        </lord-icon>
+                      </div>
+                      <div class="mt-4">
+                        <h5>No Records Found</h5>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-body p-2">
+        <ngx-simplebar style="height: calc(70vh - 50px)" class="">
+          <div class="row me-0 ms-0">
+            <div class="col-lg-12 pe-0 ps-0" style="overflow-x: hidden">
+              <div class="tab-content">
+                <div [ngbNavOutlet]="customNav"></div>
+              </div>
+            </div>
+          </div>
+        </ngx-simplebar>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalViewInfo let-modal>
+  <div class="modal-header" style="border-bottom: 1px solid #dcdcdc">
+    <h6 class="card-title mb-0">View Info</h6>
+
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span class="" aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body d-flex justify-content-center">
+    <div>
+      <h5 class="mb-1">Main-Task / Sub Task Status Update Conditions:</h5>
+      <ol>
+        <li>
+          The current user accessing the Main/sub Task must be in the Member
+          list under the Main/sub Task.
+        </li>
+        <li>
+          There must be at least one record of check-in/out for member on the
+          Main/sub Task member list.
+        </li>
+        <li>There must be at least one record of progress update by member.</li>
+        <li>Check if Sub Task is created under the Main-Task.</li>
+        <li>
+          If Sub Tasks are available:
+
+          <ul>
+            <li>All Sub Tasks must be marked as complete.</li>
+            <li>
+              Ensure member has started work on a Sub Task and not yet stop.
+              This means there should not exist member who has started in for
+              the subtask and not yet stop.
+            </li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+</ng-template>

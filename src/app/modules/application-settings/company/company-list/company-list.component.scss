@@ -1,0 +1,59 @@
+.company-list {
+    .img-thumbnail {
+        padding: 0px !important;
+    }
+
+    .avatar-lg {
+        align-items: center;
+        display: flex;
+    }
+
+    .circle {
+        border-radius: 50%;
+        width: 53px;
+            height: 53px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+        }
+    }
+
+    .company-logo {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .margin-h {
+        margin-left: -1.25rem;
+        margin-right: -1.25rem;
+    }
+
+    .avatar-lg {
+        width: 5rem;
+        height: 5rem;
+    }
+
+    .align-middle {
+        vertical-align: middle;
+    }
+
+        .table-responsive {
+        min-height: 600px;
+    }
+}
+.marginbottom {
+    margin-bottom: 0px;
+
+}
+
+@media only screen and (max-width: 600px) {
+    .marginbottom {
+        margin-bottom: 10px;
+
+    }
+}

@@ -1,0 +1,220 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<form [formGroup]="workforceForm" autocomplete="off">
+  <div class="row">
+    <div class="col-lg-4 ps-0 pe-0 mt-n2 stretch-card">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Create Workforce</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="companyId" class="form-label"
+              >Company<span class="starRequried">*</span></label
+            >
+            <ng-select
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onDropdownCompanyValueChange($event)"
+              [clearable]="false"
+              id="companyName"
+              [(ngModel)]="selectedDropDownCompanyIdValue"
+              placeholder="Select Company"
+              class="w-100 mr-2"
+              for="companyName"
+              [readonly]="disabledWithAceessGroup"
+              formControlName="company"
+            ></ng-select>
+            <div *ngIf="company.invalid && company.touched" class="mt-2">
+              <small class="text-danger" *ngIf="company['errors']['required']">
+                Company is Required
+              </small>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="ClientId" class="form-label"
+                >Client<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [items]="arrayListDropDownClientList"
+                bindLabel="clientName"
+                bindValue="clientId"
+                [disabled]="!selectedDropDownCompanyIdValue"
+                (change)="onDropdownClientValueChange($event)"
+                [clearable]="false"
+                id="clientName"
+                [(ngModel)]="selectedDropDownClientIdValue"
+                placeholder="Select Client"
+                class="w-100 mr-2"
+                for="clientName"
+                [readonly]="disabledWithAceessGroup"
+                formControlName="client"
+              ></ng-select>
+              <div *ngIf="client.invalid && client.touched" class="mt-2">
+                <small class="text-danger" *ngIf="client['errors']['required']">
+                  Client is Required
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="form-group">
+              <label class="form-label"
+                >{{ isProject ? "Project" : "Department"
+                }}<span class="starRequried">*</span></label
+              >
+
+              <ng-select
+                [readonly]="projectDepartmentFieldDisiabled"
+                [items]="arrayListDropDownProjectOrDeparmentList"
+                bindLabel="departmentName"
+                bindValue="departmentId"
+                [disabled]="
+                  !selectedDropDownCompanyIdValue ||
+                  !selectedDropDownClientIdValue
+                "
+                (change)="onDropdownDepartmentValueChange($event)"
+                [clearable]="false"
+                id="departmentName"
+                [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+                [placeholder]="
+                  isProject ? 'Select Project' : 'Select Department'
+                "
+                class="w-100 mr-2"
+                for="departmentName"
+                formControlName="project"
+              ></ng-select>
+              <div *ngIf="project?.invalid && project?.touched" class="mt-2">
+                <small
+                  class="text-danger"
+                  *ngIf="project['errors']['required']"
+                >
+                  {{ isProject ? "Project" : "Department" }} is Required</small
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="WorkforceName" class="form-label"
+                >Workforce Name
+                <span class="starRequried">*</span>
+              </label>
+              <input
+                type="text"
+                formControlName="WorkforceName"
+                class="form-control"
+                [(ngModel)]="typeWorkforceValue"
+                placeholder="Workforce name"
+              />
+            </div>
+            <div
+              *ngIf="WorkforceName?.invalid && WorkforceName?.touched"
+              class="mt-2"
+            >
+              <small
+                class="text-danger"
+                *ngIf="WorkforceName['errors']['required']"
+              >
+                Workforce Name is Required</small
+              >
+            </div>
+          </div>
+
+          <div class="text-end mb-3">
+            <button class="btn btn-success w-sm" type="button" [disabled]="workforceForm.invalid||selectedTech.length == 0 " (click)="addWorkFroce()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8 pe-0 mt-n2 stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div
+            class="d-flex align-items-center justify-content-between mb-3 mt-2"
+          >
+            <div></div>
+            <div class="mb-2" *ngIf="project.value">
+              <button
+                class="btn btn-success btn-sm"
+                type="button"
+                class="btn btn-soft-primary btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#inviteMembersModal"
+                (click)="openModalMember()"
+              >
+                <i class="ri-add-fill align-bottom me-1"></i> Add Member
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive table-card">
+            <table class="table align-middle mb-0">
+              <thead class="table-light text-muted">
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Designation</th>
+                  <th scope="col">Phone Number</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngIf="selectedTech.length == 0">
+                  <tr>
+                    <td colspan="4" class="text-center">No Member Assign</td>
+                  </tr>
+                </ng-container>
+                <ng-container *ngIf="selectedTech.length != 0">
+                  <tr *ngFor="let workTech of selectedTech;index as index">
+                    <th scope="row">
+                      <div class="d-flex align-items-center">
+                        <img
+                          [src]="
+                            workTech.profileImageUrl
+                              ? imgURl + workTech.profileImageUrl
+                              : '../../../../../../assets/images/placeholderimage.png'
+                          "
+                          alt=""
+                          style="width: 40px; height: 40px"
+                          class="rounded-circle avatar-xxs"
+                        />
+                        <div class="flex-grow-1 ms-2">
+                          <a href="javascript:void(0);" class="fw-medium"
+                            >{{ workTech.fullName }}
+                          </a>
+                        </div>
+                      </div>
+                    </th>
+                    <td>{{ workTech.accessGroupName }}</td>
+                    <td>{{ workTech.phoneNumber }}</td>
+                    <td>
+                      <a
+                        href="javascript:void(0)"
+                        class="dropdown-item cursor-pointer"
+                        (click)="openModalDeleteConf(workTech,index)"
+                        ><i
+                          class="ri-delete-bin-fill align-bottom me-2 text-danger"
+                        ></i>
+                      </a>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+            <!--end table-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+

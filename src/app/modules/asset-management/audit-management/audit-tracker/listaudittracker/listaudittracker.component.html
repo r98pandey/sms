@@ -1,0 +1,143 @@
+<nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Audit Management</li>
+        <li class="breadcrumb-item active" aria-current="page">Audit</li>
+    </ol>
+</nav>
+
+
+
+<div class="row">
+    <div class="col-md-12 mb-2">
+        <div class="card p-3">
+            <div class="display-lg">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h6 class="card-title mb-0">Audit Tracker List </h6>
+                    <div class="d-flex align-items-center">
+                        <ng-select [items]="assetStatusList" bindLabel="assetStatus" bindValue="assetStatusId"
+                            placeholder="Select Asset Status " [searchable]="false" class="custom mr-3"
+                            (change)="getassetStatus(assetStatusValue)" [(ngModel)]="assetStatusValue"
+                            [clearable]="false" style="width: 300px;">
+                        </ng-select>
+                        <ng-select [items]="auditTypeArray" bindLabel="type" bindValue="id"
+                            placeholder="Select Audit Type" [searchable]="false" [(ngModel)]="auditTypeValue"
+                            class="custom mr-3" (change)="getAuditType(auditTypeValue)" [clearable]="false"
+                            style="width:200px;">
+                        </ng-select>
+                        <ng-select [items]="yearList" placeholder="Select Year" [searchable]="false" class="custom mr-3"
+                            (change)="getYearSelection(year)" [(ngModel)]="year" [clearable]="false"
+                            style="width: 100px;">
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+            <div class="display-sm">
+                <h6 class="card-title">Audit Tracker List</h6>
+                <div class="d-flex mt-2">
+                    <ng-select [items]="assetStatusList" bindLabel="assetStatus" bindValue="assetStatusId"
+                        placeholder="Select Asset Status " [searchable]="false" class="custom"
+                        (change)="getassetStatus(assetStatusValue)" [(ngModel)]="assetStatusValue" [clearable]="false"
+                        style="width: 100%;">
+                    </ng-select>
+                </div>
+                <div class="d-flex mt-2">
+                    <ng-select [items]="auditTypeArray" bindLabel="type" bindValue="id"
+                        placeholder="Select Audit Type  " [searchable]="false" [(ngModel)]="auditTypeValue"
+                        class="custom mr-2" (change)="getAuditType(auditTypeValue)" [clearable]="false"
+                        style="width:100%;">
+                    </ng-select>
+                    <ng-select [items]="yearList" placeholder="Select Year  " [searchable]="false" class="custom"
+                        (change)="getYearSelection(year)" [(ngModel)]="year" [clearable]="false" style="width: 100%;">
+                    </ng-select>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-4" *ngFor="let audit of auditListData">
+        <div class="card card-width">
+            <div class="card-header">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <h6 class="mb-0">{{audit.fullName}}</h6>
+                        <span class="ml-2">{{audit.createdDate}}</span>
+                    </div>
+                    <div>
+                        <span class="status bg-warning text-light">{{audit.assetStatus}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="mb-2"> {{audit.companyName}}</h5>
+                <h6 class="mb-2">
+                    <i class="feather icon-clipboard text-primary mr-1"></i>
+                    <span class="text-info">{{audit.assetAuditName}}</span>
+                </h6>
+                <p class="card-text">
+                    <i class="feather icon-home mr-1"></i> {{audit.departmentName}}
+                </p>
+
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span *ngIf="audit.auditStatusId==24">
+                        <img src="../../../../../../assets/images/Verified.PNG" height="80px" width="120px">
+                    </span>
+                    <span *ngIf="audit.auditStatusId==25">
+                        <img src="../../../../../../assets/images/completed.PNG" height="80px" width="120px">
+                    </span>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="text-success">
+                            Matched
+                            <p class="text-success mt-0">{{audit.matched}}</p>
+                        </label>
+
+                    </div>
+                    <div class="col-md-4">
+                        <label class="text-primary">
+                            Not found
+                            <p class="text-primary mt-0"> {{audit.notFound}}</p>
+                        </label>
+
+                    </div>
+                    <div class="col-md-4">
+                        <label class="text-danger">
+                            Not Match
+                            <p class="text-danger mt-0">{{audit.notMatch}}</p>
+                        </label>
+                    </div>
+                    <div class="col-md-12 mt-2 " style="font-size:12px"
+                        *ngIf="audit.contactPerson1 ||audit.contactDesignation1 || audit.contactDesignation1 || audit.contactEMail1">
+                        <div class=" from mt-1">
+                            <h6> <i class="feather icon-archive mr-1 "></i>Contact Details</h6>
+                        </div>
+                        <hr class=" mt-0 mb-2">
+                        <div class="row">
+                            <div class="col-md-12" *ngIf="audit.contactPerson1">
+                                <i class="feather icon-user"></i>{{audit.contactPerson1}}
+
+                            </div>
+                            <div class="col-md-12 mt-2" *ngIf="audit.contactDesignation1">
+                                <i class="feather icon-github"></i> {{audit.contactDesignation1}}
+
+                            </div>
+                            <div class="col-md-12 mt-2" *ngIf="audit.contactEMail1">
+                                <i class="feather icon-book-open"></i> {{audit.contactEMail1}}
+
+                            </div>
+                            <div class="col-md-12 mt-2" *ngIf="audit.contactMobileNo1">
+                                <i class="feather icon-phone-call"></i> {{audit.contactMobileNo1}}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary float-right" (click)="navigateToViewDetails($event,audit)">View
+                    Details
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

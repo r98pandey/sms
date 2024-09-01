@@ -1,0 +1,305 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm-3 col-xxl-3">
+            <h5 class="card-title mb-0">Vendor List</h5>
+          </div>
+          <div
+            class="col-sm-9 col-xxl-9 d-flex gap-2 flex-wrap justify-content-end"
+          >
+            <div   *ngIf="returnValueMenu.add">
+              <button
+                type="button"
+                class="btn btn-success add-btn"
+                id="create-btn"
+                (click)="navigateToForm(false)"
+              >
+                <i class="ri-add-line align-bottom me-1"></i> Add Vendor
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row g-3">
+          <div class="col-lg"></div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onDropdownCompanyValueChange($event)"
+              [clearable]="true"
+              id="companyName"
+              [(ngModel)]="selectedDropDownCompanyIdValue"
+              placeholder="Select Company"
+              class="w-100 mr-2"
+              for="companyName"
+            ></ng-select>
+          </div>
+
+          <div class="col-lg">
+            <div class="search-box">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                [(ngModel)]="typeVendorNameValue"
+                (input)="onTypeAssetNameChange(false)"
+                placeholder="Search for Vendor name"
+                #inputer
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+          </div>
+          <div class="col-lg-auto">
+            <div class="d-flex justify-content-end">
+              <button
+                type="button"
+                class="btn btn-danger ms-1"
+                (click)="resetSerachVariable()"
+                ngbTooltip="Remove All Search"
+              >
+                <i class="ri-refresh-fill me-1 align-bottom"></i>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th>Vendor Name</th>
+                        <th>Company</th>
+                        <th>Contact Person Name</th>
+                        <th>Mobile No</th>
+                        <th>Office Phone No</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let vendor of vendorList">
+
+                        <td>
+                             <a
+                            href="javascript:void(0)"
+                            (click)="navigateToView(vendor)"
+                            class="fw-medium link-primary"
+                            >{{ vendor.vendorName}}</a
+                          >
+                          </td>
+                        <td>{{ vendor.companyName }}</td>
+                        <td>{{ vendor.contactPersonName }}</td>
+                        <td>{{ vendor.contactMobileNo }}</td>
+                        <td>{{ vendor.officePhoneNo }}</td>
+                        <td>
+                          <span
+                            class="badge text-uppercase bg-success-subtle text-success"
+                            *ngIf="vendor.status == 'Active'"
+                            >{{ vendor.status }}</span
+                          >
+                          <span
+                            class="badge text-uppercase bg-danger-subtle text-danger"
+                            *ngIf="vendor.status == 'InActive'"
+                            >{{ vendor.status }}</span
+                          >
+                          </td>
+
+
+                        <td>
+                          <div class="dropdown ms-2" ngbDropdown>
+                            <button
+                              class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                              type="button"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                              ngbDropdownToggle
+                            >
+                              <i class="ri-more-fill"></i>
+                            </button>
+
+                            <div
+                              class="dropdown-menu dropdown-menu-end"
+                              ngbDropdownMenu
+                            >
+                              <a
+                                class="dropdown-item"
+                                (click)="navigateToView(vendor)"
+                                ><i
+                                  class="ri-eye-fill align-bottom me-2 text-muted"
+                                ></i>
+                                View</a
+                              >
+                              <a *ngIf="returnValueMenu.edit"
+                                class="dropdown-item"
+                                (click)="navigateToForm(false, vendor.vendorId)"
+                                ><i
+                                  class="ri-pencil-fill align-bottom me-2 text-muted"
+                                ></i>
+                                Edit</a
+                              >
+                              <div class="dropdown-divider" *ngIf="returnValueMenu.delete"></div>
+                              <a *ngIf="returnValueMenu.delete"
+                                class="dropdown-item"
+                                href="javascript:void(0);"
+                                data-bs-toggle="modal"
+                                data-bs-target="#removeProjectModal"
+                                (click)="confirm(deleteModel, vendor.vendorId)"
+                                ><i
+                                  class="ri-delete-bin-fill align-bottom me-2 text-muted"
+                                ></i>
+                                Delete</a
+                              >
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="text-center" *ngIf="vendorList.length === 0">
+                    No Vendor Found
+                  </div>
+                </div>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col-sm-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecordsFromApi }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col-sm-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="totalRecordsFromApi"
+                        [(page)]="page"
+                        [pageSize]="pageSize"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="OnChangesPage($event)"
+                        *ngIf="totalRecordsFromApi > pageSize"
+                      >
+                        <ng-template
+                          ngbPaginationPrevious
+                          let-page
+                          let-pages="pages"
+                        >
+                          <i class="ci-arrow-left me-2"></i> Prev
+                        </ng-template>
+                        <ng-template ngbPaginationNext>
+                          Next
+                          <i class="ci-arrow-right ms-2"></i>
+                        </ng-template>
+                      </ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #deleteModel let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="mt-2 text-center">
+        <lord-icon
+          src="https://cdn.lordicon.com/gsqxdxog.json"
+          trigger="loop"
+          colors="primary:#405189,secondary:#f06548"
+          style="width: 90px; height: 90px"
+        ></lord-icon>
+        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+          <h4>You are about to delete a Vendor ?</h4>
+          <p class="text-muted mx-4 mb-0">
+            Deleting your vendor will remove all of your information from our
+            database.
+          </p>
+        </div>
+      </div>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+        class="btn  btn-danger"  data-bs-dismiss="modal"
+          (click)="modal.close('Close click')"
+        >
+          <i class="ri-close-line me-1 align-middle"></i> Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="deleteData(deleteId)"
+          (click)="modal.close('Close click')"
+        >
+          Yes, Delete It!
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+<!-- <div class="row justify-content-md-between align-items-md-center gy-2">
+                    <div class="d-flex justify-content-between p-2">
+                        Showing {{ from }} to {{ to }} of {{ totalRecords }} entries
+
+                        <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+                            (pageChange)="getdepartmentPagination()" *ngIf="totalRecords > pageSize">
+                            <ng-template ngbPaginationPrevious let-page let-pages="pages">
+                                <i class="ci-arrow-left me-2"></i>
+                                Prev
+                            </ng-template>
+                            <ng-template ngbPaginationNext>
+                                Next
+                                <i class="ci-arrow-right ms-2"></i>
+                            </ng-template>
+                        </ngb-pagination>
+                    </div>
+                </div> -->

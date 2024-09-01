@@ -1,0 +1,2555 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  [title]="'Dashboard'"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<div class="project-wrapper">
+  <div class="col-md-12 col-xl-12 col-xxl-12">
+    <div class="row">
+      <div class="col-xl-6 col-md-6" *ngFor="let stat of sendDataInProjectStat">
+        <app-projects-stat
+          [title]="stat.title"
+          [value]="stat.value"
+          [icon]="stat.icon"
+          [month]="stat.month"
+          [progressBar]="stat.progressBar"
+          [subItem]="stat.subItem"
+        ></app-projects-stat>
+      </div>
+    </div>
+  </div>
+  <div class="row align-items-center">
+    <div class="col">
+      <!-- Nav tabs -->
+      <ul
+        ngbNav
+        #nav="ngbNav"
+        [(activeId)]="clientActive"
+        class="nav nav-tabs-custom card-header-tabs border-bottom-0"
+      >
+        <li [ngbNavItem]="1">
+          <a (click)="checkdection(1)" ngbNavLink> On Duty </a>
+          <ng-template ngbNavContent>
+            <div class="row">
+              <div class="col-xl-4 stretch-card">
+                <div class="card">
+                  <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Technician</h4>
+                  </div>
+                  <div class="card-body cardbody">
+                    <ng-container
+                      *ngIf="technitionsAttendanceTransactionList.length != 0"
+                    >
+                      <div
+                        class="row mb-1"
+                        *ngFor="
+                          let data of technitionsAttendanceTransactionList
+                        "
+                      >
+                        <div class="col-sm-12 col-md-5 d-flex mb-3">
+                          <img
+                            [src]="imgUrl + data.profileImageUrl"
+                            alt=""
+                            class="avatar-xs rounded-3 me-2"
+                          />
+                          <div>
+                            <h5 class="fs-13 mb-0">{{ data.techName }}</h5>
+
+                            <p class="fs-12 mb-0 text-muted">
+                              {{ data.designationName }}
+                            </p>
+                            <p class="fs-12 mb-0 d-flex">
+                              <span
+                                class="badge bg-success me-2"
+                                *ngIf="data.taskType === 'Corrective'"
+                                >{{ data.taskType }}</span
+                              >
+
+                              <span
+                                class="badge bg-primary me-2"
+                                *ngIf="data.taskType === 'Preventive'"
+                                >{{ data.taskType }}</span
+                              >
+
+                              <span
+                                class="badge bg-info me-2"
+                                *ngIf="
+                                  data.taskType !== 'Preventive' &&
+                                  data.taskType !== 'Corrective'
+                                "
+                                >{{ data.taskType }}</span
+                              >
+
+                              <span
+                                class="badge bg-primary-subtle text-primary"
+                                *ngIf="data.transactionType === 'Check-In'"
+                                >{{ data.transactionType }}</span
+                              >
+
+                              <span
+                                class="badge bg-secondary-subtle text-secondary"
+                                *ngIf="data.transactionType === 'Check-Out'"
+                                >{{ data.transactionType }}</span
+                              >
+                            </p>
+                          </div>
+                        </div>
+                        <div class="col-sm-9 col-md-6 mb-3">
+                          <span class="fs-12 mb-0">
+                            Start - {{ data.startDateTime }}
+                          </span>
+                          <br />
+                          <span class="fs-12 mb-0">
+                            End - {{ data.endDateTime || "NA" }}
+                          </span>
+                          <br />
+                        </div>
+                        <div class="col-sm-3 col-md-1 mb-3 text-right">
+                          <i
+                            class="ri-eye-fill align-middle text-success cursor"
+                            (click)="viewMaps(data)"
+                          ></i>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-container
+                      *ngIf="technitionsAttendanceTransactionList.length == 0"
+                    >
+                      <div class="py-4 text-center">
+                        <div>
+                          <lord-icon
+                            src="https://cdn.lordicon.com/msoeawqm.json"
+                            trigger="loop"
+                            colors="primary:#405189,secondary:#0ab39c"
+                            style="width: 72px; height: 72px"
+                          >
+                          </lord-icon>
+                        </div>
+                        <div class="mt-4">
+                          <h5>
+                            No Records Found
+                          </h5>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+
+                  <!-- end tbody -->
+                </div>
+              </div>
+              <div class="col-xl-8">
+                <div class="card">
+                  <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">
+                      Map
+                      <span *ngIf="storeMapData?.techName">
+                        ( {{ storeMapData?.techName }})</span
+                      ><span *ngIf="storeMapData?.startLongitude">
+                        |
+                        <img
+                          src="http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+                        />
+                        Check-In ( {{ storeMapData?.startLongitude }} :
+                        {{ storeMapData?.startLatitude }})</span
+                      >
+                      <span *ngIf="storeMapData?.endLongitude">
+                        |
+                        <img
+                          src="http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
+                        />
+                        Check-Out ( {{ storeMapData?.endLongitude }} :
+                        {{ storeMapData?.endLatitude }})</span
+                      >
+                    </h4>
+                  </div>
+                  <div class="card-body cardbody">
+                    <google-map
+                    [latitude]="latitude"
+                    [longitude]="longitude"
+                    [options]="mapOptions"
+                    width="100%"
+                    height="700px"
+                  >
+                    <map-marker
+                      #marker="mapMarker"
+                      [position]="markers[0]"
+                      *ngIf="storeMapData?.startLatitude"
+                      [icon]="getMarkerIcon()"
+                      [label]="'Check-In'"
+                      (mapClick)="openInfoWindow_newInfo(marker, 'checkIn')"
+                    >
+                    </map-marker>
+                    <map-info-window
+                      *ngIf="
+                        storeMapData?.techName && infoWindowOpen === 'checkIn'
+                      "
+                      [options]="infoWindowOptions"
+                      [position]="markers[0]"
+                      [isOpen]="true"
+                      (closeclick)="closeInfoWindow()"
+                    >
+                      <div class="card mb-0">
+                        <div class="card-body mb-0">
+                          <ul class="list-unstyled mb-0 vstack gap-1">
+                            <li>
+                              <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                  <img
+                                    [src]="
+                                      imgUrl + storeMapData?.profileImageUrl
+                                    "
+                                    alt=""
+                                    class="avatar-sm rounded"
+                                  />
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                  <h6 class="fs-15 mb-1 text-success">
+                                    {{ storeMapData?.techName }}
+                                  </h6>
+                                  <p class="text-muted mb-0 text-success">
+                                    {{ storeMapData?.designationName }}
+                                  </p>
+                                  <p class="text-muted mb-0 text-success">
+                                    {{ storeMapData?.companyName }}
+                                  </p>
+                                  <p class="text-muted mb-0 text-success">
+                                    {{ storeMapData?.clientName }}
+                                  </p>
+                                  <p class="text-muted mb-0 text-success">
+                                    {{ storeMapData?.projectName }}
+                                  </p>
+                                  <p class="text-muted mb-0">
+                                    <span
+                                      class="badge bg-danger text-uppercase"
+                                      *ngIf="
+                                        storeMapData?.taskType == 'On-Site'
+                                      "
+                                    >
+                                      {{ storeMapData?.taskType }}
+                                    </span>
+                                    <span
+                                      class="badge bg-success text-uppercase"
+                                      *ngIf="
+                                        storeMapData?.taskType == 'Remote'
+                                      "
+                                    >
+                                      {{ storeMapData?.taskType }}
+                                    </span>
+                                    <span
+                                      class="badge bg-warning text-uppercase"
+                                      *ngIf="
+                                        storeMapData?.taskType == 'Phone Call'
+                                      "
+                                    >
+                                      {{ storeMapData?.taskType }}
+                                    </span>
+                                  </p>
+                                </div>
+                              </div>
+                            </li>
+                            <li class="mb-0">
+                              <i
+                                class="ri-mail-line me-2 align-middle text-muted fs-16"
+                              ></i
+                              >{{ storeMapData?.email }}
+                            </li>
+                            <li class="mt-0 mb-0">
+                              <i
+                                class="ri-phone-line me-2 align-middle text-muted fs-16"
+                              ></i
+                              >{{ storeMapData?.phoneNumber }}
+                            </li>
+
+                            <li class="mt-0 mb-0">
+                              <i
+                                class="ri-calendar-event-line me-2 align-middle text-muted fs-16"
+                              ></i
+                              >{{ storeMapData?.startDateTime }}
+                            </li>
+                            <li
+                              class="mt-0 mb-0"
+                              *ngIf="storeMapData?.address_Start"
+                            >
+                              <b
+                                >Checkin Address :-
+                                {{ storeMapData?.address_Start }}</b
+                              >
+                            </li>
+                            <li
+                              class="mt-0 mb-0"
+                              *ngIf="storeMapData?.address_End"
+                            >
+                              <b
+                                >Checkout Address :-
+                                {{ storeMapData?.address_End }}</b
+                              >
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </map-info-window>
+
+                    <map-marker
+                      #marker1="mapMarker"
+                      *ngIf="storeMapData?.endLatitude"
+                      [position]="markers[1]"
+                      [icon]="getMarkerIcon(1)"
+                      [label]="'Check-Out'"
+                      (mapClick)="openInfoWindow_newInfo(marker1, 'checkOut')"
+                    >
+                      <map-info-window
+                        [disableAutoPan]="true"
+                        #infoWindow
+                        *ngIf="
+                          storeMapData?.endLatitude &&
+                          infoWindowOpen === 'checkOut'
+                        "
+                        [isOpen]="infoWindowOpen === 'checkOut'"
+                        (closeclick)="closeInfoWindow()"
+                      >
+                        <div class="card mb-0">
+                          <div class="card-body mb-0">
+                            <ul class="list-unstyled mb-0 vstack gap-1">
+                              <li>
+                                <div class="d-flex align-items-center">
+                                  <div class="flex-shrink-0">
+                                    <img
+                                      [src]="
+                                        imgUrl + storeMapData?.profileImageUrl
+                                      "
+                                      alt=""
+                                      class="avatar-sm rounded"
+                                    />
+                                  </div>
+                                  <div class="flex-grow-1 ms-3">
+                                    <h6 class="fs-15 mb-1 text-warning">
+                                      {{ storeMapData?.techName }}
+                                    </h6>
+                                    <p class="text-muted mb-0 text-warning">
+                                      {{ storeMapData?.designationName }}
+                                    </p>
+                                    <p class="text-muted mb-0 text-warning">
+                                      {{ storeMapData?.companyName }}
+                                    </p>
+                                    <p class="text-muted mb-0 text-warning">
+                                      {{ storeMapData?.clientName }}
+                                    </p>
+                                    <p class="text-muted mb-0 text-warning">
+                                      {{ storeMapData?.projectName }}
+                                    </p>
+                                  </div>
+                                </div>
+                              </li>
+                              <li class="mb-0">
+                                <i
+                                  class="ri-mail-line me-2 align-middle text-muted fs-16"
+                                ></i
+                                >{{ storeMapData?.email }}
+                              </li>
+                              <li class="mt-0 mb-0">
+                                <i
+                                  class="ri-phone-line me-2 align-middle text-muted fs-16"
+                                ></i
+                                >{{ storeMapData?.phoneNumber }}
+                              </li>
+
+                              <li class="mt-0 mb-0">
+                                <i
+                                  class="ri-calendar-event-line me-2 align-middle text-muted fs-16"
+                                ></i
+                                >{{ storeMapData?.startDateTime }}
+                              </li>
+                              <li class="mt-0 mb-0">
+                                <i
+                                  class="ri-calendar-event-line me-2 align-middle text-muted fs-16"
+                                ></i
+                                >{{ storeMapData?.endDateTime }}
+                              </li>
+                              <li class="mt-0 mb-0">
+                                <span
+                                  class="badge bg-danger text-uppercase"
+                                  *ngIf="storeMapData?.taskType == 'On-Site'"
+                                >
+                                  {{ storeMapData?.taskType }}
+                                </span>
+                                <span
+                                  class="badge bg-success text-uppercase"
+                                  *ngIf="storeMapData?.taskType == 'Remote'"
+                                >
+                                  {{ storeMapData?.taskType }}
+                                </span>
+                                <span
+                                  class="badge bg-warning text-uppercase"
+                                  *ngIf="
+                                    storeMapData?.taskType == 'Phone Call'
+                                  "
+                                >
+                                  {{ storeMapData?.taskType }}
+                                </span>
+                              </li>
+                              <li
+                                class="mt-0 mb-0"
+                                *ngIf="storeMapData?.address_Start"
+                              >
+                                <b
+                                  >Checkin Address :-
+                                  {{ storeMapData?.address_Start }}</b
+                                >
+                              </li>
+                              <li
+                                class="mt-0 mb-0"
+                                *ngIf="storeMapData?.address_End"
+                              >
+                                <b
+                                  >Checkout Address :-
+                                  {{ storeMapData?.address_End }}</b
+                                >
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </map-info-window>
+                    </map-marker>
+                  </google-map>
+
+                    <!-- Polyline connecting consecutive markers -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="2">
+          <a (click)="checkdection(2)" ngbNavLink> My Task </a>
+          <ng-template ngbNavContent>
+            <div class="row">
+              <div class="col-xl-7">
+                <div class="card card-height-100">
+                  <ul
+                    ngbNav
+                    #todoWorkFlowTabs="ngbNav"
+                    [activeId]="1"
+                    class="nav nav-tabs nav-justified nav-border-top nav-border-top-primary mb-0"
+                  >
+                    <li [ngbNavItem]="checktheRuleOfTrueValue==true?1:2" *ngIf="checktheRuleOfTrueValue">
+                      <a (click)="checkdection(2) "ngbNavLink>
+                        <i class="ri-todo-line align-middle me-1"></i>My Task
+                      </a>
+                      <ng-template ngbNavContent>
+                        <div class="card-body my-tasks myTaskCardBody">
+                          <h5 class="card-title mb-2">My Task</h5>
+                          <ng-container
+                            *ngIf="checktheRuleOfClientDashbard.newTicket"
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countNewTicket !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!-- >New Ticket -->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countNewTicket ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countNewTicket ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countNewTicket !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskTicketList(
+                                      totalCountTicketServiceOrderIncident.countNewTicket,
+                                      48,
+                                      'New Ticket'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    New Ticket Received
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countNewTicket !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >Kindly generate a service order and assign
+                                    the task to support team or member for
+                                    resolution.</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countNewTicket ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    Haven't been any new support tickets.
+                                  </a>
+                                </div>
+
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countNewTicket
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countNewTicket
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- end New Ticket -->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="checktheRuleOfClientDashbard.awaitQuotation"
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+
+                              <!--  Awaiting Quotation-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskTicketList(
+                                      totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation,
+                                      53,
+                                      'Awaiting Quotation'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Awaiting Quotation
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >Account/Project Manager has approved the
+                                    tickets as billable.</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    No billable tickets to be generate quotation
+                                  </a>
+                                </div>
+
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--  End Awaiting Quotation-->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="checktheRuleOfClientDashbard.generateNewSO"
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalServiceOrderPending !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--  Waiting For Generate New Service Order-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderPending ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalServiceOrderPending ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalServiceOrderPending !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskTicketList(
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderPending,
+                                      52,
+                                      'Waiting For Generate New Service Order'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Waiting For Generate New Service Order
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderPending ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Request For New Service Order .</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderPending !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    Tickets have been approved and are Awaiting
+                                    Service Order Generation.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalServiceOrderPending
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalServiceOrderPending
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- end Waiting For Generate New Service Order-->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              checktheRuleOfClientDashbard.expectedStartTaskDateTime
+                            "
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--   Assign Member & Site Visit Date Time-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskServiceOrderList(
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime,
+                                      2,
+                                      'Assign Member & Site Visit Date Time'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Assign Member & Site Visit Date Time
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Transaction</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    The service order has not yet had the
+                                    expected start task date and time.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-container>
+                            <!--   Assign Member & Site Visit Date Time-->
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              checktheRuleOfClientDashbard.quotationToProceedFinance
+                            "
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countIsNotQuotationBilled !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--   Waiting for Generate Invoice-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countIsNotQuotationBilled ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countIsNotQuotationBilled ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countIsNotQuotationBilled !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskWaitingForInvoice(
+                                      totalCountTicketServiceOrderIncident.countIsNotQuotationBilled,
+                                      'Waiting for Generate Invoice'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Waiting for Generate Invoice
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countIsNotQuotationBilled ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Transaction</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countIsNotQuotationBilled !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    The billable tickets service order has been
+                                    successfully completed.Send it to the
+                                    finance department for further processing
+                                    and invoice creation.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countIsNotQuotationBilled
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countIsNotQuotationBilled
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!--  End  Waiting for Generate Invoice-->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              checktheRuleOfClientDashbard.techSignatureRequired
+                            "
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalIncidentTechSignature !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--   Incident Tech Signature-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalIncidentTechSignature ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalIncidentTechSignature ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalIncidentTechSignature !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskSignatureList(
+                                      31,
+                                      totalCountTicketServiceOrderIncident.countTotalIncidentTechSignature,
+                                      'Incident Tech Sign'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Incident Tech Signature
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalIncidentTechSignature ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Transaction</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalIncidentTechSignature !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    The member has completed the task and is
+                                    now waiting for the incident report
+                                    signature from the member or project
+                                    manager.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalIncidentTechSignature
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalIncidentTechSignature
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- End  Incident Tech Signature-->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              checktheRuleOfClientDashbard.clientSignatureRequired
+                            "
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalIncidentClientSignature !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--   Incident Client Signature-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalIncidentClientSignature ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalIncidentClientSignature ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalIncidentClientSignature !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskSignatureList(
+                                      31,
+                                      totalCountTicketServiceOrderIncident.countTotalIncidentClientSignature,
+
+                                      'Incident Client Sign'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Incident Client Signature
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalIncidentClientSignature ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Transaction</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalIncidentClientSignature !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    The member has completed the task and is
+                                    now waiting for the incident report
+                                    signature from the Client.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalIncidentClientSignature
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalIncidentClientSignature
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--   End Incident Client Signature-->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              checktheRuleOfClientDashbard.pendingForCloseTicketProcess
+                            "
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForClose !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--   Waiting Client to Close Ticket-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForClose ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForClose ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForClose !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskTicketList(
+                                      totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForClose,
+                                      31,
+                                      'Waiting Client to Close Ticket'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Waiting Client to Close Ticket
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForClose ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Transaction</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForClose !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    The service order for this ticket is now
+                                    complete, and the ticket is in a resolved
+                                    status. Please verify the details and
+                                    proceed with closing it.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForClose
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForClose
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--   Waiting Client to Close Ticket-->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              checktheRuleOfClientDashbard.pendingForCloseTicketProcessInternal
+                            "
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForCloseInternal !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--   Waiting Internal Ticket to Close-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForCloseInternal ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForCloseInternal ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForCloseInternal !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskTicketList(
+                                      totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForCloseInternal,
+                                      31,
+                                      'Waiting Internal Ticket to Close'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Waiting Internal Ticket to Close
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForCloseInternal ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Transaction</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForCloseInternal !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    The service order for this ticket is now
+                                    complete, and the ticket is in a resolved
+                                    status. Please verify the details and
+                                    proceed with closing it.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForCloseInternal
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForCloseInternal
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--  Waiting Internal Ticket to Close-->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              checktheRuleOfClientDashbard.ticketAcknowledgmentRequest
+                            "
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalTicketAcknowledgmentRequest !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--  Ticket Acknowledgement for completed service order-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalTicketAcknowledgmentRequest ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalTicketAcknowledgmentRequest ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalTicketAcknowledgmentRequest !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskTicketList(
+                                      totalCountTicketServiceOrderIncident.countTotalTicketAcknowledgmentRequest,
+                                      61,
+                                      'Ticket Acknowledgement for completed service order'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Ticket Acknowledgement for completed service
+                                    order
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalTicketAcknowledgmentRequest ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Transaction</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalTicketAcknowledgmentRequest !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    The service order task has been completed by
+                                    our team and is awaiting acknowledgment to
+                                    Resolve and escalate to closing process.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalTicketAcknowledgmentRequest
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalTicketAcknowledgmentRequest
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--  Ticket Acknowledgement for completed service order-->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              checktheRuleOfClientDashbard.quotationRejected
+                            "
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalTicketQuotationRejected !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--   Waiting Client to Close Ticket-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalTicketQuotationRejected ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalTicketQuotationRejected ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalTicketQuotationRejected !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskTicketList(
+                                      totalCountTicketServiceOrderIncident.countTotalTicketQuotationRejected,
+                                      57,
+                                      'Total Ticket Quotation Rejected'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Total Ticket Quotation Rejected
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalTicketQuotationRejected ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Transaction</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalTicketQuotationRejected !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    Quotation Approval task is rejected by a
+                                    reviewer or approver
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalTicketQuotationRejected
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalTicketQuotationRejected
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--   Waiting Client to Close Ticket-->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              checktheRuleOfClientDashbard.pmScheduleCompletionAcknowlegementAdmin
+                            "
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementUser !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--  Schedule Completion Acknowlegement Admin-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementUser ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementUser ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementUser !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskScheduleListForAdmin(
+                                      61,
+                                      totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementUser,
+
+                                      'Schedule Completion Acknowlegement Admin'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Schedule Completion Acknowlegement Admin
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementUser ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Transaction</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementUser !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    The tech team has completed the schedule.
+                                    Now, you are to acknowledge this schedule,
+                                    escalate it to the client for verification,
+                                    and subsequently close the schedule.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementUser
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementUser
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-container>
+                            <!--   EndSchedule Completion Acknowlegement Admin-->
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              checktheRuleOfClientDashbard.pmScheduleCompletionAcknowlegementClient
+                            "
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementClient !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--   ScheduleCompletionAcknowlegementClient-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementClient ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementClient ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementClient !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskScheduleListForClient(
+                                      62,
+                                      totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementClient,
+
+                                      'Schedule Completion Acknowlegement Client'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Schedule Completion Acknowlegement Client
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementClient ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Transaction</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementClient !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    The member has completed the task and is
+                                    now waiting for the incident report
+                                    signature from the Client.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementClient
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementClient
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--   End ScheduleCompletionAcknowlegementClient-->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              checktheRuleOfClientDashbard.auditCompletionAcknowlegementAdmin
+                            "
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementAdmin !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--   ScheduleCompletionAcknowlegementClient-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementAdmin ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementAdmin ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementAdmin !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskAuditListForAdmin(
+                                      61,
+                                      totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementAdmin,
+
+                                      'Audit Completion Acknowledgement  Admin'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Audit Completion Acknowledgement Admin
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementAdmin ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Transaction</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementAdmin !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    The member has completed the task and is
+                                    now waiting for the incident report
+                                    signature from the Client.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementAdmin
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementAdmin
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--   End ScheduleCompletionAcknowlegementClient-->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              checktheRuleOfClientDashbard.auditCompletionAcknowlegementClient
+                            "
+                          >
+                            <ng-container
+                              *ngIf="
+                                totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementClient !==
+                                0
+                              "
+                            >
+                              <hr class="my-3" />
+                              <!--   ScheduleCompletionAcknowlegementClient-->
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementClient ==
+                                      0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementClient ==
+                                            0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementClient !=
+                                            0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="
+                                    myTaskAuditListForClient(
+                                      62,
+                                      totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementClient,
+
+                                      'Audit Completion Acknowledgement  Client'
+                                    )
+                                  "
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    Audit Completion Acknowledgement Client
+                                  </h5>
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementClient ==
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                    >No Transaction</a
+                                  >
+                                  <a
+                                    href="javascript:void(0);"
+                                    *ngIf="
+                                      totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementClient !=
+                                      0
+                                    "
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    The member has completed the task and is
+                                    now waiting for the incident report
+                                    signature from the Client.
+                                  </a>
+                                </div>
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementClient
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementClient
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--   End ScheduleCompletionAcknowlegementClient-->
+                            </ng-container>
+                          </ng-container>
+
+                        <ng-container
+                        *ngIf="
+                          checktheRuleOfClientDashbard.ticketVerificationForAcknowledgeProcess
+                        "
+                      >
+                        <ng-container
+                          *ngIf="
+                            totalCountTicketServiceOrderIncident.countTotalTicketVerificationForAcknowledgeProcess !==
+                            0
+                          "
+                        >
+                          <hr class="my-3" />
+                          <!--   ticketVerificationForAcknowledgeProcess-->
+                          <div class="row g-3 cursor">
+                            <div class="col-auto">
+                              <div
+                                class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                [ngClass]="
+                                  totalCountTicketServiceOrderIncident.countTotalTicketVerificationForAcknowledgeProcess ==
+                                  0
+                                    ? 'bg-success-subtle'
+                                    : 'bg-danger-subtle'
+                                "
+                              >
+                                <div class="text-center">
+                                  <h5 class="mb-0">
+                                    <i
+                                      class="bx bx-bell text-success mt-2"
+                                      *ngIf="
+                                        totalCountTicketServiceOrderIncident.countTotalTicketVerificationForAcknowledgeProcess ==
+                                        0
+                                      "
+                                    ></i>
+                                    <i
+                                      class="bx bx-bell text-danger mt-2"
+                                      *ngIf="
+                                        totalCountTicketServiceOrderIncident.countTotalTicketVerificationForAcknowledgeProcess !=
+                                        0
+                                      "
+                                    ></i>
+                                  </h5>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="col align-items-center"
+                              (click)="
+                                myTaskTicketList(
+                                  totalCountTicketServiceOrderIncident.countTotalTicketVerificationForAcknowledgeProcess,
+                                  72,
+                                  'Ticket Verification For Acknowledge Process'
+                                )
+                              "
+                            >
+                              <h5 class="text-muted mt-0 mb-1 fs-14">
+                                Ticket Verification For Acknowledge Process
+                              </h5>
+                              <a
+                                href="javascript:void(0);"
+                                *ngIf="
+                                  totalCountTicketServiceOrderIncident.countTotalTicketVerificationForAcknowledgeProcess ==
+                                  0
+                                "
+                                class="text-reset fs-13 mb-0"
+                                >No Transaction</a
+                              >
+                              <a
+                                href="javascript:void(0);"
+                                *ngIf="
+                                  totalCountTicketServiceOrderIncident.countTotalTicketVerificationForAcknowledgeProcess !=
+                                  0
+                                "
+                                class="text-reset fs-13 mb-0"
+                              >
+                                The member has completed the task and is now
+                                waiting for the ticket Verification For Acknowledge
+                              </a>
+                            </div>
+                            <div class="col-sm-auto">
+                              <div class="avatar-group">
+                                <div class="avatar-group-item">
+                                  <a href="javascript: void(0);">
+                                    <div class="avatar-xs">
+                                      <span
+                                        class="avatar-title rounded-circle text-white"
+                                        [ngClass]="
+                                          !totalCountTicketServiceOrderIncident.countTotalTicketVerificationForAcknowledgeProcess
+                                            ? 'bg-success'
+                                            : 'bg-danger'
+                                        "
+                                      >
+                                        {{
+                                          totalCountTicketServiceOrderIncident.countTotalTicketVerificationForAcknowledgeProcess
+                                        }}
+                                      </span>
+                                    </div>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!--   End ticketVerificationForAcknowledgeProcess-->
+                        </ng-container>
+                      </ng-container>
+                      <ng-container
+                      *ngIf="
+                        !(
+                          (checktheRuleOfClientDashbard.newTicket && totalCountTicketServiceOrderIncident.countNewTicket !== 0) ||
+                          (checktheRuleOfClientDashbard.awaitQuotation && totalCountTicketServiceOrderIncident.countTotalAwaitingQuotation !== 0) ||
+                          (checktheRuleOfClientDashbard.generateNewSO && totalCountTicketServiceOrderIncident.countTotalServiceOrderPending !== 0) ||
+                          (checktheRuleOfClientDashbard.expectedStartTaskDateTime && totalCountTicketServiceOrderIncident.countTotalServiceOrderWithoutExpectedDateTime !== 0) ||
+                          (checktheRuleOfClientDashbard.quotationToProceedFinance && totalCountTicketServiceOrderIncident.countIsNotQuotationBilled !== 0) ||
+                          (checktheRuleOfClientDashbard.techSignatureRequired && totalCountTicketServiceOrderIncident.countTotalIncidentTechSignature !== 0) ||
+                          (checktheRuleOfClientDashbard.clientSignatureRequired && totalCountTicketServiceOrderIncident.countTotalIncidentClientSignature !== 0) ||
+                          (checktheRuleOfClientDashbard.pendingForCloseTicketProcess && totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForClose !== 0) ||
+                          (checktheRuleOfClientDashbard.pendingForCloseTicketProcessInternal && totalCountTicketServiceOrderIncident.countTotalTicketResolvedPendingForCloseInternal !== 0) ||
+                          (checktheRuleOfClientDashbard.ticketAcknowledgmentRequest && totalCountTicketServiceOrderIncident.countTotalTicketAcknowledgmentRequest !== 0) ||
+                          (checktheRuleOfClientDashbard.quotationRejected && totalCountTicketServiceOrderIncident.countTotalTicketQuotationRejected !== 0) ||
+                          (checktheRuleOfClientDashbard.pmScheduleCompletionAcknowlegementAdmin && totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementUser !== 0) ||
+                          (checktheRuleOfClientDashbard.pmScheduleCompletionAcknowlegementClient && totalCountTicketServiceOrderIncident.countTotalScheduleAcknowledgementClient !== 0) ||
+                          (checktheRuleOfClientDashbard.auditCompletionAcknowlegementAdmin && totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementAdmin !== 0) ||
+                          (checktheRuleOfClientDashbard.auditCompletionAcknowlegementClient && totalCountTicketServiceOrderIncident.countTotalAuditCompletionAcknowlegementClient !== 0) ||
+                          (checktheRuleOfClientDashbard.ticketVerificationForAcknowledgeProcess && totalCountTicketServiceOrderIncident.countTotalTicketVerificationForAcknowledgeProcess !== 0)
+                        )
+                      "
+                    >
+                    <div class="py-4 text-center">
+                      <div>
+                        <lord-icon
+                          src="https://cdn.lordicon.com/msoeawqm.json"
+                          trigger="loop"
+                          colors="primary:#405189,secondary:#0ab39c"
+                          style="width: 72px; height: 72px"
+                        >
+                        </lord-icon>
+                      </div>
+                      <div class="mt-4">
+                        <h5>No Records Found</h5>
+                      </div>
+                    </div>
+                    </ng-container>
+                        </div>
+                      </ng-template>
+                    </li>
+                    <ng-container
+                      *ngIf="totalCountMaintenanceWorkflowTodoList.length != 0"
+                    >
+                      <li   [ngbNavItem]="checktheRuleOfTrueValue!=true?1:2">
+                        <a (click)="checkdection(2)"  ngbNavLink>
+                          <i
+                            class="ri-stack-overflow-line align-middle me-1"
+                          ></i
+                          >WorkFlow
+                          <span
+                            class="badge bg-danger rounded-circle"
+                            *ngIf="
+                              totalCountMaintenanceWorkflowTodoList.length != 0
+                            "
+                            >{{
+                              totalCountMaintenanceWorkflowTodoList.length
+                            }}</span
+                          >
+                        </a>
+                        <ng-template ngbNavContent>
+                          <div class="card-body my-tasks myTaskCardBody">
+                            <h5 class="card-title mb-2">WorkFlow</h5>
+                            <hr class="my-3" />
+                            <ng-container
+                              *ngFor="
+                                let workFlow of totalCountMaintenanceWorkflowTodoList
+                              "
+                            >
+                              <div class="row g-3 cursor">
+                                <div class="col-auto">
+                                  <div
+                                    class="avatar-sm p-1 py-2 h-auto rounded-3"
+                                    [ngClass]="
+                                      workFlow.apprvalReviewItemCount == 0
+                                        ? 'bg-success-subtle'
+                                        : 'bg-danger-subtle'
+                                    "
+                                  >
+                                    <div class="text-center">
+                                      <h5 class="mb-0">
+                                        <i
+                                          class="bx bx-bell text-success mt-2"
+                                          *ngIf="
+                                            workFlow.apprvalReviewItemCount == 0
+                                          "
+                                        ></i>
+                                        <i
+                                          class="bx bx-bell text-danger mt-2"
+                                          *ngIf="
+                                            workFlow.apprvalReviewItemCount != 0
+                                          "
+                                        ></i>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="col align-items-center"
+                                  (click)="navigateMyWorkflowPageList(workFlow)"
+                                >
+                                  <h5 class="text-muted mt-0 mb-1 fs-14">
+                                    {{ workFlow.workflowName }}
+                                  </h5>
+
+                                  <a
+                                    href="javascript:void(0);"
+                                    class="text-reset fs-13 mb-0"
+                                  >
+                                    Waiting For {{ workFlow.approverType }}
+                                  </a>
+                                </div>
+
+                                <div class="col-sm-auto">
+                                  <div class="avatar-group">
+                                    <div class="avatar-group-item">
+                                      <a href="javascript: void(0);">
+                                        <div class="avatar-xs">
+                                          <span
+                                            class="avatar-title rounded-circle text-white"
+                                            [ngClass]="
+                                              !workFlow.apprvalReviewItemCount
+                                                ? 'bg-success'
+                                                : 'bg-danger'
+                                            "
+                                          >
+                                            {{
+                                              workFlow.apprvalReviewItemCount
+                                            }}
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <hr class="my-3" />
+                            </ng-container>
+                          </div>
+                        </ng-template>
+                      </li>
+                    </ng-container>
+                  </ul>
+
+                  <div class="card-body">
+                    <div class="tab-content text-muted">
+                      <div [ngbNavOutlet]="todoWorkFlowTabs"></div>
+                    </div>
+                    <div
+                      *ngIf="
+                        !(
+                          checktheRuleOfTrueValue ||
+                          totalCountMaintenanceWorkflowTodoList.length != 0
+                        )
+                      "
+                    >
+                      <div class="py-4 text-center">
+                        <div>
+                          <lord-icon
+                            src="https://cdn.lordicon.com/msoeawqm.json"
+                            trigger="loop"
+                            colors="primary:#405189,secondary:#0ab39c"
+                            style="width: 72px; height: 72px"
+                          >
+                          </lord-icon>
+                        </div>
+                        <div class="mt-4">
+                          <h5>
+                            No Records Found    </h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- end card -->
+              </div>
+              <div class="col-xl-5">
+                <div class="card card-height-100">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">
+                      Projects By Ticket (Billing)
+                    </h5>
+                  </div>
+
+                  <div class="card-body">
+                    <div *ngFor="let project of projectList">
+                      <h6 class="text-muted">{{ project.projectName }}</h6>
+                      <div class="d-flex flex-wrap justify-content-between">
+                        <p class="text-muted mb-0">
+                          <span class="badge bg-primary ms-1 borderEaduis">{{
+                            project.isBillingRequired_1_Count
+                          }}</span>
+
+                          Billable
+                        </p>
+
+                        <p class="text-muted mb-0">
+                          <span class="badge bg-success ms-1 borderEaduis">{{
+                            project.isBillingRequired_0_Count
+                          }}</span>
+
+                          Non Billable
+                        </p>
+
+                        <p class="text-muted mb-0">
+                          <span class="badge bg-primary ms-1 borderEaduis">{{
+                            project.isBillingRequired_Null_Count
+                          }}</span>
+                          Waiting
+                        </p>
+                      </div>
+                      <hr class="mb-1 mt-1" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="3">
+          <a ngbNavLink (click)="checkdection(3)">
+            Chatbot
+            <i
+              class="mdi mdi-circle text-danger fs-12"
+              *ngIf="globalPostMessageValueStoreClient != '0'"
+            ></i
+          ></a>
+          <ng-template ngbNavContent>
+            <div class="card card-height-100">
+              <ul
+                ngbNav
+                #Border="ngbNav"
+                [activeId]="1"
+                class="nav nav-tabs nav-border-top nav-border-top-primary mb-3"
+              >
+                <li [ngbNavItem]="1">
+                  <a ngbNavLink>
+                    External
+                    <span
+                      *ngIf="globalPostMessageValueStoreClient != '0'"
+                      class="badge align-middle ms-1 bg-danger"
+                      >{{ globalPostMessageValueStoreClient }}</span
+                    >
+                  </a>
+                  <ng-template ngbNavContent>
+                    <app-help-desk-internal-disscussion></app-help-desk-internal-disscussion>
+                  </ng-template>
+                </li>
+              </ul>
+              <div class="card-body">
+                <div class="tab-content text-muted">
+                  <div [ngbNavOutlet]="Border"></div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="4">
+          <a ngbNavLink (click)="checkdection(4)"> Graph </a>
+          <ng-template ngbNavContent>
+            <div class="row">
+              <div class="col-xl-6">
+                <div class="card card-height-100">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">Support Type</h5>
+                  </div>
+                  <div class="card-body">
+                    <div
+                      *ngIf="supportTypeBarGraph && supportTypeBarGraph.series"
+                    >
+                      <apx-chart
+                        [series]="supportTypeBarGraph.series"
+                        [chart]="supportTypeBarGraph.chart"
+                        [colors]="supportTypeBarGraph.colors"
+                        [dataLabels]="supportTypeBarGraph.dataLabels"
+                        [plotOptions]="supportTypeBarGraph.plotOptions"
+                        [yaxis]="supportTypeBarGraph.yaxis"
+                        [legend]="supportTypeBarGraph.legend"
+                        [fill]="supportTypeBarGraph.fill"
+                        [stroke]="supportTypeBarGraph.stroke"
+                        [tooltip]="supportTypeBarGraph.tooltip"
+                        [xaxis]="supportTypeBarGraph.xaxis"
+                        dir="ltr"
+                      ></apx-chart>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-6">
+                <div class="card card-height-100">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">Billable Tickets</h5>
+                  </div>
+                  <div class="card-body pt-5">
+                    <div *ngIf="billablePieChart">
+                      <apx-chart
+                        class="apex-charts"
+                        dir="ltr"
+                        [series]="billablePieChart.series"
+                        [labels]="billablePieChart.labels"
+                        [chart]="billablePieChart.chart"
+                        [plotOptions]="billablePieChart.plotOptions"
+                        [dataLabels]="billablePieChart.dataLabels"
+                        [legend]="billablePieChart.legend"
+                        [stroke]="billablePieChart.stroke"
+                        [colors]="billablePieChart.colors"
+                        dir="ltr"
+                      ></apx-chart>
+                    </div>
+
+                    <div class="mt-3">
+                      <div
+                        class="d-flex justify-content-center align-items-center mb-4"
+                      >
+                        <div>
+                          <p class="text-muted mb-0">
+                            Total -
+                            {{
+                              billable.countTotalIsBillingRequired_0 +
+                                billable.countTotalIsBillingRequired_1
+                            }}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div
+                        class="d-flex justify-content-between border-bottom border-bottom-dashed py-2 mt-3"
+                      >
+                        <p class="fw-medium mb-0">
+                          <i
+                            class="ri-checkbox-blank-circle-fill text-warning align-middle me-2"
+                          ></i
+                          >Billable
+                        </p>
+                        <div>
+                          <span class="text-muted pe-5">{{
+                            billable.countTotalIsBillingRequired_1
+                          }}</span>
+                        </div>
+                      </div>
+                      <!-- end -->
+
+                      <div
+                        class="d-flex justify-content-between border-bottom border-bottom-dashed py-2"
+                      >
+                        <p class="fw-medium mb-0">
+                          <i
+                            class="ri-checkbox-blank-circle-fill text-info align-middle me-2"
+                          ></i
+                          >Non-Billable
+                        </p>
+                        <div>
+                          <span class="text-muted pe-5">{{
+                            billable.countTotalIsBillingRequired_0
+                          }}</span>
+                        </div>
+                      </div>
+                      <!-- end -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- end col -->
+            </div>
+            <!-- <div class="row">
+              <div class="col-xl-6">
+                <div class="card card-height-100">
+                  <div class="card-header">
+                    <h4 class="card-title mb-0">Weekly Report Graph</h4>
+                  </div>
+
+                  <div class="card-body">
+                    <apx-chart
+                      [series]="multipleYAxisChart.series"
+                      [chart]="multipleYAxisChart.chart"
+                      [xaxis]="multipleYAxisChart.xaxis"
+                      [markers]="multipleYAxisChart.markers"
+                      [stroke]="multipleYAxisChart.stroke"
+                      [yaxis]="multipleYAxisChart.yaxis"
+                      [dataLabels]="multipleYAxisChart.dataLabels"
+                      [title]="multipleYAxisChart.title"
+                      [fill]="multipleYAxisChart.fill"
+                      [tooltip]="multipleYAxisChart.tooltip"
+                      [legend]="multipleYAxisChart.legend"
+                      [colors]="multipleYAxisChart.colors"
+                      dir="ltr"
+                    ></apx-chart>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-6">
+                <div class="card card-height-100">
+                  <div class="card-header">
+                    <h4 class="card-title mb-0">Line, Column & Area Charts</h4>
+                  </div>
+                
+                  <div class="card-body">
+                    <apx-chart
+                      [series]="lineColumnAreaChart.series"
+                      [chart]="lineColumnAreaChart.chart"
+                      [yaxis]="lineColumnAreaChart.yaxis"
+                      [xaxis]="lineColumnAreaChart.xaxis"
+                      [labels]="lineColumnAreaChart.labels"
+                      [stroke]="lineColumnAreaChart.stroke"
+                      [plotOptions]="lineColumnAreaChart.plotOptions"
+                      [markers]="lineColumnAreaChart.markers"
+                      [fill]="lineColumnAreaChart.fill"
+                      [tooltip]="lineColumnAreaChart.tooltip"
+                      [colors]="lineColumnAreaChart.colors"
+                      dir="ltr"
+                    ></apx-chart>
+                  </div>
+                
+                </div>
+               
+              </div>
+            </div> -->
+          </ng-template>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Tab panes -->
+    <div class="tab-content text-muted mt-3">
+      <div [ngbNavOutlet]="nav"></div>
+    </div>
+  </div>
+  <!-- end col -->
+</div>
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

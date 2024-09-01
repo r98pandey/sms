@@ -1,0 +1,363 @@
+<ng-template #qrView let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Qr-Code</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <img
+      [src]="imageUrl + assetQrData?.qrCodeImgPath"
+      alt="qr"
+      class="qrCode-img"
+    />
+  </div>
+</ng-template>
+
+<ul
+  ngbNav
+  #defaultNav="ngbNav"
+  [(activeId)]="defaultNavActiveId"
+  class="nav-tabs nav-tabs-custom"
+>
+  <li [ngbNavItem]="1">
+    <a ngbNavLink>
+      <div
+        class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+      >
+        <p class="d-none d-sm-block mb-0">Total Asset</p>
+      </div>
+    </a>
+    <ng-template ngbNavContent>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-lg">
+                  <ng-select
+                    [items]="arrayListDropDownAssetStatus"
+                    bindLabel="assetStatus"
+                    bindValue="assetStatusId"
+                    (change)="onDropdownAssetStatusValueChange($event)"
+                    [clearable]="true"
+                    id="ticketStatus"
+                    [(ngModel)]="selectedDropDownAssetStatusIdValue"
+                    placeholder="Select Status"
+                    class="w-100 mr-2"
+                    for="ticketStatus"
+                  ></ng-select>
+                </div>
+                <div class="col-lg">
+                  <div class="search-box">
+                    <input
+                      type="search"
+                      name="searchTerm"
+                      class="form-control"
+                      [(ngModel)]="typeAssetNameValue"
+                      (input)="onTypeAssetNameChange(false)"
+                      placeholder="Search for asset name"
+                      #inputer
+                    />
+                    <i class="ri-search-line search-icon"></i>
+                  </div>
+                </div>
+
+                <div class="col-lg">
+                  <div class="search-box">
+                    <input
+                      type="search"
+                      name="searchTerm"
+                      class="form-control"
+                      [(ngModel)]="typeAssetTagIdValue"
+                      (input)="onTypeAssetTagIdChange(false)"
+                      placeholder="Search Asset Tag Id"
+                      #inputerTagId
+                    />
+                    <i class="ri-search-line search-icon"></i>
+                  </div>
+                </div>
+
+                <div class="col-lg-auto">
+                  <div class="d-flex justify-content-end">
+                    <button
+                      type="button"
+                      class="btn btn-danger ms-1"
+                      (click)="resetSerachVariable()"
+                      ngbTooltip="Remove All Search"
+                    >
+                      <i class="ri-refresh-fill me-1 align-bottom"></i>
+                      Clear
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body pt-0">
+              <div>
+                <ul
+                  ngbNav
+                  #nav="ngbNav"
+                  [activeId]="1"
+                  class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+                >
+                  <li [ngbNavItem]="1">
+                    <ng-template ngbNavContent>
+                      <div class="table-responsive table-card mb-0">
+                        <table class="table">
+                          <thead>
+                            <tr class="bg-light text-muted text-uppercase">
+                              <th class="w-50">Asset Details</th>
+                              <th class="w-50">Audit Details</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let asset of assetList">
+                              <td class="w-50">
+                                <div class="card">
+                                  <div class="card-body">
+                                    <ul class="list-unstyled mb-0 vstack gap-3">
+                                      <li>
+                                        <div class="d-flex align-items-center">
+                                          <div class="flex-shrink-0">
+                                            <img
+                                              (click)="
+                                                open(
+                                                  asset.auditImageUrl
+                                                    ? imageUrl +
+                                                        asset.auditImageUrl
+                                                    : '../../../../assets/images/placeholderimage.png'
+                                                )
+                                              "
+                                              [src]="
+                                                asset.assetImagePath
+                                                  ? imageUrl +
+                                                    asset.assetImagePath
+                                                  : '../../../../assets/images/placeholderimage.png'
+                                              "
+                                              alt=""
+                                              class="avatar-sm rounded"
+                                            />
+                                          </div>
+                                          <div class="flex-grow-1 ms-3">
+                                            <h6 class="fs-15 mb-0">
+                                              {{ asset.assetName }}
+                                              <ng-container
+                                                *ngIf="asset?.qrCodeImgPath"
+                                              >
+                                                <i
+                                                  class="ri-qr-code-line fs-17 align-middle pe-auto"
+                                                  (click)="
+                                                    viewQrCodeImage(
+                                                      qrView,
+                                                      asset
+                                                    )
+                                                  "
+                                                ></i>
+                                              </ng-container>
+                                            </h6>
+                                            <p class="text-primary mb-0">
+                                              {{
+                                                asset.assetTagId
+                                                  ? asset.assetTagId
+                                                  : "NA"
+                                              }}
+                                            </p>
+                                            <p class="text-muted mb-0">
+                                              {{ asset.locationName }} |
+                                              <span
+                                                [class]="
+                                                  returnStatusBadgeClassesStatus(
+                                                    asset.assetStatusId
+                                                  )
+                                                "
+                                                >{{ asset.assetStatus }}</span
+                                              >
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </td>
+
+                              <td class="w-50">
+                                <div class="card">
+                                  <div class="card-body">
+                                    <ul class="list-unstyled mb-0 vstack gap-3">
+                                      <li>
+                                        <div
+                                          class="d-flex align-items-center"
+                                          *ngIf="asset.modifiedByName"
+                                        >
+                                          <div class="flex-shrink-0">
+                                            <img
+                                              (click)="
+                                                open(
+                                                  asset.auditImageUrl
+                                                    ? imageUrl +
+                                                        asset.auditImageUrl
+                                                    : '../../../../assets/images/placeholderimage.png'
+                                                )
+                                              "
+                                              [src]="
+                                                asset.auditImageUrl
+                                                  ? imageUrl +
+                                                    asset.auditImageUrl
+                                                  : '../../../../assets/images/placeholderimage.png'
+                                              "
+                                              alt=""
+                                              class="avatar-sm rounded"
+                                            />
+                                          </div>
+                                          <div class="flex-grow-1 ms-3">
+                                            <h6
+                                              class="fs-15 mb-1"
+                                              [ngClass]="
+                                                asset.modifiedByName
+                                                  ? 'text-muted'
+                                                  : 'text-danger'
+                                              "
+                                            >
+                                              Scanned By &nbsp; : {{
+                                                asset.modifiedByName
+                                                  ? asset.modifiedByName
+                                                  : "No audit detail"
+                                              }}
+                                            </h6>
+                                            <p class="mb-0">
+                                              <b>Scanned Date : </b>{{
+                                                   asset.modifiedDate
+                                                     ? asset.modifiedDate
+                                                     : "-"
+                                                 }}
+                                               </p><p class="mb-0">
+                                                <b>Remark : </b>{{
+                                                     asset.remark
+                                                       ? asset.remark
+                                                       : "-"
+                                                   }}
+                                                 </p>
+                                            
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="d-flex align-items-center"
+                                          *ngIf="!asset.modifiedByName"
+                                        >
+                                          <h6
+                                            class="fs-15 mb-1"
+                                            [ngClass]="
+                                              asset.modifiedByName
+                                                ? 'text-muted'
+                                                : 'text-danger'
+                                            "
+                                          >
+                                            No audit detail
+                                          </h6>
+                                         <br>  <br><br>  
+                                        </div>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </td>
+
+                            </tr>
+                          </tbody>
+                        </table>
+                        <div class="text-center" *ngIf="assetList.length === 0">
+                          No Asset Found
+                        </div>
+                      </div>
+                      <div
+                        class="row justify-content-md-between align-items-md-center gy-2"
+                      >
+                        <div class="col col-sm-12 col col-md-6">
+                          <div
+                            class="dataTables_info mb-2"
+                            id="tickets-table_info"
+                            role="status"
+                            aria-live="polite"
+                          >
+                            Showing {{ from }} to {{ to }} of
+                            {{ totalRecordsFromApi }} entries
+                          </div>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="col col-sm-12 col col-md-6">
+                          <div
+                            class="text-sm-right float-end listjs-pagination"
+                          >
+                            <ngb-pagination
+                              [collectionSize]="totalRecordsFromApi"
+                              [(page)]="page"
+                              [pageSize]="pageSize"
+                              [maxSize]="2"
+                              [rotate]="true"
+                              (pageChange)="OnChangesPage($event)"
+                              *ngIf="totalRecordsFromApi > pageSize"
+                            >
+                              <ng-template
+                                ngbPaginationPrevious
+                                let-page
+                                let-pages="pages"
+                              >
+                                <i class="ci-arrow-left me-2"></i> Prev
+                              </ng-template>
+                              <ng-template ngbPaginationNext>
+                                Next
+                                <i class="ci-arrow-right ms-2"></i>
+                              </ng-template>
+                            </ngb-pagination>
+                          </div>
+                        </div>
+                        <!-- End Pagination -->
+                      </div>
+                    </ng-template>
+                  </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content text-muted">
+                  <div [ngbNavOutlet]="nav"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </li>
+
+  <ng-container *ngIf="assetAuditNotMatch.length != 0">
+    <li [ngbNavItem]="3">
+      <a ngbNavLink>
+        <div
+          class="d-flex flex-row flex-lg-column flex-xl-row align-items-center"
+        >
+          <p class="d-none d-sm-block mb-0">
+            Not Match 
+           <span class="badge bg-success ms-1">{{assetAuditNotMatch.length}} </span>
+          </p>
+        </div>
+      </a>
+      <ng-template ngbNavContent>
+        <app-not-match-asset
+          [assetList]="assetAuditNotMatch"
+        ></app-not-match-asset>
+      </ng-template>
+    </li>
+  </ng-container>
+</ul>
+<div class="tab-content text-muted">
+  <div [ngbNavOutlet]="defaultNav"></div>
+</div>

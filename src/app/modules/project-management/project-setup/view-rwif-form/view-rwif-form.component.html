@@ -1,0 +1,222 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="mb-2">
+          <img
+            [src]="
+              companyDetailsObject?.companyLogoURL
+                ? imgUrl + companyDetailsObject?.companyLogoURL
+                : '../../../../../../assets/images/placeholderimage.png'
+            "
+            class="card-logo"
+            alt="logo light"
+            height="80"
+          />
+        </div>
+      </div>
+      <div
+        class="col-sm-9 d-flex justify-content-md-end justify-content-sm-center"
+      >
+        <div class="">
+          <h5 class="text-uppercase fw-semibold mb-0">
+            {{ companyDetailsObject?.companyName }}
+          </h5>
+          <p class="mb-0 pt-0 fs-18">
+            {{
+              companyDetailsObject.address1 ? companyDetailsObject.address1 : ""
+            }}
+          </p>
+          <p class="mb-0 pt-0 fs-18">
+            {{
+              companyDetailsObject.address2 ? companyDetailsObject.address2 : ""
+            }}
+          </p>
+          <p class="mb-0 pt-0 fs-18">
+            {{
+              companyDetailsObject?.address3
+                ? companyDetailsObject?.address3
+                : " "
+            }}
+
+            {{
+              companyDetailsObject?.country ? companyDetailsObject?.country : ""
+            }}
+          </p>
+        </div>
+      </div>
+      <div class="col-12 mt-2">
+        <div class="border-gradient-1"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12 mt-2 mb-2">
+    <div class="row">
+      <div class="col-lg-6 border-end">
+        <p class="text-muted mb-0 text-uppercase fw-semibold">Client Name</p>
+        <p class="text-muted mb-0 text-uppercase fw-semibold">Site</p>
+        <p class="text-muted mb-0 text-uppercase fw-semibold">
+          Inspection Block/Level/Zone/Location
+        </p>
+        <p class="text-muted mb-0 text-uppercase fw-semibold">Comment</p>
+      </div>
+
+      <div class="col-lg-6">
+        <h5 class="fw-medium mb-0 fs-15">
+          {{ clientDetailsObject?.clientName }}
+        </h5>
+        <h5 class="fw-medium mb-0 fs-15">
+          {{ mX_ProjectProcessHeaderDoc?.title }}
+        </h5>
+        <h5 class="fw-medium mb-0 fs-15">
+          {{
+            projectProcessMX_ProjectProcessRFWIFormDetail?.mX_ProjectProcessRFWI
+              .locationName
+          }}
+        </h5>
+        <h5 class="fw-medium mb-0 fs-15">
+          {{
+            projectProcessMX_ProjectProcessRFWIFormDetail?.mX_ProjectProcessRFWI
+              .comment
+          }}
+        </h5>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-12 mt-2 mb-2">
+    <div class="border-top border-top-dashed">
+      <div class="row mt-3">
+        <div class="col-md-6 border-end">
+          <h6 class="text-muted text-uppercase fw-semibold mb-0">
+            Inspection by
+          </h6>
+          <p class="fw-medium mb-0 fs-15">
+            <i class="ri-user-3-line align-bottom me-1"></i><b>
+              {{
+                projectProcessMX_ProjectProcessRFWIFormDetail
+                  ?.mX_ProjectProcessRFWI.inspectionByName
+              }}
+            </b>
+          </p>
+          <p class="fw-medium mb-0 fs-12">
+            <i class="ri-outlet-2-line align-bottom me-2"></i
+            >{{
+              projectProcessMX_ProjectProcessRFWIFormDetail
+                ?.mX_ProjectProcessRFWI.inspectionByDesignation
+            }}
+          </p>
+          <p class="text-muted mb-0">
+            <i class="ri-phone-line align-bottom me-1"></i>
+            {{
+              projectProcessMX_ProjectProcessRFWIFormDetail
+                ?.mX_ProjectProcessRFWI.inspectionByContactNo
+            }}
+          </p>
+        </div>
+        <!--end col-->
+        <div class="col-md-6">
+          <h6 class="text-muted text-uppercase fw-semibold mb-0">
+            Supervised By
+          </h6>
+          <p class="fw-medium mb-0 fs-15">
+            <i class="ri-user-3-line align-bottom me-1"></i>
+            {{
+              projectProcessMX_ProjectProcessRFWIFormDetail
+                ?.mX_ProjectProcessRFWI.supervisorByName
+            }}
+          </p>
+          <p class="fw-medium mb-0 fs-12">
+            <i class="ri-outlet-2-line align-bottom  me-2"></i
+            >{{
+              projectProcessMX_ProjectProcessRFWIFormDetail
+                ?.mX_ProjectProcessRFWI.supervisorByDesignation
+            }}
+          </p>
+          <p class="text-muted mb-1">
+            <i class="ri-phone-line align-bottom me-1"></i>
+            {{
+              projectProcessMX_ProjectProcessRFWIFormDetail
+                ?.mX_ProjectProcessRFWI.supervisorByContactNo
+            }}
+          </p>
+        </div>
+        <!--end col-->
+      </div>
+      <!--end row-->
+    </div>
+    <!--end card-body-->
+  </div>
+  <!--end col-->
+
+  <div class="col-lg-12 mt-3">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr class="table-active">
+            <th class="p-2" width="10%"></th>
+            <th  width="70%" class="text-start p-2">Items</th>
+            <th class="p-2"  width="30%">Accepted</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let getDataItem of projectProcessMX_ProjectProcessRFWIFormDetail?.mX_ProjectProcessRFWIItem
+            "
+          >
+            <th scope="p-2 align-top">01</th>
+            <td class="text-start p-2 align-top">
+              <span class="text-muted fs-13 d-block text-truncate">{{
+                getDataItem.rfwiItemName
+              }}</span>
+
+              <p class="text-reset fs-14 d-block text-truncate"  style="white-space: break-spaces;">
+                {{ getDataItem.remark }}
+              </p>
+            </td>
+            <td class="p-2 align-top">
+              Yes
+              <input
+                type="checkbox"
+                class="form-check-input ms-0 mx-2"
+                value="{{ getDataItem.isYes }}"
+              />
+              NO
+              <input
+                type="checkbox"
+                value="{{ getDataItem.isNo }}"
+                class="form-check-input ms-0"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!--end table-->
+    </div>
+  </div>
+
+  <div class="col-md-12 mt-3">
+    <div class="row">
+      <div class="col-md-12 mb-3">
+        <h6 class="card-title mb-0">Photo & Remark</h6>
+      </div>
+      <ng-container
+        *ngFor="
+          let getDataItemImage of projectProcessMX_ProjectProcessRFWIFormDetail?.mX_ProjectProcessRFWIImages
+        "
+      >
+        <div class="col-lg-6 mx-2">
+          <img
+            src="{{ imgUrl }}{{ getDataItemImage.rfwiImageUrl }}"
+            alt=""
+            class="img-fluid img-size"
+          />
+          <p class="text-muted mt-2">
+            {{ getDataItemImage.rfwiImageRemark }}
+          </p>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

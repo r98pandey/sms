@@ -1,0 +1,118 @@
+<div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title">Member Task Attendance List</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="modal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="offcanvas-body row">
+  <div
+    class="col-md-6 col-lg-12 mb-2"
+    *ngFor="let list of ticketingTechnicianList; let i = index"
+  >
+    <div class="card mb-1 border border-dashed">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="d-flex position-relative">
+              <img
+              (click)="open(baseUrl+list?.profileImageUrl  )"
+                src="{{ baseUrl }}{{ list?.profileImageUrl }}"
+                class="flex-shrink-0 me-1 avatar-sm rounded"
+                alt="..."
+                *ngIf="list?.profileImageUrl"
+              />
+              <img
+               (click)="open('../../../../../../assets/images/placeholderimage.png')"
+           
+                src="../../../../../../assets/images/placeholderimage.png"
+                class="flex-shrink-0 me-1 avatar-sm rounded"
+                alt="..."
+                *ngIf="!list?.profileImageUrl"
+              />
+
+              <div class="ms-lg-3 my-3 my-lg-0">
+                <h5 class="fs-16 mb-0">{{ list.techName }}</h5>
+                <p class="text-muted mb-0">{{ list.designationName }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="d-flex position-relative">
+              <img
+               (click)="open(baseUrl+list?.techPicUrlStart  )"
+                src="{{ baseUrl }}{{ list?.techPicUrlStart }}"
+                class="flex-shrink-0 me-1 avatar-sm rounded"
+                alt="..."
+                *ngIf="list?.techPicUrlStart"
+              />
+              <img
+               (click)="open('../../../../../../assets/images/placeholderimage.png')"
+           
+               src="../../../../../../assets/images/placeholderimage.png"
+                  class="flex-shrink-0 me-1 avatar-sm rounded"
+                alt="..."
+                *ngIf="!list?.techPicUrlStart"
+              />
+
+              <div class="ms-lg-3  my-lg-0">
+                <h5 class="fs-16 mb-0">
+                  <i class="ri-time-line text-primary me-1 align-bottom"></i
+                  >Check-In
+                </h5>
+                <div>
+                  <span class="badge bg-primary-subtle text-primary">{{
+                    list.startDateTime || "NA"
+                  }}</span>
+                </div>
+                 <div *ngIf="list.address_Start ">
+                  <p class="fs-12">{{
+                    list.address_Start || "NA"
+                  }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="d-flex position-relative">
+              <img
+               (click)="open(baseUrl+list?.techPicUrlEnd  )"
+                src="{{ baseUrl }}{{ list?.techPicUrlEnd }}"
+                class="flex-shrink-0 me-1 avatar-sm rounded"
+                alt="..."
+                *ngIf="list?.techPicUrlEnd"
+              />
+              <img
+               (click)="open('../../../../../../assets/images/placeholderimage.png')"
+           
+                 src="../../../../../../assets/images/placeholderimage.png"
+                class="flex-shrink-0 me-1 avatar-sm rounded"
+                alt="..."
+                *ngIf="!list?.techPicUrlEnd"
+              />
+
+              <div class="ms-lg-3 my-lg-0">
+                <h5 class="fs-16 mb-0">
+                  <i class="ri-time-line text-success me-1 align-bottom"></i
+                  >Check-Out
+                </h5>
+                <div>
+                  <span class="badge bg-success-subtle text-success">{{
+                    list.endDateTime || "NA"
+                  }}</span>
+                </div>
+                <div *ngIf="list.address_Start "  class="fs-12">
+                  <p>{{
+                    list.address_End || "NA"
+                  }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

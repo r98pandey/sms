@@ -1,0 +1,234 @@
+
+<app-breadcrumbs [title]="label" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+<div class="row">
+    <div class="col-lg-12">
+        <form [formGroup]="addCompany">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">{{ editMode.isEdit ? 'Edit' : 'Add' }} Company</h5>
+                </div>
+                <div class="text-center p-2">
+                    <div class="profile-user position-relative d-inline-block mx-auto mb-4">
+                        <img src="{{ companyLogoImg }}" class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image" />
+                        <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                            <input id="profile-img-file-input" type="file" class="profile-img-file-input" (change)="onSelectFile($event)" accept="image/*" />
+
+                            <label for="profile-img-file-input" class="profile-photo-edit avatar-xs" *ngIf="companyLogoImg === '../../../../../assets/images/placeholderimage.png'">
+                                <span class="avatar-title rounded-circle bg-light text-body">
+                                    <i class="ri-camera-fill"></i>
+                                </span>
+                            </label>
+
+                            <label *ngIf="companyLogoImg !== '../../../../../assets/images/placeholderimage.png'" for="profile-img-file-input-clear" class="profile-photo-edit avatar-xs" (click)="openModalDeleteConf($event)">
+                                <span class="avatar-title rounded-circle bg-light text-body">
+                                    <i class="ri-close-circle-fill"></i>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-lg-2">
+                            <div>
+                                <label for="Code-Input" class="form-label">Code <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="Code-Input" placeholder="Code" 
+                                required [readonly]="editMode.isEdit" 
+                                formControlName="code" 
+                                (input)="onUpperCase($event)"
+                                [class.is-invalid]="code?.invalid && code?.touched"
+                                 [class.is-valid]="code?.valid && code?.touched" />
+                                <div *ngIf="code?.invalid && code?.touched">
+                                    <small class="text-danger" *ngIf="code?.errors?.['required']">Code is
+                                        required</small>
+                                    <small class="text-danger" *ngIf="code?.errors?.['minlength']">
+                                        Code must be at least 2 characters Required</small>
+                                    <small class="text-danger" *ngIf="code?.errors?.['maxlength']">
+                                        Code must be less than 5 characters Required</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div>
+                                <label for="Name-Input" class="form-label">Name <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="Name-Input" placeholder="Name" required formControlName="name" [class.is-invalid]="name?.invalid && name?.touched" [class.is-valid]="name?.valid && name?.touched" />
+                                <div *ngIf="name?.invalid && name?.touched">
+                                    <small class="text-danger" *ngIf="name?.errors?.['required']">
+                                        Name is Required
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="Contact-person-Name-Input" class="form-label">Contact Person Name <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="Contact-person-Name-Input" placeholder="Contact Person Name" required formControlName="contactPersonName" [class.is-invalid]="
+                    contactPersonName?.invalid && contactPersonName?.touched
+                  " [class.is-valid]="
+                    contactPersonName?.valid && contactPersonName?.touched
+                  " />
+                                <div *ngIf="
+                    contactPersonName?.invalid && contactPersonName?.touched
+                  ">
+                                    <small class="text-danger" *ngIf="contactPersonName?.errors?.['required']">
+                                        Contact Person Name is Required</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="Contact-Person-Mobile-Input" class="form-label">Contact Person Mobile No
+                                    <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="Contact-Person-Mobile-Input" placeholder="Contact Person Mobile No" required formControlName="contactPersonMobileNo" [class.is-invalid]="
+                    contactPersonMobileNo?.invalid &&
+                    contactPersonMobileNo?.touched
+                  " [class.is-valid]="
+                    contactPersonMobileNo?.valid &&
+                    contactPersonMobileNo?.touched
+                  " />
+                                <div *ngIf="
+                    contactPersonMobileNo?.invalid &&
+                    contactPersonMobileNo?.touched
+                  ">
+                                    <small class="text-danger" *ngIf="contactPersonMobileNo?.errors?.['required']">
+                                        Contact Person Mobile No is Required</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="job-title-Input" class="form-label">Address <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="job-title-Input" placeholder="Address" required formControlName="address1" [class.is-invalid]="address1?.invalid && address1?.touched" [class.is-valid]="address1?.valid && address1?.touched" />
+                                <div *ngIf="address1?.invalid && address1?.touched">
+                                    <small class="text-danger" *ngIf="address1?.errors?.['required']">
+                                        Address is Required</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="City-Input" class="form-label">City <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="City-Input" placeholder="City" required formControlName="address2" [class.is-invalid]="address2?.invalid && address2?.touched" [class.is-valid]="address2?.valid && address2?.touched" />
+                                <div *ngIf="address2?.invalid && address2?.touched">
+                                    <small class="text-danger" *ngIf="address2?.errors?.['required']">
+                                        City is Required</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div>
+                                <label for="State-Input" class="form-label">State <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="city-Input" placeholder="State" required formControlName="address3" [class.is-invalid]="address3?.invalid && address3?.touched" [class.is-valid]="address3?.valid && address3?.touched" />
+                                <div *ngIf="address3?.invalid && address3?.touched">
+                                    <small class="text-danger" *ngIf="address3?.errors?.['required']">
+                                        State is Required</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="Postal-Code-Input" class="form-label">Postal Code <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="Postal-Code-Input" placeholder="Postal Code" required formControlName="postalCode" [class.is-invalid]="
+                    postalCode?.invalid && postalCode?.touched
+                  " [class.is-valid]="postalCode?.valid && postalCode?.touched" />
+                                <div *ngIf="postalCode?.invalid && postalCode?.touched">
+                                    <small class="text-danger" *ngIf="postalCode?.errors?.['required']">
+                                        Postal Code is Required</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div>
+                                <label for="country-Input" class="form-label">Country <span
+                                        class="text-danger">*</span></label>
+                                <!-- <input type="text" class="form-control" id="country-Input" 
+                                placeholder="Country" required formControlName="country" 
+                                [class.is-invalid]="country?.invalid && country?.touched"
+                                [class.is-valid]="country?.valid && country?.touched" /> -->
+                                 <ng-select [items]="countryList" bindLabel="countryName" bindValue="countryName" [clearable]="false"
+                                        placeholder="Select Country" formControlName="country"
+                                        [class.is-invalid]="country.invalid && country.touched" class="custom"
+                                        [class.is-valid]="country.valid && country.touched"> </ng-select>
+
+                                <div *ngIf="country?.invalid && country?.touched">
+                                    <small class="text-danger" *ngIf="country?.errors?.['required']">
+                                        Country is Required</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div>
+                                <label for="Office-Phone-Number-Input" class="form-label">Office Phone Number
+                                    <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="Office-Phone-Number" placeholder="Office Phone No" required formControlName="mobileNumber" [class.is-invalid]="
+                    mobileNumber?.invalid && mobileNumber?.touched
+                  " [class.is-valid]="
+                    mobileNumber?.valid && mobileNumber?.touched
+                  " />
+                                <div *ngIf="mobileNumber?.invalid && mobileNumber?.touched">
+                                    <small class="text-danger" *ngIf="mobileNumber?.errors?.['required']">Office Phone
+                                        No is
+                                        Required</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="Office-Fax-Input" class="form-label">Office Fax No <span
+                                        class="text-danger"></span></label>
+                                <input type="text" class="form-control" id="Office-Fax-Input" placeholder="Office Fax No" formControlName="faxNumber" [class.is-invalid]="faxNumber?.invalid && faxNumber?.touched" [class.is-valid]="faxNumber?.valid && faxNumber?.touched" />
+                                <div class="invalid-feedback">
+                                    Please, enter the Office Fax No.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div>
+                                <label for="Company-Head-Input" class="form-label">Company Head<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="Company-Head-Input" placeholder="Company Head" required formControlName="companyHead" [class.is-invalid]="
+                                    companyHead?.invalid && companyHead?.touched" [class.is-valid]="companyHead?.valid && companyHead?.touched" />
+                                <div *ngIf="companyHead?.invalid && companyHead?.touched">
+                                    <small class="text-danger" *ngIf="companyHead?.errors?.['required']">Company head is required</small>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12">
+                            <div class="hstack justify-content-end">
+                                <button (click)="goBack()" type="button" class="btn btn-soft-primary me-2">
+                                    <i class="align-bottom"></i>Back
+                                </button>
+                                <button type="submit" class="btn btn-success a2" (click)="openModalCreateMyCompany()" [disabled]="addCompany.invalid">
+                                    Submit
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

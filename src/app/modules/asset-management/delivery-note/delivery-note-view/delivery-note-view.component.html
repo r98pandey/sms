@@ -1,0 +1,302 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  title="Delivery Note"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row mt-1">
+  <div class="col-lg-12">
+    <div class="card mt-n4 mx-n4">
+      <div class="bg-warning-subtle">
+        <div class="card-body pb-0 px-4">
+          <div class="row mb-4">
+            <a
+              href="javascript:void(0);"
+              class="text-primary text-decoration-underline fw-medium text-end"
+              (click)="refreshThePage()"
+            >
+              <i class="ri-refresh-line text-primary fs-18"></i
+            ></a>
+            <div class="col-md">
+              <div class="row align-items-center">
+                <div class="col-md">
+                  <div>
+                    <h4 class="fw-bold">
+                      {{ masterDeliveryList?.deliveryNoteTitle || "-" }}
+                    </h4>
+                    <div class="hstack gap-3 flex-wrap">
+                      <div>
+                        <i class="ri-building-line align-bottom me-1"></i>
+                        {{ masterDeliveryList?.companyName || "-" }}
+                      </div>
+                      <div class="vr"></div>
+                      <div>
+                        <i class="ri-building-2-line align-bottom me-1"></i
+                        >{{ masterDeliveryList?.clientName || "-" }}
+                      </div>
+
+                      <div class="vr"></div>
+                      <div>
+                        <i class="ri-community-line align-bottom me-1"></i
+                        >{{ masterDeliveryList?.projectName || "-" }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ul
+            ngbNav
+            #customNav="ngbNav"
+            [activeId]="activeId"
+            class="nav nav-tabs-custom border-bottom-0"
+            role="tablist"
+          >
+            <!-- View Ticket  -->
+            <li [ngbNavItem]="1" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Schedule
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row">
+                  <div class="col-xxl-8 stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h6 class="fw-semibold text-uppercase mb-3">Remark</h6>
+                        <p class="text-muted mb-2">
+                          {{ masterDeliveryList.deliveryNoteRemark || "-" }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xxl-4">
+                    <div class="card ribbon-box right">
+                      <div
+                        class="card-header d-flex justify-content-between align-items-baseline"
+                      >
+                        <h5 class="card-title mb-0">Delivery Details</h5>
+
+                        <button class="btn btn-primary" *ngIf="masterDeliveryList?.deliveryNoteStatusId==2" (click)="
+                                        openUpdateFormModal(
+                                          updateDeliveryModal,
+                                          masterDeliveryList
+                                        )
+                                      "> Update Delivery</button>
+                      </div>
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-borderless mb-0">
+                            <tbody>
+                              <tr>
+                                <td class="fw-medium w-10">Delivery Note No</td>
+                                <td>
+                                  {{
+                                    masterDeliveryList?.deliveryNoteNo || "-"
+                                  }}
+                                </td>
+                              </tr>
+
+                              <tr>
+                                <td class="fw-medium w-10">
+                                  Expected Delivery Date Time
+                                </td>
+                                <td>
+                                  {{
+                                    masterDeliveryList?.expectedDeliveryDateTime ||
+                                      "-"
+                                  }}
+                                </td>
+                              </tr>
+
+                              <tr>
+                                <td class="fw-medium w-10">Created By</td>
+                                <td>
+                                  {{ masterDeliveryList?.createdByName || "-" }}
+                                </td>
+                              </tr>
+
+                              <tr>
+                                <td class="fw-medium w-10">
+                                  Created Date Time
+                                </td>
+                                <td id="t-client">
+                                  {{
+                                    masterDeliveryList?.createdDateTime || "-"
+                                  }}
+                                </td>
+                              </tr>
+                             
+                              <tr>
+                                <td class="fw-medium w-10">Status</td>
+                                <td>
+                                  <span
+                                    class="fs-12"
+                                    [class]="
+                                      returnStatusBadgeClassesStatus(
+                                        masterDeliveryList.deliveryNoteStatusId
+                                      )
+                                    "
+                                    >{{
+                                      masterDeliveryList.deliveryNoteStatusName
+                                    }}</span
+                                  >
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <!--end card-body-->
+                    </div>
+                  </div>
+                </div>
+                <!-- end row -->
+              </ng-template>
+            </li>
+            <!-- /View Ticket  -->
+            <!-- View Asset  -->
+            <li [ngbNavItem]="2" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Assets
+              </a>
+              <ng-template ngbNavContent>
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <app-asset-view
+                          [assetList]="assetTicketItem"
+                        ></app-asset-view>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+            <!--End View Asset  -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="tab-content text-muted">
+      <div [ngbNavOutlet]="customNav"></div>
+    </div>
+  </div>
+</div>
+
+<div class="text-end mb-3">
+  <button
+    class="btn btn-soft-primary waves-effect mx-3"
+    type="button"
+    (click)="goback()"
+  >
+    Back
+  </button>
+</div>
+
+
+<ng-template #updateDeliveryModal let-modal>
+  <div class="modal-header bg-info-subtle pb-3">
+    <h4 class="modal-title" id="modal-title">Update Delivery</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="updateDeliveryNoteFrom">
+      <div class="mb-2">
+        <div class="card-body">
+          <div class="row">
+            <div class="form-group col-md-12 mt-2">
+              <label for="name" class="form-label"
+                >Delivery Date <span style="color: red">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control mb-1"
+                id="name"
+                formControlName="deliveryDate"
+                placeholder="Delivery Date "
+                mwlFlatpickr
+                [altInput]="false"
+                [enableTime]="false"
+                [convertModelValue]="true"
+                [dateFormat]="'d-m-Y'"
+                [class.is-invalid]="
+                  deliveryDate.invalid && deliveryDate.touched
+                "
+              />
+
+              <div *ngIf="deliveryDate.invalid && deliveryDate.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="deliveryDate.errors['required']"
+                >
+                  Delivery Date is Required</small
+                >
+              </div>
+            </div>
+
+              <div class="form-group col-md-12 mt-2">
+            <label
+              for="exampleFormControlTextarea1"
+              class="form-label text-muted text-uppercase fw-semibold"
+              >Remark <span class="starRequried">*</span></label
+            >
+            <textarea
+              class="form-control bg-light border-0"
+              id="Remark"
+              rows="4"
+              placeholder="Remark"
+              formControlName="deliveryNoteRemark"
+              
+              [maxlength]="maxCharsDecision"
+              [class.is-invalid]="
+                  deliveryNoteRemark.invalid && deliveryNoteRemark.touched
+                "
+            ></textarea>
+            <label class="nopadding clrlbl">
+              Characters Remaining:
+              {{ deliveryNoteRemark?.value?.length }}/{{
+                maxCharsDecision
+              }}</label
+            >
+            <div class="invalid-feedback">Please enter a Remark</div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger mr-2 mb-2 mb-md-0"
+      (click)="modal.dismiss('cancel')"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      [disabled]="updateDeliveryNoteFrom.invalid"
+      ngbAutofocus
+      class="btn btn-success mr-2 mb-2 mb-md-0"
+      (click)="modal.close('Ok', $event)"
+    >
+      Submit
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,477 @@
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center gy-3">
+            <div class="col-lg mb-sm-3">
+              <h5 class="card-title mb-0">Project Schedule List</h5>
+            </div>
+          
+              <div class="col-lg mb-sm-3">
+                <div class="search-box w-100">
+                  <div class="search-box">
+                    <input
+                      type="search"
+                      name="searchTerm"
+                      (input)="onTypeprojectScheduleNameChange(false)"
+                      class="form-control"
+                      #inputer
+                      [(ngModel)]="typeprojectScheduleNameValue"
+                      placeholder="Search for Schedule name"
+                    />
+                    <i class="ri-search-line search-icon"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg mb-sm-3">
+                <ng-select
+                  [items]="projectScheduleStatusList"
+                  [clearable]="true"
+                  bindLabel="assetStatus"
+                  bindValue="assetStatusId"
+                  [(ngModel)]="selectedDropDownScheduleStatusIdValue"
+                  (change)="onDropdownScheduleStatusValueChange($event)"
+                  id="Status"
+                  placeholder="Select Status"
+                  class="w-100 mr-2"
+                  for="Status"
+                ></ng-select>
+              </div>
+  
+              <div class="col-lg-auto mb-sm-3 d-flex justify-content-end">
+                <button
+                  type="button"
+                  class="btn btn-danger me-2"
+                  (click)="resetSerachVariable()"
+                  ngbTooltip="Remove All Search"
+                >
+                  <i class="ri-refresh-fill me-1 align-bottom"></i>
+                  Clear
+                </button>
+  
+                <button
+                  *ngIf="projectSchedule_Add"
+                  type="button"
+                  class="btn btn-success add-btn"
+                  id="create-btn"
+                  (click)="openModalCreateProjectSchedule()"
+                >
+                  <i class="ri-add-line align-bottom me-1"></i> Add Project
+                  Schedule
+                </button>
+              </div>
+      
+          </div>
+  
+          <div class="card-body pt-0">
+            <div>
+              <ul
+                ngbNav
+                #nav="ngbNav"
+                [activeId]="1"
+                class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+              >
+                <li [ngbNavItem]="1">
+                  <ng-template ngbNavContent>
+                    <ng-container *ngIf="projectScheduleList.length != 0">
+                      <div class="row">
+                        <ng-container
+                          *ngFor="let data of projectScheduleList; index as index"
+                        >
+                          <div class="col-xxl-4 col-sm-4 stretch-card">
+                            <div class="card">
+                              <div class="card-header bg-info-subtle">
+                                <div class="d-flex align-items-center">
+                                  <div class="flex-grow-1">
+                                    <h6 class="mb-0 fs-15 d-block text-truncate">
+                                      <a
+                                        [title]="data.projectScheduleName"
+                                        href="javascript:void(0)"
+                                        (click)="
+                                          openTaskCreated(
+                                            data.projectScheduleId,
+                                            data
+                                          )
+                                        "
+                                        class="text-body"
+                                        >{{
+                                          showinString(data.projectScheduleName)
+                                        }}</a
+                                      >
+                                    </h6>
+                                  </div>
+                                  <div class="flex-shrink-0">
+                                    <div
+                                      class="d-flex gap-1 align-items-center my-n2"
+                                    >
+                                      <div class="dropdown" ngbDropdown>
+                                        <button
+                                          class="btn btn-link text-muted p-1 mt-n2 py-0 text-decoration-none fs-15 arrow-none"
+                                          data-bs-toggle="dropdown"
+                                          aria-haspopup="true"
+                                          aria-expanded="true"
+                                          ngbDropdownToggle
+                                        >
+                                          <i-feather
+                                            name="more-horizontal"
+                                            class="icon-sm"
+                                          ></i-feather>
+                                        </button>
+  
+                                        <div
+                                          class="dropdown-menu dropdown-menu-end"
+                                          ngbDropdownMenu
+                                        >
+                                          <a
+                                            class="dropdown-item"
+                                            href="javascript:void(0)"
+                                            (click)="
+                                              openTaskCreated(
+                                                data.projectScheduleId,
+                                                data
+                                              )
+                                            "
+                                            ><i
+                                              class="ri-eye-fill align-bottom me-2 text-muted"
+                                            ></i>
+                                            View</a
+                                          >
+                                          <!-- <a
+                                          class="dropdown-item"
+                                          href="javascript:void(0)"
+                                          ><i
+                                            class="ri-pencil-fill align-bottom me-2 text-muted"
+                                          ></i>
+                                          Edit</a
+                                        > -->
+                                          <ng-container
+                                            *ngIf="projectSchedule_Delete"
+                                          >
+                                            <div
+                                              class="dropdown-divider"
+                                              *ngIf="
+                                                data.projectScheduleStatusId != 49
+                                              "
+                                            ></div>
+                                            <a
+                                              *ngIf="
+                                                data.projectScheduleStatusId != 49
+                                              "
+                                              class="dropdown-item"
+                                              href="javascript:void(0);"
+                                              (click)="
+                                                openModalDeleteProjectSchedule(
+                                                  data
+                                                )
+                                              "
+                                              ><i
+                                                class="ri-delete-bin-fill align-bottom me-2 text-muted"
+                                              ></i>
+                                              Delete</a
+                                            >
+                                          </ng-container>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="card-body pt-1 pb-1">
+                                <!-- <div class="d-flex justify-content-end">
+                              
+                            </div> -->
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="d-flex">
+                                      <p
+                                        class="fs-16 mb-0 text-truncate d-block flex-grow-1"
+                                      >
+                                        <b
+                                          ><i
+                                            class="ri-building-line align-bottom me-1"
+                                          ></i
+                                          >{{ data.companyName }}</b
+                                        >
+                                      </p>
+                                    </div>
+  
+                                    <p class="fs-12 mb-0 text-truncate d-block">
+                                      <i
+                                        class="ri-building-2-line align-bottom me-1"
+                                      ></i
+                                      >{{ data.clientName }}
+                                    </p>
+                                    <p class="fs-12 mb-0 text-truncate d-block">
+                                      <i
+                                        class="ri-community-line align-bottom me-1"
+                                      ></i
+                                      >{{ data.projectName }}
+                                    </p>
+                                  </div>
+  
+                                  <div class="col-lg-12 mb-3 mt-2">
+                                    <div>
+                                      <div class="d-flex">
+                                        <div class="flex-grow-1">
+                                          <div>
+                                            <i
+                                              class="ri-list-check align-bottom me-1 text-muted"
+                                            ></i
+                                            ><b
+                                              >Main-Task :
+                                              {{ data.totalTaskCompleted }}/{{
+                                                data.totalTask
+                                              }}</b
+                                            >
+                                          </div>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                          <div>
+                                            {{
+                                              getTaskStatus(
+                                                data.totalTask,
+                                                data.totalTaskCompleted
+                                              )
+                                            }}
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <ngb-progressbar
+                                        [value]="
+                                          getTaskStatusColor(
+                                            data.totalTask,
+                                            data.totalTaskCompleted
+                                          )
+                                        "
+                                        type="primary"
+                                        class="progress-md"
+                                      ></ngb-progressbar>
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-12 mb-3">
+                                    <div>
+                                      <div class="d-flex">
+                                        <div class="flex-grow-1">
+                                          <div>
+                                            <i
+                                              class="ri-list-check align-bottom me-1 text-muted"
+                                            ></i
+                                            ><b
+                                              >Sub-Task :
+                                              {{ data.totalSubTaskCompleted }}/{{
+                                                data.totalSubTask
+                                              }}</b
+                                            >
+                                          </div>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                          <div>
+                                            {{
+                                              getTaskStatus(
+                                                data.totalSubTask,
+                                                data.totalSubTaskCompleted
+                                              )
+                                            }}
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <ngb-progressbar
+                                        [value]="
+                                          getTaskStatusColor(
+                                            data.totalSubTask,
+                                            data.totalSubTaskCompleted
+                                          )
+                                        "
+                                        type="success"
+                                        class="progress-md"
+                                      ></ngb-progressbar>
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-12 mb-2">
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div>
+                                          <p class="text-muted mb-0">
+                                            <b>Created By</b>
+                                          </p>
+                                          <div>{{ data.createdBy }}</div>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div>
+                                          <p class="text-muted mb-0">
+                                            Created Date
+                                          </p>
+                                          <h5 class="fs-14">
+                                            {{ data.createdDate }}
+                                          </h5>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+  
+                                  <div class="col-lg-12 mb-2">
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div>
+                                          <p class="text-muted mb-0">
+                                            <b>Status </b>
+                                          </p>
+                                          <div>
+                                            <span
+                                              [class]="
+                                                returnStatusBadgeClassesStatus(
+                                                  data.projectScheduleStatusId
+                                                )
+                                              "
+                                              >{{
+                                                data.projectScheduleStatusName
+                                              }}</span
+                                            >
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div>
+                                          <p class="text-muted mb-0">DateLine</p>
+                                          <h5 class="fs-14">
+                                            {{ data.plannedCompletionDate }}
+                                          </h5>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-12 mb-2">
+                                    <div class="row">
+                                      <div
+                                        class="col-md-3 text-nowrap text-center pe-0 ps-0"
+                                      >
+                                        <div>
+                                          <p class="text-muted mb-0">
+                                            Verification
+                                          </p>
+                                          <div>
+                                            <h5 class="fs-14">
+                                              {{ data.totalPendingVerification }}
+                                            </h5>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div
+                                        class="col-md-5 text-nowrap text-center pe-0 ps-0"
+                                      >
+                                        <div>
+                                          <p class="text-muted mb-0">
+                                            Acknowledgement
+                                          </p>
+                                          <h5 class="fs-14">
+                                            {{ data.totalPendingAcknowledgement }}
+                                          </h5>
+                                        </div>
+                                      </div>
+                                      <div
+                                        class="col-md-4 text-nowrap text-center pe-0 ps-0"
+                                      >
+                                        <div>
+                                          <p class="text-muted mb-0">
+                                            Pending Approval
+                                          </p>
+                                          <h5 class="fs-14">
+                                            {{ data.totalPendingPendingApproval }}
+                                          </h5>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </div>
+  
+                      <div
+                        class="row justify-content-md-between align-items-md-center gy-2"
+                      >
+                        <div class="col col-sm-12 col col-md-6">
+                          <div
+                            class="dataTables_info mb-2"
+                            id="tickets-table_info"
+                            role="status"
+                            aria-live="polite"
+                          >
+                            Showing {{ from }} to {{ to }} of
+                            {{ totalRecordsFromApi }} entries
+                          </div>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="col col-sm-12 col col-md-6">
+                          <div class="text-sm-right float-end listjs-pagination">
+                            <ngb-pagination
+                              [collectionSize]="totalRecordsFromApi"
+                              [(page)]="page"
+                              [pageSize]="pageSize"
+                              [maxSize]="2"
+                              [rotate]="true"
+                              (pageChange)="OnChangesPage($event)"
+                              *ngIf="totalRecordsFromApi > pageSize"
+                            >
+                              <ng-template
+                                ngbPaginationPrevious
+                                let-page
+                                let-pages="pages"
+                              >
+                                <i class="ci-arrow-left me-2"></i>
+                                Prev
+                              </ng-template>
+                              <ng-template ngbPaginationNext>
+                                Next
+                                <i class="ci-arrow-right ms-2"></i>
+                              </ng-template>
+                            </ngb-pagination>
+  
+                            <!-- <ngb-pagination
+                            [collectionSize]="totalRecordsFromApi"
+                            [pageSize]="pageSize"
+                            [(page)]="page"
+                            [maxSize]="2"
+                            [rotate]="true"
+                            (pageChange)="OnChangesPage($event)"
+                            *ngIf="totalRecordsFromApi > pageSize"
+                          ></ngb-pagination> -->
+                          </div>
+                        </div>
+                        <!-- End Pagination -->
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="projectScheduleList.length == 0">
+                      <div class="py-4 text-center">
+                        <div>
+                          <lord-icon
+                            src="https://cdn.lordicon.com/msoeawqm.json"
+                            trigger="loop"
+                            colors="primary:#405189,secondary:#0ab39c"
+                            style="width: 72px; height: 72px"
+                          >
+                          </lord-icon>
+                        </div>
+                        <div class="mt-4">
+                          <h5>No Records Found</h5>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-template>
+                </li>
+              </ul>
+  
+              <!-- Tab panes -->
+              <div class="tab-content text-muted">
+                <div [ngbNavOutlet]="nav"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

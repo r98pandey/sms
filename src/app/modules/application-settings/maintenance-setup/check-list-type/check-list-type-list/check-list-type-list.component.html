@@ -1,0 +1,379 @@
+<!-- Start Breadcrumbs -->
+
+<app-breadcrumbs [title]="label" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row asset-list">
+  <div class="col-lg-12">
+    <div class="card" id="orderList">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-md-3">
+            <h5 class="card-title mb-0">Check List Types</h5>
+          </div>
+          <div class="col-sm-auto col-lg-9 d-flex justify-content-end">
+            <div *ngIf="returnValueMenu.add">
+              <button class="btn btn-success add-btn" (click)="addModalPopupHandler(addModal)">
+                <i class="ri-add-line align-bottom me-1"></i> Add Checklist
+                Item
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row d-flex justify-content-end">
+          <div class="col-lg pe-0 mb-2"></div>
+          <div class="col-lg pe-0 mb-2">
+            <ng-select [items]="companyList" bindLabel="companyName" bindValue="companyId" [clearable]="true"
+              id="companyName" [(ngModel)]="companyId" (change)="changeCompanyHandler($event)"
+              placeholder="Select Company" class="mr-2">
+            </ng-select>
+          </div>
+          <div class="col-lg pe-0 mb-2">
+            <ng-select [items]="preventCategoryList" bindLabel="preventiveCategoryName" bindValue="preventiveCategoryId"
+              [(ngModel)]="preventCategoryId" [disabled]="!companyId" placeholder="Select Category" [clearable]="true"
+              class="custom mr-2" (change)="categoryHandler($event)" [searchable]="false">
+            </ng-select>
+          </div>
+          <div class="col-auto d-flex justify-content-end mb-2">
+            <button class="btn btn-danger" (click)="clear()">
+              <i class="ri-refresh-fill me-1 align-bottom"></i>
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive table-card mb-0">
+          <table class="table">
+            <thead>
+              <tr class="bg-light text-muted text-uppercase">
+                <th>Company</th>
+                <th>Check List Type</th>
+                <th>Check List Category</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody >
+              <tr *ngFor="let preventType of list" class="text-muted">
+                <td>
+                  {{ preventType?.companyName || "NA" }}
+                </td>
+                <td>
+                  {{ preventType?.preventiveTypeName || "NA" }}
+                </td>
+                <td>
+                  {{ preventType?.preventiveCategoryName || "NA" }}
+                </td>
+                <td>
+                  <div class="dropdown ps-2" ngbDropdown>
+                    <button class="btn btn-soft-secondary btn-sm dropdown arrow-none" type="button"
+                      data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+                      <i class="ri-more-fill"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                      <li>
+                        <a class="dropdown-item cursor-pointer" (click)="
+                            viewModalPopupHandler(viewModal, preventType)
+                          ">
+                          <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                          View
+                        </a>
+                      </li>
+                      <li *ngIf="returnValueMenu.edit">
+                        <a class="dropdown-item cursor-pointer" (click)="
+                            editModalPopupHandlerModal(editModal, preventType)
+                          ">
+                          <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                          Edit
+                        </a>
+                      </li>
+                      <li class="dropdown-divider" *ngIf="returnValueMenu.delete"></li>
+                      <li *ngIf="returnValueMenu.delete">
+                        <a class="dropdown-item cursor-pointer" (click)="
+                            deleteModalPopupHandler(deleteModal, preventType)
+                          ">
+                          <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                          Delete
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- <div class="text-center text-muted" *ngIf="!preventCategoryId || !companyId">
+            {{ companyId ? "Category" : "Company" }} is not selected.
+          </div> -->
+
+          <div class="text-center text-muted" *ngIf="list.length === 0">
+            No Check List Type Found
+          </div>
+        </div>
+ <div
+          class="row justify-content-md-between align-items-md-center gy-2"
+        >
+          <div class="col col-sm-12 col col-md-6">
+            <div
+              class="dataTables_info mb-2"
+              id="tickets-table_info"
+              role="status"
+              aria-live="polite"
+            >
+              Showing {{ from }} to {{ to }} of {{ totalRecords }} entries
+            </div>
+          </div>
+          <!-- Pagination -->
+          <div class="col col-sm-12 col col-md-6">
+            <div class="text-sm-right float-end listjs-pagination">
+              <ngb-pagination
+                [collectionSize]="totalRecords"
+                [(page)]="page"
+                [pageSize]="pageSize"
+                [maxSize]="2"
+                [rotate]="true"
+                (pageChange)="loadPage($event)"
+                *ngIf="totalRecords > pageSize"
+              >
+                <ng-template ngbPaginationPrevious let-page let-pages="pages">
+                  <i class="ci-arrow-left me-2"></i> Prev
+                </ng-template>
+                <ng-template ngbPaginationNext>
+                  Next
+                  <i class="ci-arrow-right ms-2"></i>
+                </ng-template>
+              </ngb-pagination>
+            </div>
+          </div>
+          <!-- End Pagination -->
+        </div>
+        <!-- <div class="row justify-content-md-between align-items-md-center gy-2">
+          <div class="d-flex justify-content-between p-2">
+            Showing {{ from }} to {{ to }} of {{ totalRecords }} entries
+            <ngb-pagination [collectionSize]="totalRecords" [(page)]="page" [pageSize]="pageSize"
+              (pageChange)="loadPage($event)" *ngIf="totalRecords > pageSize">
+              <ng-template ngbPaginationPrevious let-page let-pages="pages">
+                <i class="ci-arrow-left me-2"></i> Prev
+              </ng-template>
+              <ng-template ngbPaginationNext>
+                Next
+                <i class="ci-arrow-right ms-2"></i>
+              </ng-template>
+            </ngb-pagination>
+          </div>
+        </div> -->
+      </div>
+    </div>
+    <!--end col-->
+  </div>
+</div>
+
+<ng-template #addModal role="document" let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="modal-title">Add Checklist Item</h5>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmitHandler()">
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label" for="companyId">Company
+            <span class="starRequried">*</span>
+          </label>
+          <ng-select [items]="companyList" bindLabel="companyName" bindValue="companyId" [clearable]="false"
+            id="companyName" (change)="changeCompanyHandlerForm($event)" formControlName="companyId"
+            placeholder="Select Company" class="mr-2">
+            <div *ngIf="f['companyId'].invalid && f['companyId'].touched">
+              <small class="text-danger">Company is Required</small>
+            </div>
+          </ng-select>
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="companyId">Check List Category
+            <span class="starRequried">*</span>
+          </label>
+          <ng-select [items]="preventCategoryList2 || []" bindLabel="preventiveCategoryName"
+            bindValue="preventiveCategoryId" [clearable]="false" id="preventCategoryId"
+            formControlName="preventiveCategoryId" placeholder="Select Category" class="w-100 mr-2">
+          </ng-select>
+
+          <div *ngIf="
+              f['preventiveCategoryId'].invalid &&
+              f['preventiveCategoryId'].touched
+            ">
+            <small class="text-danger">Checklist Category is Required</small>
+          </div>
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="category">Checklist Item
+            <span class="starRequried">*</span>
+          </label>
+          <input type="text" class="form-control" id="category" 
+          formControlName="preventiveTypeName" [class.is-invalid]="
+              preventiveTypeName?.invalid && preventiveTypeName?.touched
+            " [class.is-valid]="
+              preventiveTypeName?.valid && preventiveTypeName?.touched
+            " placeholder="Checklist Item " />
+
+          <div *ngIf="
+              f['preventiveTypeName'].invalid && f['preventiveTypeName'].touched
+            ">
+            <small class="text-danger">Checklist Item is Required</small>
+          </div>
+        </div>
+        <!-- [ngClass]="{ 'is-invalid': formGroup.dirty && f['category'].errors }" -->
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" data-bs-dismiss="modal" class="btn btn-danger" (click)="modal.dismiss('cancel')">
+        Close
+      </button>
+      <button type="submit" class="btn btn-success" [disabled]="!formGroup.valid">
+        Submit
+      </button>
+    </div>
+  </form>
+</ng-template>
+<ng-template #editModal role="document" let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="modal-title">Edit Checklist Item</h5>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="editFormGroup" (ngSubmit)="editModalPopupHandler()">
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label" for="companyId">Company
+            <span class="starRequried">*</span>
+          </label>
+          <ng-select [items]="companyList" bindLabel="companyName" bindValue="companyId" [clearable]="false"
+            id="companyName" (change)="changeCompanyHandler($event)" formControlName="companyId"
+            placeholder="Select Company" class="mr-2 disabled-class" [ngClass]="{
+              'is-invalid': formGroup.dirty && fEdit['companyId'].errors
+            }" [readonly]="true">
+          </ng-select>
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="companyId">Checklist Category
+            <span class="starRequried">*</span>
+          </label>
+          <ng-select [items]="preventCategoryList2" bindLabel="preventiveCategoryName" bindValue="preventiveCategoryId"
+            [clearable]="false" id="preventCategoryId" formControlName="preventiveCategoryId"
+            placeholder="Select Category" class="w-100 mr-2 disabled-class" [ngClass]="{
+              'is-invalid': formGroup.dirty && fEdit['preventiveCategoryId'].errors
+            }" [readonly]="true">
+          </ng-select>
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="category">Checklist Item
+            <span class="starRequried">*</span>
+          </label>
+          <input type="text" class="form-control" id="category" formControlName="preventiveTypeName" [class.is-invalid]="
+              editPreventiveTypeName?.invalid && editPreventiveTypeName?.touched
+            " [class.is-valid]="
+              editPreventiveTypeName?.valid && editPreventiveTypeName?.touched
+            " placeholder="Checklist Item" />
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" data-bs-dismiss="modal" class="btn btn-danger" (click)="modal.dismiss('cancel')">
+        Close
+      </button>
+      <button type="submit" class="btn btn-success" [disabled]="!editFormGroup.valid">
+        Submit
+      </button>
+    </div>
+  </form>
+</ng-template>
+<ng-template #deleteModal role="document" let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close"
+        (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="mt-2 text-center">
+        <img
+        src
+        ="../../../../assets/images/ticketChatpartImage.png"
+        class
+        ="img-fluid rounded chat-image-success">
+        <!-- <lord-icon
+          src="https://cdn.lordicon.com/gsqxdxog.json"
+          trigger="loop"
+          colors="primary:#405189,secondary:#f06548"
+          style="width: 90px; height: 90px"
+        ></lord-icon> -->
+        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+          <h4>You are about to delete a Checklist Item ?</h4>
+          <p class="text-muted mx-4 mb-0">
+            Deleting your check list type will remove all of your information from our
+            database.
+          </p>
+        </div>
+      </div>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button class="btn btn-danger" data-bs-dismiss="modal"
+          (click)="modal.dismiss('cancel')">
+          <i class="ri-close-line me-1 align-middle"></i> Close
+        </button>
+        <button type="button" class="btn btn-primary" (click)="onDeleteSubmitHandler()"
+          (click)="modal.close('Close click')">
+          Yes, Delete It!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-light" (click)="modal.dismiss('cancel')"> Close
+        </button>
+        <button type="submit" class="btn btn-danger" (click)="onDeleteSubmitHandler()">Delete</button>
+    </div> -->
+</ng-template>
+
+<ng-template #viewModal role="document" let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="modal-title">View Checklist Item</h5>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label fw-bold" for="companyId">Company</label>
+        <p class="fs-14">{{ preventiveTypeData.companyName }}</p>
+      </div>
+      <div class="col-12">
+        <label class="form-label fw-bold" for="companyId">Checklist Category</label>
+        <p class="fs-14">{{ preventiveTypeData.preventiveCategoryName }}</p>
+      </div>
+      <div class="col-12">
+        <label class="form-label fw-bold" for="category">Checklist Item</label>
+        <p class="fs-14">{{ preventiveTypeData.preventiveTypeName }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" data-bs-dismiss="modal" class="btn btn-danger" (click)="modal.dismiss('cancel')">
+      Close
+    </button>
+  </div>
+</ng-template>

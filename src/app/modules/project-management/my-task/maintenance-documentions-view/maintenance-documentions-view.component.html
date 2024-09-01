@@ -1,0 +1,153 @@
+<div class="row me-0 ms-0">
+  <div class="col-lg-12">
+    <div class="card mb-1">
+      <div class="card-body pb-0">
+        <div class="row mb-3">
+          <div class="col-md">
+            <div class="row align-items-center">
+              <div class="col-md">
+                <div>
+                  <div class="d-flex justify-content-between">
+                    <h5 class="fw-bold">
+                      {{ maintenanceAgreement?.title }}
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      aria-label="Close"
+                      (click)="close('Cross click')"
+                    ></button>
+                  </div>
+                  <div class="d-flex justify-content-between  align-items-center">
+                    <div class="hstack gap-3 flex-wrap">
+                      <div>
+                        <b>Number</b><br />
+                        #{{ maintenanceAgreement?.maintenanceNo }}
+                      </div>
+
+                      <div class="vr"></div>
+                      <div>
+                        <b>Start Date</b><br />
+                        {{ maintenanceAgreement?.startDate }}
+                      </div>
+                      <div class="vr"></div>
+                      <div>
+                        <b>End Date</b><br />
+                        {{ maintenanceAgreement?.endDate }}
+                      </div>
+
+                      <div class="vr"></div>
+                      <div>
+                        <b>Type</b><br />
+                        {{ maintenanceAgreement?.maintenanceType }}
+                      </div>
+                      <div class="vr"></div>
+                      <!-- <div>
+                          <i class="ri-honour-line align-bottom me-1"></i
+                          ><b>Task No.</b><br /><span class="text-primary">
+                            #{{ maintenanceAgreement?.taskNo }}</span
+                          >
+                        </div>
+                        <div class="vr"></div> -->
+
+                      <div *ngIf="maintenanceAgreement?.maintenanceStatusId">
+                        <i class="ri-stack-overflow-line align-bottom me-1"></i
+                        ><b>Status</b><br /><span
+                          class="fs-14"
+                          [class]="
+                            returnStatusBadgeClassesStatus(
+                              maintenanceAgreement?.maintenanceStatusId
+                            )
+                          "
+                          >{{
+                            maintenanceAgreement?.maintenanceStatusName
+                          }}</span
+                        >
+                      </div>
+                      <div class="vr"></div>
+                      <div>
+                        <b>Created Date</b><br />
+                        {{ maintenanceAgreement?.createdDate }}
+                      </div>
+                      <div class="vr"></div>
+                      <div>
+                        <b>Created Name</b><br />
+                        {{ maintenanceAgreement?.createdBy }}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      ngbAutofocus
+                      class="btn btn-primary me-2"
+                      (click)="openModalUpdateHandler()"
+                    >
+                      {{ returnNameType() }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-12 mb-2">
+            <div class="text-muted">
+              <h6 class="mb-1 fw-semibold text-uppercase">Description</h6>
+              <ngx-simplebar style="height: 600px" class="">
+                <div [innerHTML]="maintenanceAgreement?.description"></div>
+              </ngx-simplebar>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8 stretch-card">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <ul
+            ngbNav
+            #customNav="ngbNav"
+            [(activeId)]="activeTaskTab"
+            class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0"
+            role="tablist"
+          >
+            <li [ngbNavItem]="1" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Document
+              </a>
+              <ng-template ngbNavContent>
+                <app-attmachment-agreement-warranty
+                  (completeProcess)="getUpdateResults()"
+                  [maintenanceStatusId]="
+                    maintenanceAgreement?.maintenanceStatusId
+                  "
+                  [projectId]="ProjectId"
+                  [maintenanceId]="MaintenanceId"
+                  [projectAttachment]="agreementDocList"
+                ></app-attmachment-agreement-warranty>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-body p-2">
+        <div class="row me-0 ms-0">
+          <div class="col-lg-12 pe-0 ps-0">
+            <div class="tab-content">
+              <div [ngbNavOutlet]="customNav"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

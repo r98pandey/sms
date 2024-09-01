@@ -1,0 +1,337 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<form [formGroup]="addDeliveryNoteFrom">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Basic Information</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="companyId" class="form-label mb-0"
+                >Company<span class="starRequried">*</span></label
+              >
+              <ng-select
+                [readonly]="disabledWithAceessGroup"
+                [items]="arrayListDropDownCompany"
+                bindLabel="companyName"
+                [clearable]="false"
+                bindValue="companyId"
+                placeholder="Select Company"
+                class="custom"
+                [(ngModel)]="selectedDropDownCompanyIdValue"
+                formControlName="company"
+                (change)="onDropdownCompanyValueChange($event)"
+                [ngClass]="{
+                  'is-invalid': company.invalid && company.touched,
+                  'is-valid': company.valid && company.touched
+                }"
+              >
+              </ng-select>
+
+              <div *ngIf="company.invalid && company.touched" class="mt-2">
+                <small
+                  class="text-danger"
+                  *ngIf="company['errors']['required']"
+                >
+                  Company is Required
+                </small>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label for="companyId" class="form-label mb-0"
+                  >Client<span class="starRequried">*</span></label
+                >
+                <ng-select
+                  [readonly]="disabledWithAceessGroup"
+                  [items]="arrayListDropDownClientList"
+                  bindLabel="clientName"
+                  [clearable]="false"
+                  [(ngModel)]="selectedDropDownClientIdValue"
+                  bindValue="clientId"
+                  placeholder="Select Client"
+                  class="custom"
+                  formControlName="client"
+                  (change)="onDropdownClientValueChange($event)"
+                  [ngClass]="{
+                    'is-invalid': client.invalid && client.touched,
+                    'is-valid': client.valid && client.touched
+                  }"
+                >
+                </ng-select>
+
+                <div *ngIf="client.invalid && client.touched" class="mt-2">
+                  <small
+                    class="text-danger"
+                    *ngIf="client['errors']['required']"
+                  >
+                    Client is Required
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label class="form-label mb-0"
+                  >{{ isProject ? "Project" : "Department"
+                  }}<span class="starRequried">*</span></label
+                >
+                <ng-select
+                  [readonly]="projectDepartmentFieldDisiabled"
+                  [items]="arrayListDropDownProjectOrDeparmentList"
+                  bindLabel="departmentName"
+                  bindValue="departmentId"
+                  [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+                  [placeholder]="
+                    isProject ? 'Select Project' : 'Select Department'
+                  "
+                  [clearable]="false"
+                  class="custom"
+                  formControlName="project"
+                  (change)="onDropdownDepartmentValueChange($event)"
+                  [ngClass]="{
+                    'is-invalid': project.invalid && project.touched,
+                    'is-valid': project.valid && project.touched
+                  }"
+                >
+                </ng-select>
+                <div *ngIf="project?.invalid && project?.touched" class="mt-2">
+                  <small
+                    class="text-danger"
+                    *ngIf="project['errors']['required']"
+                  >
+                    {{ isProject ? "Project" : "Department" }} is
+                    Required</small
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8 mb-3">
+              <label class="form-label mb-0"
+                >Delivery Tilte<span class="starRequried">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter Delivery Tilte"
+                formControlName="title"
+                [class.is-invalid]="title.invalid && title.touched"
+                [class.is-valid]="title.valid && title.touched"
+              />
+
+              <div *ngIf="title.invalid && title.touched">
+                <small class="text-danger" *ngIf="title['errors']['required']">
+                  Delivery Tilte is Required
+                </small>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label for="expectedDeliveryDate" class="form-label mb-0"
+                  >Expected Delivery Date
+                  <span class="starRequried">*</span>
+
+                    <i class=" ri-close-circle-line text-danger"
+                  *ngIf="expectedDeliveryDate.value"
+                   (click)="clearChangDate()"
+                  ></i>
+                </label>
+                <div class="d-flex">
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="expectedDeliveryDate"
+                    formControlName="expectedDeliveryDate"
+                    placeholder="Schedule Start On"
+                    mwlFlatpickr
+                    [altInput]="false"
+                    [enableTime]="false"
+                    [convertModelValue]="true"
+                    [dateFormat]="'d-m-Y'"
+                    [class.is-invalid]="
+                      expectedDeliveryDate.invalid &&
+                      expectedDeliveryDate.touched
+                    "
+                    [class.is-valid]="
+                      expectedDeliveryDate.valid && expectedDeliveryDate.touched
+                    "
+                  />
+                  <!-- <input
+                    type="time"
+                    id="timeInput"
+                    class="form-control"
+                    formControlName="expectedDeliveryTime"
+                  /> -->
+                  <input 
+                  [ngxMatTimepicker]="picker"
+                  id="timeInput"
+                  class="form-control"
+                  formControlName="expectedDeliveryTime" readonly>
+                  <ngx-mat-timepicker #picker
+                  dottedMinutesInGap
+                  enableKeyboardInput
+                  ></ngx-mat-timepicker>  
+  
+                </div>
+
+                <div
+                  *ngIf="
+                    expectedDeliveryDate.invalid && expectedDeliveryDate.touched
+                  "
+                >
+                  <small
+                    class="text-danger"
+                    *ngIf="expectedDeliveryDate.errors?.['required']"
+                  >
+                    Expected Delivery Date is Required
+                  </small>
+                </div>
+                <div
+                  *ngIf="
+                    expectedDeliveryTime.invalid && expectedDeliveryTime.touched
+                  "
+                >
+                  <small
+                    class="text-danger"
+                    *ngIf="expectedDeliveryTime.errors?.['required']"
+                  >
+                    Time is Required
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-8">
+              <label class="form-label mb-0"
+                >Note <span class="starRequried">*</span></label
+              >
+
+              <textarea
+                class="form-control my-1 height-textarea-2"
+                placeholder="Note"
+                rows="3"
+                id="remark"
+                name="remark"
+                formControlName="deliveryNoteRemark"
+                [class.is-invalid]="
+                  deliveryNoteRemark.invalid && deliveryNoteRemark.touched
+                "
+                [class.is-valid]="
+                  deliveryNoteRemark.valid && deliveryNoteRemark.touched
+                "
+                [maxlength]="maxCharsDecision"
+              ></textarea>
+
+              <label class="nopadding clrlbl">
+                Characters Remaining:
+                {{ deliveryNoteRemark.value?.length }}/{{
+                  maxCharsDecision
+                }}</label
+              >
+              <div *ngIf="title.invalid && title.touched">
+                <small class="text-danger" *ngIf="title['errors']['required']">
+                   Note is Required
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between">
+          <h5 class="card-title mb-0">Select Asset</h5>
+
+          <button
+            class="btn btn-primary"
+            (click)="getAssetList()"
+            *ngIf="company.value && client.value && project.value"
+          >
+            Add Asset
+          </button>
+        </div>
+        <div class="card-body "[class]="selectedAssetList?.length != 0?'maxHeightCard':''">
+          <div class="table-responsive table-card mb-0">
+            <table class="table">
+              <thead>
+                <tr class="bg-light text-muted text-uppercase">
+                  <th>Asset No</th>
+                  <th>Asset</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="selectedAssetList.length != 0">
+                <tr *ngFor="let asset of selectedAssetList">
+                  <td>
+                    <a
+                      href="javascript:void(0)"
+                      class="fw-medium link-primary"
+                      >{{ asset.assetTagId ? asset.assetTagId : "NA" }}</a
+                    >
+                  </td>
+
+                  <td>
+                    {{ asset.assetName }}
+                  </td>
+                  <td class="status">
+                    <span
+                      [class]="
+                        returnStatusBadgeClassesStatus(asset.assetStatusId)
+                      "
+                      >{{ asset.assetStatus }}</span
+                    >
+                  </td>
+
+                  <td class="status">
+                    <a
+                    href="javascript:void(0)"
+                    class="dropdown-item cursor-pointer"
+                    (click)="openModalDeleteAssetObject(asset)"
+                    ><i
+                      class="ri-delete-bin-fill align-bottom me-2 text-danger"
+                    ></i>
+                  </a> 
+                  </td>
+                </tr>
+              </tbody>
+              <tbody *ngIf="selectedAssetList.length == 0">
+                <tr>
+                  <td colspan="4" class="text-center">No Asset Selected</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="text-end mb-3">
+  <button
+    class="btn btn-soft-primary waves-effect mx-3"
+    type="button"
+    (click)="goback()"
+  >
+    Back
+  </button>
+  <button
+    (click)="onSubmit()"
+    class="btn btn-success w-sm"
+    type="button"
+    [disabled]="addDeliveryNoteFrom.invalid || selectedAssetList.length==0"
+  >
+    Submit
+  </button>
+</div>

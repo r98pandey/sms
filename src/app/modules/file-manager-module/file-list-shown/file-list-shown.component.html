@@ -1,0 +1,86 @@
+<div class="table-responsive">
+  <table class="table align-middle table-nowrap mb-0">
+    <thead class="table-active">
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">File Size</th>
+        <th scope="col">Recent Date</th>
+        <th scope="col">Created By</th>
+        <th scope="col" class="text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="file-list" *ngIf="fileList.length != 0">
+      <tr *ngFor="let data of fileList" id="r-{{ data.id }}">
+        <td>
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0 fs-17 me-2 filelist-icon">
+              <i [class]="data.icon"></i>
+            </div>
+            <div class="flex-grow-1 filelist-name">
+              {{ data.fileName }}
+            </div>
+          </div>
+        </td>
+
+        <td class="filelist-size">
+          {{ data.fileSize }}
+          {{ data.fileSizeType }}
+        </td>
+
+        <td class="filelist-create">
+          {{ data.createdDateTime }}
+        </td>
+        <td>{{ data.createdByName }}</td>
+        <td>
+          <div class="d-flex gap-3 justify-content-center">
+            <div class="dropdown" ngbDropdown>
+              <button
+                class="btn btn-light btn-icon btn-sm dropdown arrow-none"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                ngbDropdownToggle
+              >
+                <i class="ri-more-fill align-bottom"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                <!-- fileId -->
+                <li>
+                  <a
+                    class="dropdown-item edit-list"
+                    href="javascript:void(0);"
+                    (click)="openToDownload(data)"
+                    role="button"
+                    >Download</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <tbody id="file-list" *ngIf="fileList.length == 0">
+      <tr>
+        <td colspan="5">
+          <div class="tab-pane alltable">
+            <div class="py-4 text-center">
+              <div>
+                <lord-icon
+                  src="https://cdn.lordicon.com/msoeawqm.json"
+                  trigger="loop"
+                  colors="primary:#405189,secondary:#0ab39c"
+                  style="width: 72px; height: 72px"
+                >
+                </lord-icon>
+              </div>
+              <div class="mt-4">
+                <h5>No Records Found</h5>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

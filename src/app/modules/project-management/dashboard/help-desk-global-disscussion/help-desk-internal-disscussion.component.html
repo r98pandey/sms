@@ -1,0 +1,290 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body pt-0">
+        <div class="table-responsive table-card mb-0">
+          <table class="table">
+            <thead>
+              <tr class="bg-light text-muted text-uppercase">
+                <th>Post</th>
+                <th>Message</th>
+                <th class="width-10">Attachment</th>
+                <th class="text-end width-10">SubTask Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="ticketList.length == 0">
+                <tr>
+                  <td colspan="4" class="text-center">
+                    No External Discussion Data
+                  </td>
+                </tr>
+              </ng-container>
+              <ng-container *ngIf="ticketList.length != 0">
+                <tr *ngFor="let ticket of ticketList; let i = index">
+                  <td class="width-30 align-top">
+                    <div
+                      class="d-flex align-items-center"
+                      *ngIf="ticket.profileImageUrl"
+                    >
+                      <div class="flex-grow-0">
+                        <div class="d-flex align-items-center">
+                          <div
+                            class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0 online"
+                          >
+                            <img
+                              [src]="imageUrl + ticket.profileImageUrl"
+                              class="rounded-circle avatar-xs"
+                              alt=""
+                            />
+                            <!-- <span class="user-status"></span> -->
+                            <div class="dropdown" ngbDropdown>
+                              <span
+                                class="user-status shadow-none arrow-none cursor-pointer"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                ngbDropdownToggle
+                                [class]="
+                                  returnCurrentStatusClassesStatusCircle(
+                                    ticket.currentStatus
+                                  )
+                                "
+                                title="{{ ticket.currentStatus }}"
+                              ></span>
+                              <div
+                                *ngIf="ticket.currentStatus"
+                                class="dropdown-menu dropdown-menu-start drop-con p-0"
+                                ngbDropdownMenu
+                              >
+                                <div
+                                  [class]="
+                                    returnCurrentStatusClassesStatus(
+                                      ticket.currentStatus
+                                    )
+                                  "
+                                  class="text-uppercase p-2"
+                                >
+                                  <b class="fs-14">
+                                    {{ ticket.currentStatus }}</b
+                                  >
+                                </div>
+                                <div
+                                  class="white-space-normal text-muted fs-13 p-2"
+                                  *ngIf="ticket.currentStatusRemark"
+                                >
+                                  {{ ticket.currentStatusRemark }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1 overflow-hidden">
+                            <h5 class="mb-0 fs-14" [title]="ticket.msgByName">
+                              {{ ticket.accessGroup }}
+                            </h5>
+                            <p
+                              class="fs-12 mb-0 text-muted"
+                              [title]="ticket.accessGroup"
+                            >
+                              {{ ticket.msgByName }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="d-flex align-items-center"
+                      *ngIf="!ticket.profileImageUrl"
+                    >
+                      <div class="flex-grow-0">
+                        <div class="d-flex align-items-center">
+                          <div
+                            class="flex-shrink-0 chat-user-img-without user-own-img align-self-center me-3 ms-0 online rounded-circle avatar-title-custom"
+                            [class]="
+                              returnCurrentStatusClassesStatus(
+                                ticket.currentStatus
+                              )
+                            "
+                          >
+                            {{ ticket.accessGroup?.charAt(0)
+                            }}{{ ticket.accessGroup?.charAt(1) }}
+
+                            <!-- <span class="user-status"></span> -->
+                            <div class="dropdown" ngbDropdown>
+                              <span
+                                class="user-status shadow-none arrow-none cursor-pointer"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                ngbDropdownToggle
+                                [class]="
+                                  returnCurrentStatusClassesStatusCircle(
+                                    ticket.currentStatus
+                                  )
+                                "
+                                title="{{ ticket.currentStatus }}"
+                              ></span>
+                              <div
+                                *ngIf="ticket.currentStatus"
+                                class="dropdown-menu dropdown-menu-start drop-con p-0"
+                                ngbDropdownMenu
+                              >
+                                <div
+                                  [class]="
+                                    returnCurrentStatusClassesStatus(
+                                      ticket.currentStatus
+                                    )
+                                  "
+                                  class="text-uppercase p-2"
+                                >
+                                  <b class="fs-14">
+                                    {{ ticket.currentStatus }}</b
+                                  >
+                                </div>
+                                <div
+                                  class="white-space-normal text-muted fs-13 p-2"
+                                  *ngIf="ticket.currentStatusRemark"
+                                >
+                                  {{ ticket.currentStatusRemark }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1 overflow-hidden">
+                            <!-- <h5 class="text-truncate mb-0 fs-14">
+                              <a
+                                class="text-primary username"
+                                data-bs-toggle="offcanvas"
+                                href="javascript:void(0);"
+                                aria-controls="userProfileCanvasExample"
+                              >
+                                {{ ticket.fullName }}</a
+                              >
+                            </h5> -->
+                            <h5 class="fs-13 mb-0" [title]="ticket.msgByName">
+                              {{ ticket.accessGroup }}
+                            </h5>
+                            <p
+                              class="fs-12 mb-0 text-muted"
+                              [title]="ticket.msgByName"
+                            >
+                              {{ ticket.msgByName }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="align-top">
+                    <div>
+                      <h5
+                        [title]="
+                          ticket.messageContain? removeToHtml(
+                                ticket.messageContain)
+                              
+                            : ''
+                        "
+                        class="fs-13 mb-0 padding-bottom-5"
+                      >
+                        <a
+                          href="javascript:void(0)"
+                          (click)="viewHandler(ticket)"
+                          class="fw-medium link-primary mb-0 me-2"
+                          >{{ replaceTKT(ticket.ticketNo) }}</a
+                        >
+                      </h5>
+                      <div class="d-flex justify-content-between">
+                        <p class="fs-12 mb-0 text-muted align-bottom d-inline-block text-truncate" style="max-width: 650px;"*ngIf="ticket.messageContain">
+                      
+                      
+                          <i
+                            class="bx bx-check-double text-success align-bottom fs-16"
+                            *ngIf="ticket.isRead == 'true'"
+                          ></i>
+                          <i
+                            class="ri-check-line align-bottom"
+                            *ngIf="ticket.isRead == 'false'"
+                          ></i>
+
+                          {{
+                            ticket.messageContain
+                              ? removeToHtml(
+                                  removetheWordTicketTitle(
+                                    ticket.messageContain
+                                  )
+                                )
+                              : ""
+                          }}
+                        </p>
+                          <p class="fs-12 mb-0 text-muted align-bottom"*ngIf="!ticket.messageContain">
+                        No Message
+                      </p>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td class="width-10 align-top">
+                    <div
+                      class="d-flex justify-content-start align-items-bottom"
+                    >
+                      <app-chat-meaasge-file [chat]="ticket" [singlerow]="true">
+                      </app-chat-meaasge-file>
+                      <ng-container *ngIf="!ticket.fileType">
+                        <div class="fs-16 me-3"><b>-</b></div></ng-container
+                      >
+                    </div>
+                  </td>
+                  <td class="text-end width-10 align-top">
+                    <div>
+                      <h5 class="fs-13 mb-0 padding-bottom-5">
+                        <span
+                          [class]="
+                            returnStatusBadgeClassesStatus(
+                              ticket.ticketStatusId
+                            )
+                          "
+                          >{{ ticket.ticketStatusName }}</span
+                        >
+                      </h5>
+                      <div class="d-flex justify-content-end">
+                        <p class="fs-12 mb-0 text-muted align-bottom">
+                          {{ ticket.createDateTime }}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <div class="row justify-content-md-between align-items-md-center gy-2">
+          <div class="col col-sm-12 col col-md-6">
+            <div
+              class="dataTables_info mb-2"
+              id="tickets-table_info"
+              role="status"
+              aria-live="polite"
+            >
+              Showing {{ from }} to {{ to }} of
+              {{ totalRecordsFromApi }} entries
+            </div>
+          </div>
+          <!-- Pagination -->
+          <div class="col col-sm-12 col col-md-6">
+            <div class="text-sm-right float-end listjs-pagination">
+              <ngb-pagination
+                [collectionSize]="totalRecordsFromApi"
+                [pageSize]="pageSize"
+                [(page)]="page"
+                [maxSize]="2"
+                [rotate]="true"
+                (pageChange)="OnChangesPage($event)"
+                *ngIf="totalRecordsFromApi > pageSize"
+              ></ngb-pagination>
+            </div>
+          </div>
+          <!-- End Pagination -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

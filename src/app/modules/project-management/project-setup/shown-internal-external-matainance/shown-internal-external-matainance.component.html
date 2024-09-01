@@ -1,0 +1,123 @@
+<div class="row row-cols-xxl-8 row-cols-lg-4 row-cols-1">
+  <div
+    class="col"
+    *ngFor="let teamMember of internalExternalMatainanceList; index as index"
+  >
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div>
+            <div class="d-flex mb-2 align-items-center">
+              <div class="flex-shrink-0">
+                <img
+                  src="{{
+                    teamMember.profileImageUrl
+                      ? imageUrl + teamMember.profileImageUrl
+                      : '../../../../../assets/images/placeholderimage.png'
+                  }}"
+                  alt=""
+                  class="avatar-sm rounded-circle"
+                />
+              </div>
+              <div class="flex-grow-1 ms-2">
+                <h5
+                  class="card-title mb-1  text-truncate_new d-block fs-14"
+                  ngbTooltip="{{ teamMember.fullName }}"
+                >
+                  {{ teamMember.fullName }}
+                </h5>
+                <p class="text-muted mb-0 text-truncate d-block fs-12">
+                  {{ teamMember.accessGroupName }}
+                </p>
+              </div>
+            </div>
+            <p class="card-text text-muted text-truncate d-block mb-0 fs-12">
+              <i class="ri-mail-fill me-1 align-middle text-success"></i>
+              {{ teamMember.email }}
+            </p>
+
+            <p class="text-muted mb-0 text-truncate d-block mb-0 fs-12">
+              <i class="ri-phone-fill me-1 align-middle text-danger"></i>
+              {{ teamMember.phoneNumber }}
+            </p>
+            <div
+              class="text-muted mb-0 text-truncate d-block mb-0 fs-12"
+              *ngIf="comingWhichTab == 'Maintenance'"
+            >
+              <div class="d-flex justify-content-between">
+                <div>
+                  <i
+                    class="ri-information-line me-1 align-middle text-info"
+                  ></i>
+                  <span
+                    class="text-danger"
+                    *ngIf="teamMember && teamMember?.childList?.length == 0"
+                  >
+                    No Access Right Assigned</span
+                  >
+                  <span
+                    *ngIf="teamMember && teamMember?.childList?.length !== 0"
+                  >
+                    <b> No of Task Assigned :</b>
+                    <span
+                      [ngClass]="{
+                        'text-danger':
+                          getTotalObjectTrueCount(teamMember.accessRight) == 0,
+                        'text-dark':
+                          getTotalObjectTrueCount(teamMember.accessRight) != 0
+                      }"
+                    >
+                      {{ getTotalObjectTrueCount(teamMember.accessRight) }}
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-end">
+            <i 
+              class="ri-delete-bin-line fs-16 me-1 text-danger"   ngbTooltip="Delete Profile"
+              (click)="openModalDeleteConf(teamMember.projectUserAccessId)"
+            ></i>
+            <ng-container *ngIf="comingWhichTab == 'Maintenance'">
+              <i
+                class="ri-eye-line fs-16 text-info cursor me-1"
+                ngbTooltip="View My Task"
+                *ngIf="getTotalObjectTrueCount(teamMember.accessRight) != 0"
+                (click)="toggleFooterCard(index)"
+              ></i>
+
+              <i
+                class="ri-edit-2-line fs-16 text-info cursor me-1"
+                ngbTooltip="Update Ticket Process"
+                (click)="openMyTaskAccessRightModal(teamMember)"
+              ></i>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="comingWhichTab == 'Maintenance'">
+        <div class="card-footer footer-background" *ngIf="isFooterOpen(index)">
+          <ul
+            class="list-unstyled vstack gap-2 mb-0"
+            *ngFor="let child of teamMember.accessRight; index as index"
+          >
+            <li *ngIf="child.checked == true">
+              <div class="d-flex fs-12">
+                <div class="flex-shrink-0 avatar-xxs text-muted">
+                  <i
+                    class="align-bottom ri-checkbox-circle-line text-success"
+                    *ngIf="child.checked == true"
+                  ></i>
+                </div>
+                <div class="flex-grow-1">
+                  <h6 class="mb-0 fs-12">{{ child.name }}</h6>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

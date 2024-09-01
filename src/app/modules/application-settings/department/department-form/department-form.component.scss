@@ -1,0 +1,62 @@
+.image-section {
+  img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+  }
+  .hoverable {
+    position: relative;
+    display: block;
+    cursor: pointer;
+    height: 200px;
+    width: 200px;
+    border: 3px solid lightgrey;
+    border-radius: 50%;
+  }
+  .hoverable .hover-text {
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+  .hoverable .background {
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  .hoverable:hover .hover-text {
+    display: block;
+  }
+  .hoverable:hover .background {
+    display: block;
+  }
+  input {
+    display: none;
+  }
+}
+
+.ng-select.custom {
+  border: 0px;
+  min-height: 0px;
+  max-height: 30px;
+  border-radius: 10;
+}
+.ng-select.custom .ng-select-container {
+  min-height: 0px;
+  max-height: 30px;
+  border-radius: 10;
+}
+.ng-select.custom ::ng-deep .ng-select-container {
+  min-height: 0px;
+  max-height: 30px;
+  border-radius: 10;
+}

@@ -1,0 +1,490 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-sm-3 col-xxl-3">
+            <h5 class="card-title mb-0">Asset List</h5>
+          </div>
+          <div
+            class="col-sm-9 col-xxl-9 d-flex gap-2 flex-wrap justify-content-end"
+          >
+            <!-- <div class=""> -->
+
+            <div class="search-box w-50">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                [(ngModel)]="typeAssetNameValue"
+                (input)="onTypeAssetNameChange(false)"
+                placeholder="Search for asset name"
+                #inputer
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+            <div *ngIf="checkedAssetList.length >= 1">
+              <button
+                class="btn btn-primary ms-2 mb-2 mb-md-0"
+                *ngIf="storeApproverType == 'Approver'"
+                (click)="openModalSucccessWithRemarkMulti('Approver','Approve')"
+              >
+                Approve
+              </button>
+              <button
+                class="btn btn-primary ms-2 mb-2 mb-md-0"
+                *ngIf="storeApproverType == 'Reviewer'"
+                (click)="openModalSucccessWithRemarkMulti('Reviewer','Review')"
+              >
+                Review
+              </button>
+
+              <button
+                class="btn btn-danger ms-2 mb-2 mb-md-0"
+                (click)="openModalSucccessWithRemarkMulti('Reject','Reject')"
+              >
+                Reject
+              </button>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-soft-primary waves-effect"
+              (click)="onBack()"
+            >
+              <i class="feather icon-twitter btn-icon-prepend"></i>
+              Back
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row g-3">
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onDropdownCompanyValueChange($event)"
+              [clearable]="true"
+              id="companyName"
+              [(ngModel)]="selectedDropDownCompanyIdValue"
+              placeholder="Select Company"
+              class="w-100 mr-2"
+              for="companyName"
+               [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownClientList"
+              bindLabel="clientName"
+              bindValue="clientId"
+              [disabled]="!selectedDropDownCompanyIdValue"
+              (change)="onDropdownClientValueChange($event)"
+              [clearable]="true"
+              id="clientName"
+              [(ngModel)]="selectedDropDownClientIdValue"
+              placeholder="Select Client"
+              class="w-100 mr-2"
+              for="clientName"
+               [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownProjectOrDeparmentList"
+              bindLabel="departmentName"
+              bindValue="departmentId"
+              [disabled]="!selectedDropDownClientIdValue"
+              (change)="onDropdownDepartmentValueChange($event)"
+              [clearable]="true"
+              id="departmentName"
+              [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+              placeholder="Select Project"
+              class="w-100 mr-2"
+              for="departmentName"
+                  [readonly]="projectDepartmentFieldDisiabled"
+            ></ng-select>
+          </div>
+
+          <div class="col-lg-auto">
+            <div class="d-flex justify-content-end">
+              <button
+                type="button"
+                class="btn btn-primary"
+                id="create-btn"
+                (click)="openFilter(filtetcontent)"
+              >
+                <i class="ri-equalizer-fill align-bottom me-1"></i> Filters
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger ms-1"
+                (click)="resetSerachVariable()"
+                ngbTooltip="Remove All Search"
+              >
+                <i class="ri-refresh-fill me-1 align-bottom"></i>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+            <li [ngbNavItem]="1">
+              <ng-template ngbNavContent>
+                <div class="table-responsive table-card mb-0">
+                  <table class="table">
+                    <thead>
+                      <tr class="bg-light text-muted text-uppercase">
+                        <th scope="col" style="width: 50px">
+                          <div class="form-check" *ngIf="assetList.length != 0">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              id="checkAll"
+                              value="option"
+                              [checked]="checkUncheckAll()"
+                              (change)="onCheckboxChange($event)"
+                            />
+                          </div>
+                        </th>
+                        <th>Asset No</th>
+                        <th>Asset</th>
+                        <th>Company</th>
+                        <th>Client</th>
+                        <th>{{ isProject ? "Project" : "Department" }}</th>
+                        <th>Location</th>
+
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let asset of assetList; let i = index">
+                        <th scope="row">
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              name="checkAll"
+                              value="{{ asset.id }}"
+                              [(ngModel)]="assetList[i].checked"
+                              (change)="
+                                getAssetlistChecked(assetList[i].checked, asset)
+                              "
+                            />
+                          </div>
+                        </th>
+                        <td class="align-top">
+                          <a
+                            href="javascript:void(0)"
+                            (click)="viewHandler(asset.id, asset)"
+                            class="fw-medium link-primary"
+                            >{{ asset.assetTagId ? asset.assetTagId : "NA" }}</a
+                          >
+                        </td>
+
+                        <td>
+                          <ng-container *ngIf="asset?.qrCodeImgPath">
+                            <i
+                              class="ri-qr-code-line fs-17 align-middle pe-auto"
+                              (click)="viewQrCodeImage(qrView, asset)"
+                            ></i>
+                          </ng-container>
+
+                          {{ asset.assetName }}
+                        </td>
+                        <td class="align-top">
+                          {{ asset.companyName }}
+                        </td>
+                        <td class="align-top">
+                          {{ asset.clientName }}
+                        </td>
+                        <td class="align-top">
+                          {{ asset.departmentName }}
+                        </td>
+
+                        <td class="align-top">
+                          {{ asset.locationName }}
+                        </td>
+
+                        <td class="align-top">
+                          <span
+                            [class]="
+                              returnStatusBadgeClassesStatus(
+                                asset.assetStatusId
+                              )
+                            "
+                            >{{ asset.assetStatus }}</span
+                          >
+                        </td>
+
+                        <td class="align-top">
+                          <span>
+                            <div class="dropdown ms-2" ngbDropdown>
+                              <button
+                                class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                ngbDropdownToggle
+                              >
+                                <i class="ri-more-fill"></i>
+                              </button>
+                              <ul
+                                class="dropdown-menu dropdown-menu-end"
+                                ngbDropdownMenu
+                              >
+                                <li>
+                                  <a
+                                    class="dropdown-item cursor-pointer"
+                                    (click)="viewHandler(asset.id, asset)"
+                                    ><i
+                                      class="ri-eye-fill align-bottom me-2 text-muted"
+                                    ></i>
+                                    View
+                                  </a>
+                                </li>
+                                <li *ngIf="!assetList[i].checked">
+                                  <a
+                                    *ngIf="storeApproverType == 'Approver'"
+                                    class="dropdown-item cursor-pointer text-primary"
+                                    (click)="
+                                      openModalSucccessWithRemark(
+                                        asset,
+                                      
+                                        'Approver','Approve'
+                                      )
+                                    "
+                                    ><i
+                                      class="ri-checkbox-circle-line align-bottom me-2 text-primary"
+                                    ></i>
+                                    Approve
+                                  </a>
+                                </li>
+                                <li *ngIf="!assetList[i].checked">
+                                  <a
+                                    *ngIf="storeApproverType == 'Reviewer'"
+                                    class="dropdown-item cursor-pointer text-primary"
+                                    (click)="
+                                      openModalSucccessWithRemark(
+                                        asset,
+                                        'Reviewer','Review'
+                                      )
+                                    "
+                                    ><i
+                                      class="ri-checkbox-circle-line align-bottom me-2 text-primary"
+                                    ></i>
+                                    Review
+                                  </a>
+                                </li>
+
+                                <li *ngIf="!assetList[i].checked">
+                                  <a
+                                    class="dropdown-item cursor-pointer text-danger"
+                                    (click)="
+                                      openModalSucccessWithRemark(
+                                        asset,
+                                        'Reject','Reject'
+                                      )
+                                    "
+                                    ><i
+                                      class="ri-close-circle-line align-bottom me-2 text-danger"
+                                    ></i>
+                                    Reject
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="text-center" *ngIf="assetList.length === 0">
+                    No Asset Found
+                  </div>
+                </div>
+                <div
+                  class="row justify-content-md-between align-items-md-center gy-2"
+                >
+                  <div class="col col-sm-12 col col-md-6">
+                    <div
+                      class="dataTables_info mb-2"
+                      id="tickets-table_info"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Showing {{ from }} to {{ to }} of
+                      {{ totalRecordsFromApi }} entries
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col col-sm-12 col col-md-6">
+                    <div class="text-sm-right float-end listjs-pagination">
+                      <ngb-pagination
+                        [collectionSize]="totalRecordsFromApi"
+                        [(page)]="page"
+                        [pageSize]="pageSize"
+                        [maxSize]="2"
+                        [rotate]="true"
+                        (pageChange)="OnChangesPage($event)"
+                        *ngIf="totalRecordsFromApi > pageSize"
+                      >
+                        <ng-template
+                          ngbPaginationPrevious
+                          let-page
+                          let-pages="pages"
+                        >
+                          <i class="ci-arrow-left me-2"></i> Prev
+                        </ng-template>
+                        <ng-template ngbPaginationNext>
+                          Next
+                          <i class="ci-arrow-right ms-2"></i>
+                        </ng-template>
+                      </ngb-pagination>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #qrView let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Qr-Code</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <img
+      [src]="imageUrl + assetQrData?.qrCodeImgPath"
+      alt="qr"
+      class="qrCode-img"
+    />
+  </div>
+</ng-template>
+
+<!-- Right Sidebar Filter Section  -->
+<!--end offcanvas-->
+
+<ng-template #filtetcontent let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="exampleModalLabel">Filters</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="modal-body">
+    <h6 class="text-danger" *ngIf="!selectedDropDownCompanyIdValue">
+      Please select company from List page
+    </h6>
+    <div class="row">
+      <div class="col-lg-12 mb-3">
+        <label for="locationName" class="form-label fw-semibold"
+          >Location</label
+        >
+        <ng-select
+          [items]="arrayListDropDownLocationList"
+          bindLabel="locationName"
+          [disabled]="!selectedDropDownProjectOrDeparmentIdValue"
+          bindValue="locationId"
+          (change)="onDropdownLocationValueChange($event)"
+          [clearable]="false"
+          id="locationName"
+          [(ngModel)]="selectedDropDownLocationIdValue"
+          placeholder="Select Location"
+          class="w-100 mr-2"
+          for="locationName"
+        ></ng-select>
+      </div>
+      <div class="col-lg-12 mb-3">
+        <label for="categoryName" class="form-label fw-semibold"
+          >Category</label
+        >
+        <ng-select
+          [items]="arrayListDropDownCategoryList"
+          bindLabel="categoryName"
+          [disabled]="!selectedDropDownCompanyIdValue"
+          bindValue="categoryId"
+          (change)="onDropdownCategoryValueChange($event)"
+          [clearable]="false"
+          id="categoryName"
+          [(ngModel)]="selectedDropDownCategoryIdValue"
+          placeholder="Select Category"
+          class="w-100 mr-2"
+          for="categoryName"
+        ></ng-select>
+      </div>
+      <div class="col-lg-12 mb-3">
+        <label for="subCategoryName" class="form-label fw-semibold"
+          >Sub Category</label
+        >
+        <ng-select
+          [items]="arrayListDropDownSubCategoryList"
+          bindLabel="subCategoryName"
+          [disabled]="!selectedDropDownCategoryIdValue"
+          bindValue="subCategoryId"
+          (change)="onDropdownSubCategoryValueChange($event)"
+          [clearable]="false"
+          id="subCategoryName"
+          [(ngModel)]="selectedDropDownSubCategoryIdValue"
+          placeholder="Select Sub Category "
+          class="w-100 mr-2"
+          for="subCategoryName"
+        ></ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-light" (click)="clearAdvanceSearch(modal)">
+      Clear
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      (click)="submitAdvanceSearch(modal)"
+    >
+      Search
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,655 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs
+  title="Asset Detail"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card mt-n4 mx-n4">
+      <div class="bg-warning-subtle">
+        <div class="card-body pb-0 px-4">
+          <div class="row mb-3">
+            <div class="col-md">
+              <div class="row align-items-center g-3">
+                <div class="col-md-auto">
+                  <div class="avatar-md ">
+                      <img  
+                        (click)="
+                          open(
+                            assetDetailsObj.assetImagePath
+                              ? apiUrl + assetDetailsObj.assetImagePath
+                              : '../../../../../assets/images/placeholderimage.png'
+                          )
+                        "
+                        [src]="
+                          assetDetailsObj.assetImagePath
+                            ? apiUrl + assetDetailsObj.assetImagePath
+                            : '../../../../../assets/images/placeholderimage.png'
+                        "
+                        alt=""
+                        class="avatar-md  rounded-circle margTo"
+                      />
+                   
+                  </div>
+                </div>
+                <div class="col-md">
+                  <div>
+                    <h4 class="fw-bold">{{ assetDetailsObj.assetName }}</h4>
+                    <div class="hstack gap-3 flex-wrap">
+                      <div *ngIf="assetDetailsObj.assetTagId">
+                        <span class="fw-medium"
+                          >#{{ assetDetailsObj.assetTagId }}</span
+                        >
+                      </div>
+                      <div *ngIf="assetDetailsObj.assetTagId" class="vr"></div>
+
+                      <div>
+                        Category<span class="fw-medium">
+                          {{ assetDetailsObj.categoryName }}</span
+                        >
+                      </div>
+
+                      <div class="vr"></div>
+                      <div>
+                        Subcategory
+                        <span class="fw-medium">
+                          {{ assetDetailsObj.subCategoryName }}</span
+                        >
+                      </div>
+
+                      <div class="vr"></div>
+                      <div
+                        class="d-flex justify-content-center align-items-center"
+                      >
+                        <i
+                          class="ri-printer-line me-1 align-bottom"
+                          [class]="
+                            assetDetailsObj.qrCodePrintCount == 0
+                              ? 'text-danger'
+                              : 'text-success'
+                          "
+                        >
+                        </i
+                        >{{ assetDetailsObj.qrCodePrintCount }}
+                      </div>
+                      <div class="vr"></div>
+                      <div
+                        class="d-flex justify-content-center align-items-center"
+                      >
+                        <i
+                          class="align-bottom"
+                          [class]="
+                            assetDetailsObj.isLock
+                              ? 'ri-lock-line text-success'
+                              : ' ri-lock-unlock-line text-danger'
+                          "
+                        >
+                        </i
+                        >{{ assetDetailsObj.isLock ? "Locked" : "UnLocked" }}
+                      </div>
+
+                      <div class="vr"></div>
+                      <div
+                        class="badge rounded-pill fs-12"
+                        [class]="
+                          assetDetailsObj.assignType == 'Project'
+                            ? 'bg-primary'
+                            : 'bg-success'
+                        "
+                      >
+                        {{ assetDetailsObj.assignType }}
+                      </div>
+                      <div class="vr"></div>
+                      <div
+                        class="fs-14 text-success"
+                        *ngIf="assetDetailsObj.assigned == true"
+                      >
+                        {{
+                          assetDetailsObj.assignType == "Project"
+                            ? "On-site installation of the asset has been completed"
+                            : "Asset have been collected"
+                        }}
+                      </div>
+                      <div
+                        class="fs-14 text-danger"
+                        *ngIf="assetDetailsObj.assigned == false"
+                      >
+                        {{
+                          assetDetailsObj.assignType == "Project"
+                            ? "Currently, the asset is not installed on site"
+                            : "Asset have not been collected"
+                        }}
+                      </div>
+                      <div class="vr"></div>
+                      <div>
+                        <span
+                          [class]="
+                            returnStatusBadgeClassesStatus(
+                              assetDetailsObj.assetStatusId
+                            )
+                          "
+                          >{{ assetDetailsObj.assetStatus }}</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ul
+            ngbNav
+            #customNav="ngbNav"
+            [activeId]="activeId"
+            class="nav nav-tabs-custom border-bottom-0"
+            role="tablist"
+          >
+            <li [ngbNavItem]="1" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Asset Details
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row">
+                  <div class="col-xl-9 col-lg-8 stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="text-muted">
+                          <h6 class="mb-3 fw-semibold text-uppercase">
+                            Specification
+                          </h6>
+                          <p *ngIf="!assetDetailsObj.v001">
+                            No Specification Details
+                          </p>
+                          <p
+                            *ngIf="assetDetailsObj.v001"
+                            [innerHtml]="assetDetailsObj.v001"
+                          ></p>
+
+                          <div class="pt-3 border-top border-top-dashed mt-4">
+                            <h6 class="mb-3 fw-semibold text-uppercase">
+                              Warranty
+                            </h6>
+                            <div class="row">
+                              <div class="col-lg-3 col-sm-6 mb-1">
+                                <div>
+                                  <p
+                                    class="mb-2 text-uppercase fw-medium fs-13"
+                                  >
+                                    Warranty Period
+                                  </p>
+                                  <ng-container
+                                    *ngIf="
+                                      assetDetailsObj.warrantyStart &&
+                                      assetDetailsObj.warrantyEnd
+                                    "
+                                  >
+                                    <h5 class="fs-15 mb-0">
+                                      {{ assetDetailsObj.warrantyStart || "-" }}
+                                      <span *ngIf="assetDetailsObj.warrantyEnd"
+                                        >to
+                                      </span>
+                                      {{ assetDetailsObj.warrantyEnd || "-" }}
+                                    </h5>
+                                  </ng-container>
+                                  <ng-container
+                                    *ngIf="
+                                      !assetDetailsObj.warrantyStart &&
+                                      !assetDetailsObj.warrantyEnd
+                                    "
+                                  >
+                                    <h5 class="fs-15 mb-0">-</h5>
+                                  </ng-container>
+                                </div>
+                              </div>
+                              <div class="col-lg-3 col-sm-6 mb-1">
+                                <div>
+                                  <p
+                                    class="mb-2 text-uppercase fw-medium fs-13"
+                                  >
+                                    Extended Warranty Period
+                                  </p>
+
+                                  <ng-container
+                                    *ngIf="
+                                      assetDetailsObj.extendedStartWarrenty &&
+                                      assetDetailsObj.extendedEndWarrenty
+                                    "
+                                  >
+                                    <h5 class="fs-15 mb-0">
+                                      {{
+                                        assetDetailsObj.extendedStartWarrenty ||
+                                          "-"
+                                      }}
+                                      <span
+                                        *ngIf="
+                                          assetDetailsObj.extendedEndWarrenty
+                                        "
+                                        >to
+                                      </span>
+                                      {{
+                                        assetDetailsObj.extendedEndWarrenty ||
+                                          "-"
+                                      }}
+                                    </h5>
+                                  </ng-container>
+                                  <ng-container
+                                    *ngIf="
+                                      !assetDetailsObj.extendedStartWarrenty &&
+                                      !assetDetailsObj.extendedEndWarrenty
+                                    "
+                                  >
+                                    <h5 class="fs-15 mb-0">-</h5>
+                                  </ng-container>
+                                </div>
+                              </div>
+                              <div class="col-lg-3 col-sm-6 mb-1">
+                                <div>
+                                  <p
+                                    class="mb-2 text-uppercase fw-medium fs-13"
+                                  >
+                                    RMA Warranty Period
+                                  </p>
+                                  <ng-container
+                                    *ngIf="
+                                      assetDetailsObj.rmaStartWarrenty &&
+                                      assetDetailsObj.rmaEndWarrenty
+                                    "
+                                  >
+                                    <h5 class="fs-15 mb-0">
+                                      {{
+                                        assetDetailsObj.rmaStartWarrenty || "-"
+                                      }}
+                                      <span
+                                        *ngIf="assetDetailsObj.rmaEndWarrenty"
+                                        >to
+                                      </span>
+                                      {{
+                                        assetDetailsObj.rmaEndWarrenty || "-"
+                                      }}
+                                    </h5>
+                                  </ng-container>
+                                  <ng-container
+                                    *ngIf="
+                                      !assetDetailsObj.rmaStartWarrenty &&
+                                      !assetDetailsObj.rmaEndWarrenty
+                                    "
+                                  >
+                                    <h5 class="fs-15 mb-0">-</h5>
+                                  </ng-container>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="pt-3 border-top border-top-dashed mt-4">
+                            <h6 class="mb-3 fw-semibold text-uppercase">
+                              Account
+                            </h6>
+                            <div class="row">
+                              <div class="col-lg-3 col-sm-6 mb-2">
+                                <div>
+                                  <p
+                                    class="mb-2 text-uppercase fw-medium fs-13"
+                                  >
+                                    PO Number
+                                  </p>
+                                  <h5 class="fs-15 mb-0">
+                                    {{ assetDetailsObj.poNumber || "-" }}
+                                  </h5>
+                                </div>
+                              </div>
+                              <div class="col-lg-3 col-sm-6 mb-2">
+                                <div>
+                                  <p
+                                    class="mb-2 text-uppercase fw-medium fs-13"
+                                  >
+                                    Invoice Number
+                                  </p>
+                                  <h5 class="fs-15 mb-0">
+                                    {{ assetDetailsObj.invoiceNo || "-" }}
+                                  </h5>
+                                </div>
+                              </div>
+                              <div class="col-lg-3 col-sm-6 mb-2">
+                                <div>
+                                  <p
+                                    class="mb-2 text-uppercase fw-medium fs-13"
+                                  >
+                                    Invoice Date
+                                  </p>
+                                  <h5 class="fs-15 mb-0">
+                                    {{ assetDetailsObj.invoiceDate || "-" }}
+                                  </h5>
+                                </div>
+                              </div>
+                              <div class="col-lg-3 col-sm-6 mb-2">
+                                <div>
+                                  <p
+                                    class="mb-2 text-uppercase fw-medium fs-13"
+                                  >
+                                    Purchase Price
+                                  </p>
+                                  <h5 class="fs-15 mb-0">
+                                    {{
+                                      assetDetailsObj.purchasePrice
+                                        ? assetDetailsObj.v003 +
+                                          " " +
+                                          assetDetailsObj.purchasePrice
+                                        : "-"
+                                    }}
+                                  </h5>
+                                </div>
+                              </div>
+                              <div class="col-lg-3 col-sm-6 mb-2">
+                                <div>
+                                  <p
+                                    class="mb-2 text-uppercase fw-medium fs-13"
+                                  >
+                                    Purchase Date
+                                  </p>
+                                  <h5 class="fs-15 mb-0">
+                                    {{ assetDetailsObj.purchaseDate || "-" }}
+                                  </h5>
+                                </div>
+                              </div>
+
+                              <div class="col-lg-3 col-sm-6 mb-2">
+                                <div>
+                                  <p
+                                    class="mb-2 text-uppercase fw-medium fs-13"
+                                  >
+                                    Delivery Date
+                                  </p>
+                                  <h5 class="fs-15 mb-0">
+                                    {{ assetDetailsObj.deliveryDate || "-" }}
+                                  </h5>
+                                </div>
+                              </div>
+                              <div class="col-lg-3 col-sm-6 mb-2">
+                                <div>
+                                  <p
+                                    class="mb-2 text-uppercase fw-medium fs-13"
+                                  >
+                                    Installation Date
+                                  </p>
+                                  <h5 class="fs-15 mb-0">
+                                    {{
+                                      assetDetailsObj.installationDate || "-"
+                                    }}
+                                  </h5>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div
+                            class="pt-3 border-top border-top-dashed mt-4"
+                            *ngIf="
+                              assetDetailsObj.assetImagePath ||
+                              assetDetailsObj.assetImagePath1 ||
+                              assetDetailsObj.assetImagePath2 ||
+                              assetDetailsObj.assetImagePath3
+                            "
+                          >
+                            <h6 class="mb-3 fw-semibold text-uppercase">
+                              Asset Images
+                            </h6>
+                            <div class="row g-1">
+                              <div class="col-xxl-6 col-lg-6">
+                                <div class="border rounded border-dashed p-2">
+                                  <div class="row g-2 mb-3">
+                                    <div
+                                      class="col-lg-3"
+                                      *ngIf="assetDetailsObj.assetImagePath"
+                                    >
+                                      <img
+                                        (click)="
+                                          open(
+                                            assetDetailsObj.assetImagePath
+                                              ? apiUrl +
+                                                  assetDetailsObj.assetImagePath
+                                              : '../../../../../assets/images/placeholderimage.png'
+                                          )
+                                        "
+                                        [src]="
+                                          assetDetailsObj.assetImagePath
+                                            ? apiUrl +
+                                              assetDetailsObj.assetImagePath
+                                            : '../../../../../assets/images/placeholderimage.png'
+                                        "
+                                        alt=""
+                                        class="img-fluid rounded img-size-fixed"
+                                      />
+                                    </div>
+                                    <div
+                                      class="col-lg-3"
+                                      *ngIf="assetDetailsObj.assetImagePath1"
+                                    >
+                                      <img
+                                        (click)="
+                                          open(
+                                            assetDetailsObj.assetImagePath1
+                                              ? apiUrl +
+                                                  assetDetailsObj.assetImagePath1
+                                              : '../../../../../assets/images/placeholderimage.png'
+                                          )
+                                        "
+                                        [src]="
+                                          assetDetailsObj.assetImagePath1
+                                            ? apiUrl +
+                                              assetDetailsObj.assetImagePath1
+                                            : '../../../../../assets/images/placeholderimage.png'
+                                        "
+                                        alt=""
+                                        class="img-fluid rounded img-size-fixed"
+                                      />
+                                    </div>
+                                    <div
+                                      class="col-lg-3"
+                                      *ngIf="assetDetailsObj.assetImagePath2"
+                                    >
+                                      <img
+                                        (click)="
+                                          open(
+                                            assetDetailsObj.assetImagePath2
+                                              ? apiUrl +
+                                                  assetDetailsObj.assetImagePath2
+                                              : '../../../../../assets/images/placeholderimage.png'
+                                          )
+                                        "
+                                        [src]="
+                                          assetDetailsObj.assetImagePath2
+                                            ? apiUrl +
+                                              assetDetailsObj.assetImagePath2
+                                            : '../../../../../assets/images/placeholderimage.png'
+                                        "
+                                        alt=""
+                                        class="img-fluid rounded img-size-fixed"
+                                      />
+                                    </div>
+                                    <div
+                                      class="col-lg-3"
+                                      *ngIf="assetDetailsObj.assetImagePath3"
+                                    >
+                                      <img
+                                        (click)="
+                                          open(
+                                            assetDetailsObj.assetImagePath3
+                                              ? apiUrl +
+                                                  assetDetailsObj.assetImagePath3
+                                              : '../../../../../assets/images/placeholderimage.png'
+                                          )
+                                        "
+                                        [src]="
+                                          assetDetailsObj.assetImagePath3
+                                            ? apiUrl +
+                                              assetDetailsObj.assetImagePath3
+                                            : '../../../../../assets/images/placeholderimage.png'
+                                        "
+                                        alt=""
+                                        class="img-fluid rounded img-size-fixed"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- end row -->
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                  </div>
+                  <!-- ene col -->
+                  <div class="col-xl-3 col-lg-4">
+                    <div class="card">
+                      <div class="card-header">
+                        <h5 class="card-title mb-0">Basic Information</h5>
+                      </div>
+                      <div class="card-body">
+                        <div class="mb-3">
+                          <div>
+                            <h6 class="fw-bold">Company</h6>
+                            <p class="fs-14">
+                              {{ assetDetailsObj.companyName || "-"}}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div class="mb-3">
+                          <div>
+                            <h6 class="fw-bold">Client</h6>
+                            <p class="fs-14">
+                              {{ assetDetailsObj.clientName  || "-"}}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div class="mb-3">
+                          <h6 class="formfw-bold">Project</h6>
+                          <p class="fs-14">
+                            {{ assetDetailsObj.departmentName || "-"}}
+                          </p>
+                        </div>
+                        <div class="mb-3">
+                          <h6 class="fw-bold">Location</h6>
+                          <p class="fs-14">
+                            {{ assetDetailsObj.locationName || "-" }}
+                          </p>
+                        </div>
+
+                        <div class="mb-3" *ngIf=" assetDetailsObj.assetLifeSpan">
+                          <h6 class="fw-bold">Asset Lifespan</h6>
+                          <p class="fs-14">
+                            {{ assetDetailsObj.assetLifeSpan }} Month
+                          </p>
+                        </div>
+
+                        <div class="mb-3">
+                          <h6 class="fw-bold">Asset handler</h6>
+                          <p class="fs-14">
+                            {{ assetDetailsObj.employeeName || "-"}}
+                          </p>
+                        </div>
+
+                        <div class="mb-3">
+                          <h6 class="fw-bold">Vendor</h6>
+                          <p class="fs-14">
+                            {{ assetDetailsObj.vendorName || "-"}}
+                          </p>
+                        </div>
+
+                        <div class="mb-3">
+                          <h6 class="fw-bold">Model</h6>
+                          <p class="fs-14">
+                            {{ assetDetailsObj.model || "-" }}
+                          </p>
+                        </div>
+
+                        <div class="mb-3">
+                          <h6 class="fw-boldl">Serial No</h6>
+                          <p class="fs-14">
+                            {{ assetDetailsObj.serialNo || "-"}}
+                          </p>
+                        </div>
+                        <div class="mb-3">
+                          <h6 class="fw-boldl">Label Print</h6>
+                          <p class="fs-14">
+                            {{ assetDetailsObj.qrCodePrintCount || "-"}}
+                          </p>
+                        </div>
+                        <div class="mb-3">
+                          <h6 class="fw-boldl">Active/Passive</h6>
+                          <p class="fs-14">
+                            {{ assetDetailsObj.v017==1?'Active' :'Passive'|| "-"}}
+                          </p>
+                        </div>
+                        <div class="mb-3">
+                          <h6 class="fw-boldl">MTBF</h6>
+                          <p class="fs-14">
+                            {{ assetDetailsObj.v018 || "-"}} Hours
+                          </p>
+                        </div>
+                        <div class="mb-3">
+                          <h6 class="fw-boldl">Created Date </h6>
+                          <p class="fs-14">
+                            {{ assetDetailsObj.createdDate || "-"}}
+                          </p>
+                        </div>
+                      </div>
+                      <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                  </div>
+
+                  <!-- end col -->
+                </div>
+                <!-- end row -->
+              </ng-template>
+            </li>
+
+            <li [ngbNavItem]="2" class="nav-item">
+              <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                Spare Part List
+              </a>
+              <ng-template ngbNavContent>
+                <app-spare-part
+                  [assestId]="storeAssetID"
+                  [viewButton]="shownButtonSpareList"
+                  [viewButtonShown]="!shownButtonSpareList"
+                  *ngIf="storeAssetID"
+                ></app-spare-part>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end row -->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="tab-content text-muted">
+      <div [ngbNavOutlet]="customNav"></div>
+    </div>
+  </div>
+  <!-- end col -->
+
+  <div class="col-lg-12 text-end mb-3">
+    <button
+      type="button"
+      class="btn btn-soft-primary waves-effect"
+      (click)="onBack()"
+    >
+      <i class="feather icon-twitter btn-icon-prepend"></i>
+      Back
+    </button>
+  </div>
+</div>
+<!-- end row -->

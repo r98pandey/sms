@@ -1,0 +1,13 @@
+
+.auth-bg-cover {
+    background: linear-gradient(-45deg, #5ea3cb 50%, #6ada7d);
+}
+.auth-bg-cover > .bg-overlay {
+    background-image: url(../../../../../../assets/images/cover-pattern.png) !important;
+    background-position: bottom;
+    // background-color: linear-gradient(0deg, #2ac198, #3890c3)
+    color: #fff;
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-color:transparent!important;
+}

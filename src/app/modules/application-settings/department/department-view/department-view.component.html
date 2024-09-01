@@ -1,0 +1,175 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="card department-view">
+  <div class="card-body mb-0">
+    <div class="row">
+      <div class="d-flex flex-wrap">
+        <div class="flex-grow-1 fw-bold">
+          <h6 _ngcontent-shg-c69="" class="mb-3 fw-semibold text-uppercase">
+            {{ dDetail.departmentName }}
+          </h6>
+          <div class="mt-sm-2 mt-4 mb-4">
+            <div
+              class="flex-shrink-0"
+              *ngIf="dDetail.departmentName && dDetail.departmentName.length"
+            >
+              <div class="avatar-lg">
+                <span class="rounded">
+                  <ng-container>
+                    <app-avatar-photo
+                      [name]="toUpperCaseword(dDetail.departmentName)"
+                    ></app-avatar-photo>
+                  </ng-container>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row border-top border-top-dashed py-3">
+          <div class="col-lg-12 col-12 mb-3">
+            <p class="mb-2 fw-bold text-uppercase text-muted">Project Detail</p>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 mb-3">
+            <p class="mb-2 fw-bold">{{ departmentProjectLabel }} Code</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.departmentCode || "-" }}
+            </p>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 mb-3">
+            <p class="mb-2 fw-bold">Company Name</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.companyName || "-" }}
+            </p>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 mb-3">
+            <p class="mb-2 fw-bold">Client Name</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.clientName || "-" }}
+            </p>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 mb-3">
+            <p class="mb-2 fw-bold">HOD</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.departHeadName || "-" }}
+            </p>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 mb-3">
+            <p class="mb-2 fw-bold">Currency Code</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.currencyCode || "-" }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row border-top border-top-dashed py-3">
+          <div class="col-lg-12 col-12 mb-3">
+            <p class="mb-2 fw-bold text-uppercase text-muted">Contact Detail</p>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 mb-3">
+            <p class="mb-2 fw-bold">Person</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.contactPerson1 || "-" }}
+            </p>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 mb-3">
+            <p class="mb-2 fw-bold">Designation</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.contactDesignation1 || "-" }}
+            </p>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 mb-3">
+            <p class="mb-2 fw-bold">Mobile No</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.contactMobileNo1 || "-" }}
+            </p>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 mb-3">
+            <p class="mb-2 fw-bold">Phone No</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.contactPhoneNo1 || "-" }}
+            </p>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 mb-3 mt-4">
+            <p class="mb-2 fw-bold">Email</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.contactEMail1 || "-" }}
+            </p>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 mb-3 mt-4">
+            <p class="mb-2 fw-bold">Fax No</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.contactFaxNo1 || "-" }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row border-top border-top-dashed py-3 pb-0">
+          <div class="col-lg-12 col-12 mb-3">
+            <p class="mb-2 fw-bold text-uppercase text-muted">SLA Details</p>
+          </div>
+
+          <div class="col-lg-6">
+            <p class="mb-2 fw-bold">Respond SLA Duration</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.respondSLA || "-" }}
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <p class="mb-2 fw-bold">Respond SLA</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.respondSLADurationDesc || "-" }}
+            </p>
+          </div>
+
+          <div class="col-lg-6 mt-3">
+            <p class="mb-2 fw-bold">On Site SLA Duration</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.onSiteSLA || "-" }}
+            </p>
+          </div>
+          <div class="col-lg-6 mt-3">
+            <p class="mb-2 fw-bold">On Site SLA</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.onSiteSLADurationDesc || "-" }}
+            </p>
+          </div>
+
+          <div class="col-lg-6 mt-3">
+            <p class="mb-2 fw-bold">Expected SLA Duration</p>
+            <p class="fs-14 mb-0">
+              {{ dDetail.exepectedComplitionSLA || "-" }}
+            </p>
+          </div>
+          <div class="col-lg-6 mt-3">
+            <p class="mb-2 fw-bold">Expected SLA</p>
+            <p class="fs-14 mb-0">
+              {{
+                dDetail.exepectedComplitionSLADurationDesc || "-"
+              }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hstack justify-content-end gap-2 mb-3">
+  <button
+    (click)="goBack()"
+    type="button"
+    class="btn btn-soft-primary waves-effect"
+  >
+    <i class="align-bottom"></i>Back
+  </button>
+</div>

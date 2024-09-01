@@ -1,0 +1,194 @@
+.maxHeightCard {
+  height: 703px;
+  overflow-y: scroll;
+}
+
+.imgeVal {
+  width: 400px;
+  height: 400px;
+
+}
+
+
+::ng-deep ngx-dropzone {
+  border: 0px dashed #ccc !important;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  height: 60px !important;
+  display: block !important;
+  padding: 0px !important;
+}
+
+::ng-deep ngx-dropzone:hover {
+  border: 4px dashed #5477e1;
+}
+
+::ng-deep ngx-dropzone-label {
+  margin: 0px auto!important;
+}
+.container-view {
+  border: 2px dashed #717386;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.container-view:hover{
+  border: 4px dashed #5477e1;
+}
+
+/* Image preview section styling */
+.preview-section {
+  overflow-x: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-container {
+  width: calc(28% - 11px);
+  margin-right: 10px;
+  margin-bottom: 10px;
+  margin-left: 35%;
+  margin-right: 35%;
+}
+
+.image-wrapper {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ri-close-circle-line2 {
+  position: absolute;
+  top: -3px;
+  right: 17px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  font-size: 31px;
+  z-index: 2;
+  color: white;
+}
+
+.image-wrapper:hover .ri-close-circle-line2{
+  opacity: 1;
+}
+
+.image-wrapper:hover::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  border-radius: 14px;
+}
+
+.new-row {
+  clear: both;
+}
+
+/* Remove duplicate styles */
+.fa-download-diary {
+  font-size: 90px;
+  opacity: 0.4;
+}
+
+
+/* Image preview section styling */
+.preview-section {
+  overflow-x: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.image-wrapper {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ri-close-circle-line2 {
+  position: absolute;
+  top: -6px;
+  right: 3px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  font-size: 31px;
+  z-index: 2;
+  color: white;
+}
+
+.image-wrapper:hover .ri-close-circle-line2{
+  opacity: 1;
+}
+
+.image-wrapper:hover::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  border-radius: 13px;
+
+}
+
+.new-row {
+  clear: both;
+}
+
+/* Remove duplicate styles */
+.fa-download-diary {
+  font-size: 90px;
+  opacity: 0.4;
+}
+
+.dropzoneLabel {
+  display: grid;
+}
+
+
+.dropzone {
+  min-height: 19px !important;
+}
+
+
+
+.img-size-withd-upload {
+  width: 100px;
+  height: 100px;
+  border-radius: 12px;
+}
+.chat-image{
+  height: 79%;
+  /* width: 250px; */
+  width: 54%;
+  opacity: 0.5;
+}
+
+.mr-20{
+  margin-right: 12px;
+}
+
+
+.form-label{
+  margin-bottom: 0px;
+}

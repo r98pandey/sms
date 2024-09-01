@@ -1,0 +1,765 @@
+<ng-container>
+  <div class="row me-0 ms-0">
+    <div class="col-md-10 col-xl-10 pe-0 ps-0 mx-auto mt-4">
+      <div class="card h-100">
+        <div class="card-header text-center">
+          <h4 class="card-title mb-0">Organisation Details</h4>
+        </div>
+        <!-- end card header -->
+        <div class="card-body form-steps">
+          <div class="text-center pt-3 pb-4 mb-1 d-flex justify-content-center">
+            <img
+              src="../../../../../assets/images/GREENCOLOR REVISION.png"
+              class="card-logo card-logo-dark"
+              alt="logo dark"
+              height="60"
+            />
+            <img
+              src="../../../../../assets/images/GREENCOLOR REVISION.png"
+              class="card-logo card-logo-light"
+              alt="logo light"
+              height="60"
+            />
+          </div>
+          <ng-stepper #cdkStepper [linear]="true" class="step-arrow-nav wizard">
+            <cdk-step
+              [optional]="false"
+              [stepControl]="firstFormGroup"
+              #step1="cdkStep"
+            >
+              <ng-template cdkStepLabel>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link done"
+                    id="steparrow-gen-info-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#steparrow-gen-info"
+                    type="button"
+                    role="tab"
+                    aria-controls="steparrow-gen-info"
+                    aria-selected="true"
+                  >
+                    General
+                  </button>
+                </li>
+              </ng-template>
+              <form [formGroup]="firstFormGroup">
+                <div class="row mb-5">
+                  <div class="form-group col-md-12">
+                    <label for="organisationName" class="form-label pt-2"
+                      >Organisation Name<span class="starRequried"
+                        >*</span
+                      ></label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="organisationName"
+                      formControlName="organisationName"
+                      placeholder="Organisation Name"
+                      [class.is-invalid]="
+                        organisationName?.invalid && organisationName?.touched
+                      "
+                      [class.is-valid]="
+                        organisationName?.valid && organisationName?.touched
+                      "
+                    />
+
+                    <div
+                      *ngIf="
+                        organisationName?.invalid && organisationName?.touched
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="organisationName?.errors?.['required']"
+                        >Organisation Name is Required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="address1" class="form-label pt-2"
+                      >Address 1</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="address1"
+                      formControlName="address1"
+                      placeholder="Address 1"
+                    />
+                    <div *ngIf="address1?.invalid && address1?.touched">
+                      <small
+                        class="text-danger"
+                        *ngIf="address1?.errors?.['required']"
+                        >Address 1 is Required</small
+                      >
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="address2" class="form-label pt-2"
+                      >Address 2</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="address2"
+                      formControlName="address2"
+                      placeholder="Address 2"
+                    />
+                    <div *ngIf="address2?.invalid && address2?.touched">
+                      <small
+                        class="text-danger"
+                        *ngIf="address2?.errors?.['required']"
+                        >Address 2 is Required</small
+                      >
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="address3" class="form-label pt-2"
+                      >Address 3</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="address3"
+                      formControlName="address3"
+                      placeholder="Address 3"
+                    />
+                    <div *ngIf="address3?.invalid && address3?.touched">
+                      <small
+                        class="text-danger"
+                        *ngIf="address3?.errors?.['required']"
+                        >Address 3 is Required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="postalCode" class="form-label pt-2"
+                      >Postal Code</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="postalCode"
+                      formControlName="postalCode"
+                      placeholder="Postal Code"
+                    />
+                    <div *ngIf="postalCode?.invalid && postalCode?.touched">
+                      <small
+                        class="text-danger"
+                        *ngIf="postalCode?.errors?.['required']"
+                      >
+                        Postal Code is Required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="country" class="form-label pt-2">Country</label>
+                    <ng-select
+                      [items]="countryList"
+                      bindLabel="countryName"
+                      bindValue="countryName"
+                      formControlName="country"
+                      placeholder="Select Country"
+                      [searchable]="true"
+                      [clearable]="false"
+                      class="custom"
+                    >
+                    </ng-select>
+                    <!-- <select type="text" class="form-control " id="country"
+                      formControlName="country" placeholder="Country">
+                      <option value="" disabled> select Country</option>
+                      <option *ngFor="let country of countryList" value="{{country.countryName}}">
+                        {{country.countryName}}</option>
+                    </select> -->
+
+                    <div *ngIf="country?.invalid && country?.touched">
+                      <small
+                        class="text-danger"
+                        *ngIf="country?.errors?.['required']"
+                        >Country is Required</small
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between mt-5 mb-5"></div>
+
+                <div class="d-flex align-items-start gap-3 mt-5 mb-5">
+                  <button
+                    [disabled]="firstFormGroup.invalid"
+                    type="button"
+                    class="btn btn-success btn-label right ms-auto nexttab nexttab"
+                    data-nexttab="steparrow-description-info-tab"
+                    cdkStepperNext
+                  >
+                    <i
+                      class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"
+                    ></i
+                    >Go to Contact
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0"
+                    (click)="onBack()"
+                  >
+                    Back to Login
+                  </button>
+                </div>
+              </form>
+            </cdk-step>
+
+            <cdk-step
+              [optional]="false"
+              [stepControl]="secondFormGroup"
+              #step2="cdkStep"
+            >
+              <ng-template cdkStepLabel>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="steparrow-description-info-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#steparrow-description-info"
+                    type="button"
+                    role="tab"
+                    aria-controls="steparrow-description-info"
+                    aria-selected="false"
+                  >
+                    Contacts
+                  </button>
+                </li>
+              </ng-template>
+              <form [formGroup]="secondFormGroup">
+                <div class="row">
+                  <div class="form-group col-md-6 mb-2">
+                    <label for="email" class="form-label pt-2"
+                      >Email<span class="starRequried">*</span></label
+                    >
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      formControlName="email"
+                      placeholder="Email"
+                      [class.is-invalid]="email?.invalid && email?.touched"
+                      [class.is-valid]="email?.valid && email?.touched"
+                    />
+
+                    <div *ngIf="email?.invalid && email?.touched">
+                      <small
+                        class="text-danger"
+                        *ngIf="email?.errors?.['required']"
+                        >Email is Required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6 mb-2">
+                    <label for="mobileNumber" class="form-label pt-2"
+                      >Mobile<span class="starRequried">*</span></label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="mobileNumber"
+                      formControlName="mobileNumber"
+                      placeholder="Mobile number"
+                      [class.is-invalid]="
+                        mobileNumber?.invalid && mobileNumber?.touched
+                      "
+                      [class.is-valid]="
+                        mobileNumber?.valid && mobileNumber?.touched
+                      "
+                    />
+
+                    <div *ngIf="mobileNumber?.invalid && mobileNumber?.touched">
+                      <small
+                        class="text-danger"
+                        *ngIf="mobileNumber?.errors?.['required']"
+                        >Mobile number is Required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6 mb-2">
+                    <label for="faxNumber" class="form-label pt-2"
+                      >Fax Number</label
+                    >
+                    <input
+                      type="faxNumber"
+                      class="form-control"
+                      id="faxNumber"
+                      formControlName="faxNumber"
+                      placeholder="Fax Number"
+                    />
+                    <div *ngIf="faxNumber?.invalid && faxNumber?.touched">
+                      <small
+                        class="text-danger"
+                        *ngIf="faxNumber?.errors?.['required']"
+                        >Fax Number is Required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6 mb-2">
+                    <label for="websiteURL" class="form-label pt-2"
+                      >Web site URL</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="websiteURL"
+                      formControlName="websiteURL"
+                      placeholder="Web site URL"
+                    />
+                    <div *ngIf="websiteURL?.invalid && websiteURL?.touched">
+                      <small
+                        class="text-danger"
+                        *ngIf="websiteURL?.errors?.['required']"
+                      >
+                        Web site URL is Required</small
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between gap-3 mt-4">
+                  <button
+                    type="button"
+                    class="btn btn-light btn-label previestab"
+                    data-previous="steparrow-gen-info-tab"
+                    cdkStepperPrevious
+                  >
+                    <i
+                      class="ri-arrow-left-line label-icon align-middle fs-16 me-2"
+                    ></i>
+                    Back to General
+                  </button>
+                  <button
+                    [disabled]="secondFormGroup.invalid"
+                    type="button"
+                    class="btn btn-success btn-label right ms-auto nexttab nexttab"
+                    data-nexttab="pills-experience-tab"
+                    cdkStepperNext
+                  >
+                    <i
+                      class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"
+                    ></i
+                    >Go to Prefix/License
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0"
+                    (click)="onBack()"
+                  >
+                    Back to Login
+                  </button>
+                </div>
+              </form>
+            </cdk-step>
+
+            <cdk-step
+              [optional]="false"
+              [stepControl]="thirdFormGroup"
+              #step3="cdkStep"
+            >
+              <ng-template cdkStepLabel>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="pills-experience-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#pills-experience"
+                    type="button"
+                    role="tab"
+                    aria-controls="pills-experience"
+                    aria-selected="false"
+                  >
+                    Prefix/License
+                  </button>
+                </li>
+              </ng-template>
+              <form [formGroup]="thirdFormGroup">
+                <div class="row">
+                  <div class="col-md-6 stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h6 class="card-title">Prefix</h6>
+                        <hr />
+                        <div class="row mb-2 new p-4">
+                          <div class="form-check col-md-6">
+                            <label class="form-check-label">
+                              <input
+                                type="checkbox"
+                                checked
+                                class="form-check-input"
+                                formControlName="prefixCompany"
+                              />
+                              <i class="input-frame"></i>
+                              Prefix Company<span class="starRequried">*</span>
+                            </label>
+                          </div>
+                          <div class="form-check col-md-6">
+                            <label class="form-check-label">
+                              <input
+                                type="checkbox"
+                                checked
+                                class="form-check-input"
+                                formControlName="prefixDepartment"
+                                [class.is-invalid]="
+                                  prefixDepartment?.invalid &&
+                                  prefixDepartment?.touched
+                                "
+                                [class.is-valid]="
+                                  prefixDepartment?.valid &&
+                                  prefixDepartment?.touched
+                                "
+                              />
+
+                              <i class="input-frame"></i>
+                              Prefix Department
+                            </label>
+
+                            <div
+                              *ngIf="
+                                prefixDepartment?.invalid &&
+                                prefixDepartment?.touched
+                              "
+                            >
+                              <small
+                                class="text-danger"
+                                *ngIf="prefixDepartment?.errors?.['required']"
+                              >
+                                Prefix Department is Required</small
+                              >
+                            </div>
+                          </div>
+                          <div class="form-check col-md-6">
+                            <label class="form-check-label">
+                              <input
+                                type="checkbox"
+                                checked
+                                class="form-check-input"
+                                formControlName="prefixCategory"
+                              />
+                              <i class="input-frame"></i>
+                              Prefix Category
+                            </label>
+                          </div>
+                          <div class="form-check col-md-6">
+                            <label class="form-check-label">
+                              <input
+                                type="checkbox"
+                                checked
+                                class="form-check-input"
+                                formControlName="prefixSubcategory"
+                              />
+                              <i class="input-frame"></i>
+                              Prefix Subcategory
+                            </label>
+                          </div>
+                          <div class="col-md-12 mt-3 pe-0 ps-0">
+                            <div class="form-group">
+                              <label for="prefixSeparator"
+                                >Prefix Separator<span class="starRequried"
+                                  >*</span
+                                ></label
+                              >
+                              <ng-select
+                                [items]="prefixSeparatorList"
+                                formControlName="prefixSeparator"
+                                placeholder="Select Prefix Separator"
+                                [searchable]="true"
+                                [clearable]="false"
+                                class="custom"
+                                [class.is-invalid]="
+                                  prefixSeparator?.invalid &&
+                                  prefixSeparator?.touched
+                                "
+                                [class.is-valid]="
+                                  prefixSeparator?.valid &&
+                                  prefixSeparator?.touched
+                                "
+                              >
+                              </ng-select>
+
+                              <div
+                                *ngIf="
+                                  prefixSeparator?.invalid &&
+                                  prefixSeparator?.touched
+                                "
+                              >
+                                <small
+                                  class="text-danger"
+                                  *ngIf="prefixSeparator?.errors?.['required']"
+                                  >Prefix Separator is Required</small
+                                >
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h6 class="card-title">License</h6>
+                        <hr />
+                        <div class="row">
+                          <div class="form-group col-md-6">
+                            <label for="Company" class="form-label pt-2"
+                              >No Of Company<span class="starRequried"
+                                >*</span
+                              ></label
+                            >
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="Company"
+                              formControlName="NoOfCompany"
+                              placeholder="No Of Company"
+                              pattern="^[1-9][0-9]*$"
+                              [class.is-invalid]="
+                                NoOfCompany?.invalid && NoOfCompany?.touched
+                              "
+                              [class.is-valid]="
+                                NoOfCompany?.valid && NoOfCompany?.touched
+                              "
+                            />
+                            <div
+                              *ngIf="
+                                NoOfCompany?.invalid && NoOfCompany?.touched
+                              "
+                            >
+                              <small
+                                class="text-danger"
+                                *ngIf="NoOfCompany?.errors?.['required']"
+                                >No Of Company is Required</small
+                              >
+                            </div>
+                           
+                          </div>
+
+                          <div class="form-group col-md-6">
+                            <label for="user" class="form-label pt-2"
+                              >No Of Users<span class="starRequried"
+                                >*</span
+                              ></label
+                            >
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="user"
+                              formControlName="NoOfUsers"
+                              placeholder="No Of Users"
+                              pattern="^[1-9][0-9]*$"
+                              [class.is-invalid]="
+                                NoOfUsers?.invalid && NoOfUsers?.touched
+                              "
+                              [class.is-valid]="
+                                NoOfUsers?.valid && NoOfUsers?.touched
+                              "
+                            />
+                            <div
+                              *ngIf="NoOfUsers?.invalid && NoOfUsers?.touched"
+                            >
+                              <small
+                                class="text-danger"
+                                *ngIf="NoOfUsers?.errors?.['required']"
+                                >No Of User is Required</small
+                              >
+                            </div>
+                            
+                          </div>
+
+                          <div class="form-group col-md-6">
+                            <label for="project" class="form-label pt-2"
+                              >No Of Project<span class="starRequried"
+                                >*</span
+                              ></label
+                            >
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="project"
+                              formControlName="NoOfProject"
+                              placeholder="No Of Project"
+                              pattern="^[1-9][0-9]*$"
+                              [class.is-invalid]="
+                                NoOfProject?.invalid && NoOfProject?.touched
+                              "
+                              [class.is-valid]="
+                                NoOfProject?.valid && NoOfProject?.touched
+                              "
+                            />
+                            <div
+                              *ngIf="
+                                NoOfProject?.invalid && NoOfProject?.touched
+                              "
+                            >
+                              <small
+                                class="text-danger"
+                                *ngIf="NoOfProject?.errors?.['required']"
+                                >No Of Project is Required</small
+                              >
+                            </div>
+                          
+                          </div>
+
+                          <div class="form-group col-md-6">
+                            <label for="asset" class="form-label pt-2"
+                              >No Of Assets<span class="starRequried"
+                                >*</span
+                              ></label
+                            >
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="asset"
+                              formControlName="NoOfAssets"
+                              placeholder="No Of Assets"
+                              pattern="^[1-9][0-9]*$"
+                              [class.is-invalid]="
+                                NoOfAssets?.invalid && NoOfAssets?.touched
+                              "
+                              [class.is-valid]="
+                                NoOfAssets?.valid && NoOfAssets?.touched
+                              "
+                            />
+                            <div
+                              *ngIf="NoOfAssets?.invalid && NoOfAssets?.touched"
+                            >
+                              <small
+                                class="text-danger"
+                                *ngIf="NoOfAssets?.errors?.['required']"
+                                >No Of Asset is Required</small
+                              >
+                            </div>
+                            
+                          </div>
+
+
+                          <div class="form-group col-md-6">
+                            <label for="project" class="form-label pt-2"
+                              >No Of Client<span class="starRequried"
+                                >*</span
+                              ></label
+                            >
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="project"
+                              formControlName="NoOfClient"
+                              placeholder="No Of Client"
+                              pattern="^[1-9][0-9]*$"
+                              [class.is-invalid]="
+                                NoOfClient?.invalid && NoOfClient?.touched
+                              "
+                              [class.is-valid]="
+                                NoOfClient?.valid && NoOfClient?.touched
+                              "
+                            />
+                            <div
+                              *ngIf="
+                                NoOfClient?.invalid && NoOfClient?.touched
+                              "
+                            >
+                              <small
+                                class="text-danger"
+                                *ngIf="NoOfClient?.errors?.['required']"
+                                >No Of Client is Required</small
+                              >
+                            </div>
+                          
+                          </div>
+
+                          <div class="form-group col-md-6">
+                            <label for="asset" class="form-label pt-2"
+                              >No Of Client Users<span class="starRequried"
+                                >*</span
+                              ></label
+                            >
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="asset"
+                              formControlName="NoOfClientUsers"
+                              placeholder="No Of Client Users"
+                              pattern="^[1-9][0-9]*$"
+                              [class.is-invalid]="
+                                NoOfClientUsers?.invalid && NoOfClientUsers?.touched
+                              "
+                              [class.is-valid]="
+                                NoOfClientUsers?.valid && NoOfClientUsers?.touched
+                              "
+                            />
+                            <div
+                              *ngIf="NoOfClientUsers?.invalid && NoOfClientUsers?.touched"
+                            >
+                              <small
+                                class="text-danger"
+                                *ngIf="NoOfClientUsers?.errors?.['required']"
+                                >No Of Client Users is Required</small
+                              >
+                            </div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+              <div class="d-flex justify-content-between gap-3 mt-4">
+                <button
+                  type="button"
+                  class="btn btn-light btn-label previestab"
+                  data-previous="steparrow-gen-info-tab"
+                  cdkStepperPrevious
+                >
+                  <i
+                    class="ri-arrow-left-line label-icon align-middle fs-16 me-2"
+                  ></i>
+                  Back to Contact
+                </button>
+                <button
+                
+                  type="button"
+                  class="btn btn-success btn-label right ms-auto nexttab nexttab"
+                  data-nexttab="pills-experience-tab"
+                  [disabled]="thirdFormGroup.invalid"
+                  (click)="onSubmit()"
+                >
+                  <i
+                    class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"
+                  ></i
+                  >Final Submit
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0"
+                  (click)="onBack()"
+                >
+                  Back to Login
+                </button>
+              </div>
+            </cdk-step>
+          </ng-stepper>
+        </div>
+        <!-- end card body -->
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

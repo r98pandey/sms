@@ -1,0 +1,119 @@
+<!-- Start Breadcrumbs -->
+
+<app-breadcrumbs [title]="label" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+<div class="row justify-content-center company-view">
+  <div class="col-xxl-12">
+    <div class="card">
+      <div class="card-body pb-0">
+        <div class="row">
+          <div class="col-lg-12">
+            <div>
+              <div class="d-flex flex-wrap">
+                <div class="flex-grow-1 fw-bold">
+                  <h6 _ngcontent-shg-c69="" class="mb-3 fw-semibold text-uppercase"> {{ companyData.companyName}} </h6>
+                  <div class="mt-sm-2 mt-4 mb-4">
+                    <img src="{{ companyLogoImg }}" class="rounded-circle avatar-xl img-thumbnail user-profile-image"
+                      alt="user-profile-image" *ngIf="!companyData?.companyLogoURL?.includes('defaultlogo.png')" />
+                    <div class="flex-shrink-0" *ngIf="companyData?.companyLogoURL?.includes('defaultlogo.png')">
+                      <div class="avatar-lg">
+                        <span class="rounded">
+                          <ng-container>
+                            <app-avatar-photo
+                              *ngIf="!companyData.companyLogoURL || ( companyData.companyLogoURL && companyData.companyLogoURL.length )"
+                              [name]="toUpperCaseword(companyData.companyName)"></app-avatar-photo>
+                          </ng-container>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex-shrink-0 mt-sm-0 mt-3">
+                  <h6>
+                    <span class="fw-bold">Contact No</span><span style="font-weight: 100">
+                      {{ companyData.mobileNo }}</span>
+                  </h6>
+                  <h6>
+                    <span class="fw-bold">Office Phone No</span><span style="font-weight: 100">
+                      {{ companyData.officePhoneNo ||'NA' }}</span>
+                  </h6>
+                  <h6>
+                    <span class="fw-bold">Office Fax No</span><span style="font-weight: 100">
+                      {{ companyData.officeFaxNo ||'NA' }}</span>
+                  </h6>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12 px-0">
+            <div class="card-body ">
+              <div class="row g-3 border-top border-top-dashed">
+                <div class="col-lg-3 col-6">
+                  <p class="mb-2 fw-bold">
+                    Company Code
+                  </p>
+                  <p class="fs-14 mb-0">
+                    <span id="total-amount">{{
+                      companyData.companyCode
+                      }}</span>
+                    </p>
+                </div>
+                <div class="col-lg-3 col-6">
+                  <p class="mb-2 mb-2 fw-bold">
+                    Contact Person
+                  </p>
+                  <p class="mb-2">
+                    <span id="invoice-no">{{
+                      companyData.contactPerson
+                      }}</span>
+                    </p>
+                </div>
+                <!--end col-->
+                <div class="col-lg-3 col-6">
+                  <p class="mb-2 fw-bold">
+                    Company Head
+                  </p>
+                  <p class="fs-14 mb-0">
+                    <span id="invoice-date">{{
+                      companyData.companyHead
+                      }}</span>
+                    </p>
+                </div>
+
+              </div>
+              <!--end row-->
+            </div>
+            <!--end card-body-->
+          </div>
+          <!--end col-->
+          <div class="col-lg-12 px-0">
+            <div class="card-body  pt-0">
+              <div class="row g-3 ">
+                <div class="col-12 border-top border-top-dashed">
+                  <h6 class="mb-2 fw-bold mt-3">
+                    Address
+                  </h6>
+                  <p class="fs-14 mb-0" id="address-details">
+                    {{ companyData.address1 }}
+                    {{ companyData.address2 }}
+                    {{ companyData.address3 }}
+                    {{ companyData.country }}
+                    {{ companyData.postalCode }}
+                  </p>
+                </div>
+              </div>
+              <!--end row-->
+            </div>
+            <!--end card-body-->
+          </div>
+          <!--end col-->
+        </div>
+      </div>
+    </div>
+    <div class="hstack justify-content-end gap-2">
+      <button (click)="goBack()" type="button" class="btn btn-soft-primary waves-effect"><i
+          class=" align-bottom"></i>Back</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,482 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3">
+          <div class="col-lg-auto">
+            <h5 class="card-title mb-0">Task Attendance List</h5>
+          </div>
+          
+
+          <div class="col-lg">
+            <ng-select
+              [items]="accessGroupList"
+              bindLabel="name"
+              bindValue="accessGroupMasterId"
+              [clearable]="true"
+              id="accessName"
+              (change)="onTypeAccessGroup($event)"
+              [(ngModel)]="selectedAccessGroupValue"
+              placeholder="Select Access Group/Designation"
+              class="w-100 mr-2 my-1"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+          
+            <div class="clear-box">
+              <input
+                class="form-control flatpickr-input"
+                style="padding-left: 0px !important"
+                type="text"
+                mwlFlatpickr
+                [altInput]="true"
+                [convertModelValue]="true"
+                placeholder="Select From Date to End Date"
+                mode="range"
+                [dateFormat]="'d-m-Y'"
+                [(ngModel)]="selectedDateRangeValue"
+                (input)="onChangeSelectedDateValue()"
+              />
+              <i
+                class="ri-close-line search-icon"
+                *ngIf="selectedDateRangeValue?.to"
+                (click)="clearFilter()"
+              ></i>
+            </div>
+          </div>
+          <div class="col-lg">
+            <div class="search-box">
+              <input
+                type="search"
+                name="searchTerm"
+                class="form-control"
+                [(ngModel)]="searchName"
+                placeholder="Search for user name"
+                #inputer
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+          </div>
+        
+        </div>
+      </div>
+      <div class="card-body border border-dashed border-end-0 border-start-0">
+        <div class="row g-3">
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownCompany"
+              bindLabel="companyName"
+              bindValue="companyId"
+              (change)="onDropdownCompanyValueChange($event)"
+              [clearable]="false"
+              id="companyName"
+              [(ngModel)]="selectedDropDownCompanyIdValue"
+              placeholder="Select Company"
+              class="w-100 mr-2"
+              for="companyName"
+              [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [items]="arrayListDropDownClientList"
+              bindLabel="clientName"
+              bindValue="clientId"
+              [disabled]="!selectedDropDownCompanyIdValue"
+              (change)="onDropdownClientValueChange($event)"
+              [clearable]="true"
+              id="clientName"
+              [(ngModel)]="selectedDropDownClientIdValue"
+              placeholder="Select Client"
+              class="w-100 mr-2"
+              for="clientName"
+              [readonly]="disabledWithAceessGroup"
+            ></ng-select>
+          </div>
+          <div class="col-lg">
+            <ng-select
+              [readonly]="projectDepartmentFieldDisiabled"
+              [items]="arrayListDropDownProjectOrDeparmentList"
+              bindLabel="departmentName"
+              bindValue="departmentId"
+              [disabled]="
+                !selectedDropDownCompanyIdValue ||
+                !selectedDropDownClientIdValue
+              "
+              (change)="onDropdownDepartmentValueChange($event)"
+              [clearable]="true"
+              id="departmentName"
+              [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+              [placeholder]="isProject ? 'Select Project' : 'Select Department'"
+              class="w-100 mr-2"
+              for="departmentName"
+            ></ng-select>
+          </div>
+
+          <div class="col-lg">
+            <ng-select
+              [items]="taskTypeList"
+            
+              (change)="onSearchTaskType($event)"
+              [clearable]="true"
+              id="TaskType"
+              [(ngModel)]="selectedTaskType"
+              placeholder="Select Task Type"
+              class="w-100 mr-2"
+            ></ng-select>
+          </div>
+         
+
+          <div class="col-lg-auto">
+            <div class="d-flex justify-content-end">
+              <button
+                type="button"
+                class="btn btn-danger ms-1"
+                (click)="resetSerachVariable()"
+                ngbTooltip="Remove All Search"
+              >
+                <i class="ri-refresh-fill me-1 align-bottom"></i>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body pt-0">
+        <div>
+          <ul
+            ngbNav
+            #nav="ngbNav"
+            [activeId]="1"
+            class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+          >
+          <li [ngbNavItem]="1">
+            <ng-template ngbNavContent>
+              <div class="table-responsive table-card mb-0">
+                <table class="table">
+                  <thead>
+                    <tr class="bg-light text-muted text-uppercase">
+                      <th>Name</th>
+                      <th>Work From</th>
+                      <th >Ticket Details</th>
+                      <th class="text-center">Total Working</th>
+                      <th>Check In</th>
+                      <th>Check Out</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let user of userList">
+                      <td class="customer_name  align-top">
+                        <div *ngIf="user.profileImageUrl">
+                          <div class="d-flex align-items-center">
+                            <img
+                              (click)="open(apiUrl + user.profileImageUrl)"
+                              src="{{ apiUrl }}{{ user.profileImageUrl }}"
+                              class="avatar-xs rounded-circle me-2 cursor"
+                              alt=""
+                            />
+                            <div class="text-primary">
+                              {{ user.fullName }}
+
+                              <p class="mb-0 text-muted">
+                                {{ user.designationName }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="!user.profileImageUrl">
+                          <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0 avatar-xs me-2">
+                              <div
+                                class="avatar-title bg-success-subtle text-success rounded-circle fs-13"
+                              >
+                                {{ user.fullName.charAt(0) }}
+                              </div>
+                            </div>
+                            <div class="text-primary">
+                              {{ user.fullName }}
+
+                              <p class="mb-0 text-muted">
+                                {{ user.designationName }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td class="align-top">
+
+                          <span
+                            class="badge bg-success me-2"
+                            *ngIf="user.taskType === 'Corrective'"
+                            >{{ user.taskType }}</span
+                          >
+
+                          <span
+                            class="badge bg-primary me-2"
+                            *ngIf="user.taskType === 'Preventive'"
+                            >{{ user.taskType }}</span
+                          >
+
+                          <span
+                            class="badge bg-info me-2"
+                            *ngIf="
+                              user.taskType !== 'Preventive' &&
+                              user.taskType !== 'Corrective'
+                            "
+                            >{{ user.taskType }}</span
+                          >
+
+                      </td>
+                    
+                      <td class="title align-top">
+                        <a
+                          href="javascript:void(0)"
+                          (click)="viewHandleMap(user)"
+                          class="fw-medium link-primary"
+                          >{{ user.ticketNo }}</a
+                        >
+                        <p class="text-muted fs-14" [title]="user.ticketTitle"> {{ user.ticketTitle }}</p>
+
+                       
+                      </td>
+                      <td
+                        class="text-center align-top"
+                        [ngClass]="
+                          user.totalWorkingHours == 0
+                            ? 'text-danger'
+                            : 'text-success'
+                        "
+                      >
+                        {{ user.totalWorkingHours
+                        }}
+                        <!-- <span class="text-muted ps-1">Hour's </span> -->
+                      </td>
+
+                      <td class="align-top">
+                        {{ user.startDateTime }}
+
+                        <p class="mb-0 text-muted">
+                          <!-- {{ user.startGPSLocation }} -->
+                          <span *ngIf="!user.startGPSLocation">- </span>
+                          <span *ngIf="user.startGPSLocation">
+                            <span
+                              *ngIf="user.techPicUrlStart"
+                              class="fs-18"
+                            >
+                              <img
+                                class="rounded-circle avatar-xxs align-bottom me-1"
+                                (click)="
+                                  open(apiUrl + user.techPicUrlStart)
+                                "
+                                [src]="apiUrl + user.techPicUrlStart"
+                              />|
+                            </span>
+                            <i
+                              class="ri-map-pin-line text-primary align-bottom fs-18 cursor"
+                              (click)="
+                                openAduit(
+                                  openMap,
+                                  user.startGPSLocation,
+                                  'Check-In',
+                                  user
+                                )
+                              "
+                              [title]="user.startGPSLocation"
+                            ></i>
+                          </span>
+                        </p>
+                      </td>
+                      <td class="align-top">
+                        {{ user.endDateTime || "-" }}
+
+                        <p class="mb-0 text-muted">
+                          <span *ngIf="!user.endGPSLocation">- </span>
+                          <span *ngIf="user.endGPSLocation">
+                            <span *ngIf="user.techPicUrlEnd" class="fs-18">
+                              <img
+                                class="rounded-circle avatar-xxs align-bottom me-1"
+                                (click)="open(apiUrl + user.techPicUrlEnd)"
+                                [src]="apiUrl + user.techPicUrlEnd"
+                              />
+                              |
+                            </span>
+                            <i
+                              class="ri-map-pin-line text-primary align-bottom fs-18 cursor"
+                              (click)="
+                                openAduit(
+                                  openMap,
+                                  user.endGPSLocation,
+                                  'Check-Out',
+                                  user
+                                )
+                              "
+                              [title]="user.endGPSLocation"
+                            ></i>
+                          </span>
+                        </p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="text-center" *ngIf="userList.length === 0">
+                  No Attendance Found
+                </div>
+                <!-- <div
+                  class="text-center mt-3"
+                  *ngIf="!selectedDateRangeValue?.to"
+                >
+                  <b>
+                    {{
+                      !selectedDateRangeValue?.to
+                        ? "Please Select Date Range"
+                        : "No Attendance Found"
+                    }}</b
+                  >
+                </div> -->
+              </div>
+              <div
+                class="row justify-content-md-between align-items-md-center gy-2"
+              >
+                <div class="col-sm-6">
+                  <div
+                    class="dataTables_info mb-2"
+                    id="tickets-table_info"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    Showing {{ from }} to {{ to }} of
+                    {{ totalRecords }} entries
+                  </div>
+                </div>
+                <!-- Pagination -->
+                <div class="col-sm-6">
+                  <div class="text-sm-right float-end listjs-pagination">
+                    <ngb-pagination
+                      [collectionSize]="totalRecords"
+                      [(page)]="page"
+                      [pageSize]="pageSize"
+                      [maxSize]="2"
+                      [rotate]="true"
+                      (pageChange)="pageChange($event)"
+                      *ngIf="totalRecords > pageSize"
+                    >
+                      <ng-template
+                        ngbPaginationPrevious
+                        let-page
+                        let-pages="pages"
+                      >
+                        <i class="ci-arrow-left me-2"></i> Prev
+                      </ng-template>
+                      <ng-template ngbPaginationNext>
+                        Next
+                        <i class="ci-arrow-right ms-2"></i>
+                      </ng-template>
+                    </ngb-pagination>
+                  </div>
+                </div>
+                <!-- End Pagination -->
+              </div>
+            </ng-template>
+          </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content text-muted">
+            <div [ngbNavOutlet]="nav"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #deleteModel let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="btn-close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="mt-2 text-center">
+        <img
+        src
+        ="../../../../assets/images/ticketChatpartImage.png"
+        class
+        ="img-fluid rounded chat-image-success">
+        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+          <h4>You are about to delete a User ?</h4>
+          <p class="text-muted mx-4 mb-0">
+            Deleting your user will remove all of your information from our
+            database.
+          </p>
+        </div>
+      </div>
+      <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+        <button
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+          (click)="modal.close('Close click')"
+          id="deleteRecord-close"
+        >
+          <i class="ri-close-line me-1 align-middle"></i> Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="delete-product"
+          (click)="deleteData(deleteId)"
+          (click)="modal.close('Close click')"
+        >
+          Yes, Delete It!
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</ng-template>
+
+
+
+<ng-template #openMap let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title">Map</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="offcanvas-body pt-0">
+    <app-shown-map-location
+      [latitude]="latitude"
+      [longitude]="longitude"
+      [userData]="userData"
+      [typeChecking]="typeChecking"
+    ></app-shown-map-location>
+    <div class="text-end">
+      <button
+        type="button"
+        class="btn btn-outline-danger"
+        (click)="offcanvas.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,163 @@
+<div class="card mb-0">
+  <div class="card-body border border-dashed border-end-0 border-start-0">
+    <div class="row g-3">
+      <div class="col-lg">
+        <ng-select [items]="arrayListDropDownCompany" bindLabel="companyName" bindValue="companyId"
+          (change)="onDropdownCompanyValueChange($event)" [clearable]="true" id="companyName"
+          [(ngModel)]="selectedDropDownCompanyIdValue" placeholder="Select Company" class="w-100 mr-2" for="companyName"
+          [readonly]="disabledWithAceessGroup"></ng-select>
+      </div>
+      <div class="col-lg">
+        <ng-select [items]="arrayListDropDownClientList" bindLabel="clientName" bindValue="clientId"
+          [disabled]="!selectedDropDownCompanyIdValue" (change)="onDropdownClientValueChange($event)" [clearable]="true"
+          id="clientName" [(ngModel)]="selectedDropDownClientIdValue" placeholder="Select Client" class="w-100 mr-2"
+          for="clientName" [readonly]="disabledWithAceessGroup"></ng-select>
+      </div>
+      <div class="col-lg">
+        <ng-select [readonly]="projectDepartmentFieldDisiabled" [items]="arrayListDropDownProjectOrDeparmentList"
+          bindLabel="departmentName" bindValue="departmentId" [disabled]="
+            !selectedDropDownCompanyIdValue ||
+            !selectedDropDownClientIdValue
+          " (change)="onDropdownDepartmentValueChange($event)" [clearable]="true" id="departmentName"
+          [(ngModel)]="selectedDropDownProjectOrDeparmentIdValue"
+          [placeholder]="isProject ? 'Select Project' : 'Select Department'" class="w-100 mr-2"
+          for="departmentName"></ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <ng-container *ngIf="projectTaskSubTaskUnionList.length != 0">
+      <div class="table-responsive table-card mb-0 text-muted">
+        <table class="table">
+          <thead>
+            <tr class="bg-light text-muted text-uppercase">
+              <th>Task</th>
+              <th>Schedule</th>
+              <th>
+                Company , Client & {{ isProject ? "Project" : "Department" }}
+              </th>
+
+
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of projectTaskSubTaskUnionList; index as index">
+              <td class="align-top" *ngIf="data.taskFlag == 'Sub-Task'">
+                <a href="javascript:void(0)" (click)="openViewHandleSubTask(data.taskLinkId,data.projectTaskId,data)"
+                  class="fw-medium text-reset">
+                  <p class="mb-0" ngbTooltip="{{ data.taskTitle }}">
+                    {{ showinString(data.taskTitle) }}
+                  </p>
+                  <p class="mb-0 text-primary">#{{ data.taskNo }}</p>
+                </a>
+                <p class="mb-0">
+                  <span class="badge bg-primary-subtle text-primary badge-border fs-12"><b>{{ data.taskFlag }}</b></span>  |   <span class="badge bg-success-subtle text-success badge-border fs-12"*ngIf="data.isTaskSchedule==1"><b>
+    Task Schedule
+</b>
+</span>
+
+<span class="badge bg-warning-subtle text-warning badge-border fs-12" *ngIf="data.isTaskSchedule==0"><b>
+    Work Programme
+</b>
+</span>
+                </p>
+              </td>
+              <td class="align-top" *ngIf="data.taskFlag == 'Main-Task'">
+                <a href="javascript:void(0)" (click)="openViewHandleTask(data.projectTaskId,data)"
+                  class="fw-medium text-reset">
+                  <p class="mb-0" ngbTooltip="{{ data.taskTitle }}">
+                    {{ showinString(data.taskTitle) }}
+                  </p>
+                  <p class="mb-0 text-primary">#{{ data.taskNo }}</p>
+                </a>
+                <p class="mb-0">
+
+                  
+                  <span class="badge bg-secondary-subtle text-secondary badge-border  fs-12"><b>{{ data.taskFlag }}</b></span> |   <span class="badge bg-success-subtle text-success badge-border fs-12"*ngIf="data.isTaskSchedule==1"><b>
+    Task Schedule
+</b>
+</span>
+
+<span class="badge bg-warning-subtle text-warning badge-border fs-12" *ngIf="data.isTaskSchedule==0"><b>
+    Work Programme
+</b>
+</span>
+                </p>
+              </td>
+
+              <td class="align-top">
+                <p class="mb-0" ngbTooltip="{{ data.projectScheduleName }}">
+                  <b> {{ showinString(data.projectScheduleName) }}</b>
+                </p>
+                <div class="mb-0">
+                  <span *ngIf="data.scheduleNo" class="text-primary">#{{ data.scheduleNo || "-" }}
+                  </span>
+                  <div class="vr"></div>
+                  <span [class]="
+                      returnStatusBadgeClassesStatus(
+                        data.projectScheduleStatusId
+                      )
+                    ">{{ data.projectScheduleStatusName }}</span>
+                </div>
+              </td>
+              <td class="align-top title">
+                <p class="mb-0 title_new fs-12" [title]="data.companyName">
+                  {{ data.companyName }}
+                </p>
+                <p class="mb-0 title_new fs-12" [title]="data.clientName">
+                  {{ data.clientName }}
+                </p>
+                <p class="mb-0 title_new fs-12" [title]="data.projectName">
+                  {{ data.projectName }}
+                </p>
+              </td>
+
+
+              <td class="status align-top">
+                <span [class]="returnStatusBadgeClassesStatus(data.taskStatusId)">{{ data.taskStatusName }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row justify-content-md-between align-items-md-center pb-3">
+        <div class="col-sm-6">
+          <div class="dataTables_info mb-2 mt-2" id="tickets-table_info" role="status" aria-live="polite">
+            Showing {{ from }} to {{ to }} of {{ totalRecords }} entries
+          </div>
+        </div>
+        <!-- Pagination -->
+        <div class="col-sm-6">
+          <div class="text-sm-right float-end listjs-pagination">
+            <ngb-pagination [collectionSize]="totalRecords" [(page)]="page" [pageSize]="pageSize" [maxSize]="2"
+              [rotate]="true" (pageChange)="loadPage($event)" *ngIf="totalRecords > pageSize">
+              <ng-template ngbPaginationPrevious let-page let-pages="pages">
+                <i class="ci-arrow-left me-2"></i>
+                Prev
+              </ng-template>
+              <ng-template ngbPaginationNext>
+                Next
+                <i class="ci-arrow-right ms-2"></i>
+              </ng-template>
+            </ngb-pagination>
+          </div>
+        </div>
+        <!-- End Pagination -->
+      </div>
+    </ng-container>
+    <ng-container *ngIf="projectTaskSubTaskUnionList.length == 0">
+      <div class="py-4 text-center">
+        <div>
+          <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+            colors="primary:#405189,secondary:#0ab39c" style="width: 72px; height: 72px">
+          </lord-icon>
+        </div>
+        <div class="mt-4">
+          <h5>No Records Found</h5>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

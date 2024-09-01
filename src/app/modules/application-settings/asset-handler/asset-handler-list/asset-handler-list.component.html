@@ -1,0 +1,828 @@
+<!-- Start Breadcrumbs -->
+
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="card" id="orderList">
+  <div class="card-header border-0">
+    <div class="row align-items-center gy-3">
+      <div class="col">
+        <h5 class="card-title mb-0">Asset Handlers</h5>
+      </div>
+      <div class="col-sm-auto d-flex gap-2 flex-wrap justify-content-end">
+        <div *ngIf="returnValueMenu.add">
+          <button
+            class="btn btn-success add-btn"
+            (click)="addModalPopup(modalConfirm2)"
+          >
+            <i class="ri-add-line align-bottom me-1"></i> Add Asset Handler
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body border border-dashed border-end-0 border-start-0">
+    <div class="row ">
+      <div class="col-lg mb-sm-2">
+        <ng-select
+          [items]="companyList"
+          bindLabel="companyName"
+          bindValue="companyId"
+          (change)="onDropdownCompanyValueChange($event)"
+          [clearable]="true"
+          id="companyName"
+          [(ngModel)]="selectedCompanyId"
+          placeholder="Select Company"
+          class="w-100 mb-1"
+          for="companyName"
+        ></ng-select>
+      </div>
+      <div class="col-lg  mb-sm-2">
+        <ng-select
+          [items]="clientList"
+          bindLabel="clientName"
+          bindValue="clientId"
+          (change)="onDropdownClientValueChange($event)"
+          [clearable]="true"
+          id="clientName"
+          [(ngModel)]="selectedClientId"
+          placeholder="Select Client"
+          [disabled]="!selectedCompanyId || selectedCompanyId == ''"
+          class="w-100  mb-1"
+          for="clientName"
+        ></ng-select>
+      </div>
+      <div class="col-lg  mb-sm-2">
+        <ng-select
+          [items]="departmentList"
+          bindLabel="departmentName"
+          bindValue="departmentId"
+          (change)="onDropdownDepartmentValueChange($event)"
+          [clearable]="true"
+          id="departmentName"
+          [(ngModel)]="selectedDepartmentId"
+          [disabled]="!selectedClientId || selectedClientId == ''"
+          placeholder="Select Project"
+          class="w-100 mb-1"
+          for="departmentName"
+        ></ng-select>
+      </div>
+      <div class="col-lg  mb-sm-2">
+        <div class="search-box">
+          <input
+            type="search"
+            name="searchTerm"
+            class="form-control mb-1"
+            placeholder="Search Asset Handler"
+            [(ngModel)]="searchName"
+            (input)="onEmployeeNameChangeHandler($event)"
+          />
+          <i class="ri-search-line search-icon"></i>
+        </div>
+      </div>
+      <div class="col-lg-auto  mb-sm-2 d-flex justify-content-end">
+        <button class="btn btn-danger" (click)="clear()">
+          <i class="ri-refresh-fill me-1 align-bottom"></i>
+          Clear
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body pt-3">
+    <div class="table-responsive table-card mb-0">
+      <table class="table">
+        <thead>
+          <tr class="bg-light text-muted text-uppercase">
+            <th class="ps-5">Image</th>
+            <th>Employee Id</th>
+            <th>Employee Name</th>
+            <th> {{isProject ? 'Project' : 'Department'}}</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody class="px-2">
+          <tr *ngFor="let emp of empList" class="text-muted">
+            <td>
+              <img
+              (click)="open(apiUrl+emp.empImgUrl)"
+                src="{{ apiUrl }}{{ emp.empImgUrl }}"
+                alt=""
+                *ngIf="emp.empImgUrl"
+                class="ms-4"
+                style="height: 60px; width: 60px"
+              />
+              <img
+              (click)="open('../../../../../../assets/images/userClientPlaceholder.png')"
+                src="../../../../../../assets/images/userClientPlaceholder.png"
+                alt=""
+                *ngIf="!emp.empImgUrl"
+                class="ms-4"
+                style="height: 60px; width: 60px"
+              />
+            </td>
+
+            <td
+              class="align-middle fw-medium link-primary cursor"
+              (click)="view(viewModal, emp)"
+            >
+              {{ emp.employeeTagId }}
+            </td>
+
+            <td class="align-middle">
+              {{ emp.employeeName }}
+            </td>
+
+            <td class="align-middle">{{ emp.departmentName }}</td>
+
+            <td class="align-middle">
+              {{ emp.email }}
+            </td>
+
+            <td class="align-middle">
+              <span
+                class="badge text-uppercase bg-success-subtle text-success"
+                >{{ emp.status }}</span
+              >
+            </td>
+
+            <td class="ps-2 align-middle">
+              <span>
+                <div class="dropdown ms-2" ngbDropdown>
+                  <button
+                    class="btn btn-soft-secondary btn-sm dropdown arrow-none"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    ngbDropdownToggle
+                  >
+                    <i class="ri-more-fill"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                    <li>
+                      <a
+                        class="dropdown-item cursor-pointer"
+                        (click)="view(viewModal, emp)"
+                      >
+                        <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                        View
+                      </a>
+                    </li>
+                    <li>
+                      <a  *ngIf="returnValueMenu.edit"
+                        class="dropdown-item cursor-pointer"
+                        (click)="editModalPopup(modalConfirm3, emp)"
+                      >
+                        <i
+                          class="ri-pencil-fill align-bottom me-2 text-muted"
+                        ></i>
+                        Edit
+                      </a>
+                    </li>
+                    <li class="dropdown-divider"  *ngIf="returnValueMenu.delete"></li>
+                    <li>
+                      <a  *ngIf="returnValueMenu.delete"
+                        class="dropdown-item cursor-pointer"
+                        (click)="confirmDelete(emp.employeeId)"
+                      >
+                        <i
+                          class="ri-delete-bin-fill align-bottom me-2 text-muted"
+                        ></i>
+                        Delete
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="text-center" *ngIf="empList.length === 0">
+        <p class="text-muted">No Asset Handler Found.</p>
+      </div>
+    </div>
+
+    <div
+      class="row justify-content-md-between align-items-md-center gy-2 px-4 mb-4"
+    >
+      <div class="col-sm-6">
+        <div
+          class="dataTables_info mb-2"
+          id="tickets-table_info"
+          role="status"
+          aria-live="polite"
+        >
+          Showing {{ from }} to {{ to }} of {{ totalRecords }} entries
+        </div>
+      </div>
+      <!-- Pagination -->
+      <div class="col-sm-6">
+        <div class="text-sm-right float-end listjs-pagination">
+          <ngb-pagination
+            [collectionSize]="totalRecords"
+            [(page)]="page"
+            [pageSize]="pageSize"
+            [maxSize]="2"
+            [rotate]="true"
+            (pageChange)="pageChange($event)"
+            *ngIf="totalRecords > pageSize"
+          >
+            <ng-template ngbPaginationPrevious let-page let-pages="pages">
+              <i class="ci-arrow-left me-2"></i> Prev
+            </ng-template>
+            <ng-template ngbPaginationNext>
+              Next
+              <i class="ci-arrow-right ms-2"></i>
+            </ng-template>
+          </ngb-pagination>
+        </div>
+      </div>
+      <!-- End Pagination -->
+    </div>
+  </div>
+</div>
+
+<ng-template #modalConfirm2 role="document" let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="modal-title">Add Asset Handler</h5>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form #f="ngForm" (ngSubmit)="onSubmitHandler(f)" id="submit-form">
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-12 text-center">
+          <div
+            class="profile-user position-relative d-inline-block mx-auto mb-1"
+          >
+            <img
+              [src]="isDefaultImage == true ? defaultImage : image"
+              alt="user-profile-image"
+              class="rounded-circle avatar-xl img-thumbnail user-profile-image"
+            />
+            <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+              <input
+                id="profile-img-file-input"
+                type="file"
+                accept="image/*"
+                (change)="changeListener($event)"
+                class="profile-img-file-input"
+              />
+
+              <label
+                for="profile-img-file-input"
+                class="profile-photo-edit avatar-xs"
+                *ngIf="isDefaultImage"
+              >
+                <span class="avatar-title rounded-circle bg-light text-body">
+                  <i class="ri-camera-fill"></i>
+                </span>
+              </label>
+
+              <label
+                *ngIf="!isDefaultImage"
+                class="profile-photo-edit avatar-xs"
+                (click)="onClearImage($event)"
+              >
+                <span class="avatar-title rounded-circle bg-light text-body">
+                  <i class="ri-close-circle-fill"></i>
+                </span>
+              </label>
+              <!-- <label
+                for="profile-img-file-input"
+                class="profile-photo-edit avatar-xs"
+              >
+                <span class="avatar-title rounded-circle bg-light text-body">
+                  <i class="ri-camera-fill"></i>
+                </span>
+              </label> -->
+            </div>
+          </div>
+          <h5 class="fs-13 mt-3">Profile Image</h5>
+        </div>
+
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="form-group col-lg-6 mt-2 mb-2">
+              <label for="companyName" class="form-label">
+                Company Name
+                <span class="starRequried">*</span>
+              </label>
+              <ng-select
+                [items]="companyList_add"
+                bindLabel="companyName"
+                bindValue="companyId"
+                (change)="onDropdownCompanyValueChange2($event)"
+                [clearable]="false"
+                id="companyName"
+                [(ngModel)]="employee.companyId"
+                placeholder="Select Company"
+                class="w-100 mr-2"
+                for="companyName"
+                name="companyId"
+                required
+              ></ng-select>
+            </div>
+
+            <div class="form-group col-lg-6 mt-2 mb-2">
+              <label for="clientName" class="form-label">
+                Client Name
+                <span class="starRequried">*</span>
+              </label>
+              <ng-select
+                [items]="clientList_Array"
+                bindLabel="clientName"
+                bindValue="clientId"
+                (change)="onDropdownClientValueChange2($event)"
+                [clearable]="false"
+                id="clientName"
+                name="clientId"
+                [disabled]="!employee.companyId || employee.companyId == ''"
+                [(ngModel)]="employee.clientId"
+                placeholder="Select Client"
+                class="w-100 mr-2"
+                for="clientName"
+                required
+              ></ng-select>
+            </div>
+
+            <div class="form-group col-lg-6 mt-2 mb-2">
+              <label for="departmentName" class="form-label">
+                {{isProject ? "Project" : "Department"}} Name
+                <span class="starRequried">*</span>
+              </label>
+
+              <ng-select
+                [items]="departmentList_add"
+                bindLabel="departmentName"
+                bindValue="departmentId"
+                [clearable]="false"
+                id="departmentName"
+                [disabled]="!employee.clientId || employee.clientId == ''"
+                name="departmentId"
+                [(ngModel)]="employee.departmentId"
+                [placeholder]="isProject ? 'Select Project' : 'Select Department'"
+                class="w-100 mr-2"
+                for="departmentName"
+                required
+              ></ng-select>
+            </div>
+            <div class="form-group col-lg-6 mt-2 mb-2">
+              <label for="empId" class="form-label"
+                >Employee Id
+          
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="empId"
+                placeholder="Enter Employee Id"
+                [(ngModel)]="employee.empId"
+                name="empId"
+                #empId="ngModel"
+                
+              />
+            
+            </div>
+
+            <div class="form-group col-lg-6 mt-2 mb-2">
+              <label for="empName" class="form-label">
+                Employee Name
+                <span class="starRequried">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="empName"
+                placeholder=" Enter Employee Name"
+                [(ngModel)]="employee.empName"
+                name="empName"
+                #empName="ngModel"
+                [ngClass]="{ 'is-invalid': empName.dirty && empName.invalid }"
+                required
+              />
+
+              <div *ngIf="empName?.invalid && empName?.touched">
+                <small
+                  class="text-danger"
+                  *ngIf="empName?.errors?.['required']"
+                >
+                  Employee Name is Required
+                </small>
+              </div>
+            </div>
+            <div class="form-group col-lg-6 mt-2 mb-2">
+              <label for="email" class="form-label">
+                Email
+                <span class="starRequried">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="email"
+                placeholder="Email"
+                [(ngModel)]="employee.email"
+                name="email"
+                #email="ngModel"
+                required
+                email
+                [ngClass]="{ 'is-invalid': email.dirty && email.invalid }"
+              />
+              <div *ngIf="email?.invalid && email?.touched">
+                <small class="text-danger" *ngIf="email?.errors?.['required']">
+                  Email is Required
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        data-bs-dismiss="modal"
+        class="btn btn-danger"
+        (click)="modal.dismiss('cancel')"
+      >
+        Close
+      </button>
+      <button type="submit" class="btn btn-success" [disabled]="f.invalid">
+        Submit
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #modalConfirm3 role="document" let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="modal-title">Edit Asset Handler</h5>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form
+    #editForm="ngForm"
+    (ngSubmit)="onEditSubmitHandler()"
+    id="edit-submit-form"
+  >
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-12 text-center">
+          <div
+            class="profile-user position-relative d-inline-block mx-auto mb-2"
+          >
+            <img
+            (click)="open(selectedAssetHandler.empImgUrl
+                                            ? apiUrl +
+                                              selectedAssetHandler.empImgUrl
+                                            : '../../../../../assets/images/placeholderimage.png')"
+              [src]="
+                selectedAssetHandler.empImgUrl
+                  ? apiUrl + selectedAssetHandler.empImgUrl
+                  : '../../../../../../assets/images/userClientPlaceholder.png'
+              "
+              alt="user-profile-image"
+              class="rounded-circle avatar-xl img-thumbnail user-profile-image"
+            />
+            <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+              <input
+                id="profile-img-file-input"
+                type="file"
+                accept="image/*"
+                (change)="onSelectFile($event)"
+                class="profile-img-file-input"
+              />
+
+              <label
+                for="profile-img-file-input"
+                class="profile-photo-edit avatar-xs"
+                *ngIf="isDefaultImage"
+              >
+                <span class="avatar-title rounded-circle bg-light text-body">
+                  <i class="ri-camera-fill"></i>
+                </span>
+              </label>
+
+              <label
+                *ngIf="!isDefaultImage"
+                class="profile-photo-edit avatar-xs"
+                (click)="openModalDeleteConf($event)"
+              >
+                <span class="avatar-title rounded-circle bg-light text-body">
+                  <i class="ri-close-circle-fill"></i>
+                </span>
+              </label>
+            </div>
+          </div>
+          <h5 class="fs-13 mt-1">Profile Image</h5>
+        </div>
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="form-group col-lg-6 mt-2 mb-2">
+              <label for="companyName" class="form-label">
+                Company Name
+                <span class="starRequried">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="companyName"
+                placeholder="Enter Company Name"
+                [(ngModel)]="editEmployee.companyName"
+                name="companyName"
+                #companyName="ngModel"
+                [ngClass]="{
+                  'is-invalid': companyName.dirty && companyName.invalid
+                }"
+                required
+                [disabled]="true"
+              />
+              <!-- <small class="text-secondary">Company Disabled</small> -->
+            </div>
+
+            <div class="form-group col-lg-6 mt-2 mb-2">
+              <label for="clientName" class="form-label">
+                Client Name
+                <span class="starRequried">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="clientName"
+                placeholder="Enter Client Name"
+                [(ngModel)]="editEmployee.clientName"
+                name="clientName"
+                #clientName="ngModel"
+                [ngClass]="{
+                  'is-invalid': clientName.dirty && clientName.invalid
+                }"
+                required
+                [disabled]="true"
+              />
+            </div>
+
+            <div class="form-group col-lg-6 mt-2 mb-2">
+              <label for="departmentName" class="form-label">
+               {{isProject ? "Project" : "Department"}} Name
+                <span class="starRequried">*</span>
+              </label>
+
+              <input
+                type="text"
+                class="form-control"
+                id="departmentName"
+                 [placeholder]="isProject ? 'Select Project' : 'Select Department'"
+                [(ngModel)]="editEmployee.departmentName"
+                name="departmentName"
+                #departmentName="ngModel"
+                [ngClass]="{
+                  'is-invalid': departmentName.dirty && departmentName.invalid
+                }"
+                required
+                [disabled]="true"
+              />
+            </div>
+            <div class="form-group col-lg-6 mt-2 mb-2">
+              <label for="empId" class="form-label"
+                >Employee Id
+              
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="empTagId"
+                placeholder="Enter Employee Id"
+                [(ngModel)]="editEmployee.empTagId"
+                name="empTagId"
+                #empTagId="ngModel"
+               
+              />
+            </div>
+
+            <div class="form-group col-lg-6 mt-2 mb-2">
+              <label for="empName" class="form-label">
+                Employee Name
+                <span class="starRequried">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="empName"
+                placeholder=" Enter Employee Name"
+                [(ngModel)]="editEmployee.empName"
+                name="empName"
+                #empName="ngModel"
+                [ngClass]="{ 'is-invalid': empName.dirty && empName.invalid }"
+                required
+              />
+            </div>
+
+            <div class="form-group col-lg-6 mt-2 mb-2">
+              <label for="email" class="form-label">
+                Email
+                <span class="starRequried">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="email"
+                placeholder=" email"
+                [(ngModel)]="editEmployee.email"
+                name="email"
+                #email="ngModel"
+                required
+                email
+                [ngClass]="{ 'is-invalid': email.dirty && email.invalid }"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        data-bs-dismiss="modal"
+        class="btn btn-danger"
+        (click)="modal.dismiss('cancel')"
+      >
+        Close
+      </button>
+      <button
+        type="submit"
+        class="btn btn-success"
+        [disabled]="editForm.invalid"
+      >
+        Update
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #viewModal role="document" let-modal>
+  <div class="modal-header p-3 bg-info-subtle">
+    <h5 class="modal-title" id="modal-title">View Asset Handler</h5>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div>
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-3 d-flex justify-content-center">
+          <div
+            class="profile-user position-relative d-inline-block mx-auto mb-0"
+          >
+            <img
+              [src]="
+                selectedEmpData.empImgUrl
+                  ? apiUrl + selectedEmpData.empImgUrl
+                  : defaultImage
+              "
+              alt="user-profile-image"
+              class="rounded-circle avatar-xl img-thumbnail user-profile-image"
+            />
+          </div>
+        </div>
+
+        <div class="col-9">
+          <div class="row">
+            <div class="col-lg-6 mb-3">
+              <p class="mb-1 fw-bold">Employee Name</p>
+              <p class="fs-14 mb-0">
+                {{ selectedEmpData.employeeName }}
+              </p>
+            </div>
+
+            <div class="col-lg-6 mb-3">
+              <p class="mb-1 fw-bold">Employee Id</p>
+              <p class="fs-14 mb-0 fw-medium link-primary">
+                {{ selectedEmpData.employeeTagId }}
+              </p>
+            </div>
+
+            <div class="col-lg-6 mb-3">
+              <p class="mb-1 fw-bold">Status</p>
+              <p class="fs-14 mb-0">
+                <span
+                  class="badge text-uppercase bg-success-subtle text-success"
+                  >{{ selectedEmpData.status }}</span
+                >
+              </p>
+            </div>
+
+            <div class="col-lg-6 mb-3">
+              <p class="mb-1 fw-bold">Email</p>
+              <p class="fs-14 mb-0">
+                {{ selectedEmpData.email }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-12 border-top border-top-dashed pt-3">
+          <div class="row">
+            <div class="col-lg-4 mb-3">
+              <p class="mb-1 fw-bold">Company Name</p>
+              <p class="fs-14 mb-0">
+                {{ selectedEmpData.companyName }}
+              </p>
+            </div>
+
+            <div class="col-lg-4 mb-3">
+              <p class="mb-1 fw-bold">Client Name</p>
+              <p class="fs-14 mb-0">
+                {{ selectedEmpData.clientName }}
+              </p>
+            </div>
+
+            <div class="col-lg-4 mb-3">
+              <p class="mb-1 fw-bold"> {{ isProject ? 'Project' : 'Department'}} Name</p>
+              <p class="fs-14 mb-0">
+                {{ selectedEmpData.departmentName }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        data-bs-dismiss="modal"
+        class="btn btn-danger"
+        (click)="modal.dismiss('cancel')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalDelete role="document" let-modal>
+  <div class="modal-header p-3 bg-danger">
+    <h5 class="modal-title" id="modal-title">Delete Asset</h5>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row g-3">
+      <div class="col-12 d-flex justify-content-center">
+        <h5 class="mt-2">Sure you wants to delete it ?</h5>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      data-bs-dismiss="modal"
+      class="btn btn-danger"
+      (click)="modal.dismiss('cancel')"
+    >
+      Close
+    </button>
+    <button type="submit" class="btn btn-danger" (click)="deleteHandler()">
+      Delete
+    </button>
+  </div>
+</ng-template>
+
+

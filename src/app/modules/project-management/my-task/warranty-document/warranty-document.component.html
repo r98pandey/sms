@@ -1,0 +1,64 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card mb-0" *ngIf="returnStringData=='Data found'">
+      <div class="card-body" style="height: 500px; overflow-y: auto">
+        <ng-container *ngFor="let document of myWarrantyPeriodSubmissionProcess">
+          <div class="row g-3 cursor" (click)="routerToMove(document)" *ngIf="document.count != 0">
+            <div class="col-auto">
+              <div class="avatar-sm p-1 py-2 h-auto rounded-3 bg-danger-subtle">
+                <div class="text-center">
+                  <h5 class="mb-0">
+                    <i class="bx bx-bell text-danger mt-2"></i>
+                  </h5>
+                </div>
+              </div>
+            </div>
+            <div class="col align-items-center">
+              <h5 class="mt-0 mb-1 fs-14">{{ document.name }}</h5>
+              <a href="javascript:void(0);" class="text-muted text-reset fs-13 mb-0">
+                {{ document.remark }}
+              </a>
+            </div>
+            <div class="col-sm-auto">
+              <div class="avatar-group">
+                <div class="avatar-group-item">
+                  <a href="javascript: void(0);">
+                    <div class="avatar-xs">
+                      <span
+                        class="avatar-title rounded-circle text-white bg-danger"
+                      >
+                        {{ document.count }}
+                      </span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-3" *ngIf="document.count != 0" />
+        </ng-container>
+      </div>
+    </div>
+    <div  *ngIf="returnStringData=='No Records Found'" style="height: 500px;">
+    
+    
+        <div class="py-4 text-center">
+          <div>
+            <lord-icon
+              src="https://cdn.lordicon.com/msoeawqm.json"
+              trigger="loop"
+              colors="primary:#405189,secondary:#0ab39c"
+              style="width: 72px; height: 72px"
+            >
+            </lord-icon>
+          </div>
+          <div class="mt-4">
+            <h5>
+              No Records Found  </h5>
+          </div>
+        </div>
+        
+    </div>
+  </div>
+</div>

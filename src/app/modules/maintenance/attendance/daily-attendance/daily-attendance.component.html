@@ -1,0 +1,934 @@
+<app-breadcrumbs
+  [title]="label"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-sm-12 col-lg-12 col-xxl-12">
+    <div class="card">
+      <div class="card-header text-center">
+        <h4 class="card-title text-dark mb-0">
+          {{ currentDate | date : "EEEE, dd-MMMM-yyyy" }}
+        </h4>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-lg-6 col-xxl-6">
+    <div class="card card-animate">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <h5>Staff In-Out Status</h5>
+        </div>
+
+        <div class="row">
+          <div
+            class="col-xxl-4 col-sm-4 stretch-card"
+            (click)="onCardClickActiveCheckIn('CheckIn')"
+          >
+            <div class="card card-animate mb-0">
+              <div
+                class="card-body bg-warning"
+                [class]="activeCard == 'CheckIn' ? 'activeClasCheckIn' : ''"
+              >
+                <div class="d-flex align-items-center">
+                  <div class="avatar-sm flex-shrink-0">
+                    <span
+                      class="avatar-title bg-opacity-25 bg-light text-primary rounded-circle fs-3"
+                    >
+                      <i class="ri-alarm-line align-middle text-white"></i>
+                    </span>
+                  </div>
+                  <div class="flex-grow-1 ms-2">
+                    <p class="text-uppercase fw-semibold fs-12 mb-1 text-white">
+                      Checkin
+                    </p>
+                    <h4 class="mb-0">
+                      <span
+                        *ngIf="
+                          staffDailyAttendanceCountList.checkInEmployees != 0
+                        "
+                        [countUp]="
+                          staffDailyAttendanceCountList.checkInEmployees
+                        "
+                        class="counter-value text-white cursor-pointer"
+                        [options]="option"
+                      ></span>
+                      <span
+                        *ngIf="
+                          staffDailyAttendanceCountList.checkInEmployees == 0
+                        "
+                        class="counter-value text-white"
+                        >0</span
+                      >
+                    </h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-xxl-4 col-sm-4 stretch-card"
+            (click)="onCardClickActiveCheckout('CheckOut')"
+          >
+            <div class="card card-animate mb-0">
+              <div
+                class="card-body bg-info"
+                [class]="activeCard == 'CheckOut' ? 'activeClasCheckOut' : ''"
+              >
+                <div class="d-flex align-items-center">
+                  <div class="avatar-sm flex-shrink-0">
+                    <span
+                      class="avatar-title bg-light bg-opacity-25 text-primary rounded-circle fs-3"
+                    >
+                      <i class="ri-alarm-fill align-middle text-white"></i>
+                    </span>
+                  </div>
+                  <div class="flex-grow-1 ms-2">
+                    <p class="text-uppercase fw-semibold fs-12 mb-1 text-white">
+                      Checkout
+                    </p>
+                    <h4 class="mb-0">
+                      <span
+                        *ngIf="
+                          staffDailyAttendanceCountList.checkOutEmployees != 0
+                        "
+                        [countUp]="
+                          staffDailyAttendanceCountList.checkOutEmployees
+                        "
+                        class="counter-value text-white cursor-pointer"
+                        [options]="option"
+                      ></span>
+                      <span
+                        *ngIf="
+                          staffDailyAttendanceCountList.checkOutEmployees == 0
+                        "
+                        class="counter-value text-white"
+                        >0</span
+                      >
+                    </h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-xxl-4 col-sm-4 stretch-card"
+            [class]="activeCard == 'absent' ? 'activeClasabsent' : ''"
+            data-bs-toggle="modal"
+            data-bs-target="#AbsentListModal"
+            (click)="GetV2_StaffAbsentListPost(absentList)"
+          >
+            <div class="card card-animate mb-0">
+              <div class="card-body bg-danger">
+                <div class="d-flex align-items-center">
+                  <div class="avatar-sm flex-shrink-0">
+                    <span
+                      class="avatar-title bg-light bg-opacity-25 text-primary rounded-circle fs-3"
+                    >
+                      <i class="ri-calendar-2-line align-middle text-white"></i>
+                    </span>
+                  </div>
+                  <div class="flex-grow-1 ms-2">
+                    <p class="text-uppercase fw-semibold fs-12 mb-1 text-white">
+                      Absent
+                    </p>
+                    <h4 class="mb-0">
+                      <span
+                        *ngIf="
+                          staffDailyAttendanceCountList.absentEmployees != 0
+                        "
+                        [countUp]="
+                          staffDailyAttendanceCountList.absentEmployees
+                        "
+                        class="counter-value text-white cursor-pointer"
+                        [options]="option"
+                      ></span>
+                      <span
+                        *ngIf="
+                          staffDailyAttendanceCountList.absentEmployees == 0
+                        "
+                        class="counter-value text-white"
+                        >0</span
+                      >
+                    </h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-lg-6 col-xxl-6">
+    <div class="card card-animate">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <h5>Check-In From</h5>
+        </div>
+
+        <div class="row">
+          <div
+            class="col-xxl-4 col-sm-4 stretch-card"
+            (click)="onCardClickActiveTaskType('Office')"
+          >
+            <div class="card card-animate mb-0">
+              <div
+                class="card-body bg-success"
+                [class]="activeCard == 'Office' ? 'activeClasoffice' : ''"
+              >
+                <div class="d-flex align-items-center">
+                  <div class="avatar-sm flex-shrink-0">
+                    <span
+                      class="avatar-title bg-light bg-opacity-25 text-primary rounded-circle fs-3"
+                    >
+                      <i class="ri-todo-line align-middle text-white"></i>
+                    </span>
+                  </div>
+                  <div class="flex-grow-1 ms-2">
+                    <p class="text-uppercase fw-semibold fs-12 mb-1 text-white">
+                      Office
+                    </p>
+                    <h4 class="mb-0">
+                      <span
+                        *ngIf="
+                          staffDailyAttendanceCountList.workFromOffice != 0
+                        "
+                        [countUp]="staffDailyAttendanceCountList.workFromOffice"
+                        class="counter-value text-white cursor-pointer"
+                        [options]="option"
+                      ></span>
+                      <span
+                        *ngIf="
+                          staffDailyAttendanceCountList.workFromOffice == 0
+                        "
+                        class="counter-value text-white"
+                        >0</span
+                      >
+                    </h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-xxl-4 col-sm-4 stretch-card"
+            (click)="onCardClickActiveTaskType('Home')"
+          >
+            <div class="card card-animate mb-0">
+              <div
+                class="card-body bg-secondary"
+                [class]="activeCard == 'Home' ? 'activeClashome' : ''"
+              >
+                <div class="d-flex align-items-center">
+                  <div class="avatar-sm flex-shrink-0">
+                    <span
+                      class="avatar-title bg-light bg-opacity-25 text-primary rounded-circle fs-3"
+                    >
+                      <i class="ri-home-gear-line align-middle text-white"></i>
+                    </span>
+                  </div>
+                  <div class="flex-grow-1 ms-2">
+                    <p class="text-uppercase fw-semibold fs-12 mb-1 text-white">
+                      Home
+                    </p>
+                    <h4 class="mb-0">
+                      <span
+                        *ngIf="staffDailyAttendanceCountList.workFromHome != 0"
+                        [countUp]="staffDailyAttendanceCountList.workFromHome"
+                        class="counter-value text-white"
+                        [options]="option"
+                      ></span>
+                      <span
+                        *ngIf="staffDailyAttendanceCountList.workFromHome == 0"
+                        class="counter-value text-white cursor-pointer"
+                        >0</span
+                      >
+                    </h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-xxl-4 col-sm-4 stretch-card"
+            (click)="onCardClickActiveTaskType('On-Site')"
+          >
+            <div class="card card-animate mb-0">
+              <div
+                class="card-body bg-primary"
+                [class]="activeCard == 'On-Site' ? 'activeClasOnsite' : ''"
+              >
+                <div class="d-flex align-items-center">
+                  <div class="avatar-sm flex-shrink-0">
+                    <span
+                      class="avatar-title bg-light bg-opacity-25 text-primary rounded-circle fs-3"
+                    >
+                      <i class="ri-ticket-2-line align-middle text-white"></i>
+                    </span>
+                  </div>
+                  <div class="flex-grow-1 ms-2">
+                    <p class="text-uppercase fw-semibold fs-12 mb-1 text-white">
+                      On-site
+                    </p>
+                    <h4 class="mb-0">
+                      <span
+                        *ngIf="
+                          staffDailyAttendanceCountList.workFromOnSite != 0
+                        "
+                        [countUp]="staffDailyAttendanceCountList.workFromOnSite"
+                        class="counter-value text-white cursor-pointer"
+                        [options]="option"
+                      ></span>
+                      <span
+                        *ngIf="
+                          staffDailyAttendanceCountList.workFromOnSite == 0
+                        "
+                        class="counter-value text-white"
+                        >0</span
+                      >
+                    </h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-0">
+        <div class="row align-items-center gy-3 mb-1">
+          <div class="col-lg-auto">
+            <h5 class="card-title mb-1">Daily Attendance List</h5>
+          </div>
+          <div class="col-lg text-end mb-2">
+            <div class="dropdown" ngbDropdown>
+              <button
+                [disabled]="!selectedDateRangeValue"
+                class="btn btn-secondary dropdown arrow-none"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                ngbDropdownToggle
+                type="button"
+              >
+                <i class="ri-file-download-line align-bottom me-1"></i>
+                Export
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                <li>
+                  <a
+                    class="dropdown-item cursor-pointer"
+                    (click)="downloadReport('PDF')"
+                    ><i
+                      class="ri-file-pdf-line align-bottom me-2 text-muted"
+                    ></i>
+                    Pdf
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item cursor-pointer"
+                    (click)="downloadReport('EXCEL')"
+                    ><i
+                      class="ri-file-excel-line align-bottom me-2 text-muted"
+                    ></i>
+                    Excel
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="card-body border border-dashed border-end-0 border-start-0">
+          <div class="row gy-3">
+            <div class="col-lg">
+              <ng-select
+                [items]="accessGroupList"
+                bindLabel="name"
+                bindValue="name"
+                [loading]="loading.accessGroup"
+                [clearable]="true"
+                id="accessName"
+                (change)="onTypeAccessGroup($event)"
+                [(ngModel)]="selectedAccessGroupValue"
+                placeholder="Select Access Group/Designation"
+                class="w-100 mr-2"
+              ></ng-select>
+            </div>
+            <div class="col-lg">
+              <div class="search-box">
+                <input
+                  type="search"
+                  name="searchTerm"
+                  class="form-control"
+                  [(ngModel)]="searchName"
+                  placeholder="Search for Full name"
+                  #inputer
+                />
+                <i class="ri-search-line search-icon"></i>
+              </div>
+            </div>
+            <div class="col-lg">
+              <div class="clear-box" *ngIf="!selectionbyDateRange">
+                <input
+                  class="form-control flatpickr-input"
+                  type="text"
+                  placeholder="Select Date"
+                  mwlFlatpickr
+                  [altInput]="false"
+                  [enableTime]="false"
+                  [convertModelValue]="true"
+                  [dateFormat]="'d-m-Y'"
+                  [(ngModel)]="selectedDateValue"
+                  (input)="onChangeSelectedDateValue()"
+                />
+              </div>
+              <div class="clear-box" *ngIf="selectionbyDateRange">
+                <input
+                  class="form-control flatpickr-input"
+                  style="padding-left: 0px !important"
+                  type="text"
+                  mwlFlatpickr
+                  [altInput]="true"
+                  [convertModelValue]="true"
+                  placeholder="Select From Date to End Date"
+                  mode="range"
+                  [dateFormat]="'d-m-Y'"
+                  [(ngModel)]="selectedDateRangeValue"
+                  (input)="onChangeSelectedDateValueRange()"
+                />
+                <i
+                  class="ri-close-line search-icon"
+                  *ngIf="selectedDateRangeValue?.to"
+                  (click)="clearFilter()"
+                ></i>
+              </div>
+
+              <div class="form-check">
+                <input
+                  (change)="onChangeselectionbyDateRange()"
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="auth-remember-check"
+                  [(ngModel)]="selectionbyDateRange"
+                />
+                <label class="form-check-label" for="auth-remember-check"
+                  >Selection by date range</label
+                >
+              </div>
+            </div>
+            <div class="col-lg-auto">
+              <div class="d-flex justify-content-end">
+                <button
+                  type="button"
+                  class="btn btn-danger ms-1"
+                  (click)="resetSerachVariable()"
+                  ngbTooltip="Remove All Search"
+                >
+                  <i class="ri-refresh-fill me-1 align-bottom"></i>
+                  Clear
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body pt-0">
+          <div>
+            <ul
+              ngbNav
+              #nav="ngbNav"
+              [activeId]="1"
+              class="nav nav-tabs nav-tabs-custom nav-success mb-3"
+            >
+              <li [ngbNavItem]="1">
+                <ng-template ngbNavContent>
+                  <div class="table-responsive table-card mb-0">
+                    <div *ngIf="userList.length != 0">
+                      <table class="table">
+                        <thead>
+                          <tr class="bg-light text-muted text-uppercase">
+                            <th>Name</th>
+                            <th>Work From</th>
+                            <th class="text-center">Normal</th>
+                            <th class="text-center">OverTime</th>
+                            <th class="text-center">Total Working</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let user of userList">
+                            <td class="customer_name align-top">
+                              <div
+                                class="d-flex align-items-center"
+                                *ngIf="user.profileImageUrl"
+                              >
+                                <div class="flex-grow-0">
+                                  <div class="d-flex align-items-center">
+                                    <div
+                                      class="flex-shrink-0 chat-user-img user-own-img align-self-center me-3 ms-0 online"
+                                    >
+                                      <img
+                                        (click)="
+                                          open(apiUrl + user.profileImageUrl)
+                                        "
+                                        [src]="apiUrl + user.profileImageUrl"
+                                        class="rounded-circle avatar-xs"
+                                        alt=""
+                                      />
+                                      <!-- <span class="user-status"></span> -->
+                                      <div class="dropdown" ngbDropdown>
+                                        <span
+                                          class="user-status shadow-none arrow-none cursor-pointer"
+                                          data-bs-toggle="dropdown"
+                                          aria-expanded="false"
+                                          ngbDropdownToggle
+                                          [class]="
+                                            returnCurrentStatusClassesStatusCircle(
+                                              user.currentStatus
+                                            )
+                                          "
+                                          title="{{ user.currentStatus }}"
+                                        ></span>
+                                        <div
+                                          *ngIf="user.currentStatus"
+                                          class="dropdown-menu dropdown-menu-start drop-con p-0"
+                                          ngbDropdownMenu
+                                        >
+                                          <div
+                                            [class]="
+                                              returnCurrentStatusClassesStatus(
+                                                user.currentStatus
+                                              )
+                                            "
+                                            class="text-uppercase p-2"
+                                          >
+                                            <b class="fs-14">
+                                              {{ user.currentStatus }}</b
+                                            >
+                                          </div>
+                                          <div
+                                            class="white-space-normal text-muted fs-13 p-2"
+                                            *ngIf="user.currentStatusRemark"
+                                          >
+                                            {{ user.currentStatusRemark }}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="flex-grow-1 overflow-hidden">
+                                      <h5 class="text-truncate mb-0 fs-14">
+                                        <a
+                                          class="text-primary username"
+                                          data-bs-toggle="offcanvas"
+                                          href="javascript:void(0);"
+                                          aria-controls="userProfileCanvasExample"
+                                        >
+                                          {{ user.fullName }}</a
+                                        >
+                                      </h5>
+                                      <p class="fs-12 mb-0 text-muted">
+                                        {{ user.designationName }}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                class="d-flex align-items-center"
+                                *ngIf="!user.profileImageUrl"
+                              >
+                                <div class="flex-grow-0">
+                                  <div class="d-flex align-items-center">
+                                    <div
+                                      class="flex-shrink-0 chat-user-img-without user-own-img align-self-center me-3 ms-0 online rounded-circle avatar-title-custom"
+                                      [class]="
+                                        returnCurrentStatusClassesStatus(
+                                          user.currentStatus
+                                        )
+                                      "
+                                    >
+                                      {{ user.fullName?.charAt(0)
+                                      }}{{ user.fullName?.charAt(1) }}
+
+                                      <!-- <span class="user-status"></span> -->
+                                      <div class="dropdown" ngbDropdown>
+                                        <span
+                                          class="user-status shadow-none arrow-none cursor-pointer"
+                                          data-bs-toggle="dropdown"
+                                          aria-expanded="false"
+                                          ngbDropdownToggle
+                                          [class]="
+                                            returnCurrentStatusClassesStatusCircle(
+                                              user.currentStatus
+                                            )
+                                          "
+                                          title="{{ user.currentStatus }}"
+                                        ></span>
+                                        <div
+                                          *ngIf="user.currentStatus"
+                                          class="dropdown-menu dropdown-menu-start drop-con p-0"
+                                          ngbDropdownMenu
+                                        >
+                                          <div
+                                            [class]="
+                                              returnCurrentStatusClassesStatus(
+                                                user.currentStatus
+                                              )
+                                            "
+                                            class="text-uppercase p-2"
+                                          >
+                                            <b class="fs-14">
+                                              {{ user.currentStatus }}</b
+                                            >
+                                          </div>
+                                          <div
+                                            class="white-space-normal text-muted fs-13 p-2"
+                                            *ngIf="user.currentStatusRemark"
+                                          >
+                                            {{ user.currentStatusRemark }}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="flex-grow-1 overflow-hidden">
+                                      <h5 class="text-truncate mb-0 fs-14">
+                                        <a
+                                          class="text-primary username"
+                                          data-bs-toggle="offcanvas"
+                                          href="javascript:void(0);"
+                                          aria-controls="userProfileCanvasExample"
+                                        >
+                                          {{ user.fullName }}</a
+                                        >
+                                      </h5>
+                                      <p class="fs-12 mb-0 text-muted">
+                                        {{ user.designationName }}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+
+                            <td class="align-top">
+                              {{ user.taskType }}
+                            </td>
+                            <td
+                              class="text-center align-top"
+                              [ngClass]="
+                                user.regularHours == 0
+                                  ? 'text-danger'
+                                  : 'text-success'
+                              "
+                            >
+                              {{ user.regularHours }}
+                              <span
+                                *ngIf="user.regularHours == 0"
+                                class="text-muted ps-1"
+                                >Hour's
+                              </span>
+                            </td>
+                            <td
+                              class="text-center align-top"
+                              [ngClass]="
+                                user.overtimeHours == 0
+                                  ? 'text-danger'
+                                  : 'text-success'
+                              "
+                            >
+                              {{ user.overtimeHours }}
+                              <span
+                                *ngIf="user.overtimeHours == 0"
+                                class="text-muted ps-1"
+                                >Hour's
+                              </span>
+                            </td>
+                            <td
+                              class="text-center align-top"
+                              [ngClass]="
+                                user.totalWorkingHours == 0
+                                  ? 'text-danger'
+                                  : 'text-success'
+                              "
+                            >
+                              {{ user.totalWorkingHours }}
+                              <span
+                                *ngIf="user.totalWorkingHours == 0"
+                                class="text-muted ps-1"
+                                >Hour's
+                              </span>
+                            </td>
+
+                            <td class="align-top">
+                              {{ user.startDateTime }}
+
+                              <p class="mb-0 text-muted">
+                                <!-- {{ user.startGPSLocation }} -->
+                                <span *ngIf="!user.startGPSLocation">- </span>
+                                <span *ngIf="user.startGPSLocation">
+                                  <span
+                                    *ngIf="user.techPicUrlStart"
+                                    class="fs-18"
+                                  >
+                                    <img
+                                      class="rounded-circle avatar-xxs align-bottom me-1"
+                                      (click)="
+                                        open(apiUrl + user.techPicUrlStart)
+                                      "
+                                      [src]="apiUrl + user.techPicUrlStart"
+                                    />|
+                                  </span>
+                                  <i
+                                    class="ri-map-pin-line text-primary align-bottom fs-18 cursor"
+                                    (click)="
+                                      openAduit(
+                                        openMap,
+                                        user.startGPSLocation,
+                                        'Check-In',
+                                        user
+                                      )
+                                    "
+                                    [title]="user.startGPSLocation"
+                                  ></i>
+                                </span>
+                              </p>
+                            </td>
+                            <td class="align-top">
+                              {{ user.endDateTime || "-" }}
+
+                              <p class="mb-0 text-muted">
+                                <span *ngIf="!user.endGPSLocation">- </span>
+                                <span *ngIf="user.endGPSLocation">
+                                  <span
+                                    *ngIf="user.techPicUrlEnd"
+                                    class="fs-18"
+                                  >
+                                    <img
+                                      class="rounded-circle avatar-xxs align-bottom me-1"
+                                      (click)="
+                                        open(apiUrl + user.techPicUrlEnd)
+                                      "
+                                      [src]="apiUrl + user.techPicUrlEnd"
+                                    />
+                                    |
+                                  </span>
+                                  <i
+                                    class="ri-map-pin-line text-primary align-bottom fs-18 cursor"
+                                    (click)="
+                                      openAduit(
+                                        openMap,
+                                        user.endGPSLocation,
+                                        'Check-Out',
+                                        user
+                                      )
+                                    "
+                                    [title]="user.endGPSLocation"
+                                  ></i>
+                                </span>
+                              </p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div class="text-center" *ngIf="userList.length === 0">
+                      No Attendance Found
+                    </div>
+                    <!-- <div
+                      class="text-center mt-3"
+                      *ngIf="!selectedDateRangeValue?.to"
+                    >
+                      <b>
+                        {{
+                          !selectedDateRangeValue?.to
+                            ? "Please Select Date Range"
+                            : "No Attendance Found"
+                        }}</b
+                      >
+                    </div> -->
+                  </div>
+                  <div
+                    class="row justify-content-md-between align-items-md-center gy-2"
+                  >
+                    <div class="col-sm-6">
+                      <div
+                        class="dataTables_info mb-2"
+                        id="tickets-table_info"
+                        role="status"
+                        aria-live="polite"
+                      >
+                        Showing {{ from }} to {{ to }} of
+                        {{ totalRecords }} entries
+                      </div>
+                    </div>
+                    <!-- Pagination -->
+                    <div class="col-sm-6">
+                      <div class="text-sm-right float-end listjs-pagination">
+                        <ngb-pagination
+                          [collectionSize]="totalRecords"
+                          [(page)]="page"
+                          [pageSize]="pageSize"
+                          [maxSize]="2"
+                          [rotate]="true"
+                          (pageChange)="pageChange($event)"
+                          *ngIf="totalRecords > pageSize"
+                        >
+                          <ng-template
+                            ngbPaginationPrevious
+                            let-page
+                            let-pages="pages"
+                          >
+                            <i class="ci-arrow-left me-2"></i> Prev
+                          </ng-template>
+                          <ng-template ngbPaginationNext>
+                            Next
+                            <i class="ci-arrow-right ms-2"></i>
+                          </ng-template>
+                        </ngb-pagination>
+                      </div>
+                    </div>
+                    <!-- End Pagination -->
+                  </div>
+                </ng-template>
+              </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content text-muted">
+              <div [ngbNavOutlet]="nav"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #openMap let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title">Map</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss('Cross click')"
+    ></button>
+  </div>
+
+  <div class="offcanvas-body pt-0">
+    <app-shown-map-location
+      [latitude]="latitude"
+      [longitude]="longitude"
+      [userData]="userData"
+      [typeChecking]="typeChecking"
+    ></app-shown-map-location>
+    <div class="text-end">
+      <button
+        type="button"
+        class="btn btn-outline-danger"
+        (click)="offcanvas.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!--  -->
+
+<ng-template #absentList role="document" let-modal>
+  <div class="modal-header p-3 bg-primary-subtle">
+    <h5 class="modal-title" id="absentListModelLable">Absent Staff List</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body p-4">
+    <div class="search-box mb-3">
+      <input
+        type="text"
+        class="form-control bg-light border-light"
+        (keyup)="filterAbsent($event)"
+        [(ngModel)]="AbsentSearchText"
+        placeholder="Search member here..."
+      />
+      <i class="ri-search-line search-icon"></i>
+    </div>
+    <ngx-simplebar class="mx-n4 px-4" style="height: 400px">
+      <div class="vstack gap-3">
+        <div *ngFor="let absent of filteredAbsentList; let i = index">
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0 me-3">
+              <div class="d-flex align-items-center gap-1">
+                <div class="form-check form-check-flat form-check-primary">
+                  <label class="form-check-label"> </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="avatar-xs flex-shrink-0 me-3">
+              <img
+                src="{{
+                  absent.profileImageUrl
+                    ? imageUrl + absent.profileImageUrl
+                    : '../../../../../assets/images/placeholderimage.png'
+                }}"
+                style="width: 30px; height: 30px"
+                alt=""
+                class="img-fluid rounded-circle"
+              />
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="fs-14 mb-0">
+                <a href="javascript:void(0);" class="text-body d-block">
+                  {{ absent.fullName }}
+                </a>
+              </h5>
+              <p class="mt-0 mb-0">{{ absent.accessGroupName }}</p>
+            </div>
+            <div class="flex-shrink-0 me-3 mb-0">
+              <p class="mb-0">
+                <span
+                  ><i class="ri-phone-fill me-1"></i
+                  >{{ absent.phoneNumber }}</span
+                >
+              </p>
+              <!-- <p class="mb-0"><span><i class=" ri-mail-check-fill me-1"></i>{{ tech.email }}</span></p> -->
+            </div>
+          </div>
+        </div>
+        <div
+          class="text-center mt-3 text-muted"
+          *ngIf="filteredAbsentList.length == 0"
+        >
+          <p>No Member Found</p>
+        </div>
+      </div>
+    </ngx-simplebar>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
